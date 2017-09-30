@@ -1,4 +1,4 @@
-package com.cynerds.cybuger;
+package com.cynerds.cyburger;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

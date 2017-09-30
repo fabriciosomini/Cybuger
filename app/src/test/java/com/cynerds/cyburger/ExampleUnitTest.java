@@ -1,4 +1,4 @@
-package com.cynerds.cybuger;
+package com.cynerds.cyburger;
 
 import org.junit.Test;
 
