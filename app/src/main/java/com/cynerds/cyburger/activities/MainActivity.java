@@ -7,9 +7,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.DialogManager;
 
 public class MainActivity extends WorkspaceActivity {
 
+    private int backPressed = 0;
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -46,6 +49,32 @@ public class MainActivity extends WorkspaceActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         setActionBarTitle(getString(R.string.title_combos));
+    }
+
+    @Override
+    public void onBackPressed() {
+        backPressed++;
+        if (backPressed > 0) {
+            Runnable positiveAction = new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            };
+
+            Runnable negativeAction = new Runnable() {
+                @Override
+                public void run() {
+                    backPressed = 0;
+                }
+            };
+            DialogAction dialogAction = new DialogAction();
+            dialogAction.setPositiveAction(positiveAction);
+            dialogAction.setNegativeAction(negativeAction);
+
+            DialogManager dialogManager = new DialogManager();
+            dialogManager.showDialog(this, "Tem certeza que deseja sair?", DialogManager.DialogType.YES_NO, dialogAction);
+        }
     }
 
 }
