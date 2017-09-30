@@ -2,9 +2,11 @@ package com.cynerds.cyburger.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
@@ -31,7 +33,7 @@ public class WorkspaceActivity extends AppCompatActivity {
     private Bundle savedInstanceState;
     private View.OnClickListener onSaveListener;
     private View.OnClickListener onCancelListener;
-
+    private TextView actionBarTitle;
     public View.OnClickListener getOnSaveListener() {
         return onSaveListener;
     }
@@ -91,6 +93,10 @@ public class WorkspaceActivity extends AppCompatActivity {
         return isDirty;
     }
 
+    protected void setActionBarTitle(String title) {
+        actionBarTitle.setText(title);
+
+    }
 
     private void findBaseComponents(View view) {
 
@@ -198,6 +204,11 @@ public class WorkspaceActivity extends AppCompatActivity {
         this.savedInstanceState = savedInstanceState;
         baseComponentList = new ArrayList<>();
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
+        getSupportActionBar().setCustomView(R.layout.base_titlebar);
+
+        actionBarTitle = (TextView) findViewById(R.id.action_bar_title);
+
     }
 
     @Override
@@ -242,5 +253,7 @@ public class WorkspaceActivity extends AppCompatActivity {
         newObject = GsonHelper.ToObject(type, (String) newObject);
         return newObject;
     }
+
+
 }
 

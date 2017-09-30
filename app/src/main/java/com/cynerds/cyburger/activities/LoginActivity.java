@@ -1,9 +1,8 @@
 package com.cynerds.cyburger.activities;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -72,7 +71,7 @@ public class LoginActivity extends WorkspaceActivity {
 
 
         try {
-            //FirebaseAccount 5xb64
+
             String aType = "Vmxjd2VHTXlWbGRqUm1oVVlsZG9jVlJYZUdGUk1XUlZVMnM1YTJKV1NsbFViRkpDVUZFOVBRPT0=";
             accountManager = new AccountManager(this, aType);
         } catch (Exception e) {
@@ -93,10 +92,8 @@ public class LoginActivity extends WorkspaceActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    //Toast.makeText(LoginActivity.this, "onAuthStateChanged:signed_in:" + user.getUid(), Toast.LENGTH_SHORT).show();
-                } else {
+                if (user == null) {
+
 
                     Toast.makeText(LoginActivity.this, "Sessão expirada. Por favor, faça login novamente.",
                             Toast.LENGTH_SHORT).show();

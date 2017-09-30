@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">JBComponents</string>
+    <string name="app_name">CYBURGER</string>
 
-    <string name="title_home">Controle</string>
-    <string name="title_dashboard">Gastos e Receitas</string>
-    <string name="title_notifications">Notificações</string>
+    <string name="title_combos">Combos</string>
+    <string name="title_dashboard">Cardápio</string>
+    <string name="title_notifications">Pedidos</string>
 
     <string name="general_button_save">Salvar</string>
     <string name="general_button_cancel">Cancelar</string>
