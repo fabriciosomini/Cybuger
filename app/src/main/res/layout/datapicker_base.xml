@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/baseDatePicker"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/datePickerContent"
+        android:layout_width="302dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/datePickerHeader"
+            android:layout_width="0dp"
+            android:layout_height="76dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintHorizontal_bias="0.37"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/datepickerYearLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="1999"
+            android:textColor="@color/colorNeutral"
+            app:layout_constraintLeft_toLeftOf="@+id/datePickerMonthDayLbl"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/datePickerMonthDayLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:text="Seg, Jan, 01"
+            android:textColor="@color/colorNeutral"
+            android:textSize="24sp"
+            app:layout_constraintHorizontal_bias="0.574"
+            app:layout_constraintLeft_toLeftOf="@+id/datePickerHeader"
+            app:layout_constraintTop_toBottomOf="@+id/datepickerYearLbl" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/datePickerBodyContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/datePickerHeader">
+
+            <TableLayout
+                android:id="@+id/datePickerDaysTable"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/datePickerNavigatorContent">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="120">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="D" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="120">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="D" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="120">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="D" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="120">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="D" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="120">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="D" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="120">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="Q" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="S" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:text="D" />
+                </TableRow>
+            </TableLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/datePickerNavigatorContent"
+                android:layout_width="268dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/datePickerNextMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/datePickerPreviousMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_chevron_left"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/datePickerMonthYearLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Janeiro 1999"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/datePickerPreviousMonth"
+                    app:layout_constraintRight_toLeftOf="@+id/datePickerNextMonth"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <com.cynerds.cyburger.components.JBButton
+            android:id="@+id/datePickerOkButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:buttonText="OK"
+            app:layout_constraintHorizontal_bias="0.421"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/datePickerCancelBtn"
+            app:layout_constraintTop_toBottomOf="@+id/datePickerBodyContent"></com.cynerds.cyburger.components.JBButton>
+
+        <com.cynerds.cyburger.components.JBButton
+            android:id="@+id/datePickerCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:buttonText="CANCELAR"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/datePickerBodyContent">
+
+        </com.cynerds.cyburger.components.JBButton>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

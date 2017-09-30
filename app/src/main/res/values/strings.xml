@@ -1,6 +1,18 @@
 <resources>
-    <string name="app_name">Cybuger</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">JBComponents</string>
+
+    <string name="title_home">Controle</string>
+    <string name="title_dashboard">Gastos e Receitas</string>
+    <string name="title_notifications">Notificações</string>
+
+    <string name="general_button_save">Salvar</string>
+    <string name="general_button_cancel">Cancelar</string>
+    <string name="general_label_requiredfield">Campo requerido</string>
+    <string name="general_validation_invalidDateFormat">Data inválida</string>
+
+    <string name="login_label_email">E-mail</string>
+    <string name="login_label_password">Senha</string>
+    <string name="login_label_rememberMe">Lembrar-me</string>
+    <string name="login_button_singIn">Entrar</string>
+    <string name="login_label_incorrectPassword">E-mail ou senha inválido</string>
 </resources>

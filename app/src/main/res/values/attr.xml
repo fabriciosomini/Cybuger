@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BaseComponent">
+        <!--Define whether the field is required or not-->
+        <attr name="isRequired" format="boolean" value="false" />
+        <!--Define the field label-->
+        <attr name="label" format="string" />
+        <attr name="isMultiline" format="boolean" value="false"></attr>
+        <attr name="hint" format="reference"></attr>
+
+    </declare-styleable>
+
+
+    <declare-styleable name="JBNumber">
+        <attr name="minValue" format="integer"></attr>
+        <attr name="maxValue" format="integer"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="JBDateText">
+        <attr name="datePickerStyle" format="enum">
+            <enum name="full" value="0"></enum>
+            <enum name="month" value="1"></enum>
+
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BaseButton">
+        <attr name="buttonText" format="string"></attr>
+        <attr name="type" format="enum">
+            <enum name="primary" value="0"></enum>
+            <enum name="secondary" value="1"></enum>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BaseCheckbox">
+        <attr name="checkboxText" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="BaseButtonGroup">
+        <attr name="firstButtonText" format="reference"></attr>
+        <attr name="secondButtonText" format="reference"></attr>
+        <attr name="thirdButtonText" format="reference"></attr>
+    </declare-styleable>
+</resources>
