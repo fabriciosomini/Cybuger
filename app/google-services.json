@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "867214553293",
+    "firebase_url": "https://cyburger-16de2.firebaseio.com",
+    "project_id": "cyburger-16de2",
+    "storage_bucket": "cyburger-16de2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867214553293:android:bb7659202c449500",
+        "android_client_info": {
+          "package_name": "com.cynerds.cybuger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867214553293-t5drvhp7de881gu80dpdft8hu28sgngj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cynerds.cybuger",
+            "certificate_hash": "0e6c6fc1c2d96c3801fd3416a287fbd877e4680b"
+          }
+        },
+        {
+          "client_id": "867214553293-5f4n927fflkk78kpjke0ntlelk62u5r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbdt5fPH4vwwCkqWAJwLO_LewoqIKcpjA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867214553293-5f4n927fflkk78kpjke0ntlelk62u5r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
