@@ -4,13 +4,17 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.components.base.BaseComponent;
+import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.GsonHelper;
@@ -34,6 +38,8 @@ public class WorkspaceActivity extends AppCompatActivity {
     private View.OnClickListener onSaveListener;
     private View.OnClickListener onCancelListener;
     private TextView actionBarTitle;
+
+
     public View.OnClickListener getOnSaveListener() {
         return onSaveListener;
     }
@@ -207,6 +213,7 @@ public class WorkspaceActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
         actionBar.setCustomView(R.layout.base_titlebar);
+
         actionBarTitle = (TextView) findViewById(R.id.action_bar_title);
 
     }
@@ -252,6 +259,39 @@ public class WorkspaceActivity extends AppCompatActivity {
 
         newObject = GsonHelper.ToObject(type, (String) newObject);
         return newObject;
+    }
+
+    protected void showActionBarMenu(boolean showMenu) {
+
+        if (showMenu) {
+            final ImageButton hamburgerMenu = (ImageButton) findViewById(R.id.hamburgerMenu);
+
+            if (showMenu) {
+                hamburgerMenu.setVisibility(View.VISIBLE);
+                hamburgerMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PopupMenu popupMenu = new PopupMenu(WorkspaceActivity.this, hamburgerMenu);
+                        popupMenu.inflate(R.menu.menu_overflow);
+
+                        popupMenu.getMenu().findItem(R.id.action_perfil).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                ActivityManager.startActivity(WorkspaceActivity.this, ProfileActivity.class);
+                                return false;
+                            }
+                        });
+
+                        popupMenu.show();
+
+                    }
+                });
+
+            } else {
+                hamburgerMenu.setVisibility(View.INVISIBLE);
+
+            }
+        }
     }
 
 

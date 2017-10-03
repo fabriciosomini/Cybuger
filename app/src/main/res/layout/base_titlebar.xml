@@ -20,18 +20,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toRightOf="@+id/previousTabBtn"
-        app:layout_constraintRight_toLeftOf="@+id/nextTabBtn"
+        app:layout_constraintRight_toLeftOf="@+id/hamburgerMenu"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/nextTabBtn"
+        android:id="@+id/hamburgerMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@null"
-        android:src="@drawable/ic_chevron_right"
+        android:src="@drawable/ic_overflow_menu"
+        android:tint="@color/white"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -70,6 +70,7 @@ public class MainActivity extends WorkspaceActivity {
         navigation.setSelectedItemId(R.id.navigation_combos);
 
         setActionBarTitle(getString(R.string.title_combos));
+        showActionBarMenu(true);
 
     }
 
@@ -98,5 +99,6 @@ public class MainActivity extends WorkspaceActivity {
             dialogManager.showDialog(this, "Tem certeza que deseja sair?", DialogManager.DialogType.YES_NO, dialogAction);
         }
     }
+
 
 }
