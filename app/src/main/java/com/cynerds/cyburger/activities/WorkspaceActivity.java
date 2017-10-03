@@ -204,9 +204,9 @@ public class WorkspaceActivity extends AppCompatActivity {
         this.savedInstanceState = savedInstanceState;
         baseComponentList = new ArrayList<>();
 
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
-        getSupportActionBar().setCustomView(R.layout.base_titlebar);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
+        actionBar.setCustomView(R.layout.base_titlebar);
         actionBarTitle = (TextView) findViewById(R.id.action_bar_title);
 
     }

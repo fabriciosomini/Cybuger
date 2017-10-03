@@ -1,54 +1,76 @@
 package com.cynerds.cyburger.activities;
 
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.fragments.CombosFragment;
+import com.cynerds.cyburger.fragments.FoodMenuFragment;
+import com.cynerds.cyburger.fragments.OrdersFragment;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 
 public class MainActivity extends WorkspaceActivity {
 
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    CombosFragment combosFragment = new CombosFragment();
+    FoodMenuFragment foodMenuFragment = new FoodMenuFragment();
+    OrdersFragment ordersFragment = new OrdersFragment();
     private int backPressed = 0;
     private TextView mTextMessage;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
+
                 case R.id.navigation_combos:
-                    mTextMessage.setText(R.string.title_combos);
+
+                    fragmentManager.beginTransaction().replace(R.id.contentLayout,
+                            combosFragment,
+                            combosFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_combos));
                     return true;
+
                 case R.id.navigation_foodMenu:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    fragmentManager.beginTransaction().replace(R.id.contentLayout,
+                            foodMenuFragment,
+                            foodMenuFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_dashboard));
                     return true;
+
                 case R.id.navigation_orders:
-                    mTextMessage.setText(R.string.title_notifications);
+                    fragmentManager.beginTransaction().replace(R.id.contentLayout,
+                            ordersFragment,
+                            ordersFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_notifications));
                     return true;
             }
             return false;
+
         }
 
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_combos);
 
         setActionBarTitle(getString(R.string.title_combos));
+
     }
 
     @Override
