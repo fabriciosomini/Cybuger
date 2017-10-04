@@ -7,6 +7,7 @@
         <attr name="label" format="string" />
         <attr name="isMultiline" format="boolean" value="false"></attr>
         <attr name="hint" format="reference"></attr>
+        <attr name="displayLabel" format="boolean"></attr>
 
     </declare-styleable>
 

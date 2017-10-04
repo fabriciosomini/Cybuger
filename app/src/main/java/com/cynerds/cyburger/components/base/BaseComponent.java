@@ -25,6 +25,7 @@ public abstract class BaseComponent<T> extends ConstraintLayout {
 
     protected final WorkspaceActivity finalWorkspaceActivity;
     protected final BaseComponent baseCompoenent;
+    private boolean attributeDisplayLabel;
     protected String attributeHint;
     protected Object componentValue;
     protected View component;
@@ -67,6 +68,18 @@ public abstract class BaseComponent<T> extends ConstraintLayout {
 
         attributeValueLabel = StringImporter.getStringFromResource(getContext(), attributeValueLabel);
 
+        String displayLabelStr = attrs.getAttributeValue(namespace, "displayLabel");
+
+        if(displayLabelStr == null)
+        {
+            attributeDisplayLabel = true;
+        }
+        else
+        {
+            attributeDisplayLabel = Boolean.parseBoolean(attrs.getAttributeValue(namespace, "displayLabel"));
+
+        }
+
     }
 
 
@@ -85,7 +98,6 @@ public abstract class BaseComponent<T> extends ConstraintLayout {
     }
 
 
-
     public void setValidationMessage(String validationMessage) {
 
         if (baseComponentMessages != null) {
@@ -100,90 +112,99 @@ public abstract class BaseComponent<T> extends ConstraintLayout {
 
 
         super.onFinishInflate();
-            setFocusableInTouchMode(true);
-            String namespace = getClass().getName();
+        setFocusableInTouchMode(true);
+        String namespace = getClass().getName();
 
 
-            baseComponentLabel = (TextView) findViewById(R.id.baseComponentLabel);
-            baseComponentView = findViewById(R.id.innerbaseDate);
-            baseComponentMessages = (TextView) findViewById(R.id.baseComponentMessages);
+        baseComponentLabel = (TextView) findViewById(R.id.baseComponentLabel);
+        baseComponentView = findViewById(R.id.innerbaseDate);
+        baseComponentMessages = (TextView) findViewById(R.id.baseComponentMessages);
 
         if (baseComponentView == null) {
 
             return;
+        }
+
+
+        ViewGroup.LayoutParams layoutParams = baseComponentView.getLayoutParams();
+        ViewGroup viewGroup = ((ViewGroup) findViewById(R.id.baseComponentContainer));
+        int baseComponentViewIndex = viewGroup.indexOfChild(baseComponentView);
+
+        if (attributeValueLabel != null) {
+            if (!attributeValueLabel.isEmpty()) {
+                baseComponentLabel.setText(attributeValueLabel);
             }
 
-
-            ViewGroup.LayoutParams layoutParams = baseComponentView.getLayoutParams();
-            ViewGroup viewGroup = ((ViewGroup) findViewById(R.id.baseComponentContainer));
-            int baseComponentViewIndex = viewGroup.indexOfChild(baseComponentView);
-
-            if (attributeValueLabel != null) {
-                if (!attributeValueLabel.isEmpty()) {
-                    baseComponentLabel.setText(attributeValueLabel);
-                }
-
-            }
+        }
 
 
-            if (attributeValueIsRequired) {
+        if (attributeValueIsRequired) {
 
-                baseComponentLabel.setText(baseComponentLabel.getText() + "*");
-            }
+            baseComponentLabel.setText(baseComponentLabel.getText() + "*");
+        }
 
+
+        if (!attributeDisplayLabel) {
+
+            baseComponentLabel.setVisibility(GONE);
+        }
+        else
+        {
+
+            baseComponentLabel.setVisibility(VISIBLE);
+        }
 
         if (component instanceof EditText) {
 
 
-                if (!attributeValueIsMultiline) {
-                    ((EditText) component).setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-                }
+            if (!attributeValueIsMultiline) {
+                ((EditText) component).setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
+            }
 
             if (attributeHint != null) {
                 ((EditText) component).setHint(attributeHint);
-                }
-
-
-                ((EditText) component).addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                        if (s.length() > 0) {
-                            finalWorkspaceActivity.addDirty(baseCompoenent);
-                            componentValue = ((EditText) component).getText().toString();
-
-                        } else {
-
-                            finalWorkspaceActivity.removeDirty(baseCompoenent);
-                            componentValue = "";
-                        }
-                    }
-                });
-
             }
 
 
-            component.setLayoutParams(layoutParams);
-            component.requestLayout();
+            ((EditText) component).addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            hashId = String.valueOf(component.hashCode());
-            component.setId(R.id.innerbaseDate);
-            viewGroup.removeViewAt(baseComponentViewIndex);
-            viewGroup.addView(component, baseComponentViewIndex);
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                    if (s.length() > 0) {
+                        finalWorkspaceActivity.addDirty(baseCompoenent);
+                        componentValue = ((EditText) component).getText().toString();
+
+                    } else {
+
+                        finalWorkspaceActivity.removeDirty(baseCompoenent);
+                        componentValue = "";
+                    }
+                }
+            });
+
+        }
 
 
-            hideValidationMessage();
+        component.setLayoutParams(layoutParams);
+        component.requestLayout();
 
+        hashId = String.valueOf(component.hashCode());
+        component.setId(R.id.innerbaseDate);
+        viewGroup.removeViewAt(baseComponentViewIndex);
+        viewGroup.addView(component, baseComponentViewIndex);
+
+
+        hideValidationMessage();
 
 
     }
@@ -220,8 +241,6 @@ public abstract class BaseComponent<T> extends ConstraintLayout {
     public void hideValidationMessage() {
         baseComponentMessages.setVisibility(INVISIBLE);
     }
-
-
 
 
 }
