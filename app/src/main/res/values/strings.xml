@@ -24,4 +24,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_signIn">Entrar</string>
     <string name="title_signUp">Cadastrar</string>
+    <string name="confirmPassword_hint">Confirme sua senha</string>
+    <string name="signUp">Cadastrar</string>
 </resources>
