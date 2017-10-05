@@ -26,4 +26,5 @@
     <string name="title_signUp">Cadastrar</string>
     <string name="confirmPassword_hint">Confirme sua senha</string>
     <string name="signUp">Cadastrar</string>
+    <string name="or">ou</string>
 </resources>

@@ -9,22 +9,22 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         android:text="Facebook"
         app:layout_constraintLeft_toLeftOf="parent"
         style="@style/FirebaseUI.Button.AccountChooser.FacebookButton"
-        android:id="@+id/JBButton">
+        android:id="@+id/JBButton"
+        app:layout_constraintHorizontal_bias="0.498"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/signInRememberCbx">
 
     </Button>
     <com.cynerds.cyburger.components.JBEmail
         android:id="@+id/signUserInTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:isRequired="true"
         app:hint="@string/login_label_email"
         app:displayLabel="false"
@@ -33,7 +33,7 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        app:layout_constraintTop_toBottomOf="@+id/JBButton"></com.cynerds.cyburger.components.JBEmail>
+        tools:layout_editor_absoluteY="64dp"></com.cynerds.cyburger.components.JBEmail>
 
     <com.cynerds.cyburger.components.JBPassword
         android:id="@+id/signInPasswordTxt"
@@ -61,19 +61,31 @@
         app:layout_constraintTop_toBottomOf="@+id/signInPasswordTxt"
         tools:layout_constraintTop_creator="1" />
 
+    <TextView
+        android:text="@string/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/JBButton"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.501" />
 
     <com.cynerds.cyburger.components.JBButton
         android:id="@+id/signInBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         app:buttonText="Entrar"
-        app:layout_constraintRight_toRightOf="@+id/signInRememberCbx"
-        app:layout_constraintTop_toBottomOf="@+id/signInRememberCbx"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/signInRememberCbx"></com.cynerds.cyburger.components.JBButton>
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"></com.cynerds.cyburger.components.JBButton>
 
 
 
