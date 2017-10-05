@@ -23,79 +23,35 @@
 
     <!-- Login progress -->
 
-    <com.cynerds.cyburger.components.JBEmail
-        android:id="@+id/signUserInTxt"
-        android:layout_width="wrap_content"
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        app:tabMode="fixed"
         android:layout_marginTop="8dp"
-        app:isRequired="true"
-        app:hint="@string/login_label_email"
-        app:displayLabel="false"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appLogo"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"></com.cynerds.cyburger.components.JBEmail>
-
-    <com.cynerds.cyburger.components.JBPassword
-        android:id="@+id/signInPasswordTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:isRequired="true"
-        app:displayLabel="false"
-        app:hint="@string/login_label_password"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUserInTxt"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"></com.cynerds.cyburger.components.JBPassword>
-
-    <com.cynerds.cyburger.components.JBCheckbox
-        android:id="@+id/signInRememberCbx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:checkboxText="@string/login_label_rememberMe"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@+id/sliding_tabs"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signInPasswordTxt"
-        tools:layout_constraintTop_creator="1" />
-
-
-    <com.cynerds.cyburger.components.JBButton
-        android:id="@+id/signInBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="8dp"
-        app:buttonText="Entrar"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="@+id/signInRememberCbx"
-        app:layout_constraintTop_toBottomOf="@+id/signInRememberCbx"></com.cynerds.cyburger.components.JBButton>
-
-
-
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
-
-
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 </android.support.constraint.ConstraintLayout>
