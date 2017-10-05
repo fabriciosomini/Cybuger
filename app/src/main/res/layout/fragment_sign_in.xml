@@ -24,45 +24,43 @@
         android:layout_marginEnd="8dp">
 
     </Button>
-    <com.cynerds.cyburger.components.JBEmail
+    <EditText
         android:id="@+id/signUserInTxt"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        app:isRequired="true"
-        app:hint="@string/login_label_email"
-        app:displayLabel="false"
+
+        android:hint="@string/login_label_email"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"></com.cynerds.cyburger.components.JBEmail>
+        android:layout_marginTop="8dp"></EditText>
 
-    <com.cynerds.cyburger.components.JBPassword
+    <EditText
         android:id="@+id/signInPasswordTxt"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:isRequired="true"
-        app:displayLabel="false"
-        app:hint="@string/login_label_password"
+     android:hint="@string/login_label_password"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUserInTxt"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"></com.cynerds.cyburger.components.JBPassword>
+        tools:layout_constraintRight_creator="1"></EditText>
 
-    <com.cynerds.cyburger.components.JBCheckbox
+    <CheckBox
         android:id="@+id/signInRememberCbx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:checkboxText="@string/login_label_rememberMe"
+       android:text="@string/login_label_rememberMe"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signInPasswordTxt"
-        tools:layout_constraintTop_creator="1" />
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:text="@string/or"

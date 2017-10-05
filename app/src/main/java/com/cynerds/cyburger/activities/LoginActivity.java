@@ -6,15 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.SimpleFragmentPagerAdapter;
-import com.cynerds.cyburger.components.JBButton;
-import com.cynerds.cyburger.components.JBCheckbox;
-import com.cynerds.cyburger.components.JBEmail;
-import com.cynerds.cyburger.components.JBPassword;
+
 import com.cynerds.cyburger.helpers.Account;
 import com.cynerds.cyburger.helpers.AccountManager;
 import com.cynerds.cyburger.helpers.ActivityManager;
@@ -31,10 +31,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends WorkspaceActivity {
     public static boolean isRememberMeChecked;
-    JBEmail signInUserTxt;
-    JBPassword signInPasswordTxt;
-    JBButton signInBtn;
-    JBCheckbox signInRememberCbx;
+    EditText signInUserTxt;
+    EditText signInPasswordTxt;
+    Button signInBtn;
+    CheckBox signInRememberCbx;
     private Preferences preferences;
     private AccountManager accountManager;
     private FirebaseAuth mAuth;
@@ -190,7 +190,7 @@ public class LoginActivity extends WorkspaceActivity {
                         if (isSuccessful) {
 
 
-                            signInPasswordTxt.hideValidationMessage();
+                            signInPasswordTxt.setError("");
 
 
                             try {
@@ -220,14 +220,14 @@ public class LoginActivity extends WorkspaceActivity {
 
                         } else {
 
-                            signInBtn.getButton().setEnabled(true);
+                            signInBtn.setEnabled(true);
 
 
                             Exception exception = task.getException();
                             if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
 
-                                signInPasswordTxt.setValidationMessage(getString(R.string.login_label_incorrectPassword));
-                                signInPasswordTxt.showValidationMessage();
+                                signInPasswordTxt.setError(getString(R.string.login_label_incorrectPassword));
+
                             } else if (exception != null && exception.getClass() == FirebaseNetworkException.class) {
 
                                 if (mAuth.getCurrentUser() != null) {

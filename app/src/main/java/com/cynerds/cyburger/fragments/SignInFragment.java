@@ -12,10 +12,7 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
-import com.cynerds.cyburger.components.JBButton;
-import com.cynerds.cyburger.components.JBCheckbox;
-import com.cynerds.cyburger.components.JBEmail;
-import com.cynerds.cyburger.components.JBPassword;
+
 import com.cynerds.cyburger.helpers.Account;
 import com.cynerds.cyburger.helpers.AccountManager;
 import com.cynerds.cyburger.helpers.Permissions;

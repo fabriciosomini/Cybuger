@@ -12,7 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.components.behavior.DashboardCardViewItem;
+import com.cynerds.cyburger.views.DashboardCardViewItem;
+
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class DashboardCardAdapter extends ArrayAdapter<DashboardCardViewItem> {
         TextView cardTitle =   (TextView) convertView.findViewById(R.id.cardTitle);
         TextView cardContent = (TextView) convertView.findViewById(R.id.cardContent);
         ImageView cardManageIcon = (ImageView) convertView.findViewById(R.id.cardManageIcon);
-        ConstraintLayout baseComponentContainer = (ConstraintLayout) convertView.findViewById(R.id.baseComponentContainer);
+        ConstraintLayout baseComponentContainer = (ConstraintLayout) convertView.findViewById(R.id.dashboard_cardview);
         View.OnClickListener onCardViewClickListener = dashboardCardViewItem.getOnCardViewClickListener();
         View.OnClickListener onManageClickListener = dashboardCardViewItem.getOnManageClickListener();
 

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.components.base.BaseComponent;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -33,7 +32,7 @@ public class WorkspaceActivity extends AppCompatActivity {
     private Runnable onPermissionDeniedAction;
     private boolean ignoreUnsavedChanges;
     private String unsavedChangesMessage;
-    private List<BaseComponent> baseComponentList;
+
     private Bundle savedInstanceState;
     private View.OnClickListener onSaveListener;
     private View.OnClickListener onCancelListener;
@@ -93,66 +92,13 @@ public class WorkspaceActivity extends AppCompatActivity {
     }
 
 
-    protected boolean isComponentDirty(BaseComponent baseComponent) {
 
-        boolean isDirty = dirty.contains(baseComponent.getHashId());
-        return isDirty;
-    }
 
     protected void setActionBarTitle(String title) {
         actionBarTitle.setText(title);
 
     }
 
-    private void findBaseComponents(View view) {
-
-        if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = ((ViewGroup) view);
-
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-
-                View child = viewGroup.getChildAt(i);
-                if (child.getClass().getSuperclass() == BaseComponent.class) {
-                    BaseComponent component = (BaseComponent) child;
-                    if (!baseComponentList.contains(component)) {
-                        baseComponentList.add(component);
-                    }
-
-                } else {
-                    //Let's dig more
-                    if (child instanceof ViewGroup) {
-                        findBaseComponents(child);
-                    }
-
-
-                }
-            }
-        }
-
-
-    }
-
-    protected boolean validateFields() {
-
-        boolean isWorkspaceValid = true;
-
-
-        findBaseComponents(findViewById(android.R.id.content).getRootView());//((ViewGroup) ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0));
-
-        for (int i = 0; i < baseComponentList.size(); i++) {
-
-            BaseComponent component = baseComponentList.get(i);
-            if (!isComponentDirty(component) && component.isRequired()) {
-                component.setValidationMessage(getString(R.string.general_label_requiredfield));
-                component.showValidationMessage();
-                isWorkspaceValid = false;
-            } else {
-                component.hideValidationMessage();
-            }
-        }
-
-        return isWorkspaceValid;
-    }
 
     protected void closeActivity() {
 
@@ -185,22 +131,7 @@ public class WorkspaceActivity extends AppCompatActivity {
 
     }
 
-    public void removeDirty(BaseComponent baseComponent) {
-        String hashcode = String.valueOf(baseComponent.getHashId());
-        if (dirty.contains(hashcode)) {
-            dirty.remove(hashcode);
-        }
-    }
 
-    public void addDirty(BaseComponent baseComponent) {
-
-        if (!dirty.contains(baseComponent.getHashId())) {
-            dirty.add(baseComponent.getHashId());
-
-        }
-
-
-    }
 
 
     @Override
@@ -208,7 +139,7 @@ public class WorkspaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.savedInstanceState = savedInstanceState;
-        baseComponentList = new ArrayList<>();
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);

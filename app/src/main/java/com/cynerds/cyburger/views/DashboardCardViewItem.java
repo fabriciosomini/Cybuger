@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.components.behavior;
+package com.cynerds.cyburger.views;
 
 import android.view.View;
 
