@@ -15,8 +15,7 @@ import android.widget.Toast;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.SimpleFragmentPagerAdapter;
 
-import com.cynerds.cyburger.helpers.Account;
-import com.cynerds.cyburger.helpers.AccountManager;
+
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
@@ -36,10 +35,10 @@ public class LoginActivity extends WorkspaceActivity {
     Button signInBtn;
     CheckBox signInRememberCbx;
     private Preferences preferences;
-    private AccountManager accountManager;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private Account account;
+
 
     private Permissions permissions;
 

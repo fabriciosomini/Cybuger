@@ -17,8 +17,6 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.helpers.Account;
-import com.cynerds.cyburger.helpers.AccountManager;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
@@ -32,6 +30,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -43,10 +42,10 @@ public class SignInFragment extends Fragment {
     Button signInBtn;
     CheckBox signInRememberCbx;
     private Preferences preferences;
-    private AccountManager accountManager;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private Account account;
+
     private String rememberMePref;
     private Permissions permissions;
 
@@ -60,26 +59,18 @@ public class SignInFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View inflatedView =  inflater.inflate(R.layout.fragment_sign_in, container, false);
+        View inflatedView = inflater.inflate(R.layout.fragment_sign_in, container, false);
         inflatedView.setFocusableInTouchMode(true);
         mAuth = FirebaseAuth.getInstance();
-
-
-        try {
-
-            String aType = "Vmxjd2VHTXlWbGRqUm1oVVlsZG9jVlJYZUdGUk1XUlZVMnM1YTJKV1NsbFViRkpDVUZFOVBRPT0=";
-            accountManager = new AccountManager(getActivity(), aType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        rememberMePref = "VjFSSmVGWXlVa2RqUm1oT1ZqSjRhRll3Vm5kVU1XUnpVbFJzVVZWVU1Eaz0=";
-
-        account = accountManager.getAccount();
-
         preferences = new Preferences(getActivity());
         permissions = new Permissions(getActivity());
+        signInUserTxt = (EditText) inflatedView.findViewById(R.id.signUserInTxt);
+        signInPasswordTxt = (EditText) inflatedView.findViewById(R.id.signInPasswordTxt);
+        signInBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
+        signInRememberCbx = (CheckBox) inflatedView.findViewById(R.id.signInRememberCbx);
+
+        rememberMePref = "remeberMe";
+
 
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
 
@@ -98,28 +89,18 @@ public class SignInFragment extends Fragment {
 
         };
 
-        signInUserTxt = (EditText) inflatedView.findViewById(R.id.signUserInTxt);
-        signInPasswordTxt = (EditText) inflatedView.findViewById(R.id.signInPasswordTxt);
-        signInBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
-        signInRememberCbx = (CheckBox) inflatedView.findViewById(R.id.signInRememberCbx);
-
-
-
 
         signInUserTxt.setText("farofa@test.com");
         signInPasswordTxt.setText("123_@123");
-
-
 
         signInRememberCbx.setChecked(isRememberMeChecked);
         String storedEmail;
         String storedPwd;
         try {
-            boolean noAccountFound = accountManager.getEmail(account).isEmpty() &&
-                    accountManager.getPassword(account).isEmpty();
-            if (!noAccountFound) {
-                storedEmail = accountManager.getEmail(account).trim();
-                storedPwd = accountManager.getPassword(account).trim();
+            boolean anyAccounts = false;//Existem contas salvas
+            if (anyAccounts) {
+                storedEmail = "";//pega email do registro
+                storedPwd = "";//pega senha do registro
 
                 signInUserTxt.setText(storedEmail);
                 signInPasswordTxt.setText(storedPwd);
@@ -151,17 +132,35 @@ public class SignInFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                    signInBtn.setEnabled(false);
+                signInBtn.setEnabled(false);
 
-                    String email = "";
-                    String password = "";
-
-
-                    email = String.valueOf(signInUserTxt.getText().toString());
-                    password = String.valueOf(signInPasswordTxt.getText().toString());
+                String email = "";
+                String password = "";
 
 
+                email = String.valueOf(signInUserTxt.getText().toString());
+                password = String.valueOf(signInPasswordTxt.getText().toString());
+
+
+                boolean isFilledOut = true;
+                if (signInUserTxt.getText().toString().trim().equals("")) {
+
+                    signInUserTxt.setError(getString(R.string.general_label_requiredfield));
+                    isFilledOut = false;
+                }
+
+                if (signInPasswordTxt.getText().toString().trim().equals("")) {
+
+                    signInPasswordTxt.setError(getString(R.string.general_label_requiredfield));
+
+                    isFilledOut = false;
+                }
+
+
+                if (isFilledOut) {
                     signIn(email, password);
+
+                }
 
 
             }
@@ -185,29 +184,6 @@ public class SignInFragment extends Fragment {
 
 
                             signInPasswordTxt.setError(null);
-
-
-                            try {
-                                boolean noAccountFound = accountManager.getEmail(account).isEmpty() &&
-                                        accountManager.getPassword(account).isEmpty();
-                                if (isRememberMeChecked) {
-
-                                    accountManager.setAccount(email, password);
-
-
-                                } else {
-                                    if (!noAccountFound) {
-
-                                        accountManager.removeAccount(email, password);
-
-                                    }
-
-                                }
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
 
 
                             doLogin();
