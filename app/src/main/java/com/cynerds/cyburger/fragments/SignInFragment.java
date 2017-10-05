@@ -116,7 +116,7 @@ public class SignInFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                LoginActivity.isRememberMeChecked = isChecked;
+                SignInFragment.isRememberMeChecked = isChecked;
                 if (isChecked) {
                     if (!permissions.isPermissionForExternalStorageGranted()) {
 

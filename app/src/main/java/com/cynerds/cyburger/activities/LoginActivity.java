@@ -43,8 +43,6 @@ public class LoginActivity extends WorkspaceActivity {
     private Permissions permissions;
 
 
-    //rememberMe 5xb64
-    private String rememberMePref;
 
     @Override
     public void onStart() {
