@@ -69,7 +69,7 @@ public class SignInFragment extends Fragment {
         signInBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
         signInRememberCbx = (CheckBox) inflatedView.findViewById(R.id.signInRememberCbx);
 
-        rememberMePref = "remeberMe";
+        rememberMePref = "rememberMe";
 
 
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
