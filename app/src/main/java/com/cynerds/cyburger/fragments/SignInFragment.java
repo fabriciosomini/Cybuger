@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,9 @@ import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookException;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,17 +41,19 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignInFragment extends Fragment {
 
     public static boolean isRememberMeChecked;
-    EditText signInUserTxt;
-    EditText signInPasswordTxt;
-    Button signInBtn;
-    CheckBox signInRememberCbx;
+    private EditText signInUserTxt;
+    private EditText signInPasswordTxt;
+    private Button signInBtn;
+    private Button signInFacebookBtn;
+   private CheckBox signInRememberCbx;
+
     private Preferences preferences;
-
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private String rememberMePref;
     private Permissions permissions;
+    private CallbackManager mCallbackManager;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -67,6 +73,7 @@ public class SignInFragment extends Fragment {
         signInUserTxt = (EditText) inflatedView.findViewById(R.id.signUserInTxt);
         signInPasswordTxt = (EditText) inflatedView.findViewById(R.id.signInPasswordTxt);
         signInBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
+        signInFacebookBtn = (Button) inflatedView.findViewById(R.id.signInFacebookBtn);
         signInRememberCbx = (CheckBox) inflatedView.findViewById(R.id.signInRememberCbx);
 
         rememberMePref = "rememberMe";
@@ -109,25 +116,6 @@ public class SignInFragment extends Fragment {
             e.printStackTrace();
         }
 
-
-        signInRememberCbx.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                SignInFragment.isRememberMeChecked = isChecked;
-                if (isChecked) {
-                    if (!permissions.isPermissionForExternalStorageGranted()) {
-
-                        permissions.requestPermissionForExternalStorage();
-                    }
-
-                }
-            }
-        });
-
-
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,10 +154,71 @@ public class SignInFragment extends Fragment {
             }
         });
 
+        signInFacebookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doLoginFacebook();
+            }
+        });
+
+        signInRememberCbx.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SignInFragment.isRememberMeChecked = isChecked;
+                if (isChecked) {
+                    if (!permissions.isPermissionForExternalStorageGranted()) {
+
+                        permissions.requestPermissionForExternalStorage();
+                    }
+
+                }
+            }
+        });
+
+
+
+
 
         return inflatedView;
     }
 
+    private void doLoginFacebook() {
+        // Initialize Facebook Login button
+       /* mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) getActivity().findViewById(R.id.signInFacebookBtn);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // ...
+            }
+        });*/
+    }
+
+
+   // @Override
+   /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }*/
     private void signIn(final String email, final String password) {
 
 
