@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
+<comboItems version="2" >
 
     <item
         is-multidex="true"
@@ -12,12 +12,111 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\5db395b3fa254a5f061358c711f632ab8c33ae02\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="9a0c96cb2e74d3a6e692d920c9e03326e77f6429">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_79b313168cc38032753d0b75772106b98465f4a7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\f6f28db060f6406ee87f877a2f3a8407b8482abc\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="252896ce41f2a84a2849e29235e66098be7d12ee">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_afa6aaaa95dfe59f94606209e6e7c3f189e95939\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\bolts-tasks-1.4.0_8480d31e191d917a4f641f444dd9ca85c611294a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\82d6c100de08596d26b131681a918b484a33f8f5\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="bc9ea2bc291bbebc83f5b160d115c699bddc4e16">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_bae4ad9ddf39833ce3263bf6f5620cd55206e211\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-applinks\1.4.0\8ad21bf21784dacce5f2043afb97218cc377e835\bolts-applinks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\bolts-applinks-1.4.0_6e69005f9bd2b7ba61165aad6040d7ea80013a26\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\c2ca295c16f1efd788a926db09cecf9f7d25325a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="53e8932b1ac8c7dfc35cfeda1f9efbc9822ceaf3">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_07640f2408f3aaca47279dbe5b58f67ce24c905c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\e1e25de5e0eac34f4747af239049a416ab154739\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="0d394688dd7030b83dea8eed3fa483410c24afe0">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7c01074c6035970fcd3a070d72af09b72f479fad\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.gradle\caches\modules-2\files-2.1\com.google.zxing\core\3.3.0\73c49077166faa4c3c0059c5f583d1d7bd1475fe\core-3.3.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="73c49077166faa4c3c0059c5f583d1d7bd1475fe">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\core-3.3.0_5e4d09e89b4863c3e4c1e97a32d1c452522d6d96\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\b1be32f3dc6aae37d7d3c446c23934a7690b28e6\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="82ea5a937ab84229fbd2f3fc8cf2a72cbdf0ee0f">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_224e0dff2960901348f851697db32a42adf48b21\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.0"
-        sha1="d4729e8bff927ea7eb28e39a4f756464a15568be">
+        sha1="2da597bcfcdd0b6408616e82283b47414f9d0913">
         <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_964ad7bbc37b894ca266b1cd97664386dcc0c9dc\classes.dex" />
     </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\050ff2e35e46dc76b8ee3624a8c668d673630fd1\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="2482bfd874e8b3927f4141105674ad392ff83698">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_35a5a7f43ac2c2fdce4bf155036cd3aef35a97aa\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\eae9a1daf9c42984e468479ef20bc94b6f78f6e4\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="b8b26b28aae0ba8e2db55ad9fe0ebc770530c5ef">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_77409be138afaab9b33ce3a0ada0984c372a4c44\classes.dex" />
+    </item>
 
-</items>
+</comboItems>
