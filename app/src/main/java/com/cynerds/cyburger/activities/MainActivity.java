@@ -28,6 +28,8 @@ public class MainActivity extends WorkspaceActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
             switch (item.getItemId()) {
 
                 case R.id.navigation_combos:
@@ -36,6 +38,7 @@ public class MainActivity extends WorkspaceActivity {
                             combosFragment,
                             combosFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_combos));
+
                     return true;
 
                 case R.id.navigation_foodMenu:
@@ -43,6 +46,7 @@ public class MainActivity extends WorkspaceActivity {
                             foodMenuFragment,
                             foodMenuFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_dashboard));
+
                     return true;
 
                 case R.id.navigation_orders:
@@ -50,6 +54,7 @@ public class MainActivity extends WorkspaceActivity {
                             ordersFragment,
                             ordersFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_notifications));
+
                     return true;
             }
             return false;

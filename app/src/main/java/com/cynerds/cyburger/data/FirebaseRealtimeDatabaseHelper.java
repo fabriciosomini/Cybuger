@@ -1,5 +1,6 @@
 package com.cynerds.cyburger.data;
 
+import com.cynerds.cyburger.models.BaseModel;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,24 +16,15 @@ import java.util.List;
  */
 
 public class FirebaseRealtimeDatabaseHelper<T> {
-    private final Class<T> classType;
+    private final Class<BaseModel> classType;
     private final DatabaseReference mainReference;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
     // ConnectivityManager connectivityManager;
-    private List<T> items;
+    private List<BaseModel> items;
     private DataChangeListener dataChangeListener;
 
-    public interface DataChangeListener {
-        public void onDataChanged(Object item);
-    }
-
-    public void setDataChangeListener(DataChangeListener dataChangeListener ){
-
-        this.dataChangeListener = dataChangeListener;
-
-    }
-    public FirebaseRealtimeDatabaseHelper(Class<T> classType) {
+    public FirebaseRealtimeDatabaseHelper(Class<BaseModel> classType) {
 
         this.classType = classType;
         database = FirebaseDatabase.getInstance();
@@ -47,13 +39,13 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         createDataWatcher();
 
 
-
     }
 
+    public void setDataChangeListener(DataChangeListener dataChangeListener) {
 
-    /*public boolean isConnected(){
-        return connectivityManager.isConnected();
-    }*/
+        this.dataChangeListener = dataChangeListener;
+
+    }
 
     private void createDataWatcher() {
         ChildEventListener postListener = new ChildEventListener() {
@@ -62,15 +54,23 @@ public class FirebaseRealtimeDatabaseHelper<T> {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                T object = dataSnapshot.getValue(classType);
+                BaseModel object = dataSnapshot.getValue(classType);
+
 
                 if (object != null) {
-                    if (!items.contains(object)) {
-                        items.add(object);
 
+                    int index = getIndexOfObject(object);
+
+                    if (index > -1) {
+
+                        items.set(index, object);
+
+                    } else {
+
+                        items.add(object);
                     }
 
-                    if(dataChangeListener !=null){
+                    if (dataChangeListener != null) {
                         dataChangeListener.onDataChanged(object);
 
                     }
@@ -82,11 +82,20 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                T object = dataSnapshot.getValue(classType);
+                BaseModel object = dataSnapshot.getValue(classType);
                 if (object != null) {
 
+                    int index = getIndexOfObject(object);
 
-                    if(dataChangeListener !=null){
+                    if (index > -1) {
+
+
+                        items.set(index, object);
+
+                    }
+
+
+                    if (dataChangeListener != null) {
                         dataChangeListener.onDataChanged(object);
                     }
                 }
@@ -94,22 +103,38 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                T object = dataSnapshot.getValue(classType);
+                BaseModel object = dataSnapshot.getValue(classType);
                 if (object != null) {
 
+                    int index = getIndexOfObject(object);
 
-                    if(dataChangeListener !=null){
+                    if (index > -1) {
+
+                        items.remove(index);
+                    }
+
+                    if (dataChangeListener != null) {
                         dataChangeListener.onDataChanged(object);
+
                     }
                 }
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                T object = dataSnapshot.getValue(classType);
+                BaseModel object = dataSnapshot.getValue(classType);
                 if (object != null) {
 
-                    if(dataChangeListener !=null){
+
+                    int index = getIndexOfObject(object);
+
+                    if (index > -1) {
+
+
+                        items.set(index, object);
+
+                    }
+                    if (dataChangeListener != null) {
                         dataChangeListener.onDataChanged(object);
                     }
                 }
@@ -126,6 +151,22 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     }
 
+
+    /*public boolean isConnected(){
+        return connectivityManager.isConnected();
+    }*/
+
+    private int getIndexOfObject(BaseModel object) {
+
+        for (int i = 0; i < items.size(); i++) {
+            BaseModel baseModel = items.get(i);
+            if (baseModel.getId().equals(object.getId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public FirebaseRealtimeDatabaseResult insert(T t) {
 
         FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
@@ -137,8 +178,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         return firebaseRealtimeDatabaseResult;
     }
 
-
-    public List<T> selectAll() {
+    public List<BaseModel> selectAll() {
 
 
         return items;
@@ -198,5 +238,9 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
         SUCCESS, ERROR
 
+    }
+
+    public interface DataChangeListener {
+        void onDataChanged(Object item);
     }
 }

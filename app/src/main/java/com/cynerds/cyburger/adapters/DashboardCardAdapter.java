@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
-
 import java.util.List;
 
 /**
@@ -30,9 +29,9 @@ public class DashboardCardAdapter extends ArrayAdapter<DashboardCardViewItem> {
 
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
+
         final DashboardCardViewItem dashboardCardViewItem = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
+
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.dashboard_card_view, parent, false);
         }

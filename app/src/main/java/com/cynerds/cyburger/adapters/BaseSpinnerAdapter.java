@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cynerds.cyburger.models.SpinnerModel;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.Query;
-import com.cynerds.cyburger.models.BaseDto;
 
 /**
  * Created by fabri on 08/07/2017.
@@ -40,15 +40,15 @@ public class BaseSpinnerAdapter<T> extends FirebaseListAdapter<T> {
 
         String description;
         if (object != null) {
-            if (object.getClass().getSuperclass() == BaseDto.class) {
+            if (object.getClass().getSuperclass() == SpinnerModel.class) {
 
 
-                description = ((BaseDto) object).getDescription();
+                description = ((SpinnerModel) object).getDescription();
 
             } else {
 
                 description = "Exception: " + this.getClass().getSimpleName()
-                        + " works only with " + BaseDto.class.getSimpleName();
+                        + " works only with " + SpinnerModel.class.getSimpleName();
             }
 
         } else {

@@ -7,17 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.combos.DailyCombo;
+import com.cynerds.cyburger.models.combos.MonthlyCombo;
 import com.cynerds.cyburger.models.foodmenu.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -26,10 +29,13 @@ import java.util.List;
 public class CombosFragment extends Fragment {
 
 
-
+    FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
 
     public CombosFragment() {
         // Required empty public constructor
+
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(MonthlyCombo.class);
+        // createCombos();
     }
 
 
@@ -37,72 +43,127 @@ public class CombosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
+        final ListView listview = (ListView) view.findViewById(android.R.id.list);
 
-        ListView listview = (ListView) view.findViewById(android.R.id.list);
 
-        DashboardCardAdapter adapter =
-                new DashboardCardAdapter(getActivity(), R.layout.dashboard_card_view, getDashboardCardViewItems());
+        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+            @Override
+            public void onDataChanged(Object item) {
 
-        listview.setAdapter(adapter);
 
-        getDailyCombo();
+                if (firebaseRealtimeDatabaseHelper.selectAll().size() > 0) {
+
+                    Toast.makeText(CombosFragment.this.getActivity(), "FUCK THIS ITEMS COMING", Toast.LENGTH_SHORT).show();
+
+                    List<DashboardCardViewItem> dashboardCardViewItems = getDashboardCardViewItems();
+                    DashboardCardAdapter adapter =
+                            new DashboardCardAdapter(getActivity(), R.layout.dashboard_card_view, dashboardCardViewItems);
+
+                    //  adapter.notifyDataSetChanged();
+
+                    listview.setAdapter(adapter);
+
+
+                } else {
+                    Toast.makeText(CombosFragment.this.getActivity(), "AIN'T NO SHH HERE", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        };
+
+        firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
 
         return view;
     }
 
-    DailyCombo getDailyCombo() {
+    List<MonthlyCombo> getDailyCombo() {
 
+        List<MonthlyCombo> server = firebaseRealtimeDatabaseHelper.selectAll();
+        return server;
 
+    }
+
+    private void createCombos() {
         List<DashboardCardViewItem> dashboardCardViewItems = new ArrayList<>();
 
         Item item = new Item();
         Item item2 = new Item();
-        List<Item> comboItems = new ArrayList<>();
+        List<Item> comboItemsList = new ArrayList<>();
         Combo combo = new Combo();
-        List<Combo> combos = new ArrayList<>();
+        List<Combo> combosList = new ArrayList<>();
         DailyCombo dailyCombo = new DailyCombo();
-
+        List<DailyCombo> dailyComboList = new ArrayList<>();
+        MonthlyCombo monthlyCombo = new MonthlyCombo();
 
         //1
         item.setDescription("Coca-cola");
         item.setPrice(3.50f);
         item.setSize("600ml");
+        item.setId(UUID.randomUUID().toString());
 
         item2.setDescription("Hamburger");
         item2.setPrice(10.50f);
         item2.setSize("1 unidade");
+        item2.setId(UUID.randomUUID().toString());
 
         //2
-        comboItems.add(item);
-        comboItems.add(item2);
+        comboItemsList.add(item);
+        comboItemsList.add(item2);
 
 
         //3
-        combo.setComboItems(comboItems);
-
+        combo.setComboItems(comboItemsList);
+        combo.setComboName("King Combo: Coca + Hamburger");
+        combo.setId(UUID.randomUUID().toString());
 
         //4
-        combos.add(combo);
+        combosList.add(combo);
 
         //5
-        dailyCombo.setCombos(combos);
+        dailyCombo.setCombos(combosList);
         dailyCombo.setDate("Segunda-feira");
+        dailyCombo.setId(UUID.randomUUID().toString());
+
+        //6
+        dailyComboList.add(dailyCombo);
+
+        monthlyCombo.setMonthlyCombos(dailyComboList);
+        monthlyCombo.setId(UUID.randomUUID().toString());
 
 
-        FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(DailyCombo.class);
-        firebaseRealtimeDatabaseHelper.insert(dailyCombo);
+        firebaseRealtimeDatabaseHelper.insert(monthlyCombo);
 
-
-        DailyCombo server = firebaseRealtimeDatabaseHelper.selectAll();
-        return dailyCombo;
 
     }
-
 
     public List<DashboardCardViewItem> getDashboardCardViewItems() {
 
         List<DashboardCardViewItem> items = new ArrayList<>();
+
+        List<MonthlyCombo> monthlyCombos = getDailyCombo();
+
+
+        for (MonthlyCombo monthlyCombo :
+                monthlyCombos) {
+
+            for (DailyCombo dailyCombo :
+                    monthlyCombo.getMonthlyCombos()) {
+
+                for (Combo combo :
+                        dailyCombo.getCombos()) {
+
+
+                    DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
+                    dashboardCardViewItem.setTitle(combo.getComboName());
+                    items.add(dashboardCardViewItem);
+                }
+            }
+
+
+        }
         return items;
     }
 }

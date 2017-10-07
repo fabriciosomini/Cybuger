@@ -1,14 +1,17 @@
 package com.cynerds.cyburger.models.foodmenu;
 
+import com.cynerds.cyburger.models.BaseModel;
+
 /**
  * Created by comp8 on 05/10/2017.
  */
 
-public class Item {
+public class Item extends BaseModel {
 
     private String description;
     private String ingredients;
     private float price;
+    private String size;
 
     public String getSize() {
         return size;
@@ -17,8 +20,6 @@ public class Item {
     public void setSize(String size) {
         this.size = size;
     }
-
-    private String size;
 
     public String getIngredients() {
         return ingredients;
