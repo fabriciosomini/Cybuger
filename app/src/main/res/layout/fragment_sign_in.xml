@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+
     tools:context=".fragments.SignInFragment">
 
 
@@ -27,10 +28,12 @@
 
     <EditText
         android:id="@+id/signUserInTxt"
+        style="@style/AppTheme.CyburgerEditText"
+
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/login_label_email"
+
         android:inputType="textEmailAddress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -40,12 +43,12 @@
 
     <EditText
         android:id="@+id/signInPasswordTxt"
+        style="@style/AppTheme.CyburgerEditText"
+
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/login_label_password"
         android:inputType="textPassword"
-
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

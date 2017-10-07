@@ -16,8 +16,8 @@
             <EditText
 
                 android:id="@+id/signUpUserTxt"
+                style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -34,8 +34,8 @@
 
                 android:id="@+id/signUpPassword"
 
+                style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -51,9 +51,8 @@
             <EditText
 
                 android:id="@+id/signUpConfirmPasswordTxt"
-
+                style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
