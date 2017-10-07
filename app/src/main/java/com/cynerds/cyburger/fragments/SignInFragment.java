@@ -15,16 +15,11 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
+import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
-import com.cynerds.cyburger.models.profile.Profile;
 import com.facebook.CallbackManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,9 +43,10 @@ public class SignInFragment extends Fragment {
     private String rememberMePref;
     private Permissions permissions;
     private CallbackManager mCallbackManager;
-
+    private AuthenticationHelper authenticationHelper;
     public SignInFragment() {
-        // Required empty public constructor
+
+
     }
 
 
@@ -61,6 +57,7 @@ public class SignInFragment extends Fragment {
 
         View inflatedView = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
+        authenticationHelper = new AuthenticationHelper(getActivity());
         setUIEvents(inflatedView);
 
 
@@ -101,78 +98,7 @@ public class SignInFragment extends Fragment {
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }*/
-    private void signIn(final String email, final String password) {
 
-
-        mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-
-                        boolean isSuccessful = task.isSuccessful();
-                        if (isSuccessful) {
-
-
-                            signInPasswordTxt.setError(null);
-
-
-                            doLogin();
-
-                        } else {
-
-                            signInBtn.setEnabled(true);
-
-
-                            Exception exception = task.getException();
-                            if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
-
-                                signInPasswordTxt.setError(getString(R.string.login_label_incorrectPassword));
-
-                            } else if (exception != null && exception.getClass() == FirebaseNetworkException.class) {
-
-                                if (mAuth.getCurrentUser() != null) {
-                                    doLogin();
-                                }
-
-                            }
-
-
-                        }
-
-                    }
-                });
-    }
-
-    private void doLogin() {
-
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
-
-        // if(.size() > 0)
-        {
-
-
-         /*   Profile userProfile = new Profile();
-            userProfile.setId(user.getUid());
-            userProfile.setRole();
-
-            getActivity().getApplication().setCurrentUserProfile();*/
-
-            preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
-
-            ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
-            getActivity().finish();
-        }
-       /* else
-        {
-
-            Toast.makeText(getActivity(), "Não foi possível carregar o perfil do usuário.", Toast.LENGTH_SHORT).show();
-        }*/
-
-    }
 
     public void setUIEvents(View inflatedView) {
 
@@ -207,8 +133,8 @@ public class SignInFragment extends Fragment {
         };
 
 
-        signInUserTxt.setText("farofa@test.com");
-        signInPasswordTxt.setText("123_@123");
+        signInUserTxt.setText("fa@test.com");
+        signInPasswordTxt.setText("123456");
 
         signInRememberCbx.setChecked(isRememberMeChecked);
         String storedEmail;
@@ -256,7 +182,29 @@ public class SignInFragment extends Fragment {
 
 
                 if (isFilledOut) {
-                    signIn(email, password);
+
+                    authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
+                        @Override
+                        public void onSuccess() {
+                            signInPasswordTxt.setError(null);
+                            preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
+
+                            ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
+                            getActivity().finish();
+                        }
+
+                        @Override
+                        public void onError(Exception exception) {
+                            signInBtn.setEnabled(true);
+
+                            if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
+
+                                signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
+
+                            }
+                        }
+                    });
+                    authenticationHelper.signIn(email, password);
 
                 }
 

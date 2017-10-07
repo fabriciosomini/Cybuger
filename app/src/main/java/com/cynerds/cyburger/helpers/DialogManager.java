@@ -17,8 +17,8 @@ import com.cynerds.cyburger.R;
 public class DialogManager {
 
     public static DialogResult Result;
-    private final DialogType dialogType;
     private final Context context;
+    private DialogType dialogType;
     private DialogAction dialogAction;
     private AlertDialog alertDialog;
     private int layoutResId = -1;
@@ -28,6 +28,14 @@ public class DialogManager {
         this.context = context;
         this.dialogType = dialogType;
         this.dialogAction = dialogAction;
+    }
+
+
+    public DialogManager(Context context) {
+
+        this.context = context;
+
+
     }
 
     public void showDialog(String message) {
@@ -47,7 +55,10 @@ public class DialogManager {
 
 
         final Context dialogContext = context;
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+        DialogInterface.OnClickListener dialogClickListener;
+        if (dialogAction != null) {
+            dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -72,11 +83,22 @@ public class DialogManager {
                 }
             }
         };
+        } else {
+            //Se você não definir as ações do click, o comportamento será o padrão
+            dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            };
+
+        }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         contentView = inflater.inflate(R.layout.dialog_add_item, null);
         View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
         alertDialog = builder.create();
         title = title == null ? "" : title;
         message = message == null ? "" : message;
@@ -95,35 +117,41 @@ public class DialogManager {
         }
 
 
-        switch (dialogType) {
+        if (dialogType != null) {
 
-            case OK:
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
+            switch (dialogType) {
 
-            case OK_CANCEL:
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
+                case OK:
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
 
-            case SAVE_NO_CANCEL:
+                case OK_CANCEL:
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
 
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
-                break;
+                case SAVE_NO_CANCEL:
 
-            case YES_NO:
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
+                    break;
 
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Sim", dialogClickListener);
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
+                case YES_NO:
+
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Sim", dialogClickListener);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
                     break;
 
 
-            case SAVE_CANCEL:
+                case SAVE_CANCEL:
 
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
-                break;
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
+                    break;
 
+
+            }
+        } else {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
 
         }
 

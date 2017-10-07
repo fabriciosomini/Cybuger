@@ -6,7 +6,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     private final DatabaseReference mainReference;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
-    // ConnectivityManager connectivityManager;
     private List<BaseModel> items;
     private DataChangeListener dataChangeListener;
 
@@ -30,10 +28,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         this.classType = classType;
         database = FirebaseDatabase.getInstance();
         mainReference = database.getReference();
-        //connectivityManager = new ConnectivityManager(mainReference);
-
         databaseReference = mainReference.child(classType.getSimpleName());
-        // databaseReference.keepSynced(true);
 
         items = new ArrayList<>();
 
@@ -152,10 +147,6 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     }
 
 
-    /*public boolean isConnected(){
-        return connectivityManager.isConnected();
-    }*/
-
     private int getIndexOfObject(BaseModel object) {
 
         for (int i = 0; i < items.size(); i++) {
@@ -185,6 +176,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         firebaseRealtimeDatabaseResult.setMessage("Success");
         firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
 
+
         databaseReference.push().setValue(baseModel);
 
         return firebaseRealtimeDatabaseResult;
@@ -197,10 +189,6 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
 
 
-    }
-
-    public Query getDatabaseReference() {
-        return databaseReference;
     }
 
     public enum DatabaseOperationResultType {
