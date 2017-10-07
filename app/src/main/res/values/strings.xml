@@ -34,4 +34,6 @@
     <string name="manage_items_item_description">Descrição do item</string>
     <string name="manage_items_item_price">Preço do item</string>
     <string name="manage_items_add_item">Adicionar item</string>
+    <string name="manage_items_item_ingredients">Ingredientes</string>
+    <string name="manage_items_item_measure_unit">Unidade de medida</string>
 </resources>

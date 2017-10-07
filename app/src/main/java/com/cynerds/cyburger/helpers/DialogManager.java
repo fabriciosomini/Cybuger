@@ -22,7 +22,7 @@ public class DialogManager {
     private DialogAction dialogAction;
     private AlertDialog alertDialog;
     private int layoutResId = -1;
-
+    private View contentView;
     public DialogManager(Context context, DialogType dialogType, DialogAction dialogAction) {
 
         this.context = context;
@@ -30,14 +30,17 @@ public class DialogManager {
         this.dialogAction = dialogAction;
     }
 
-    public void setContentView(@LayoutRes int layoutResID) {
-        this.layoutResId = layoutResID;
-    }
-
-
     public void showDialog(String message) {
 
         showDialog("", message);
+    }
+
+    public View getContentView() {
+        return contentView;
+    }
+
+    public void setContentView(@LayoutRes int layoutResID) {
+        this.layoutResId = layoutResID;
     }
 
     public void showDialog(String title, String message) {
@@ -71,8 +74,8 @@ public class DialogManager {
         };
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        contentView = inflater.inflate(R.layout.dialog_add_item, null);
         View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
-        View contentView = inflater.inflate(R.layout.dialog_add_item, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         alertDialog = builder.create();
         title = title == null ? "" : title;

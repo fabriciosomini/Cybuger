@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
@@ -43,8 +42,13 @@ public class CombosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
+        createList(view);
+
+        return view;
+    }
+
+    private void createList(View view) {
         final ListView listview = (ListView) view.findViewById(android.R.id.list);
 
 
@@ -55,19 +59,14 @@ public class CombosFragment extends Fragment {
 
                 if (firebaseRealtimeDatabaseHelper.selectAll().size() > 0) {
 
-                    Toast.makeText(CombosFragment.this.getActivity(), "FUCK THIS ITEMS COMING", Toast.LENGTH_SHORT).show();
-
                     List<DashboardCardViewItem> dashboardCardViewItems = getDashboardCardViewItems();
                     DashboardCardAdapter adapter =
                             new DashboardCardAdapter(getActivity(), R.layout.dashboard_card_view, dashboardCardViewItems);
 
-                    //  adapter.notifyDataSetChanged();
 
                     listview.setAdapter(adapter);
 
 
-                } else {
-                    Toast.makeText(CombosFragment.this.getActivity(), "AIN'T NO SHH HERE", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -75,9 +74,8 @@ public class CombosFragment extends Fragment {
         };
 
         firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
-
-        return view;
     }
+
 
     List<MonthlyCombo> getDailyCombo() {
 

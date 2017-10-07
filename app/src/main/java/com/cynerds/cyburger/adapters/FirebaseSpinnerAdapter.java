@@ -17,10 +17,10 @@ import com.google.firebase.database.Query;
  * Created by fabri on 08/07/2017.
  */
 
-public class BaseSpinnerAdapter<T> extends FirebaseListAdapter<T> {
+public class FirebaseSpinnerAdapter<T> extends FirebaseListAdapter<T> {
 
 
-    public BaseSpinnerAdapter(Activity activity, Class<T> modelClass, @LayoutRes int modelLayout, Query query) {
+    public FirebaseSpinnerAdapter(Activity activity, Class<T> modelClass, @LayoutRes int modelLayout, Query query) {
 
         super(activity, modelClass, modelLayout, query);
     }

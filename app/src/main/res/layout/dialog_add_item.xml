@@ -50,4 +50,50 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemPriceLabel" />
+
+    <TextView
+        android:id="@+id/itemIngredientsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/manage_items_item_ingredients"
+        app:layout_constraintLeft_toLeftOf="@+id/itemIngredients"
+        app:layout_constraintTop_toBottomOf="@+id/itemPrice" />
+
+    <EditText
+        android:id="@+id/itemIngredients"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:inputType="text"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemIngredientsLabel" />
+
+    <TextView
+        android:id="@+id/itemMeasureUnitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/manage_items_item_measure_unit"
+        app:layout_constraintLeft_toLeftOf="@+id/itemMeasureUnitCbx"
+        app:layout_constraintTop_toBottomOf="@+id/itemIngredients" />
+
+    <Spinner
+        android:id="@+id/itemMeasureUnitCbx"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemMeasureUnitLabel" />
 </android.support.constraint.ConstraintLayout>

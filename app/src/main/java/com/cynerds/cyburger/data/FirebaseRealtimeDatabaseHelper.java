@@ -10,6 +10,7 @@ import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by fabri on 07/07/2017.
@@ -167,13 +168,25 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         return -1;
     }
 
-    public FirebaseRealtimeDatabaseResult insert(T t) {
+    public FirebaseRealtimeDatabaseResult insert(BaseModel baseModel) {
+
+        if (baseModel != null) {
+            if (baseModel.getId() != null) {
+                if (baseModel.getId().isEmpty()) {
+                    baseModel.setId(UUID.randomUUID().toString());
+                }
+            } else {
+
+                baseModel.setId(UUID.randomUUID().toString());
+            }
+        }
+
 
         FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
         firebaseRealtimeDatabaseResult.setMessage("Success");
         firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
 
-        databaseReference.push().setValue(t);
+        databaseReference.push().setValue(baseModel);
 
         return firebaseRealtimeDatabaseResult;
     }
