@@ -33,7 +33,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         //connectivityManager = new ConnectivityManager(mainReference);
 
         databaseReference = mainReference.child(classType.getSimpleName());
-        databaseReference.keepSynced(true);
+        // databaseReference.keepSynced(true);
 
         items = new ArrayList<>();
 
@@ -190,56 +190,13 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         return firebaseRealtimeDatabaseResult;
     }
 
-    public List<BaseModel> selectAll() {
+    public List<BaseModel> get() {
 
 
         return items;
 
 
 
-       /* if (type.equals(Incoming.class.getName())) {
-
-
-            FirebaseRealtimeDatabaseHelper<IncomingType> incomingTypeDatabaseOperations = new FirebaseRealtimeDatabaseHelper<>(IncomingType.class);
-            List<IncomingType> incomingTypes = incomingTypeDatabaseOperations.selectAll(IncomingType.class.getName());
-            IncomingType incomingType = incomingTypes.get(0);
-
-            Incoming incoming1 = new Incoming();
-            incoming1.setDescription("Salário parte 1");
-            incoming1.setAmount(900.50f);
-            incoming1.setIncomingType(incomingType);
-
-            Incoming incoming2 = new Incoming();
-            incoming2.setDescription("Salário parte 2");
-            incoming2.setAmount(300.50f);
-            incoming2.setIncomingType(incomingType);
-
-
-            items.add((T) incoming1);
-            items.add((T) incoming2);
-        }
-
-        if (type.equals(IncomingType.class.getName())) {
-
-            IncomingType incomingTypeSalary = new IncomingType();
-            incomingTypeSalary.setId(0);
-            incomingTypeSalary.setDescription("Salário");
-
-            IncomingType incomingTypeExtraIncoming = new IncomingType();
-            incomingTypeExtraIncoming.setId(1);
-            incomingTypeExtraIncoming.setDescription("Receita extra");
-
-            IncomingType incomingTypeSavings = new IncomingType();
-            incomingTypeSavings.setId(2);
-            incomingTypeSavings.setDescription("Econômias");
-
-            items.add((T) incomingTypeSalary);
-            items.add((T) incomingTypeExtraIncoming);
-            items.add((T) incomingTypeSavings);
-        }
-
-
-        return (ArrayList<T>) items;*/
     }
 
     public Query getDatabaseReference() {

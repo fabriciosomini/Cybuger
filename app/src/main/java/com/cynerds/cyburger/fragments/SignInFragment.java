@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
+import com.cynerds.cyburger.models.profile.Profile;
 import com.facebook.CallbackManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -144,10 +146,31 @@ public class SignInFragment extends Fragment {
 
     private void doLogin() {
 
-        preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
 
-        ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
-        getActivity().finish();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+
+        // if(.size() > 0)
+        {
+
+
+         /*   Profile userProfile = new Profile();
+            userProfile.setId(user.getUid());
+            userProfile.setRole();
+
+            getActivity().getApplication().setCurrentUserProfile();*/
+
+            preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
+
+            ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
+            getActivity().finish();
+        }
+       /* else
+        {
+
+            Toast.makeText(getActivity(), "Não foi possível carregar o perfil do usuário.", Toast.LENGTH_SHORT).show();
+        }*/
 
     }
 

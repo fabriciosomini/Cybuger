@@ -146,7 +146,7 @@ public class ManageItemsActivity extends BaseActivity {
             public void onDataChanged(Object item) {
 
 
-                if (firebaseRealtimeDatabaseHelper.selectAll().size() > 0) {
+                if (firebaseRealtimeDatabaseHelper.get().size() > 0) {
 
                     getDashboardCardViewItems();
 
@@ -179,7 +179,7 @@ public class ManageItemsActivity extends BaseActivity {
 
     List<Item> getItems() {
 
-        List<Item> items = firebaseRealtimeDatabaseHelper.selectAll();
+        List<Item> items = firebaseRealtimeDatabaseHelper.get();
         return items;
 
     }
