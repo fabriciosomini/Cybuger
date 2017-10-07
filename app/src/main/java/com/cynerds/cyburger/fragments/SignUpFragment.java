@@ -2,14 +2,19 @@ package com.cynerds.cyburger.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -84,6 +89,23 @@ public class SignUpFragment extends Fragment {
 
     private void createUser(String email, String password) {
         //Criar usuário no fibase
+
+        Task<AuthResult> createNewUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
+
+        createNewUser.addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+
+                } else {
+
+                    Exception exception = task.getException();
+                    Toast.makeText(getActivity(), "Algo deu errado ao criar o usuário", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
 }
