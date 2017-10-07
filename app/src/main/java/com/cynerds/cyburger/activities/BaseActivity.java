@@ -37,6 +37,14 @@ public class BaseActivity extends AppCompatActivity {
     private TextView actionBarTitle;
 
 
+    public View getView() {
+
+
+        return findViewById(android.R.id.content);
+    }
+
+
+
     public View.OnClickListener getOnSaveListener() {
         return onSaveListener;
     }
@@ -133,6 +141,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +155,8 @@ public class BaseActivity extends AppCompatActivity {
 
         actionBarTitle = (TextView) findViewById(R.id.action_bar_title);
 
+
+        getView().setFocusableInTouchMode(true);
 
     }
 

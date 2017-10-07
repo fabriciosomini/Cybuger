@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.fragments.CombosFragment;
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity {
                             combosFragment,
                             combosFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_combos));
-
+                    Toast.makeText(MainActivity.this, "CombosFragment", Toast.LENGTH_SHORT).show();
                     return true;
 
                 case R.id.navigation_foodMenu:

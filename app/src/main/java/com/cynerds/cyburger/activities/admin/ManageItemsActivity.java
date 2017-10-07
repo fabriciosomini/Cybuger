@@ -1,6 +1,8 @@
 package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,10 +40,36 @@ public class ManageItemsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_items);
+        setActionBarTitle(getString(R.string.menu_manage_items));
 
 
-        EditText searchItemBoxTxt = (EditText) findViewById(R.id.searchItemBoxTxt);
-        searchItemBoxTxt.setFocusableInTouchMode(true);
+        createList();
+
+        setUIEvents();
+
+    }
+
+    private void setUIEvents() {
+
+
+        EditText searchItemBoxTxt = (EditText) findViewById(R.id.searchBoxItemsTxt);
+        searchItemBoxTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         Button addNewItemBtn = (Button) findViewById(R.id.addNewItemBtn);
 
@@ -105,9 +133,6 @@ public class ManageItemsActivity extends BaseActivity {
             }
         });
 
-
-        createList();
-
     }
 
     private void createList() {
@@ -154,8 +179,8 @@ public class ManageItemsActivity extends BaseActivity {
 
     List<Item> getItems() {
 
-        List<Item> server = firebaseRealtimeDatabaseHelper.selectAll();
-        return server;
+        List<Item> items = firebaseRealtimeDatabaseHelper.selectAll();
+        return items;
 
     }
 

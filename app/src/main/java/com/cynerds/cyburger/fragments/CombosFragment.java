@@ -3,10 +3,14 @@ package com.cynerds.cyburger.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
@@ -28,9 +32,12 @@ import java.util.UUID;
 public class CombosFragment extends Fragment {
 
 
+
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
+    private boolean isListCreated;
 
     public CombosFragment() {
         // Required empty public constructor
@@ -46,13 +53,45 @@ public class CombosFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
-        createList(view);
+
+        if (!isListCreated) {
+            isListCreated = true;
+            createList(view);
+        }
+
+        updateList(view);
+        setUIEvents(view);
+
 
         return view;
     }
 
-    private void createList(View view) {
-        final ListView listview = (ListView) view.findViewById(android.R.id.list);
+    private void setUIEvents(View view) {
+
+        view.setFocusableInTouchMode(true);
+
+        EditText searchBoxCombosTxt = (EditText) view.findViewById(R.id.searchBoxCombosTxt);
+
+
+        searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void createList(final View view) {
 
 
         FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
@@ -62,24 +101,7 @@ public class CombosFragment extends Fragment {
 
                 if (firebaseRealtimeDatabaseHelper.selectAll().size() > 0) {
 
-                    getDashboardCardViewItems();
-
-                    if (adapter == null) {
-                        adapter =
-                                new DashboardCardAdapter(getContext(),
-                                        R.layout.dashboard_card_view, dashboardCardViewItems);
-
-
-                        listview.setAdapter(adapter);
-                    } else {
-
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
+                    updateList(view);
 
                 }
             }
@@ -88,11 +110,39 @@ public class CombosFragment extends Fragment {
         firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
     }
 
+    private void updateList(View view) {
+
+        Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
+        final ListView listview = (ListView) view.findViewById(android.R.id.list);
+        getDashboardCardViewItems();
+
+        if (adapter == null) {
+            adapter =
+                    new DashboardCardAdapter(getContext(),
+                            R.layout.dashboard_card_view, dashboardCardViewItems);
+
+
+            listview.setAdapter(adapter);
+        } else {
+
+            if (listview.getAdapter() == null) {
+
+                listview.setAdapter(adapter);
+            }
+
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
 
     List<MonthlyCombo> getDailyCombo() {
 
-        List<MonthlyCombo> server = firebaseRealtimeDatabaseHelper.selectAll();
-        return server;
+        List<MonthlyCombo> dailyCombos = firebaseRealtimeDatabaseHelper.selectAll();
+        return dailyCombos;
 
     }
 

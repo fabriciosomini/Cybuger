@@ -36,4 +36,5 @@
     <string name="manage_items_add_item">Adicionar item</string>
     <string name="manage_items_item_ingredients">Ingredientes</string>
     <string name="manage_items_item_measure_unit">Unidade de medida</string>
+    <string name="general_search">Buscar</string>
 </resources>

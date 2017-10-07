@@ -35,6 +35,12 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        setUIEvents(inflatedView);
+
+        return inflatedView;
+    }
+
+    private void setUIEvents(View inflatedView) {
         inflatedView.setFocusableInTouchMode(true);
 
         signUpUserTxt = (EditText) inflatedView.findViewById(R.id.signUpUserTxt);
@@ -75,8 +81,6 @@ public class SignUpFragment extends Fragment {
 
             }
         });
-
-        return inflatedView;
     }
 
     private void createUser(String email, String password) {

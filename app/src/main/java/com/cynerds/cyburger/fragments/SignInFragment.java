@@ -1,7 +1,6 @@
 package com.cynerds.cyburger.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,20 +14,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.activities.LoginActivity;
-
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookException;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +58,102 @@ public class SignInFragment extends Fragment {
 
 
         View inflatedView = inflater.inflate(R.layout.fragment_sign_in, container, false);
+
+        setUIEvents(inflatedView);
+
+
+        return inflatedView;
+    }
+
+    private void doLoginFacebook() {
+        // Initialize Facebook Login button
+       /* mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) getActivity().findViewById(R.id.signInFacebookBtn);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // ...
+            }
+        });*/
+    }
+
+
+   // @Override
+   /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }*/
+    private void signIn(final String email, final String password) {
+
+
+        mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+
+                        boolean isSuccessful = task.isSuccessful();
+                        if (isSuccessful) {
+
+
+                            signInPasswordTxt.setError(null);
+
+
+                            doLogin();
+
+                        } else {
+
+                            signInBtn.setEnabled(true);
+
+
+                            Exception exception = task.getException();
+                            if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
+
+                                signInPasswordTxt.setError(getString(R.string.login_label_incorrectPassword));
+
+                            } else if (exception != null && exception.getClass() == FirebaseNetworkException.class) {
+
+                                if (mAuth.getCurrentUser() != null) {
+                                    doLogin();
+                                }
+
+                            }
+
+
+                        }
+
+                    }
+                });
+    }
+
+    private void doLogin() {
+
+        preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
+
+        ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
+        getActivity().finish();
+
+    }
+
+    public void setUIEvents(View inflatedView) {
         inflatedView.setFocusableInTouchMode(true);
+
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(getActivity());
         permissions = new Permissions(getActivity());
@@ -179,96 +266,5 @@ public class SignInFragment extends Fragment {
         });
 
 
-
-
-
-        return inflatedView;
     }
-
-    private void doLoginFacebook() {
-        // Initialize Facebook Login button
-       /* mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) getActivity().findViewById(R.id.signInFacebookBtn);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                // ...
-            }
-        });*/
-    }
-
-
-   // @Override
-   /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Pass the activity result back to the Facebook SDK
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }*/
-    private void signIn(final String email, final String password) {
-
-
-        mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-
-                        boolean isSuccessful = task.isSuccessful();
-                        if (isSuccessful) {
-
-
-                            signInPasswordTxt.setError(null);
-
-
-                            doLogin();
-
-                        } else {
-
-                            signInBtn.setEnabled(true);
-
-
-                            Exception exception = task.getException();
-                            if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
-
-                                signInPasswordTxt.setError(getString(R.string.login_label_incorrectPassword));
-
-                            } else if (exception != null && exception.getClass() == FirebaseNetworkException.class) {
-
-                                if (mAuth.getCurrentUser() != null) {
-                                    doLogin();
-                                }
-
-                            }
-
-
-                        }
-
-                    }
-                });
-    }
-
-    private void doLogin() {
-
-        preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
-
-        ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
-        getActivity().finish();
-
-    }
-
 }

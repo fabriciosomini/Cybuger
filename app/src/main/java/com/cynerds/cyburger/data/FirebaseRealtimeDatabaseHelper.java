@@ -131,7 +131,6 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
                     if (index > -1) {
 
-
                         items.set(index, object);
 
                     }
