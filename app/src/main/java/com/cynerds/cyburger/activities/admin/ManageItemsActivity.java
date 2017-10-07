@@ -25,11 +25,13 @@ public class ManageItemsActivity extends BaseActivity {
 
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
-
+    List<DashboardCardViewItem> dashboardCardViewItems;
+    DashboardCardAdapter adapter;
 
     public ManageItemsActivity() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Item.class);
+        dashboardCardViewItems = new ArrayList<>();
     }
 
     @Override
@@ -121,14 +123,24 @@ public class ManageItemsActivity extends BaseActivity {
 
                 if (firebaseRealtimeDatabaseHelper.selectAll().size() > 0) {
 
-                    List<DashboardCardViewItem> dashboardCardViewItems = getDashboardCardViewItems();
-                    DashboardCardAdapter adapter =
-                            new DashboardCardAdapter(getApplicationContext(),
-                                    R.layout.dashboard_card_view, dashboardCardViewItems);
+                    getDashboardCardViewItems();
+
+                    if (adapter == null) {
+                        adapter =
+                                new DashboardCardAdapter(getApplicationContext(),
+                                        R.layout.dashboard_card_view, dashboardCardViewItems);
 
 
-                    listview.setAdapter(adapter);
+                        listview.setAdapter(adapter);
+                    } else {
 
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
 
                 }
 
@@ -147,27 +159,46 @@ public class ManageItemsActivity extends BaseActivity {
 
     }
 
-    public List<DashboardCardViewItem> getDashboardCardViewItems() {
+    public void getDashboardCardViewItems() {
 
-        List<DashboardCardViewItem> items = new ArrayList<>();
 
         List<Item> monthlyCombos = getItems();
 
+        boolean repeat = false;
 
         for (Item item :
                 monthlyCombos) {
 
-
             DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
+            dashboardCardViewItem.setId(item.getId());
             dashboardCardViewItem.setTitle(item.getDescription());
             dashboardCardViewItem.setContent("Ingredientes: " + item.getIngredients()
                     + "\nUnidade de medida: "
                     + item.getSize()
                     + "\nPreço: " + item.getPrice());
-            items.add(dashboardCardViewItem);
+
+
+            for (int i = 0; i < dashboardCardViewItems.size(); i++) {
+                DashboardCardViewItem d = dashboardCardViewItems.get(i);
+                if (item.getId().equals(d.getId())) {
+                    repeat = true;
+                    dashboardCardViewItems.set(i, dashboardCardViewItem);
+                    break;
+                } else {
+                    repeat = false;
+                }
+            }
+
+            if (repeat) {
+                continue;
+            }
+
+
+            dashboardCardViewItems.add(dashboardCardViewItem);
+
 
         }
-        return items;
+
     }
 
     public List<String> getMeasureUnitItems() {

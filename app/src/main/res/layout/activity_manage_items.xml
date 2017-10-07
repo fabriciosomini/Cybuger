@@ -8,6 +8,7 @@
 
     <Button
         android:id="@+id/addNewItemBtn"
+        style="@style/AppTheme.CyburgerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
@@ -18,20 +19,23 @@
 
     <EditText
         android:id="@+id/searchItemBoxTxt"
+        style="@style/AppTheme.CyburgerEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@android:id/list"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/addNewItemBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@android:id/list"
-        android:layout_width="395dp"
-        android:layout_height="587dp"
-
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"

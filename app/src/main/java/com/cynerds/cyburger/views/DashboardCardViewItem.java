@@ -2,13 +2,15 @@ package com.cynerds.cyburger.views;
 
 import android.view.View;
 
+import com.cynerds.cyburger.models.BaseModel;
+
 /**
  * Created by fabri on 05/07/2017.
  */
 
-public class DashboardCardViewItem {
+public class DashboardCardViewItem extends BaseModel {
 
-    private int id;
+
     private String title;
     private String content;
     private int headerIconId;
@@ -49,13 +51,7 @@ public class DashboardCardViewItem {
         this.actionIconId = actionIconId;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
