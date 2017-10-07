@@ -119,7 +119,7 @@ public class DialogManager {
 
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
-                    break;
+                break;
 
 
         }
