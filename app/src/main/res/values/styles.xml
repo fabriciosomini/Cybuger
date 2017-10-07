@@ -12,10 +12,12 @@
 
     <style name="AppTheme.CyburgerButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_shape</item>
+        <item name="android:layout_height">45dp</item>
     </style>
 
     <style name="AppTheme.CyburgerEditText" parent="Widget.AppCompat.EditText">
         <item name="android:background">@drawable/edit_text_shape</item>
+
     </style>
 
 </resources>
