@@ -62,13 +62,11 @@ public class CombosFragment extends Fragment {
         updateList(view);
         setUIEvents(view);
 
-
         return view;
     }
 
     private void setUIEvents(View view) {
 
-        view.setFocusableInTouchMode(true);
 
         EditText searchBoxCombosTxt = (EditText) view.findViewById(R.id.searchBoxCombosTxt);
 

@@ -41,7 +41,6 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setUIEvents(View inflatedView) {
-        inflatedView.setFocusableInTouchMode(true);
 
         signUpUserTxt = (EditText) inflatedView.findViewById(R.id.signUpUserTxt);
         signUpPasswordTxt = (EditText) inflatedView.findViewById(R.id.signUpPassword);

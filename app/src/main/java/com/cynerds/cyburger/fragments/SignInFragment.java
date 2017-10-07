@@ -152,7 +152,7 @@ public class SignInFragment extends Fragment {
     }
 
     public void setUIEvents(View inflatedView) {
-        inflatedView.setFocusableInTouchMode(true);
+
 
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(getActivity());
