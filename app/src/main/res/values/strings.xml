@@ -43,4 +43,7 @@
     <string name="login_error_email_already_taken">Este e-mail já está em uso</string>
     <string name="login_error_unable_load_profile">Não foi possível carregar o perfil do usuário.</string>
     <string name="general_plus_signal">+</string>
+    <string name="sign_up_display_name">Nome</string>
+    <string name="sign_up_password">Senha</string>
+    <string name="sign_up_email">E-mail</string>
 </resources>

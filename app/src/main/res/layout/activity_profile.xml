@@ -6,19 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.cynerds.cyburger.activities.ProfileActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Seu nome"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/saveProfileBtn"
         style="@style/AppTheme.CyburgerButton"
         android:layout_width="0dp"
         android:layout_marginBottom="10dp"
@@ -32,39 +21,59 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <EditText
-        android:id="@+id/editText"
-        style="@style/AppTheme.CyburgerEditText"
+    <TextView
+        android:id="@+id/profileNameTxt"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:text="Olá, {user.name}"
+        android:textSize="20dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintRight_toLeftOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/profileEmailLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="15dp"
         android:text="Seu e-mail"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintBottom_toTopOf="@+id/profileEmailTxt"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/profileEmailTxt"
         style="@style/AppTheme.CyburgerEditText"
         android:layout_width="304dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="0dp"
         android:layout_marginStart="8dp"
-        android:ems="10"
 
+        android:layout_marginTop="8dp"
+        android:ems="10"
         android:inputType="textPersonName"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintRight_toLeftOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="66dp"
+        android:layout_marginLeft="232dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_profile" />
 </android.support.constraint.ConstraintLayout>

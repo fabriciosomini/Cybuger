@@ -31,6 +31,7 @@ public class SignUpFragment extends Fragment {
 
 
     private EditText signUpUserTxt;
+    private EditText signUpDisplayNameTxt;
     private EditText signUpPasswordTxt;
     private EditText signUpConfirmPasswordTxt;
     private Button signUpBtn;
@@ -55,7 +56,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setUIEvents(View inflatedView) {
-
+        signUpDisplayNameTxt = (EditText) inflatedView.findViewById(R.id.signUpDisplayNameTxt);
         signUpUserTxt = (EditText) inflatedView.findViewById(R.id.signUpUserTxt);
         signUpPasswordTxt = (EditText) inflatedView.findViewById(R.id.signUpPassword);
         signUpConfirmPasswordTxt = (EditText) inflatedView.findViewById(R.id.signUpConfirmPasswordTxt);
@@ -76,11 +77,18 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                String displayName = signUpDisplayNameTxt.getText().toString().trim();
                 String email = signUpUserTxt.getText().toString().trim();
                 String password = signUpPasswordTxt.getText().toString().trim();
                 String confirmPassword = signUpConfirmPasswordTxt.getText().toString().trim();
 
                 boolean isFilledOut = true;
+
+                if (displayName.equals("")) {
+
+                    signUpDisplayNameTxt.setError(getString(R.string.general_label_requiredfield));
+                    isFilledOut = false;
+                }
 
                 if (email.equals("")) {
 
@@ -121,6 +129,7 @@ public class SignUpFragment extends Fragment {
 
     private void createUser(final String email, final String password) {
 
+
         signUpBtn.setEnabled(false);
 
         Task<AuthResult> createNewUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
@@ -131,7 +140,6 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
 
 
-                    Toast.makeText(getActivity(), "Usuário criado", Toast.LENGTH_SHORT).show();
 
                     authenticationHelper.createProfile(task.getResult().getUser());
 
