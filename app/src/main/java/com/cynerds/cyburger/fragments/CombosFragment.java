@@ -28,12 +28,15 @@ import java.util.UUID;
 public class CombosFragment extends Fragment {
 
 
-    FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    List<DashboardCardViewItem> dashboardCardViewItems;
+    DashboardCardAdapter adapter;
 
     public CombosFragment() {
         // Required empty public constructor
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(MonthlyCombo.class);
+        dashboardCardViewItems = new ArrayList<>();
         //createCombos();
     }
 
@@ -59,17 +62,26 @@ public class CombosFragment extends Fragment {
 
                 if (firebaseRealtimeDatabaseHelper.selectAll().size() > 0) {
 
-                    List<DashboardCardViewItem> dashboardCardViewItems = getDashboardCardViewItems();
-                    DashboardCardAdapter adapter =
-                            new DashboardCardAdapter(getActivity(), R.layout.dashboard_card_view, dashboardCardViewItems);
+                    getDashboardCardViewItems();
+
+                    if (adapter == null) {
+                        adapter =
+                                new DashboardCardAdapter(getContext(),
+                                        R.layout.dashboard_card_view, dashboardCardViewItems);
 
 
-                    listview.setAdapter(adapter);
+                        listview.setAdapter(adapter);
+                    } else {
 
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
 
                 }
-
-
             }
         };
 
@@ -137,13 +149,13 @@ public class CombosFragment extends Fragment {
 
     }
 
-    public List<DashboardCardViewItem> getDashboardCardViewItems() {
+    public void getDashboardCardViewItems() {
 
-        List<DashboardCardViewItem> items = new ArrayList<>();
+
 
         List<MonthlyCombo> monthlyCombos = getDailyCombo();
 
-
+        boolean repeat = false;
         for (MonthlyCombo monthlyCombo :
                 monthlyCombos) {
 
@@ -156,12 +168,33 @@ public class CombosFragment extends Fragment {
 
                     DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
                     dashboardCardViewItem.setTitle(combo.getComboName());
-                    items.add(dashboardCardViewItem);
+                    dashboardCardViewItem.setId(combo.getId());
+
+
+                    for (int i = 0; i < dashboardCardViewItems.size(); i++) {
+                        DashboardCardViewItem d = dashboardCardViewItems.get(i);
+                        if (combo.getId().equals(d.getId())) {
+                            repeat = true;
+                            dashboardCardViewItems.set(i, dashboardCardViewItem);
+                            break;
+                        } else {
+                            repeat = false;
+                        }
+                    }
+
+                    if (repeat) {
+                        continue;
+                    }
+
+
+                    dashboardCardViewItems.add(dashboardCardViewItem);
                 }
             }
 
 
         }
-        return items;
+
     }
+
+
 }

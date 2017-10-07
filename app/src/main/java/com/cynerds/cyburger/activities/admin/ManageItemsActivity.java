@@ -162,12 +162,12 @@ public class ManageItemsActivity extends BaseActivity {
     public void getDashboardCardViewItems() {
 
 
-        List<Item> monthlyCombos = getItems();
+        List<Item> items = getItems();
 
         boolean repeat = false;
 
         for (Item item :
-                monthlyCombos) {
+                items) {
 
             DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
             dashboardCardViewItem.setId(item.getId());
