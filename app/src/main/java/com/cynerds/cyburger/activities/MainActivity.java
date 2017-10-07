@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
@@ -15,7 +16,7 @@ import com.cynerds.cyburger.fragments.OrdersFragment;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 
-public class MainActivity extends WorkspaceActivity {
+public class MainActivity extends BaseActivity {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     CombosFragment combosFragment = new CombosFragment();
@@ -83,25 +84,26 @@ public class MainActivity extends WorkspaceActivity {
     public void onBackPressed() {
         backPressed++;
         if (backPressed > 0) {
-            Runnable positiveAction = new Runnable() {
+
+
+            DialogAction dialogAction = new DialogAction();
+            dialogAction.setPositiveAction(new View.OnClickListener() {
                 @Override
-                public void run() {
+                public void onClick(View v) {
                     finish();
                 }
-            };
-
-            Runnable negativeAction = new Runnable() {
+            });
+            dialogAction.setNegativeAction(new View.OnClickListener() {
                 @Override
-                public void run() {
+                public void onClick(View v) {
                     backPressed = 0;
                 }
-            };
-            DialogAction dialogAction = new DialogAction();
-            dialogAction.setPositiveAction(positiveAction);
-            dialogAction.setNegativeAction(negativeAction);
+            });
 
-            DialogManager dialogManager = new DialogManager();
-            dialogManager.showDialog(this, "Tem certeza que deseja sair?", DialogManager.DialogType.YES_NO, dialogAction);
+            DialogManager dialogManager = new DialogManager(this,
+                    DialogManager.DialogType.YES_NO,
+                    dialogAction);
+            dialogManager.showDialog("Tem certeza que deseja sair?");
         }
     }
 

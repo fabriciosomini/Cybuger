@@ -2,7 +2,13 @@ package com.cynerds.cyburger.helpers;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import com.cynerds.cyburger.R;
 
 /**
  * Created by fabri on 08/07/2017.
@@ -11,66 +17,115 @@ import android.support.v7.app.AlertDialog;
 public class DialogManager {
 
     public static DialogResult Result;
-    DialogAction dialogAction;
+    private final DialogType dialogType;
+    private final Context context;
+    private DialogAction dialogAction;
     private AlertDialog alertDialog;
+    private int layoutResId = -1;
 
-    public DialogManager() {
+    public DialogManager(Context context, DialogType dialogType, DialogAction dialogAction) {
 
-        dialogAction = new DialogAction();
+        this.context = context;
+        this.dialogType = dialogType;
+        this.dialogAction = dialogAction;
     }
 
-    public void showDialog(Context context, String message, DialogType dialogType, final DialogAction dialogAction) {
+    public void setContentView(@LayoutRes int layoutResID) {
+        this.layoutResId = layoutResID;
+    }
+
+
+    public void showDialog(String message) {
+
+        showDialog("", message);
+    }
+
+    public void showDialog(String title, String message) {
+
+
+        final Context dialogContext = context;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        dialogAction.getPositiveAction().run();
-                        break;
+                        if (dialogAction.getPositiveAction() != null) {
+                            dialogAction.getPositiveAction().onClick(((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE));
+                            break;
+                        }
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        dialogAction.getNegativeAction().run();
-                        break;
+                        if (dialogAction.getNegativeAction() != null) {
+                            dialogAction.getNegativeAction().onClick(((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE));
+                            break;
+                        }
 
                     case DialogInterface.BUTTON_NEUTRAL:
-                        dialogAction.getNeutralAction().run();
-                        break;
+                        if (dialogAction.getNeutralAction() != null) {
+                            dialogAction.getNeutralAction().onClick(((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL));
+                            break;
+                        }
+
                 }
             }
         };
 
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
+        View contentView = inflater.inflate(R.layout.dialog_add_item, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        alertDialog = builder.create();
+        title = title == null ? "" : title;
+        message = message == null ? "" : message;
+
+        if (layoutResId > -1) {
+
+            alertDialog.setCustomTitle(titleView);
+            TextView titleText = (TextView) titleView.findViewById(R.id.alertTitleText);
+            titleText.setText(title);
+            alertDialog.setView(contentView);
+
+        } else {
+            alertDialog.setTitle(title);
+            alertDialog.setMessage(message);
+
+        }
 
 
         switch (dialogType) {
 
             case OK:
-                if (dialogAction.getPositiveAction() != null) {
-                    alertDialog = builder.setMessage(message).setPositiveButton("OK", dialogClickListener).show();
-                    break;
-                }
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
+
             case OK_CANCEL:
-                if (dialogAction.getPositiveAction() != null && dialogAction.getNeutralAction() != null) {
-                    alertDialog = builder.setMessage(message).setPositiveButton("OK", dialogClickListener)
-                            .setNegativeButton("Cancelar", dialogClickListener).show();
-                    break;
-                }
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
+
             case SAVE_NO_CANCEL:
-                if (dialogAction.getPositiveAction() != null && dialogAction.getNegativeAction() != null
-                        && dialogAction.getNeutralAction() != null) {
-                    alertDialog = builder.setMessage(message).setPositiveButton("Salvar", dialogClickListener)
-                            .setNegativeButton("Não salvar", dialogClickListener)
-                            .setNeutralButton("Cancelar", dialogClickListener).show();
-                    break;
-                }
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
+                break;
+
             case YES_NO:
-                if (dialogAction.getPositiveAction() != null && dialogAction.getNegativeAction() != null) {
-                    alertDialog = builder.setMessage(message).setPositiveButton("Sim", dialogClickListener)
-                            .setNegativeButton("Não", dialogClickListener).show();
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Sim", dialogClickListener);
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
                     break;
-                }
+
+
+            case SAVE_CANCEL:
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
+                    break;
+
 
         }
+
+
+        alertDialog.show();
 
 
     }
@@ -85,7 +140,7 @@ public class DialogManager {
     }
 
     public enum DialogType {
-        YES_NO, OK, OK_CANCEL, SAVE_NO_CANCEL
+        YES_NO, OK, OK_CANCEL, SAVE_NO_CANCEL, SAVE_CANCEL
     }
 
     public enum DialogResult {

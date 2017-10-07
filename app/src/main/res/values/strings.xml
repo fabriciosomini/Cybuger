@@ -11,7 +11,7 @@
     <string name="general_label_requiredfield">Campo requerido</string>
     <string name="general_validation_invalidDateFormat">Data inválida</string>
 
-    <string name="menu_perfil">Perfil</string>
+    <string name="menu_profile">Perfil</string>
 
 
     <string name="login_label_email">E-mail</string>
@@ -30,4 +30,8 @@
 
     <string name="facebook_app_id">[APP_ID]</string>
     <string name="fb_login_protocol_scheme">fb[APP_ID]</string>
+    <string name="menu_manage_items">Gerenciar itens</string>
+    <string name="manage_items_item_description">Descrição do item</string>
+    <string name="manage_items_item_price">Preço do item</string>
+    <string name="manage_items_add_item">Adicionar item</string>
 </resources>

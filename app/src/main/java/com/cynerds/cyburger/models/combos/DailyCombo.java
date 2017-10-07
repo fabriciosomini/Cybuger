@@ -10,15 +10,15 @@ import java.util.List;
 
 public class DailyCombo extends BaseModel {
 
-    private String date;
+    private ComboDay comboDay;
     private List<Combo> combos;
 
-    public String getDate() {
-        return date;
+    public ComboDay getComboDay() {
+        return comboDay;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setComboDay(ComboDay comboDay) {
+        this.comboDay = comboDay;
     }
 
     public List<Combo> getCombos() {
@@ -27,6 +27,17 @@ public class DailyCombo extends BaseModel {
 
     public void setCombos(List<Combo> combos) {
         this.combos = combos;
+    }
+
+    public enum ComboDay {
+        SEGUNDA,
+        TERCA,
+        QUARTA,
+        QUINTA,
+        SEXTA,
+        SABADO,
+        DOMINGO
+
     }
 
 

@@ -7,7 +7,8 @@ import android.content.Intent;
  * Created by fabri on 15/07/2017.
  */
 
-public class ActivityManager<T> {
+public abstract class ActivityManager<T> {
+
 
 
     public static void startActivity(Activity activity, Class tClass) {

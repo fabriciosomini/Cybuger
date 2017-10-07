@@ -35,7 +35,7 @@ public class CombosFragment extends Fragment {
         // Required empty public constructor
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(MonthlyCombo.class);
-        // createCombos();
+        //createCombos();
     }
 
 
@@ -124,7 +124,7 @@ public class CombosFragment extends Fragment {
 
         //5
         dailyCombo.setCombos(combosList);
-        dailyCombo.setDate("Segunda-feira");
+        dailyCombo.setComboDay(DailyCombo.ComboDay.SEGUNDA);
         dailyCombo.setId(UUID.randomUUID().toString());
 
         //6

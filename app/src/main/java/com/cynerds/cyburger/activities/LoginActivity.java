@@ -1,34 +1,21 @@
 package com.cynerds.cyburger.activities;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.SimpleFragmentPagerAdapter;
-
-
-import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
 
 
-public class LoginActivity extends WorkspaceActivity {
+public class LoginActivity extends BaseActivity {
     public static boolean isRememberMeChecked;
     EditText signInUserTxt;
     EditText signInPasswordTxt;

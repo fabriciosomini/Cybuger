@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class ProfileActivity extends WorkspaceActivity {
+public class ProfileActivity extends BaseActivity {
 
 
     //Usar esse metodo para puxar o perfil do usuário atual
