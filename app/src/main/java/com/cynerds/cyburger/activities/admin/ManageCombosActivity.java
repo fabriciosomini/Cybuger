@@ -1,17 +1,20 @@
 package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.combos.Combo;
-import com.cynerds.cyburger.models.combos.DailyCombo;
+import com.cynerds.cyburger.models.combos.ComboDay;
 import com.cynerds.cyburger.models.combos.MonthlyCombo;
 import com.cynerds.cyburger.models.foodmenu.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,12 +27,27 @@ public class ManageCombosActivity extends BaseActivity {
 
     }
 
+    public static String[] getNames(Class<? extends Enum<?>> e) {
+        return Arrays.toString(e.getEnumConstants()).replaceAll("^.|.$", "").split(", ");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_combos);
+        setActionBarTitle(getString(R.string.menu_manage_combos));
 
+        setUIEvents();
 
+    }
+
+    private void setUIEvents() {
+        Spinner comboDayCbx = (Spinner) findViewById(R.id.comboDayCbx);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item,
+                getNames(ComboDay.class));
+
+        comboDayCbx.setAdapter(arrayAdapter);
     }
 
     private void createCombos() {
@@ -40,8 +58,6 @@ public class ManageCombosActivity extends BaseActivity {
         List<Item> comboItemsList = new ArrayList<>();
         Combo combo = new Combo();
         List<Combo> combosList = new ArrayList<>();
-        DailyCombo dailyCombo = new DailyCombo();
-        List<DailyCombo> dailyComboList = new ArrayList<>();
         MonthlyCombo monthlyCombo = new MonthlyCombo();
 
         //1
@@ -68,15 +84,8 @@ public class ManageCombosActivity extends BaseActivity {
         //4
         combosList.add(combo);
 
-        //5
-        dailyCombo.setCombos(combosList);
-        dailyCombo.setComboDay(DailyCombo.ComboDay.SEGUNDA);
-        dailyCombo.setId(UUID.randomUUID().toString());
 
-        //6
-        dailyComboList.add(dailyCombo);
-
-        monthlyCombo.setMonthlyCombos(dailyComboList);
+        monthlyCombo.setCombos(combosList);
         monthlyCombo.setId(UUID.randomUUID().toString());
 
 

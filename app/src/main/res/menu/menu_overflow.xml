@@ -16,5 +16,21 @@
         android:icon="@drawable/ic_profile"
         android:title="@string/menu_manage_items" />
 
+    <item
+        android:id="@+id/action_manage_combos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:icon="@drawable/ic_profile"
+        android:title="@string/menu_manage_combos" />
+
+    <item
+        android:id="@+id/action_manage_onsale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:icon="@drawable/ic_profile"
+        android:title="@string/menu_manage_onsale" />
+
 
 </menu>

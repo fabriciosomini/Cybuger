@@ -12,6 +12,24 @@ import java.util.List;
 public class Combo extends BaseModel {
     private List<Item> comboItems;
     private String comboName;
+    private float comboAmount;
+    private ComboDay comboDay;
+
+    public float getComboAmount() {
+        return comboAmount;
+    }
+
+    public void setComboAmount(float comboAmount) {
+        this.comboAmount = comboAmount;
+    }
+
+    public ComboDay getComboDay() {
+        return comboDay;
+    }
+
+    public void setComboDay(ComboDay comboDay) {
+        this.comboDay = comboDay;
+    }
 
     public String getComboName() {
         return comboName;

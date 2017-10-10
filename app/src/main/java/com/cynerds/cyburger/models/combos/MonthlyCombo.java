@@ -12,14 +12,14 @@ import java.util.List;
 public class MonthlyCombo extends BaseModel {
 
 
-    private List<DailyCombo> monthlyCombos = new ArrayList<>();
+    private List<Combo> combos = new ArrayList<>();
 
-    public List<DailyCombo> getMonthlyCombos() {
-        return monthlyCombos;
+    public List<Combo> getCombos() {
+        return combos;
     }
 
-    public void setMonthlyCombos(List<DailyCombo> monthlyCombos) {
-        this.monthlyCombos = monthlyCombos;
+    public void setCombos(List<Combo> combos) {
+        this.combos = combos;
     }
 
 

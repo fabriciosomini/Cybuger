@@ -16,7 +16,6 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.combos.Combo;
-import com.cynerds.cyburger.models.combos.DailyCombo;
 import com.cynerds.cyburger.models.combos.MonthlyCombo;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
@@ -143,11 +142,10 @@ public class CombosFragment extends Fragment {
         for (MonthlyCombo monthlyCombo :
                 monthlyCombos) {
 
-            for (DailyCombo dailyCombo :
-                    monthlyCombo.getMonthlyCombos()) {
+
 
                 for (Combo combo :
-                        dailyCombo.getCombos()) {
+                        monthlyCombo.getCombos()) {
 
 
                     DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
@@ -173,7 +171,6 @@ public class CombosFragment extends Fragment {
 
                     dashboardCardViewItems.add(dashboardCardViewItem);
                 }
-            }
 
 
         }
