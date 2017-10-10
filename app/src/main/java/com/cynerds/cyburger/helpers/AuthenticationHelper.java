@@ -1,7 +1,9 @@
 package com.cynerds.cyburger.helpers;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
@@ -14,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.List;
 
@@ -24,16 +27,21 @@ import java.util.List;
 public class AuthenticationHelper {
 
     private final Activity activity;
+    private UserProfileChangeRequest profileUpdates;
+    private UserProfileChangeRequest.Builder profileBuilder;
     private FirebaseAuth mAuth;
     private Preferences preferences;
     private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     private OnSignInListener onSignInListener;
+    private FirebaseUser user;
 
     public AuthenticationHelper(Activity activity) {
         this.activity = activity;
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(activity);
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        profileBuilder = new UserProfileChangeRequest.Builder();
     }
 
     public void createProfile(FirebaseUser user) {
@@ -110,7 +118,7 @@ public class AuthenticationHelper {
 
     private void loadUserProfile() throws FirebaseAuthException {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
 
 
@@ -133,6 +141,81 @@ public class AuthenticationHelper {
 
         throw new FirebaseAuthException("ERROR_CANT_LOAD_PROFILE", activity.getString(R.string.login_error_unable_load_profile));
 
+
+    }
+
+    public void updateEmail(@NonNull String email) {
+        if (!email.isEmpty()) {
+            profileBuilder.setDisplayName(email);
+        }
+        user.updateEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(activity, "E-mail atualizado!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(activity, "Falha ao atualizar e-mail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public void updatePassword(@NonNull String password) {
+
+        user.updatePassword(password)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(activity, "Senha atualizada!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(activity, "Falha ao atualizar senha", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public void updateDisplayName(@NonNull String displayName) {
+
+
+        if (!displayName.isEmpty()) {
+            profileBuilder.setDisplayName(displayName);
+        }
+
+        profileUpdates = profileBuilder.build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(activity, "Nome atualizado!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(activity, "Falha ao atualizar nome", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+    }
+
+    public void updateProfilePicture(@NonNull Uri profileUri) {
+
+
+        profileBuilder.setPhotoUri(profileUri);
+        profileUpdates = profileBuilder.build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(activity, "Foto atualizada!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(activity, "Falha ao atualizar foto", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
     }
 

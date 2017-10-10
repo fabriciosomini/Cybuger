@@ -133,7 +133,7 @@ public class SignInFragment extends Fragment {
         };
 
 
-        signInUserTxt.setText("fa@test.com");
+        signInUserTxt.setText("dev@cynerds.com");
         signInPasswordTxt.setText("123456");
 
         signInRememberCbx.setChecked(isRememberMeChecked);

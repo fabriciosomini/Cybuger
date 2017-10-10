@@ -62,15 +62,17 @@ public class SignUpFragment extends Fragment {
         signUpConfirmPasswordTxt = (EditText) inflatedView.findViewById(R.id.signUpConfirmPasswordTxt);
         signUpBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
 
+        signUpDisplayNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
+        signUpDisplayNameTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
 
         signUpUserTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         signUpUserTxt.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
-        signUpPasswordTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
+        /*signUpPasswordTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         signUpPasswordTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         signUpConfirmPasswordTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-        signUpConfirmPasswordTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        signUpConfirmPasswordTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);*/
 
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,25 +86,25 @@ public class SignUpFragment extends Fragment {
 
                 boolean isFilledOut = true;
 
-                if (displayName.equals("")) {
+                if (displayName.isEmpty()) {
 
                     signUpDisplayNameTxt.setError(getString(R.string.general_label_requiredfield));
                     isFilledOut = false;
                 }
 
-                if (email.equals("")) {
+                if (email.isEmpty()) {
 
                     signUpUserTxt.setError(getString(R.string.general_label_requiredfield));
                     isFilledOut = false;
                 }
 
-                if (password.equals("")) {
+                if (password.isEmpty()) {
 
                     signUpPasswordTxt.setError(getString(R.string.general_label_requiredfield));
                     isFilledOut = false;
                 }
 
-                if (confirmPassword.equals("")) {
+                if (confirmPassword.isEmpty()) {
 
                     signUpConfirmPasswordTxt.setError(getString(R.string.general_label_requiredfield));
                     isFilledOut = false;
@@ -113,7 +115,7 @@ public class SignUpFragment extends Fragment {
 
                         signUpPasswordTxt.setError(null);
                         signUpConfirmPasswordTxt.setError(null);
-                        createUser(email, password);
+                        createUser(displayName, email, password);
                     } else {
 
                         signUpPasswordTxt.setError(getString(R.string.general_unmatching_password));
@@ -127,7 +129,7 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    private void createUser(final String email, final String password) {
+    private void createUser(final String displayName, final String email, final String password) {
 
 
         signUpBtn.setEnabled(false);
@@ -142,7 +144,7 @@ public class SignUpFragment extends Fragment {
 
 
                     authenticationHelper.createProfile(task.getResult().getUser());
-
+                    authenticationHelper.updateDisplayName(displayName);
 
                     authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
                         @Override
