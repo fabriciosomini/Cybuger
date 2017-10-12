@@ -1,6 +1,9 @@
 package com.cynerds.cyburger.components;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +19,9 @@ import com.cynerds.cyburger.R;
 
 public class TagItem extends android.support.v7.widget.AppCompatTextView {
     private TextView textView;
+    private Drawable newBackground;
+    private boolean isAdded = false;
+    private Drawable defaultBackground;
 
     public TagItem(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -23,21 +29,29 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         initializeViews(context);
     }
 
-    public TagItem(Context context)
-    {
+    public TagItem(Context context) {
 
         super(context);
 
         initializeViews(context);
     }
 
+    public boolean isAdded() {
+        return isAdded;
+    }
+
     private void initializeViews(final Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         textView = (TextView) inflater.inflate(R.layout.component_tag, null);
+        defaultBackground = textView.getBackground();
 
-        int rightDrawable = R.drawable.ic_action_add;
-        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,rightDrawable,0);
+        int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
+        newBackground = textView.getBackground().getConstantState().newDrawable();
+        newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
+
+        toggleAdded();
+
         textView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -46,11 +60,11 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
                 final int DRAWABLE_RIGHT = 2;
                 final int DRAWABLE_BOTTOM = 3;
 
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (textView.getRight() - textView.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (textView.getRight() - textView.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
 
-                        Toast.makeText(context, "Adicionar item", Toast.LENGTH_SHORT).show();
 
+                        toggleAdded();
                         return true;
                     }
                 }
@@ -61,9 +75,25 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         });
     }
 
-    public void setText(String text){
+    private void toggleAdded() {
+        if (!isAdded) {
+            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_action_add, 0);
+            textView.setBackground(defaultBackground);
 
-        text = text + "       ";
+            Toast.makeText(getContext(), "Adicionar item", Toast.LENGTH_SHORT).show();
+        } else {
+
+            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_action_close, 0);
+            textView.setBackground(newBackground);
+
+            Toast.makeText(getContext(), "Remover item", Toast.LENGTH_SHORT).show();
+        }
+
+        isAdded = !isAdded;
+    }
+
+
+    public void setText(String text) {
         textView.setText(text);
     }
 

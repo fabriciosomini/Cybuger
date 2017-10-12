@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tagItem"
+    style="@style/AppTheme.CyburgerEditText"
+    android:layout_width="wrap_content"
+    android:layout_height="45dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
     android:orientation="vertical"
-
-        android:id="@+id/tagItem"
-
-        android:layout_width="wrap_content"
-        style="@style/AppTheme.CyburgerEditText"
-        android:layout_height="@dimen/default_height"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        android:text="TEST"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp">
+    android:text="TEST"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
 </TextView>

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="flexbox-0.3.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/4449b7c7c874860b716c0d38b29bfa304c38b4cf/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/4449b7c7c874860b716c0d38b29bfa304c38b4cf/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/4811b82f9e204a7759e361b69b2d0e99322cf47f/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/4811b82f9e204a7759e361b69b2d0e99322cf47f/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -4,9 +4,6 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.models.Tag;
@@ -50,11 +47,7 @@ public class TagInput extends ConstraintLayout {
             TagItem tagInput =  new TagItem(context);
             tagInput.setText(tag.getDescription());
 
-            TextView textView = new TextView(context);
-            textView.setText(tag.getDescription() + "    ");
-
-
-            flexboxLayout.addView(tagInput);
+            flexboxLayout.addView(tagInput.getTextView());
 
         }
 
