@@ -141,7 +141,7 @@ public class CombosFragment extends Fragment {
         boolean repeat = false;
 
 
-                for (Combo combo :
+        for (final Combo combo :
                         combos) {
 
 
@@ -162,10 +162,19 @@ public class CombosFragment extends Fragment {
                                 }
                             });
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
-                            dialogManager.showDialog("Deseja pedir esse item?");
+                            dialogManager.showDialog("Deseja confirmar o pedido?");
 
                         }
                     });
+
+            dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogManager dialogManager = new DialogManager(getContext());
+                    dialogManager.setContentView(R.layout.component_photo_viewer);
+                    dialogManager.showDialog(combo.getComboName(), "");
+                }
+            });
 
                     for (int i = 0; i < dashboardCardViewItems.size(); i++) {
                         DashboardCardViewItem d = dashboardCardViewItems.get(i);

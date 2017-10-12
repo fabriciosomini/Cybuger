@@ -95,7 +95,6 @@ public class DialogManager {
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        contentView = inflater.inflate(R.layout.dialog_add_item, null);
         View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -105,8 +104,11 @@ public class DialogManager {
 
         if (layoutResId > -1) {
 
+           
+            contentView = inflater.inflate(layoutResId, null);
+
             alertDialog.setCustomTitle(titleView);
-            TextView titleText = (TextView) titleView.findViewById(R.id.alertTitleText);
+            TextView titleText = titleView.findViewById(R.id.alertTitleText);
             titleText.setText(title);
             alertDialog.setView(contentView);
 
