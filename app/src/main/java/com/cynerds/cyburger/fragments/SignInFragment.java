@@ -106,11 +106,11 @@ public class SignInFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(getActivity());
         permissions = new Permissions(getActivity());
-        signInUserTxt = (EditText) inflatedView.findViewById(R.id.signUserInTxt);
-        signInPasswordTxt = (EditText) inflatedView.findViewById(R.id.signInPasswordTxt);
-        signInBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
-        signInFacebookBtn = (Button) inflatedView.findViewById(R.id.signInFacebookBtn);
-        signInRememberCbx = (CheckBox) inflatedView.findViewById(R.id.signInRememberCbx);
+        signInUserTxt = inflatedView.findViewById(R.id.signUserInTxt);
+        signInPasswordTxt = inflatedView.findViewById(R.id.signInPasswordTxt);
+        signInBtn = inflatedView.findViewById(R.id.signInBtn);
+        signInFacebookBtn = inflatedView.findViewById(R.id.signInFacebookBtn);
+        signInRememberCbx = inflatedView.findViewById(R.id.signInRememberCbx);
 
         rememberMePref = "rememberMe";
 
@@ -133,7 +133,8 @@ public class SignInFragment extends Fragment {
         };
 
 
-        signInUserTxt.setText("dev@cynerds.com");
+        //  signInUserTxt.setText("dev@cynerds.com");
+        signInUserTxt.setText("fabricio.somini@gmail.com");
         signInPasswordTxt.setText("123456");
 
         signInRememberCbx.setChecked(isRememberMeChecked);

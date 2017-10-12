@@ -1,7 +1,6 @@
 package com.cynerds.cyburger.fragments;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -11,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
@@ -37,7 +38,7 @@ public class OrdersFragment extends Fragment {
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
     private boolean isListCreated;
-
+    private BaseActivity currentActivty;
     public OrdersFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Order.class);
@@ -50,6 +51,7 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        currentActivty = (BaseActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
 
         if (!isListCreated) {
@@ -95,11 +97,9 @@ public class OrdersFragment extends Fragment {
             public void onDataChanged(Object item) {
 
 
-                if (firebaseRealtimeDatabaseHelper.get().size() > 0) {
 
                     updateList(view);
 
-                }
             }
         };
 
@@ -108,6 +108,7 @@ public class OrdersFragment extends Fragment {
 
     private void updateList(View view) {
 
+        Toast.makeText(currentActivty, "UpdateList " + this.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
 
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
@@ -126,23 +127,20 @@ public class OrdersFragment extends Fragment {
                 listview.setAdapter(adapter);
             }
 
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
+            currentActivty.runOnUiThread(new Runnable() {
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
         }
     }
 
     public void getDashboardCardViewItems() {
 
+        dashboardCardViewItems.clear();
 
         List<Order> orders = getOrders();
 
-        boolean repeat = false;
         for (Order order :
                 orders) {
 
@@ -183,21 +181,6 @@ public class OrdersFragment extends Fragment {
 
             //------------------------------
             dashboardCardViewItem.setContent(orderedItemsString);
-
-            for (int i = 0; i < dashboardCardViewItems.size(); i++) {
-                DashboardCardViewItem d = dashboardCardViewItems.get(i);
-                if (order.getId().equals(d.getId())) {
-                    repeat = true;
-                    dashboardCardViewItems.set(i, dashboardCardViewItem);
-                    break;
-                } else {
-                    repeat = false;
-                }
-            }
-
-            if (repeat) {
-                continue;
-            }
 
 
             dashboardCardViewItems.add(dashboardCardViewItem);

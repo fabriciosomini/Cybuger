@@ -36,6 +36,7 @@ public class ItemsMenuFragment extends Fragment {
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
     private boolean isListCreated;
+    private BaseActivity currentActivty;
 
 
     public ItemsMenuFragment() {
@@ -49,6 +50,8 @@ public class ItemsMenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        currentActivty = (BaseActivity) getActivity();
 
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
 
@@ -95,11 +98,10 @@ public class ItemsMenuFragment extends Fragment {
             public void onDataChanged(Object item) {
 
 
-                if (firebaseRealtimeDatabaseHelper.get().size() > 0) {
 
                     updateList(view);
 
-                }
+
             }
         };
 
@@ -108,7 +110,7 @@ public class ItemsMenuFragment extends Fragment {
 
     private void updateList(View view) {
 
-        Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
+        Toast.makeText(currentActivty, "UpdateList " + this.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
 
@@ -126,7 +128,7 @@ public class ItemsMenuFragment extends Fragment {
                 listview.setAdapter(adapter);
             }
 
-            getActivity().runOnUiThread(new Runnable() {
+            currentActivty.runOnUiThread(new Runnable() {
                 public void run() {
                     adapter.notifyDataSetChanged();
                 }
@@ -144,10 +146,9 @@ public class ItemsMenuFragment extends Fragment {
 
     public void getDashboardCardViewItems() {
 
+        dashboardCardViewItems.clear();
 
         List<Item> items = getItems();
-
-        boolean repeat = false;
 
         for (final Item item :
                 items) {
@@ -195,21 +196,6 @@ public class ItemsMenuFragment extends Fragment {
                     dialogManager.showDialog(item.getDescription(), "");
                 }
             });
-
-            for (int i = 0; i < dashboardCardViewItems.size(); i++) {
-                DashboardCardViewItem d = dashboardCardViewItems.get(i);
-                if (item.getId().equals(d.getId())) {
-                    repeat = true;
-                    dashboardCardViewItems.set(i, dashboardCardViewItem);
-                    break;
-                } else {
-                    repeat = false;
-                }
-            }
-
-            if (repeat) {
-                continue;
-            }
 
 
             dashboardCardViewItems.add(dashboardCardViewItem);
