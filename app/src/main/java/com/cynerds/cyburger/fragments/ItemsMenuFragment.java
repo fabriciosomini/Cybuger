@@ -160,7 +160,7 @@ public class ItemsMenuFragment extends Fragment {
                     "Ingredientes: " + item.getIngredients()
                     + "\nUnidade de medida: "
                     + item.getSize()
-                    + "\nPreço: " + item.getPrice());
+                            + "\nValor: " + item.getPrice());
 
 
             dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
@@ -171,13 +171,17 @@ public class ItemsMenuFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
-                            Badge badge = ((BaseActivity) getActivity()).getBadge();
+
+                            BaseActivity baseActivity = ((BaseActivity) getActivity());
+                            Badge badge = baseActivity.getBadge();
+                            baseActivity.getOrder().getOrderedItems().add(item);
                             badge.setBadgeCount(badge.getBadgeCount() + 1);
+
 
                         }
                     });
                     DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
-                    dialogManager.showDialog("Deseja confirmar o pedido?");
+                    dialogManager.showDialog("Hey você!", "Deseja confirmar o pedido?");
 
 
                 }

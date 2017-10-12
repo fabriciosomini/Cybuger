@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,9 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.GsonHelper;
+import com.cynerds.cyburger.models.combos.Combo;
+import com.cynerds.cyburger.models.items.Item;
+import com.cynerds.cyburger.models.orders.Order;
 
 import java.util.ArrayList;
 
@@ -38,6 +42,11 @@ public class BaseActivity extends AppCompatActivity {
     private TextView actionBarTitle;
     private Badge badge;
     private View hamburgerMenu;
+    private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
 
     public Badge getBadge() {
         return badge;
@@ -159,6 +168,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private void setUIEvents() {
 
+        order = new Order();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
         actionBar.setCustomView(R.layout.base_titlebar);
@@ -206,6 +216,50 @@ public class BaseActivity extends AppCompatActivity {
 
             }
         });
+
+
+        badge.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                DialogManager dialogManager = new DialogManager(BaseActivity.this);
+                dialogManager.setContentView(R.layout.dialog_ordering_items);
+                dialogManager.showDialog("Seu pedido", "");
+
+                TextView orderedItemsTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsTxtView);
+                TextView orderedItemsAmountTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsAmountTxtView);
+
+                String orderedItemsString = "";
+                String orderedItemsAmountString = "";
+                float orderedItemsAmount = 0;
+
+                for (Combo combo :
+                        order.getOrderedCombos()) {
+
+                    orderedItemsAmount += combo.getComboAmount();
+                    orderedItemsString += combo.getComboName() + " - R$ " + combo.getComboAmount() + "\n";
+                }
+
+                for (Item item :
+                        order.getOrderedItems()) {
+
+                    orderedItemsAmount += item.getPrice();
+                    orderedItemsString += item.getDescription() + " - R$ " + item.getPrice() + "\n";
+                }
+
+
+                orderedItemsAmountString = "R$ " + String.valueOf(orderedItemsAmount);
+                orderedItemsAmountTxtView.setText(orderedItemsAmountString);
+
+                if (!orderedItemsString.isEmpty()) {
+                    orderedItemsTxtView.setText(orderedItemsString);
+                }
+
+
+                return false;
+            }
+        });
+
     }
 
 

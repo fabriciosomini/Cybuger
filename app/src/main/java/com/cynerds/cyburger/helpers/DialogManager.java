@@ -102,18 +102,18 @@ public class DialogManager {
         title = title == null ? "" : title;
         message = message == null ? "" : message;
 
+        TextView titleText = titleView.findViewById(R.id.alertTitleText);
+        titleText.setText(title);
+        alertDialog.setCustomTitle(titleView);
+
+
         if (layoutResId > -1) {
 
-           
             contentView = inflater.inflate(layoutResId, null);
-
-            alertDialog.setCustomTitle(titleView);
-            TextView titleText = titleView.findViewById(R.id.alertTitleText);
-            titleText.setText(title);
             alertDialog.setView(contentView);
 
         } else {
-            alertDialog.setTitle(title);
+
             alertDialog.setMessage(message);
 
         }

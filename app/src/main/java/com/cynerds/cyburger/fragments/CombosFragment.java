@@ -108,7 +108,6 @@ public class CombosFragment extends Fragment {
 
     private void updateList(View view) {
 
-//        Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
 
@@ -146,7 +145,7 @@ public class CombosFragment extends Fragment {
                 combos) {
 
 
-            DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
+            final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
             dashboardCardViewItem.setTitle(combo.getComboName());
             dashboardCardViewItem.setId(combo.getId());
             dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
@@ -161,13 +160,17 @@ public class CombosFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
-                            Badge badge = ((BaseActivity) getActivity()).getBadge();
+
+                            BaseActivity baseActivity = ((BaseActivity) getActivity());
+                            Badge badge = baseActivity.getBadge();
+                            baseActivity.getOrder().getOrderedCombos().add(combo);
                             badge.setBadgeCount(badge.getBadgeCount() + 1);
+
 
                         }
                     });
                     DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
-                    dialogManager.showDialog("Deseja confirmar o pedido?");
+                    dialogManager.showDialog("Hey você!", "Deseja confirmar o pedido?");
 
 
                 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
@@ -17,6 +18,10 @@ public class Badge extends ConstraintLayout {
 
     TextView badgeCountText;
     private int badgeCount;
+    private View badge;
+    private LayoutInflater inflater;
+
+
 
     public Badge(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,18 +36,21 @@ public class Badge extends ConstraintLayout {
 
 
     private void initializeViews(Context context) {
-        LayoutInflater inflater = (LayoutInflater) context
+        inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.component_badge, this);
+        badge = inflater.inflate(R.layout.component_badge, this);
+
     }
+
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        badgeCountText = findViewById(R.id.badgeCountText);
+        badgeCountText = badge.findViewById(R.id.badgeCountText);
 
     }
+
 
     public int getBadgeCount() {
         return badgeCount;
