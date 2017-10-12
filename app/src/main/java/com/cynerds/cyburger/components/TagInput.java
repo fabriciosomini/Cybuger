@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 
 import com.cynerds.cyburger.R;
@@ -48,7 +49,7 @@ public class TagInput extends ConstraintLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        EditText searchTagItemBox = findViewById(R.id.searchTagItemBox);
+        final EditText searchTagItemBox = findViewById(R.id.searchTagItemBox);
         searchTagItemBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,12 +96,28 @@ public class TagInput extends ConstraintLayout {
 
             }
         });
+
+        searchTagItemBox.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (searchTagItemBox.getText().toString().isEmpty()) {
+                        final FlexboxLayout flexboxLayout = findViewById(R.id.addedTagItemsContainer);
+                        flexboxLayout.removeAllViews();
+                    }
+
+                } else {
+                    generateTags(tagList);
+                }
+            }
+        });
     }
+
 
     public void setFilterableList(List<Tag> tagList){
 
         this.tagList = tagList;
-        generateTags(tagList);
+
 
     }
 
