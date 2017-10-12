@@ -13,8 +13,9 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="-446dp"
         android:fillViewport="true"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -47,10 +48,10 @@
                 android:text="@string/manage_combos_combo_day"
 
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintTop_toBottomOf="@+id/comboPriceTxt" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/comboNameTxt"
                 style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
@@ -67,7 +68,7 @@
                 android:text="Preço do combo"
 
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintTop_toBottomOf="@+id/comboNameTxt" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -93,11 +94,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView5"></com.cynerds.cyburger.components.TagInput>
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/comboPriceTxt"
                 style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-
+                android:inputType="numberDecimal"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />

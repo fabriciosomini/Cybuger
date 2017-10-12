@@ -31,12 +31,18 @@ public class TagInput extends ConstraintLayout {
 
     private final Context context;
     private List<Tag> tagList;
+    private List<Tag> selectedTags;
 
     public TagInput(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         initializeViews(context);
         this.context = context;
+        selectedTags = new ArrayList<>();
+    }
+
+    public List<Tag> getSelectedTags() {
+        return selectedTags;
     }
 
     private void initializeViews(Context context) {
@@ -50,6 +56,7 @@ public class TagInput extends ConstraintLayout {
         super.onFinishInflate();
 
         final EditText searchTagItemBox = findViewById(R.id.searchTagItemBox);
+        searchTagItemBox.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         searchTagItemBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -137,6 +144,7 @@ public class TagInput extends ConstraintLayout {
                 @Override
                 public void onTagItemStateChanged(TagItem item) {
 
+                    selectedTags.add(tag);
                     int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
                     Drawable newBackground = item.getTextView().getBackground().getConstantState().newDrawable();
                     newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
@@ -155,6 +163,7 @@ public class TagInput extends ConstraintLayout {
                         @Override
                         public void onTagItemStateChanged(TagItem item) {
                             flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
+                            selectedTags.remove(tag);
                         }
                     });
 
@@ -167,4 +176,6 @@ public class TagInput extends ConstraintLayout {
 
         }
     }
+
+
 }

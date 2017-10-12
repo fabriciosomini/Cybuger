@@ -56,11 +56,11 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setUIEvents(View inflatedView) {
-        signUpDisplayNameTxt = (EditText) inflatedView.findViewById(R.id.signUpDisplayNameTxt);
-        signUpUserTxt = (EditText) inflatedView.findViewById(R.id.signUpUserTxt);
-        signUpPasswordTxt = (EditText) inflatedView.findViewById(R.id.signUpPassword);
-        signUpConfirmPasswordTxt = (EditText) inflatedView.findViewById(R.id.signUpConfirmPasswordTxt);
-        signUpBtn = (Button) inflatedView.findViewById(R.id.signInBtn);
+        signUpDisplayNameTxt = inflatedView.findViewById(R.id.signUpDisplayNameTxt);
+        signUpUserTxt = inflatedView.findViewById(R.id.signUpUserTxt);
+        signUpPasswordTxt = inflatedView.findViewById(R.id.signUpPassword);
+        signUpConfirmPasswordTxt = inflatedView.findViewById(R.id.signUpConfirmPasswordTxt);
+        signUpBtn = inflatedView.findViewById(R.id.signInBtn);
 
         signUpDisplayNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         signUpDisplayNameTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
@@ -68,11 +68,7 @@ public class SignUpFragment extends Fragment {
         signUpUserTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         signUpUserTxt.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
-        /*signUpPasswordTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-        signUpPasswordTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-        signUpConfirmPasswordTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-        signUpConfirmPasswordTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);*/
 
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
