@@ -30,7 +30,7 @@ public class CombosFragment extends Fragment {
 
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
-    FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
+   
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
     private boolean isListCreated;
@@ -146,7 +146,9 @@ public class CombosFragment extends Fragment {
                     DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
                     dashboardCardViewItem.setTitle(combo.getComboName());
                     dashboardCardViewItem.setId(combo.getId());
-
+                    dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
+                    dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
+                            + "Esse combo está por R$" + combo.getComboAmount());
 
                     for (int i = 0; i < dashboardCardViewItems.size(); i++) {
                         DashboardCardViewItem d = dashboardCardViewItems.get(i);

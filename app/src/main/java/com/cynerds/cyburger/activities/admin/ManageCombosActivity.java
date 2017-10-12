@@ -51,6 +51,7 @@ public class ManageCombosActivity extends BaseActivity {
                 getNames(ComboDay.class));
         final Spinner comboDayCbx = findViewById(R.id.comboDayCbx);
         final EditText comboNameTxt = findViewById(R.id.comboNameTxt);
+        final EditText comboInfoTxt = findViewById(R.id.comboInfoTxt);
         final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final TagInput itemsTagInput = findViewById(R.id.itemsTagInput);
         final Button saveComboBtn = findViewById(R.id.saveComboBtn);
@@ -65,6 +66,7 @@ public class ManageCombosActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String comboName = comboNameTxt.getText().toString();
+                String comboInfo = comboInfoTxt.getText().toString();
                 Float comboAmount = Float.valueOf(comboPriceTxt.getText().toString());
                 ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString());
 
@@ -72,6 +74,7 @@ public class ManageCombosActivity extends BaseActivity {
                 combo.setComboName(comboName);
                 combo.setComboAmount(comboAmount);
                 combo.setComboDay(comboDay);
+                combo.setComboInfo(comboInfo);
 
                 List<Item> items = new ArrayList<Item>();
                 for (Tag tag : itemsTagInput.getSelectedTags()) {
