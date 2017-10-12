@@ -6,7 +6,10 @@ import android.widget.Spinner;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.adapters.DashboardCardAdapter;
+import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.models.Tag;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.combos.ComboDay;
 import com.cynerds.cyburger.models.combos.MonthlyCombo;
@@ -21,9 +24,11 @@ import java.util.UUID;
 public class ManageCombosActivity extends BaseActivity {
 
     private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperItems;
 
     public ManageCombosActivity() {
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(MonthlyCombo.class);
+        firebaseRealtimeDatabaseHelperItems = new FirebaseRealtimeDatabaseHelper(Item.class);
 
     }
 
@@ -48,6 +53,48 @@ public class ManageCombosActivity extends BaseActivity {
                 getNames(ComboDay.class));
 
         comboDayCbx.setAdapter(arrayAdapter);
+
+
+
+        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+            @Override
+            public void onDataChanged(Object item) {
+
+
+                if (firebaseRealtimeDatabaseHelperItems.get().size() > 0) {
+
+
+                   updateTags();
+                }
+
+
+            }
+        };
+
+        firebaseRealtimeDatabaseHelperItems.setDataChangeListener(dataChangeListener);
+    }
+
+    private void updateTags() {
+        List<Tag> tagList = new ArrayList<>();
+        List<Item> items = getItems();
+
+        for (Item item :
+                items) {
+            Tag tag = new Tag();
+            tag.setDescription(item.getDescription());
+            tag.setObject(item);
+            tagList.add(tag);
+        }
+
+        TagInput tagInput = (TagInput)findViewById(R.id.itemsTagInput);
+        tagInput.setFilterableList(tagList);
+    }
+
+    List<Item> getItems() {
+
+        List<Item> items = firebaseRealtimeDatabaseHelperItems.get();
+        return items;
+
     }
 
     private void createCombos() {

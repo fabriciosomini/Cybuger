@@ -3,6 +3,15 @@
 
     <item
         is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\3477ba86a9f1ca9860b59e47313e9ded655db621\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="b62fdc4cfef174c1e456014195c83fa7de7dc041">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_3b724c8350dd9551b5453fa1083bcbde6a87df82\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
@@ -12,12 +21,156 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\4449b7c7c874860b716c0d38b29bfa304c38b4cf\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="2fe439230c8d6fb5427c255939ce9dc98b172150">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_06845d55321bb3d8d52ba76330cc61e400ffced2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.gradle\caches\modules-2\files-2.1\com.android.support\support-annotations\26.1.0\814258103cf26a15fcc26ecce35f5b7d24b73f8\support-annotations-26.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="0814258103cf26a15fcc26ecce35f5b7d24b73f8">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-26.1.0_da0581c2e4574726811f0f3c48f782ecec743fef\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\d85e218c5613481db15710d9315a8da40aa582fb\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="a37fc31c5ceeaa4532a37358add1b189d8db4af1">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_2f16a8070851ba8f95bb58687b9e6f21e9cf4c66\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\a719b0c8318fe59fb9875c7200560f5b12132dba\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="2442771a5590dd4eb4bce00c2e9dca9e22e4c963">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_71e1661fea77788ddab4a22115a434a9a2cfd2df\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\5b31e20f639e7a74c269d5a40099d70f9f0954d2\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="40392f30a601db5675cdf18192aab013d6fee6ec">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d6384fd4bdaf10d412cfe04fed20d4b249fa6f49\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.gradle\caches\modules-2\files-2.1\android.arch.core\common\1.0.0\a2d487452376193fc8c103dd2b9bd5f2b1b44563\common-1.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="a2d487452376193fc8c103dd2b9bd5f2b1b44563">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\common-1.0.0_2d170d784f0734f641b2fd557f727f15118e8513\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\75be621257568c7f2aeff8a296ab64b796b49827\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="233f60a165ae622c8b36731502ebbda0f65e1930">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b87662c66708bcfd052c67cffd537dafa7bb64c2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\21530e0958da6df8e630fd94f9d5fd79e75835a6\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_aee649573aeb51210591d52922a5b04e6d49f03e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\56bbf3e0e716776fb0c4440274f1781dda09fc76\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="f428e2fbc9ed0b297e3a3f420e51e6982f66822d">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c954eccd86c24dc5d6b2e92b377511fbf94ea9e3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\ab90640f25b95adec99dec64135f9c8d7a3aa73a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="6f4138a4e065826cb044d49faea4cfd7191773d1">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_10bc9c8ec16fd6f79b4a3678e50dc6910488fc15\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\37f71493fb925747cae193d51d42430b923c915b\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="58b12bdb21a84f22e0dc3b047aeceb0a546b1b44">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_bb2b3192c351e144e41bcb2dd6284e27abc27a96\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.gradle\caches\modules-2\files-2.1\android.arch.lifecycle\common\1.0.0\e414a4cb28434e25c4f6aa71426eb20cf4874ae9\common-1.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="e414a4cb28434e25c4f6aa71426eb20cf4874ae9">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\common-1.0.0_d5e46033ced0af8adcbf4229fea757d3c8488aff\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\e387089e8ecd872c4619098f43e33cbd68b10f69\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="508f50705b4fde51a16259f29c854201a3044516">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_aa6a095ff6c18f3613827feca424f193b29fd26d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\1bc2e282ed82072ad8be46a6c9284cb353b91e78\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="f97cf85b0fe70d37a705111dafa6b1b418ea1650">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_714e09370b291e3196805d85f6d7f9c84dc72d93\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\c1f106f51864603bea620150d8891c8fbbc132df\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="7efef32744ca4a436492d5cf28c08698cc2af256">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d66bd93a9267557c6895449149b403faed663de0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.0"
-        sha1="a1c301b51ea0ec1b36f6442ea2a4e8ba088f2b90">
+        sha1="d2effa25ca050c0e1784895cb14e45e37954c464">
         <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_964ad7bbc37b894ca266b1cd97664386dcc0c9dc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\comp8\.android\build-cache\38a3e1ca43a3449493baf4de245a20709f20bfee\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="b12cd9c87c3dfb012a911b6e38d2444ed0a65e1f">
+        <dex dex="C:\Users\comp8\AndroidStudioProjects\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_24d395e21c87c99b716e300fdede3cbc29da7552\classes.dex" />
     </item>
 
 </items>

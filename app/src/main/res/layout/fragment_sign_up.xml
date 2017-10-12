@@ -19,7 +19,7 @@
                 android:layout_width="300dp"
 
                 android:layout_marginLeft="8dp"
-
+                android:layout_height="@dimen/default_height"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/sign_up_display_name"
@@ -39,6 +39,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/sign_up_email"
+                android:layout_height="@dimen/default_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signUpDisplayNameTxt">
@@ -55,6 +56,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/sign_up_password"
+                android:layout_height="@dimen/default_height"
                 android:inputType="textPassword"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -63,7 +65,7 @@
             </EditText>
 
             <EditText
-
+                android:layout_height="@dimen/default_height"
                 android:id="@+id/signUpConfirmPasswordTxt"
                 style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="300dp"
@@ -96,6 +98,7 @@
                     android:id="@+id/signInBtn"
                     style="@style/AppTheme.CyburgerButton"
                     android:layout_width="300dp"
+                    android:layout_height="@dimen/default_height"
                     android:layout_marginTop="15dp"
                     android:text="@string/title_signUp"
                     app:layout_constraintLeft_toLeftOf="parent"
