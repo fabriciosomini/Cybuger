@@ -7,12 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
+import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -36,7 +36,12 @@ public class BaseActivity extends AppCompatActivity {
     private View.OnClickListener onSaveListener;
     private View.OnClickListener onCancelListener;
     private TextView actionBarTitle;
+    private Badge badge;
+    private View hamburgerMenu;
 
+    public Badge getBadge() {
+        return badge;
+    }
 
     public View getView() {
 
@@ -147,6 +152,12 @@ public class BaseActivity extends AppCompatActivity {
 
         this.savedInstanceState = savedInstanceState;
 
+        setUIEvents();
+
+
+    }
+
+    private void setUIEvents() {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
@@ -157,6 +168,44 @@ public class BaseActivity extends AppCompatActivity {
 
         getView().setFocusableInTouchMode(true);
 
+        badge = findViewById(R.id.badge);
+        hamburgerMenu = findViewById(R.id.hamburgerMenu);
+
+        hamburgerMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(BaseActivity.this, hamburgerMenu);
+                popupMenu.inflate(R.menu.menu_overflow);
+
+                popupMenu.getMenu().findItem(R.id.action_profile).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        ActivityManager.startActivity(BaseActivity.this, ProfileActivity.class);
+                        return false;
+                    }
+                });
+
+
+                popupMenu.getMenu().findItem(R.id.action_manage_items).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        ActivityManager.startActivity(BaseActivity.this, ManageItemsActivity.class);
+                        return false;
+                    }
+                });
+
+                popupMenu.getMenu().findItem(R.id.action_manage_combos).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        ActivityManager.startActivity(BaseActivity.this, ManageCombosActivity.class);
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
+
+            }
+        });
     }
 
 
@@ -203,48 +252,24 @@ public class BaseActivity extends AppCompatActivity {
         return newObject;
     }
 
+    protected void showBadge(boolean showBadge) {
+
+        if (showBadge) {
+            badge.setVisibility(View.VISIBLE);
+
+        } else {
+            badge.setVisibility(View.INVISIBLE);
+
+        }
+    }
+
     protected void showActionBarMenu(boolean showMenu) {
 
         if (showMenu) {
-            final ImageButton hamburgerMenu = findViewById(R.id.hamburgerMenu);
+
 
             if (showMenu) {
                 hamburgerMenu.setVisibility(View.VISIBLE);
-                hamburgerMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PopupMenu popupMenu = new PopupMenu(BaseActivity.this, hamburgerMenu);
-                        popupMenu.inflate(R.menu.menu_overflow);
-
-                        popupMenu.getMenu().findItem(R.id.action_profile).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                ActivityManager.startActivity(BaseActivity.this, ProfileActivity.class);
-                                return false;
-                            }
-                        });
-
-
-                        popupMenu.getMenu().findItem(R.id.action_manage_items).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                ActivityManager.startActivity(BaseActivity.this, ManageItemsActivity.class);
-                                return false;
-                            }
-                        });
-
-                        popupMenu.getMenu().findItem(R.id.action_manage_combos).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                ActivityManager.startActivity(BaseActivity.this, ManageCombosActivity.class);
-                                return false;
-                            }
-                        });
-
-                        popupMenu.show();
-
-                    }
-                });
 
             } else {
                 hamburgerMenu.setVisibility(View.INVISIBLE);

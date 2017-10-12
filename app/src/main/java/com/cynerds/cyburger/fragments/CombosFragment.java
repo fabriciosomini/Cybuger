@@ -13,7 +13,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
+import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -159,10 +161,14 @@ public class CombosFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
                                     Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                                    Badge badge = ((BaseActivity) getActivity()).getBadge();
+                                    badge.setBadgeCount(badge.getBadgeCount() + 1);
+
                                 }
                             });
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
                             dialogManager.showDialog("Deseja confirmar o pedido?");
+
 
                         }
                     });

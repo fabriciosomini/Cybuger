@@ -76,8 +76,10 @@ public class MainActivity extends BaseActivity {
 
         setActionBarTitle(getString(R.string.title_combos));
         showActionBarMenu(true);
+        showBadge(true);
 
     }
+
 
     @Override
     public void onBackPressed() {

@@ -33,4 +33,12 @@
 
     </style>
 
+
+    <style name="AppTheme.CyburgerBadge" parent="Widget.AppCompat.EditText">
+
+        <item name="android:background">@drawable/edit_text_shape</item>
+
+
+    </style>
+
 </resources>
