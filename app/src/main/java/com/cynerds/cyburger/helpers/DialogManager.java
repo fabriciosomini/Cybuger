@@ -152,10 +152,7 @@ public class DialogManager {
 
 
             }
-        } else {
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
-
-        }
+        } 
 
 
         alertDialog.show();
