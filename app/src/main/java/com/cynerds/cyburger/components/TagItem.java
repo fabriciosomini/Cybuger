@@ -22,6 +22,8 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
     private Drawable newBackground;
     private boolean isAdded = false;
     private Drawable defaultBackground;
+    private LayoutInflater inflater;
+    private TagItemStateChangeListener tagItemStateChangeListener;
 
     public TagItem(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,12 +38,20 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         initializeViews(context);
     }
 
+    public TagItemStateChangeListener getTagItemStateChangeListener() {
+        return tagItemStateChangeListener;
+    }
+
+    public void setTagItemStateChangeListener(TagItemStateChangeListener tagItemStateChangeListener) {
+        this.tagItemStateChangeListener = tagItemStateChangeListener;
+    }
+
     public boolean isAdded() {
         return isAdded;
     }
 
     private void initializeViews(final Context context) {
-        LayoutInflater inflater = (LayoutInflater) context
+        inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         textView = (TextView) inflater.inflate(R.layout.component_tag, null);
         defaultBackground = textView.getBackground();
@@ -76,22 +86,25 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
     }
 
     private void toggleAdded() {
+
+        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_action_add, 0);
+        textView.setBackground(defaultBackground);
+
         if (!isAdded) {
-            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_action_add, 0);
-            textView.setBackground(defaultBackground);
 
             Toast.makeText(getContext(), "Adicionar item", Toast.LENGTH_SHORT).show();
         } else {
 
-            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_action_close, 0);
-            textView.setBackground(newBackground);
 
             Toast.makeText(getContext(), "Remover item", Toast.LENGTH_SHORT).show();
         }
 
         isAdded = !isAdded;
-    }
 
+        if (tagItemStateChangeListener != null) {
+            tagItemStateChangeListener.onTagItemStateChanged(this);
+        }
+    }
 
     public void setText(String text) {
         textView.setText(text);
@@ -99,5 +112,10 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
 
     public TextView getTextView() {
         return textView;
+    }
+
+    public interface TagItemStateChangeListener {
+
+        void onTagItemStateChanged(TagItem item);
     }
 }
