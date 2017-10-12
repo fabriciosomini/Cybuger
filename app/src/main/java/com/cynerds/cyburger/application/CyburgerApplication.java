@@ -11,14 +11,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CyburgerApplication extends Application {
 
-    private Profile profile;
+    private static Profile profile;
 
-    public Profile getProfile() {
+    public static Profile getProfile() {
         return profile;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public static void setProfile(Profile profile) {
+        CyburgerApplication.profile = profile;
     }
 
     @Override

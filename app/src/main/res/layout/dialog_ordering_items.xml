@@ -9,7 +9,7 @@
 
     <ScrollView
         android:layout_width="300dp"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -43,24 +43,41 @@
                 android:id="@+id/orderedItemsTotalTxtView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="25dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:text="Total - "
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/orderConfirmBtn"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
             <TextView
                 android:id="@+id/orderedItemsAmountTxtView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
 
+                android:layout_marginBottom="25dp"
                 android:layout_marginEnd="25dp"
+                android:layout_marginRight="25dp"
+
                 android:text="R$ 0,00"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/orderConfirmBtn"
+                app:layout_constraintRight_toRightOf="parent" />
 
+            <Button
+                android:id="@+id/orderConfirmBtn"
+                style="@style/AppTheme.CyburgerButton"
+                android:layout_width="180dp"
+                android:layout_height="@dimen/default_height"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/ordering_confirm"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

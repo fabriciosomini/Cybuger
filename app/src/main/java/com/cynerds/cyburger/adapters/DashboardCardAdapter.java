@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,18 +37,20 @@ public class DashboardCardAdapter extends ArrayAdapter<DashboardCardViewItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.dashboard_card_view, parent, false);
         }
         // Lookup view for data population
-        ImageView cardIcon =   (ImageView) convertView.findViewById(R.id.cardIcon);
-        TextView cardTitle =   (TextView) convertView.findViewById(R.id.cardTitle);
-        TextView cardContent = (TextView) convertView.findViewById(R.id.cardContent);
-        ImageView cardManageIcon = (ImageView) convertView.findViewById(R.id.cardManageIcon);
-        ConstraintLayout baseComponentContainer = (ConstraintLayout) convertView.findViewById(R.id.dashboard_cardview);
+        ImageView cardIcon = convertView.findViewById(R.id.cardIcon);
+        TextView cardTitle = convertView.findViewById(R.id.cardTitle);
+        TextView cardContent = convertView.findViewById(R.id.cardContent);
+        ImageView cardManageIcon = convertView.findViewById(R.id.cardManageIcon);
+        ConstraintLayout baseComponentContainer = convertView.findViewById(R.id.dashboard_cardview);
         View.OnClickListener onCardViewClickListener = dashboardCardViewItem.getOnCardViewClickListener();
         View.OnClickListener onManageClickListener = dashboardCardViewItem.getOnManageClickListener();
 
         cardManageIcon.setImageResource(dashboardCardViewItem.getActionIconId());
 
 
-
+        if (dashboardCardViewItem.getTitleColor() > 0) {
+            cardTitle.setTextColor(ContextCompat.getColor(getContext(), dashboardCardViewItem.getTitleColor()));
+        }
 
         if(onCardViewClickListener !=null)
         {

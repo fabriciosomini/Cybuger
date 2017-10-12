@@ -52,7 +52,7 @@ public class AuthenticationHelper {
 
         firebaseRealtimeDatabaseHelper.insert(profile);
 
-        ((CyburgerApplication) activity.getApplication()).setProfile(profile);
+        CyburgerApplication.setProfile(profile);
 
     }
 
@@ -129,7 +129,7 @@ public class AuthenticationHelper {
                     profiles) {
 
                 if (profile.getUserId().equals(user.getUid())) {
-                    ((CyburgerApplication) activity.getApplication()).setProfile(profile);
+                    CyburgerApplication.setProfile(profile);
 
                     return;
                 }

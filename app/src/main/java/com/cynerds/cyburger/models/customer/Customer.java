@@ -9,6 +9,15 @@ import com.cynerds.cyburger.models.BaseModel;
 public class Customer extends BaseModel {
 
     private String customerName;
+    private String linkedProfileId;
+
+    public String getLinkedProfileId() {
+        return linkedProfileId;
+    }
+
+    public void setLinkedProfileId(String linkedProfileId) {
+        this.linkedProfileId = linkedProfileId;
+    }
 
     public String getCustomerName() {
         return customerName;

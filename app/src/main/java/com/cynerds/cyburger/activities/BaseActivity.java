@@ -8,19 +8,25 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
+import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.GsonHelper;
 import com.cynerds.cyburger.models.combos.Combo;
+import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.models.orders.Order;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -30,6 +36,7 @@ import java.util.ArrayList;
 
 public class BaseActivity extends AppCompatActivity {
 
+    private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperOrders;
     private ArrayList dirty = new ArrayList<>();
     private Runnable onPermissionGrantedAction;
     private Runnable onPermissionDeniedAction;
@@ -43,6 +50,11 @@ public class BaseActivity extends AppCompatActivity {
     private Badge badge;
     private View hamburgerMenu;
     private Order order;
+
+    public BaseActivity() {
+
+        firebaseRealtimeDatabaseHelperOrders = new FirebaseRealtimeDatabaseHelper(Order.class);
+    }
 
     public Order getOrder() {
         return order;
@@ -159,6 +171,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         this.savedInstanceState = savedInstanceState;
 
         setUIEvents();
@@ -222,7 +235,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                DialogManager dialogManager = new DialogManager(BaseActivity.this);
+                final DialogManager dialogManager = new DialogManager(BaseActivity.this);
                 dialogManager.setContentView(R.layout.dialog_ordering_items);
                 dialogManager.showDialog("Seu pedido", "");
 
@@ -254,6 +267,36 @@ public class BaseActivity extends AppCompatActivity {
                 if (!orderedItemsString.isEmpty()) {
                     orderedItemsTxtView.setText(orderedItemsString);
                 }
+
+                if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0) {
+
+                    Button orderConfirmBtn = dialogManager.getContentView().findViewById(R.id.orderConfirmBtn);
+                    orderConfirmBtn.setVisibility(View.VISIBLE);
+
+                    orderConfirmBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                            Customer customer = new Customer();
+                            customer.setCustomerName(customerName);
+                            customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
+
+                            order.setCustomer(customer);
+                            firebaseRealtimeDatabaseHelperOrders.insert(order);
+
+                            Toast.makeText(BaseActivity.this, "Pedido confirmado", Toast.LENGTH_SHORT).show();
+
+                            //Reset - pedido confirmado
+                            badge.setBadgeCount(0);
+                            order = new Order();
+                            dialogManager.closeDialog();
+                        }
+                    });
+
+
+                }
+
 
 
                 return false;

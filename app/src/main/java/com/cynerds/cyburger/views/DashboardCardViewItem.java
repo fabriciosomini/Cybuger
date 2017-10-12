@@ -18,6 +18,7 @@ public class DashboardCardViewItem extends BaseModel {
     private View.OnClickListener onManageClickListener;
     private View.OnClickListener onCardViewClickListener;
     private Object extra;
+    private int titleColor;
 
     public View.OnClickListener getOnCardViewClickListener() {
         return onCardViewClickListener;
@@ -75,5 +76,13 @@ public class DashboardCardViewItem extends BaseModel {
 
     public void setExtra(String extra) {
         this.extra = extra;
+    }
+
+    public int getTitleColor() {
+        return titleColor;
+    }
+
+    public void setTitleColor(int titleColor) {
+        this.titleColor = titleColor;
     }
 }

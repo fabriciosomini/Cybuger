@@ -181,7 +181,7 @@ public class ItemsMenuFragment extends Fragment {
                         }
                     });
                     DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
-                    dialogManager.showDialog("Hey você!", "Deseja confirmar o pedido?");
+                    dialogManager.showDialog("", "Deseja adicionar esse item?");
 
 
                 }
