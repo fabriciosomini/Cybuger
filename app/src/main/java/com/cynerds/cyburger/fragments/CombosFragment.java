@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
@@ -30,7 +32,7 @@ public class CombosFragment extends Fragment {
 
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
-   
+
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
     private boolean isListCreated;
@@ -149,6 +151,21 @@ public class CombosFragment extends Fragment {
                     dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
                     dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
                             + "Esse combo está por R$" + combo.getComboAmount());
+                    dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogAction dialogAction = new DialogAction();
+                            dialogAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
+                            dialogManager.showDialog("Deseja pedir esse item?");
+
+                        }
+                    });
 
                     for (int i = 0; i < dashboardCardViewItems.size(); i++) {
                         DashboardCardViewItem d = dashboardCardViewItems.get(i);
