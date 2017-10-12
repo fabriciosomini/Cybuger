@@ -16,7 +16,6 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.combos.Combo;
-import com.cynerds.cyburger.models.combos.MonthlyCombo;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class CombosFragment extends Fragment {
 
     public CombosFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(MonthlyCombo.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Combo.class);
         dashboardCardViewItems = new ArrayList<>();
 
     }
@@ -64,7 +63,7 @@ public class CombosFragment extends Fragment {
     private void setUIEvents(View view) {
 
 
-        EditText searchBoxCombosTxt = (EditText) view.findViewById(R.id.searchBoxCombosTxt);
+        EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
 
 
         searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
@@ -107,7 +106,7 @@ public class CombosFragment extends Fragment {
     private void updateList(View view) {
 
         Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
-        final ListView listview = (ListView) view.findViewById(android.R.id.list);
+        final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
 
         if (adapter == null) {
@@ -135,17 +134,13 @@ public class CombosFragment extends Fragment {
     public void getDashboardCardViewItems() {
 
 
-
-        List<MonthlyCombo> monthlyCombos = getDailyCombo();
+        List<Combo> combos = getCombos();
 
         boolean repeat = false;
-        for (MonthlyCombo monthlyCombo :
-                monthlyCombos) {
-
 
 
                 for (Combo combo :
-                        monthlyCombo.getCombos()) {
+                        combos) {
 
 
                     DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
@@ -173,14 +168,14 @@ public class CombosFragment extends Fragment {
                 }
 
 
-        }
+
 
     }
 
-    List<MonthlyCombo> getDailyCombo() {
+    List<Combo> getCombos() {
 
-        List<MonthlyCombo> dailyCombos = firebaseRealtimeDatabaseHelper.get();
-        return dailyCombos;
+        List<Combo> combos = firebaseRealtimeDatabaseHelper.get();
+        return combos;
 
     }
 
