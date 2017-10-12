@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.models.Tag;
@@ -37,31 +40,24 @@ public class TagInput extends ConstraintLayout {
 
     public void setFilterableList(List<Tag> tagList){
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-
-
         this.tagList = tagList;
-
-
-        FlexboxLayout flexboxLayout = (FlexboxLayout) findViewById(R.id.tagItemsContainer);
+        FlexboxLayout flexboxLayout =  findViewById(R.id.tagItemsContainer);
         flexboxLayout.setFlexDirection(FlexDirection.ROW);
+        flexboxLayout.removeAllViews();
 
         for (Tag tag :
                 tagList) {
             TagItem tagInput =  new TagItem(context);
             tagInput.setText(tag.getDescription());
+
+            TextView textView = new TextView(context);
+            textView.setText(tag.getDescription() + "    ");
+
+
             flexboxLayout.addView(tagInput);
+
         }
 
-
-
-       /* View view = flexboxLayout.getChildAt(0);
-        FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) view.getLayoutParams();
-        lp.setOrder(-1);
-        lp.setFlexGrow(2);
-        view.setLayoutParams(lp);*/
 
     }
 }
