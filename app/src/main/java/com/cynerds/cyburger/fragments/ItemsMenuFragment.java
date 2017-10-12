@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
-import com.cynerds.cyburger.models.foodmenu.Item;
+import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FoodMenuFragment extends Fragment {
+public class ItemsMenuFragment extends Fragment {
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
@@ -34,7 +34,7 @@ public class FoodMenuFragment extends Fragment {
     private boolean isListCreated;
 
 
-    public FoodMenuFragment() {
+    public ItemsMenuFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Item.class);
         dashboardCardViewItems = new ArrayList<>();
@@ -62,7 +62,7 @@ public class FoodMenuFragment extends Fragment {
     private void setUIEvents(View view) {
 
 
-        EditText searchBoxCombosTxt = (EditText) view.findViewById(R.id.searchBoxCombosTxt);
+        EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
 
 
         searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
@@ -105,7 +105,7 @@ public class FoodMenuFragment extends Fragment {
     private void updateList(View view) {
 
         Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
-        final ListView listview = (ListView) view.findViewById(android.R.id.list);
+        final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
 
         if (adapter == null) {

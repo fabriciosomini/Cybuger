@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.fragments.CombosFragment;
-import com.cynerds.cyburger.fragments.FoodMenuFragment;
+import com.cynerds.cyburger.fragments.ItemsMenuFragment;
 import com.cynerds.cyburger.fragments.OrdersFragment;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -21,7 +21,7 @@ public class MainActivity extends BaseActivity {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     CombosFragment combosFragment = new CombosFragment();
-    FoodMenuFragment foodMenuFragment = new FoodMenuFragment();
+    ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
     private int backPressed = 0;
     private TextView mTextMessage;
@@ -45,8 +45,8 @@ public class MainActivity extends BaseActivity {
 
                 case R.id.navigation_foodMenu:
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
-                            foodMenuFragment,
-                            foodMenuFragment.getTag()).commit();
+                            itemsMenuFragment,
+                            itemsMenuFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_dashboard));
 
                     return true;
@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_combos);
 

@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.models.foodmenu;
+package com.cynerds.cyburger.models.items;
 
 import com.cynerds.cyburger.models.BaseModel;
 

@@ -1,7 +1,7 @@
 package com.cynerds.cyburger.models.combos;
 
 import com.cynerds.cyburger.models.BaseModel;
-import com.cynerds.cyburger.models.foodmenu.Item;
+import com.cynerds.cyburger.models.items.Item;
 
 import java.util.List;
 

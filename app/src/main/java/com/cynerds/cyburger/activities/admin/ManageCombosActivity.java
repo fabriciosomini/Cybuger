@@ -14,7 +14,7 @@ import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.Tag;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.combos.ComboDay;
-import com.cynerds.cyburger.models.foodmenu.Item;
+import com.cynerds.cyburger.models.items.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;

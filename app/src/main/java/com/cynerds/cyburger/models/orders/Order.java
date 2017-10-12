@@ -3,7 +3,7 @@ package com.cynerds.cyburger.models.orders;
 import com.cynerds.cyburger.models.BaseModel;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
-import com.cynerds.cyburger.models.foodmenu.Item;
+import com.cynerds.cyburger.models.items.Item;
 
 import java.util.List;
 

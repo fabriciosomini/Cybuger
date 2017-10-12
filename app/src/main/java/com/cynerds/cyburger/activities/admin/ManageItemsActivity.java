@@ -17,7 +17,7 @@ import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
-import com.cynerds.cyburger.models.foodmenu.Item;
+import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class ManageItemsActivity extends BaseActivity {
     private void setUIEvents() {
 
 
-        EditText searchItemBoxTxt = (EditText) findViewById(R.id.searchBoxItemsTxt);
+        EditText searchItemBoxTxt = findViewById(R.id.searchBoxItemsTxt);
         searchItemBoxTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,7 +71,7 @@ public class ManageItemsActivity extends BaseActivity {
         });
 
 
-        Button addNewItemBtn = (Button) findViewById(R.id.addNewItemBtn);
+        Button addNewItemBtn = findViewById(R.id.addNewItemBtn);
 
         final DialogAction dialogAction = new DialogAction();
         final DialogManager dialogManager = new DialogManager(ManageItemsActivity.this,
@@ -92,10 +92,10 @@ public class ManageItemsActivity extends BaseActivity {
 
                         View dialogContent = dialogManager.getContentView();
 
-                        EditText itemDescription = (EditText) dialogContent.findViewById(R.id.itemDescription);
-                        EditText itemPrice = (EditText) dialogContent.findViewById(R.id.itemPrice);
-                        EditText itemIngredients = (EditText) dialogContent.findViewById(R.id.itemIngredients);
-                        Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemMeasureUnitCbx);
+                        EditText itemDescription = dialogContent.findViewById(R.id.itemDescription);
+                        EditText itemPrice = dialogContent.findViewById(R.id.itemPrice);
+                        EditText itemIngredients = dialogContent.findViewById(R.id.itemIngredients);
+                        Spinner spinner = dialogContent.findViewById(R.id.itemMeasureUnitCbx);
 
                         Item item = new Item();
                         item.setDescription(itemDescription.getText().toString());
@@ -126,7 +126,7 @@ public class ManageItemsActivity extends BaseActivity {
                                 getMeasureUnitItems());
 
                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemMeasureUnitCbx);
+                Spinner spinner = dialogContent.findViewById(R.id.itemMeasureUnitCbx);
                 spinner.setAdapter(spinnerArrayAdapter);
 
 
@@ -138,7 +138,7 @@ public class ManageItemsActivity extends BaseActivity {
     private void createList() {
 
 
-        final ListView listview = (ListView) findViewById(android.R.id.list);
+        final ListView listview = findViewById(android.R.id.list);
 
 
         FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
