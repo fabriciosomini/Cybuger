@@ -141,8 +141,6 @@ public class BaseActivity extends AppCompatActivity {
 
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,23 +152,13 @@ public class BaseActivity extends AppCompatActivity {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //bellow setSupportActionBar(toolbar);
         actionBar.setCustomView(R.layout.base_titlebar);
 
-        actionBarTitle = (TextView) findViewById(R.id.action_bar_title);
+        actionBarTitle = findViewById(R.id.action_bar_title);
 
 
         getView().setFocusableInTouchMode(true);
 
     }
 
-
-
-    /*@Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-
-        View view = super.onCreateView(name, context, attrs);
-        view.setFocusableInTouchMode(true);
-
-        return view;
-    }**/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -218,7 +206,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void showActionBarMenu(boolean showMenu) {
 
         if (showMenu) {
-            final ImageButton hamburgerMenu = (ImageButton) findViewById(R.id.hamburgerMenu);
+            final ImageButton hamburgerMenu = findViewById(R.id.hamburgerMenu);
 
             if (showMenu) {
                 hamburgerMenu.setVisibility(View.VISIBLE);

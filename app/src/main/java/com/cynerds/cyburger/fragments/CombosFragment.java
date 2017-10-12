@@ -107,7 +107,7 @@ public class CombosFragment extends Fragment {
 
     private void updateList(View view) {
 
-        Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "updateList", Toast.LENGTH_SHORT).show();
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
 

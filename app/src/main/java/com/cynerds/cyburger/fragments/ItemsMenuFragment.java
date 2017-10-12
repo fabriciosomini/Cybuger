@@ -151,7 +151,8 @@ public class ItemsMenuFragment extends Fragment {
             DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
             dashboardCardViewItem.setId(item.getId());
             dashboardCardViewItem.setTitle(item.getDescription());
-            dashboardCardViewItem.setContent("Ingredientes: " + item.getIngredients()
+            dashboardCardViewItem.setContent(
+                    "Ingredientes: " + item.getIngredients()
                     + "\nUnidade de medida: "
                     + item.getSize()
                     + "\nPreço: " + item.getPrice());

@@ -109,7 +109,7 @@ public class TagInput extends ConstraintLayout {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if (searchTagItemBox.getText().toString().isEmpty()) {
-                        final FlexboxLayout flexboxLayout = findViewById(R.id.addedTagItemsContainer);
+                        final FlexboxLayout flexboxLayout = findViewById(R.id.tagItemsContainer);
                         flexboxLayout.removeAllViews();
                     }
 

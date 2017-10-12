@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
@@ -24,7 +23,6 @@ public class MainActivity extends BaseActivity {
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
     private int backPressed = 0;
-    private TextView mTextMessage;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

@@ -47,7 +47,7 @@ public class ManageCombosActivity extends BaseActivity {
 
     private void setUIEvents() {
         ArrayAdapter arrayAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_dropdown_item,
                 getNames(ComboDay.class));
         final Spinner comboDayCbx = findViewById(R.id.comboDayCbx);
         final EditText comboNameTxt = findViewById(R.id.comboNameTxt);
