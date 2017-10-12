@@ -158,6 +158,7 @@ public class OrdersFragment extends Fragment {
                 dashboardCardViewItem.setTitleColor(R.color.colorAccent);
             } else {
                 dashboardCardViewItem.setTitle(customerName);
+                dashboardCardViewItem.setTitleColor(R.color.black);
             }
 
             //Pega Items do pedido-----------
