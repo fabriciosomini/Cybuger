@@ -13,8 +13,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
+import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
@@ -145,18 +149,48 @@ public class ItemsMenuFragment extends Fragment {
 
         boolean repeat = false;
 
-        for (Item item :
+        for (final Item item :
                 items) {
 
             DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
             dashboardCardViewItem.setId(item.getId());
             dashboardCardViewItem.setTitle(item.getDescription());
+            dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
             dashboardCardViewItem.setContent(
                     "Ingredientes: " + item.getIngredients()
                     + "\nUnidade de medida: "
                     + item.getSize()
                     + "\nPreço: " + item.getPrice());
 
+
+            dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogAction dialogAction = new DialogAction();
+                    dialogAction.setPositiveAction(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                            Badge badge = ((BaseActivity) getActivity()).getBadge();
+                            badge.setBadgeCount(badge.getBadgeCount() + 1);
+
+                        }
+                    });
+                    DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
+                    dialogManager.showDialog("Deseja confirmar o pedido?");
+
+
+                }
+            });
+
+            dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogManager dialogManager = new DialogManager(getContext());
+                    dialogManager.setContentView(R.layout.component_photo_viewer);
+                    dialogManager.showDialog(item.getDescription(), "");
+                }
+            });
 
             for (int i = 0; i < dashboardCardViewItems.size(); i++) {
                 DashboardCardViewItem d = dashboardCardViewItems.get(i);

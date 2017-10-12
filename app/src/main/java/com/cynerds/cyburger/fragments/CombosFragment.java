@@ -32,7 +32,6 @@ import java.util.List;
 public class CombosFragment extends Fragment {
 
 
-
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
 
     List<DashboardCardViewItem> dashboardCardViewItems;
@@ -144,34 +143,35 @@ public class CombosFragment extends Fragment {
 
 
         for (final Combo combo :
-                        combos) {
+                combos) {
 
 
-                    DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
-                    dashboardCardViewItem.setTitle(combo.getComboName());
-                    dashboardCardViewItem.setId(combo.getId());
-                    dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
-                    dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
-                            + "Esse combo está por R$" + combo.getComboAmount());
-                    dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
+            DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
+            dashboardCardViewItem.setTitle(combo.getComboName());
+            dashboardCardViewItem.setId(combo.getId());
+            dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
+            dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
+                    + "Esse combo está por R$" + combo.getComboAmount());
+
+            dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogAction dialogAction = new DialogAction();
+                    dialogAction.setPositiveAction(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DialogAction dialogAction = new DialogAction();
-                            dialogAction.setPositiveAction(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
-                                    Badge badge = ((BaseActivity) getActivity()).getBadge();
-                                    badge.setBadgeCount(badge.getBadgeCount() + 1);
-
-                                }
-                            });
-                            DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
-                            dialogManager.showDialog("Deseja confirmar o pedido?");
-
+                            Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                            Badge badge = ((BaseActivity) getActivity()).getBadge();
+                            badge.setBadgeCount(badge.getBadgeCount() + 1);
 
                         }
                     });
+                    DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
+                    dialogManager.showDialog("Deseja confirmar o pedido?");
+
+
+                }
+            });
 
             dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
@@ -182,26 +182,24 @@ public class CombosFragment extends Fragment {
                 }
             });
 
-                    for (int i = 0; i < dashboardCardViewItems.size(); i++) {
-                        DashboardCardViewItem d = dashboardCardViewItems.get(i);
-                        if (combo.getId().equals(d.getId())) {
-                            repeat = true;
-                            dashboardCardViewItems.set(i, dashboardCardViewItem);
-                            break;
-                        } else {
-                            repeat = false;
-                        }
-                    }
-
-                    if (repeat) {
-                        continue;
-                    }
-
-
-                    dashboardCardViewItems.add(dashboardCardViewItem);
+            for (int i = 0; i < dashboardCardViewItems.size(); i++) {
+                DashboardCardViewItem d = dashboardCardViewItems.get(i);
+                if (combo.getId().equals(d.getId())) {
+                    repeat = true;
+                    dashboardCardViewItems.set(i, dashboardCardViewItem);
+                    break;
+                } else {
+                    repeat = false;
                 }
+            }
+
+            if (repeat) {
+                continue;
+            }
 
 
+            dashboardCardViewItems.add(dashboardCardViewItem);
+        }
 
 
     }
@@ -212,10 +210,6 @@ public class CombosFragment extends Fragment {
         return combos;
 
     }
-
-
-
-
 
 
 }
