@@ -180,7 +180,7 @@ public class CombosFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     DialogManager dialogManager = new DialogManager(getContext());
-                    dialogManager.setContentView(R.layout.component_photo_viewer);
+                    dialogManager.setContentView(R.layout.dialog_preview_item);
                     dialogManager.showDialog(combo.getComboName(), "");
                 }
             });

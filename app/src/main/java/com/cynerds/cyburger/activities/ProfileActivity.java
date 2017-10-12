@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -52,15 +52,15 @@ public class ProfileActivity extends BaseActivity {
             final Uri photoUrl = user.getPhotoUrl();
 
 
-            final Button saveProfileBtn = (Button) findViewById(R.id.saveProfileBtn);
-            final TextView profileNameTxtEditText = (TextView) findViewById(R.id.profileNameTxt);
-            final EditText profileEmailTxt = (EditText) findViewById(R.id.profileEmailTxt);
-            final ImageView profilePictureImg = (ImageView) findViewById(R.id.profilePictureImg);
+            final Button saveProfileBtn = findViewById(R.id.saveProfileBtn);
+            final TextView profileNameTxtEditText = findViewById(R.id.profileNameTxt);
+            final EditText profileEmailTxt = findViewById(R.id.profileEmailTxt);
+            final PhotoViewer profilePictureImg = findViewById(R.id.profilePictureImg);
 
             String profileName = profileNameTxtEditText.getText().toString();
             profileNameTxtEditText.setText(profileName.replace("{user.name}", name));
             profileEmailTxt.setText(email);
-
+            profilePictureImg.setEditable(true);
 
             profilePictureImg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,7 +85,10 @@ public class ProfileActivity extends BaseActivity {
                             DialogManager.DialogType.SAVE_CANCEL,
                             dialogAction);
 
+                    dialogManager.setContentView(R.layout.component_photo_viewer);
                     dialogManager.showDialog("Foto do perfil", "");
+
+
                 }
             });
 
