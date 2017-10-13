@@ -245,7 +245,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void displayOrderDialog() {
 
-        final boolean readOnly = order.getObjectKey() != null;
+        final boolean readOnly = order.getKey() != null;
 
         String title = "Fazer pedido";
         if (readOnly) {

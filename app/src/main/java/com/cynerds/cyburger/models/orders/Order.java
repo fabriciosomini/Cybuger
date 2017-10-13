@@ -12,7 +12,7 @@ import java.util.List;
  * Created by fabri on 07/10/2017.
  */
 
-public class Order extends BaseModel<Order> {
+public class Order extends BaseModel {
 
     private Customer customer;
     private List<Combo> orderedCombos;

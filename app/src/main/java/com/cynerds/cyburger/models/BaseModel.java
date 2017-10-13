@@ -4,16 +4,16 @@ package com.cynerds.cyburger.models;
  * Created by fabri on 06/10/2017.
  */
 
-public class BaseModel<T> implements Cloneable {
+public class BaseModel {
     private String id;
-    private String objectKey;
+    private String key;
 
-    public String getObjectKey() {
-        return objectKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setObjectKey(String objectKey) {
-        this.objectKey = objectKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getId() {
@@ -25,14 +25,5 @@ public class BaseModel<T> implements Cloneable {
     }
 
 
-    public T getClone() {
-        try {
-
-            return (T) super.clone();
-        } catch (CloneNotSupportedException e) {
-            System.out.println(" Cloning not allowed. ");
-            return (T) this;
-        }
-    }
 
 }
