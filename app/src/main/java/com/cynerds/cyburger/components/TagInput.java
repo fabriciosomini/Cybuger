@@ -31,6 +31,7 @@ public class TagInput extends ConstraintLayout {
     private final Context context;
     private List<Tag> tagList;
     private List<Tag> selectedTags;
+    private int measuredHeight = -1;
 
     public TagInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -55,8 +56,18 @@ public class TagInput extends ConstraintLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+
     }
 
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (heightMeasureSpec > 0 && measuredHeight < 0) {
+            this.measuredHeight = getMeasuredHeight();
+        }
+
+    }
 
     public void setFilterableList(List<Tag> tagList){
 
@@ -108,8 +119,9 @@ public class TagInput extends ConstraintLayout {
             }
         });
 
-        flexboxLayoutAddedItems.addView(topTagItem.getTextView());
 
+        flexboxLayoutAddedItems.addView(topTagItem.getTextView());
+        getLayoutParams().height = measuredHeight + topTagItem.getTextView().getMeasuredHeight();
 
 
     }

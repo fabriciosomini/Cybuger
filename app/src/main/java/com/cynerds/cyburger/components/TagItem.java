@@ -82,7 +82,12 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         });
     }
 
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
 
+
+    }
 
     public void setText(String text) {
         textView.setText(text);
