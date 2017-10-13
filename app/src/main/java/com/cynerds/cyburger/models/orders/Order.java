@@ -12,7 +12,7 @@ import java.util.List;
  * Created by fabri on 07/10/2017.
  */
 
-public class Order extends BaseModel {
+public class Order extends BaseModel<Order> {
 
     private Customer customer;
     private List<Combo> orderedCombos;
@@ -46,5 +46,6 @@ public class Order extends BaseModel {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
 
 }

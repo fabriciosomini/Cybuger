@@ -156,12 +156,7 @@ public class OrdersFragment extends Fragment {
                 dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Order newOrder = new Order();
-                        newOrder.setCustomer(order.getCustomer());
-                        newOrder.setOrderedCombos(order.getOrderedCombos());
-                        newOrder.setOrderedItems(order.getOrderedItems());
-                        newOrder.setKey(order.getKey());
-
+                        Order newOrder = order.getClone();
                         currentActivty.setOrder(newOrder);
                         currentActivty.displayOrderDialog();
 
