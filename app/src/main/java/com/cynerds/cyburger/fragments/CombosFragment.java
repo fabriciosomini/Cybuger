@@ -153,6 +153,7 @@ public class CombosFragment extends Fragment {
             dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
                     + "Esse combo está por R$" + combo.getComboAmount());
 
+            final DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.SAVE_CANCEL);
             dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,15 +165,31 @@ public class CombosFragment extends Fragment {
 
                             BaseActivity baseActivity = ((BaseActivity) getActivity());
                             Badge badge = baseActivity.getBadge();
-                            baseActivity.getOrder().getOrderedCombos().add(combo);
-                            badge.setBadgeCount(badge.getBadgeCount() + 1);
+
+                            EditText confirmItemQuantityTxt = dialogManager.getContentView()
+                                    .findViewById(R.id.confirmItemQuantityTxt);
+                            String confirmItemQuatityStr = confirmItemQuantityTxt.getText().toString();
+
+                            if (confirmItemQuatityStr.isEmpty()) {
+
+                                confirmItemQuatityStr = confirmItemQuantityTxt.getHint().toString();
+                            }
+
+                            int itemQuantity = Integer.valueOf(confirmItemQuatityStr);
+                            for (int i = 0; i < itemQuantity; i++) {
+
+                                baseActivity.getOrder().getOrderedCombos().add(combo);
+                                badge.setBadgeCount(badge.getBadgeCount() + 1);
+                            }
+
 
 
                         }
                     });
-                    DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.YES_NO, dialogAction);
-                    dialogManager.showDialog("", "Deseja adicionar esse item?");
 
+                    dialogManager.setContentView(R.layout.dialog_ordering_confirm);
+                    dialogManager.setAction(dialogAction);
+                    dialogManager.showDialog("Adicionar item", "");
 
                 }
             });

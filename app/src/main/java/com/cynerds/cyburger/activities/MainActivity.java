@@ -101,9 +101,8 @@ public class MainActivity extends BaseActivity {
                 }
             });
 
-            DialogManager dialogManager = new DialogManager(this,
-                    DialogManager.DialogType.YES_NO,
-                    dialogAction);
+            DialogManager dialogManager = new DialogManager(this, DialogManager.DialogType.YES_NO);
+            dialogManager.setAction(dialogAction);
             dialogManager.showDialog("Tem certeza que deseja sair?");
         }
     }

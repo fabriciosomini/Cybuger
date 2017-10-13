@@ -23,7 +23,9 @@ public class DialogManager {
     private AlertDialog alertDialog;
     private int layoutResId = -1;
     private View contentView;
-    public DialogManager(Context context, DialogType dialogType, DialogAction dialogAction) {
+    private DialogAction action;
+
+    public DialogManager(Context context, DialogType dialogType) {
 
         this.context = context;
         this.dialogType = dialogType;
@@ -97,8 +99,9 @@ public class DialogManager {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
         alertDialog = builder.create();
+        alertDialog.setCancelable(true);
+
         title = title == null ? "" : title;
         message = message == null ? "" : message;
 
@@ -167,6 +170,10 @@ public class DialogManager {
             alertDialog.cancel();
 
         }
+    }
+
+    public void setAction(DialogAction action) {
+        this.dialogAction = action;
     }
 
     public enum DialogType {

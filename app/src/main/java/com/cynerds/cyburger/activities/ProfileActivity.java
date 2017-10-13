@@ -82,9 +82,9 @@ public class ProfileActivity extends BaseActivity {
                     });
 
                     DialogManager dialogManager = new DialogManager(ProfileActivity.this,
-                            DialogManager.DialogType.SAVE_CANCEL,
-                            dialogAction);
+                            DialogManager.DialogType.SAVE_CANCEL);
 
+                    dialogManager.setAction(dialogAction);
                     dialogManager.setContentView(R.layout.component_photo_viewer);
                     dialogManager.showDialog("Foto do perfil", "");
 

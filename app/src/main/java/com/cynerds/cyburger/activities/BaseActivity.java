@@ -139,8 +139,8 @@ public class BaseActivity extends AppCompatActivity {
 
             DialogAction dialogAction = new DialogAction();
             final DialogManager dialogManager = new DialogManager(this,
-                    DialogManager.DialogType.YES_NO,
-                    dialogAction);
+                    DialogManager.DialogType.YES_NO);
+            dialogManager.setAction(dialogAction);
 
             dialogAction.setPositiveAction(new View.OnClickListener() {
                 @Override
