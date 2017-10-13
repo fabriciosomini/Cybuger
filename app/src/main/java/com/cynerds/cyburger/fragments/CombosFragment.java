@@ -154,12 +154,20 @@ public class CombosFragment extends Fragment {
             dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
                     + "Esse combo está por R$" + combo.getComboAmount());
 
-            final DialogManager addItemToOrderingDialogManager = new DialogManager(getContext(), DialogManager.DialogType.SAVE_CANCEL);
+            final DialogManager addComboToOrderingDialogManager = new DialogManager(getContext());
             dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogAction dialogAction = new DialogAction();
-                    dialogAction.setPositiveAction(new View.OnClickListener() {
+
+
+                    addComboToOrderingDialogManager.setContentView(R.layout.dialog_ordering_confirm);
+                    addComboToOrderingDialogManager.showDialog("Adicionar item", "");
+
+
+                    Button addToOrderBtn = addComboToOrderingDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+                    Button cancelAddToOrderBtn = addComboToOrderingDialogManager.getContentView().findViewById(R.id.cancelAddToOrderBtn);
+
+                    addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
@@ -167,7 +175,7 @@ public class CombosFragment extends Fragment {
                             BaseActivity baseActivity = ((BaseActivity) getActivity());
                             Badge badge = baseActivity.getBadge();
 
-                            EditText confirmItemQuantityTxt = addItemToOrderingDialogManager.getContentView()
+                            EditText confirmItemQuantityTxt = addComboToOrderingDialogManager.getContentView()
                                     .findViewById(R.id.confirmItemQuantityTxt);
                             String confirmItemQuatityStr = confirmItemQuantityTxt.getText().toString();
 
@@ -182,15 +190,18 @@ public class CombosFragment extends Fragment {
                                 baseActivity.getOrder().getOrderedCombos().add(combo);
                                 badge.setBadgeCount(badge.getBadgeCount() + 1);
                             }
-
+                            addComboToOrderingDialogManager.closeDialog();
 
 
                         }
                     });
 
-                    addItemToOrderingDialogManager.setContentView(R.layout.dialog_ordering_confirm);
-                    addItemToOrderingDialogManager.setAction(dialogAction);
-                    addItemToOrderingDialogManager.showDialog("Adicionar item", "");
+                    cancelAddToOrderBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addComboToOrderingDialogManager.closeDialog();
+                        }
+                    });
 
                 }
             });

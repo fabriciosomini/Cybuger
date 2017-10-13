@@ -166,12 +166,19 @@ public class ItemsMenuFragment extends Fragment {
                             + "\nValor: " + item.getPrice());
 
 
-            final DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.SAVE_CANCEL);
+            final DialogManager addItemToOrderingDialogManager = new DialogManager(getContext());
             dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogAction dialogAction = new DialogAction();
-                    dialogAction.setPositiveAction(new View.OnClickListener() {
+
+
+                    addItemToOrderingDialogManager.setContentView(R.layout.dialog_ordering_confirm);
+                    addItemToOrderingDialogManager.showDialog("Adicionar item", "");
+
+                    Button addToOrderBtn = addItemToOrderingDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+                    Button cancelAddToOrderBtn = addItemToOrderingDialogManager.getContentView().findViewById(R.id.cancelAddToOrderBtn);
+
+                    addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
@@ -179,7 +186,7 @@ public class ItemsMenuFragment extends Fragment {
                             BaseActivity baseActivity = ((BaseActivity) getActivity());
                             Badge badge = baseActivity.getBadge();
 
-                            EditText confirmItemQuantityTxt = dialogManager.getContentView()
+                            EditText confirmItemQuantityTxt = addItemToOrderingDialogManager.getContentView()
                                     .findViewById(R.id.confirmItemQuantityTxt);
 
                             String confirmItemQuatityStr = confirmItemQuantityTxt.getText().toString();
@@ -196,12 +203,17 @@ public class ItemsMenuFragment extends Fragment {
                                 badge.setBadgeCount(badge.getBadgeCount() + 1);
                             }
 
+                            addItemToOrderingDialogManager.closeDialog();
+
                         }
                     });
 
-                    dialogManager.setContentView(R.layout.dialog_ordering_confirm);
-                    dialogManager.setAction(dialogAction);
-                    dialogManager.showDialog("Adicionar item", "");
+                    cancelAddToOrderBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addItemToOrderingDialogManager.closeDialog();
+                        }
+                    });
 
                 }
             });
