@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
@@ -153,8 +155,8 @@ public class ItemsMenuFragment extends Fragment {
         for (final Item item :
                 items) {
 
-            DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
-            dashboardCardViewItem.setId(item.getId());
+            final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
+            dashboardCardViewItem.setExtra(item);
             dashboardCardViewItem.setTitle(item.getDescription());
             dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
             dashboardCardViewItem.setContent(
@@ -207,9 +209,34 @@ public class ItemsMenuFragment extends Fragment {
             dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogManager dialogManager = new DialogManager(getContext());
-                    dialogManager.setContentView(R.layout.dialog_preview_item);
-                    dialogManager.showDialog(item.getDescription(), "");
+                    final DialogManager previewItemDialogManager = new DialogManager(getContext());
+                    previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
+                    previewItemDialogManager.showDialog(item.getDescription(), "");
+
+                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteComboBtn);
+                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editComboBtn);
+
+
+                    deleteComboBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogAction deleteComboAction = new DialogAction();
+                            deleteComboAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    Combo comboToDelete = (Combo) dashboardCardViewItem.getExtra();
+                                    firebaseRealtimeDatabaseHelper.delete(comboToDelete);
+                                    previewItemDialogManager.closeDialog();
+                                    Toast.makeText(getContext(), "Item removido", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            DialogManager confirmDeleteDialog = new DialogManager(getContext(), DialogManager.DialogType.YES_NO);
+                            confirmDeleteDialog.setAction(deleteComboAction);
+                            confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
+                        }
+                    });
+
                 }
             });
 

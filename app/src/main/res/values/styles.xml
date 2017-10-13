@@ -15,6 +15,12 @@
 
     </style>
 
+    <style name="AppTheme.CyburgerSecondaryButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/secondary_button_shape</item>
+
+    </style>
+
+
     <style name="AppTheme.CyburgerEditText" parent="Widget.AppCompat.EditText">
 
         <item name="android:background">@drawable/edit_text_shape</item>

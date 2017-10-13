@@ -6,6 +6,15 @@ package com.cynerds.cyburger.models;
 
 public class BaseModel {
     private String id;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getId() {
         return id;

@@ -149,9 +149,7 @@ public class OrdersFragment extends Fragment {
             Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
             DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
-
-
-            dashboardCardViewItem.setId(order.getId());
+            dashboardCardViewItem.setExtra(order);
 
             if (customer.getLinkedProfileId().equals(profile.getUserId())) {
                 dashboardCardViewItem.setTitle("Seu pedido");

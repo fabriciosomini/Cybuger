@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -148,12 +149,12 @@ public class CombosFragment extends Fragment {
 
             final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
             dashboardCardViewItem.setTitle(combo.getComboName());
-            dashboardCardViewItem.setId(combo.getId());
+            dashboardCardViewItem.setExtra(combo);
             dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
             dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
                     + "Esse combo está por R$" + combo.getComboAmount());
 
-            final DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.SAVE_CANCEL);
+            final DialogManager addItemToOrderingDialogManager = new DialogManager(getContext(), DialogManager.DialogType.SAVE_CANCEL);
             dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -166,7 +167,7 @@ public class CombosFragment extends Fragment {
                             BaseActivity baseActivity = ((BaseActivity) getActivity());
                             Badge badge = baseActivity.getBadge();
 
-                            EditText confirmItemQuantityTxt = dialogManager.getContentView()
+                            EditText confirmItemQuantityTxt = addItemToOrderingDialogManager.getContentView()
                                     .findViewById(R.id.confirmItemQuantityTxt);
                             String confirmItemQuatityStr = confirmItemQuantityTxt.getText().toString();
 
@@ -187,9 +188,9 @@ public class CombosFragment extends Fragment {
                         }
                     });
 
-                    dialogManager.setContentView(R.layout.dialog_ordering_confirm);
-                    dialogManager.setAction(dialogAction);
-                    dialogManager.showDialog("Adicionar item", "");
+                    addItemToOrderingDialogManager.setContentView(R.layout.dialog_ordering_confirm);
+                    addItemToOrderingDialogManager.setAction(dialogAction);
+                    addItemToOrderingDialogManager.showDialog("Adicionar item", "");
 
                 }
             });
@@ -197,9 +198,34 @@ public class CombosFragment extends Fragment {
             dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogManager dialogManager = new DialogManager(getContext());
-                    dialogManager.setContentView(R.layout.dialog_preview_item);
-                    dialogManager.showDialog(combo.getComboName(), "");
+                    final DialogManager previewItemDialogManager = new DialogManager(getContext());
+                    previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
+                    previewItemDialogManager.showDialog(combo.getComboName(), "");
+
+                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteComboBtn);
+                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editComboBtn);
+
+
+                    deleteComboBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogAction deleteComboAction = new DialogAction();
+                            deleteComboAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    Combo comboToDelete = (Combo) dashboardCardViewItem.getExtra();
+                                    firebaseRealtimeDatabaseHelper.delete(comboToDelete);
+                                    previewItemDialogManager.closeDialog();
+                                    Toast.makeText(getContext(), "Combo removido", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            DialogManager confirmDeleteDialog = new DialogManager(getContext(), DialogManager.DialogType.YES_NO);
+                            confirmDeleteDialog.setAction(deleteComboAction);
+                            confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse combo?");
+                        }
+                    });
+
                 }
             });
 

@@ -2,13 +2,11 @@ package com.cynerds.cyburger.views;
 
 import android.view.View;
 
-import com.cynerds.cyburger.models.BaseModel;
-
 /**
  * Created by fabri on 05/07/2017.
  */
 
-public class DashboardCardViewItem extends BaseModel {
+public class DashboardCardViewItem {
 
 
     private String title;
@@ -74,7 +72,7 @@ public class DashboardCardViewItem extends BaseModel {
         return extra;
     }
 
-    public void setExtra(String extra) {
+    public void setExtra(Object extra) {
         this.extra = extra;
     }
 

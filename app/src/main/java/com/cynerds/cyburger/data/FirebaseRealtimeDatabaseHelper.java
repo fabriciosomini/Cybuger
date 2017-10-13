@@ -51,7 +51,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 BaseModel object = dataSnapshot.getValue(classType);
-
+                object.setKey(dataSnapshot.getKey());
 
                 if (object != null) {
 
@@ -79,6 +79,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 BaseModel object = dataSnapshot.getValue(classType);
+                object.setKey(dataSnapshot.getKey());
                 if (object != null) {
 
                     int index = getIndexOfObject(object);
@@ -100,6 +101,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 BaseModel object = dataSnapshot.getValue(classType);
+                object.setKey(dataSnapshot.getKey());
                 if (object != null) {
 
                     int index = getIndexOfObject(object);
@@ -119,6 +121,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 BaseModel object = dataSnapshot.getValue(classType);
+                object.setKey(dataSnapshot.getKey());
                 if (object != null) {
 
 
@@ -183,11 +186,11 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     }
 
     public List<BaseModel> get() {
-
-
         return items;
+    }
 
-
+    public void delete(BaseModel object) {
+        databaseReference.child(object.getKey()).removeValue();
 
     }
 
