@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="abc_action_bar_home_description" msgid="4600421777120114993">"Navigeer tuis"
+    </string>
+    <string name="abc_action_bar_home_description_format" msgid="1397052879051804371">"%1$s, %2$s"
+    </string>
+    <string name="abc_action_bar_home_subtitle_description_format" msgid="6623331958280229229">
+        "%1$s, %2$s, %3$s"
+    </string>
+    <string name="abc_action_bar_up_description" msgid="1594238315039666878">"Navigeer op"</string>
+    <string name="abc_action_menu_overflow_description" msgid="3588849162933574182">"Nog opsies"
+    </string>
+    <string name="abc_action_mode_done" msgid="4076576682505996667">"Klaar"</string>
+    <string name="abc_activity_chooser_view_see_all" msgid="7468859129482906941">"Sien alles"
+    </string>
+    <string name="abc_activitychooserview_choose_application" msgid="2031811694353399454">"Kies \'n
+        program"
+    </string>
+    <string name="abc_capital_off" msgid="121134116657445385">"AF"</string>
+    <string name="abc_capital_on" msgid="3405795526292276155">"AAN"</string>
+    <string name="abc_search_hint" msgid="7723749260725869598">"Soek …"</string>
+    <string name="abc_searchview_description_clear" msgid="3691816814315814921">"Vee navraag uit"
+    </string>
+    <string name="abc_searchview_description_query" msgid="2550479030709304392">"Soeknavraag"
+    </string>
+    <string name="abc_searchview_description_search" msgid="8264924765203268293">"Soek"</string>
+    <string name="abc_searchview_description_submit" msgid="8928215447528550784">"Dien navraag in"
+    </string>
+    <string name="abc_searchview_description_voice" msgid="893419373245838918">"Stemsoektog"
+    </string>
+    <string name="abc_shareactionprovider_share_with" msgid="3421042268587513524">"Deel met"
+    </string>
+    <string name="abc_shareactionprovider_share_with_application" msgid="7165123711973476752">"Deel
+        met %s"
+    </string>
+    <string name="abc_toolbar_collapse_description" msgid="1603543279005712093">"Vou in"</string>
+    <string name="com_facebook_device_auth_instructions" gender="unknown">Besoek &lt;b>facebook.com/device&lt;/b>
+        en voer die kode wat hierbo gewys word, in.
+    </string>
+    <string name="com_facebook_image_download_unknown_error" gender="unknown">Onvoorsiene fout
+        terwyl die prent afgelaai is.
+    </string>
+    <string name="com_facebook_internet_permission_error_message" gender="unknown">
+        WebView-aanmelding vereis INTERNET-toestemming
+    </string>
+    <string name="com_facebook_internet_permission_error_title" gender="unknown">
+        AndroidManifest-fout
+    </string>
+    <string name="com_facebook_like_button_liked" gender="unknown">Hou van</string>
+    <string name="com_facebook_like_button_not_liked" gender="unknown">Hou van</string>
+    <string name="com_facebook_loading" gender="unknown">Laai tans …</string>
+    <string name="com_facebook_loginview_cancel_action" gender="unknown">Kanselleer</string>
+    <string name="com_facebook_loginview_log_in_button" gender="unknown">Teken aan</string>
+    <string name="com_facebook_loginview_log_in_button_continue" gender="unknown">Gaan voort met
+        Facebook
+    </string>
+    <string name="com_facebook_loginview_log_in_button_long" gender="unknown">Meld aan met
+        Facebook
+    </string>
+    <string name="com_facebook_loginview_log_out_action" gender="unknown">Teken uit</string>
+    <string name="com_facebook_loginview_log_out_button" gender="unknown">Teken uit</string>
+    <string name="com_facebook_loginview_logged_in_as" gender="unknown">Aangemeld as: %1$s</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook" gender="unknown">Aangemeld met
+        Facebook
+    </string>
+    <string name="com_facebook_send_button_text" gender="unknown">Stuur</string>
+    <string name="com_facebook_share_button_text" gender="unknown">Deel</string>
+    <string name="com_facebook_smart_device_instructions" gender="unknown">Maak die
+        Facebook-toepassing op jou mobiele toestel oop en soek kennisgewings om jou rekening te
+        koppel.
+    </string>
+    <string name="com_facebook_smart_device_instructions_or" gender="unknown">- OF -</string>
+    <string name="com_facebook_smart_login_confirmation_cancel" gender="unknown">Nie jy nie?
+    </string>
+    <string name="com_facebook_smart_login_confirmation_continue_as" gender="unknown">Gaan voort as
+        %1$s
+    </string>
+    <string name="com_facebook_smart_login_confirmation_title" gender="unknown">Bevestig
+        aanmelding
+    </string>
+    <string name="com_facebook_tooltip_default" gender="unknown">Jy is in beheer – kies watter
+        inligting jy met toepassings wil deel.
+    </string>
+    <string name="common_google_play_services_enable_button" msgid="8585111718777012708">
+        "Aktiveer"
+    </string>
+    <string name="common_google_play_services_enable_text" msgid="7045129128108380659">"<ns1:g
+        id="APP_NAME">%1$s
+    </ns1:g> sal nie werk nie tensy jy Google Play-dienste aktiveer."
+    </string>
+    <string name="common_google_play_services_enable_title" msgid="3147157405986503375">"Aktiveer
+        Google Play-dienste"
+    </string>
+    <string name="common_google_play_services_install_button" msgid="9115728400623041681">
+        "Installeer"
+    </string>
+    <string name="common_google_play_services_install_text" msgid="8179894293032530091">"<ns1:g
+        id="APP_NAME">%1$s
+    </ns1:g> sal nie sonder Google Play Dienste werk nie, wat nie op jou toestel is nie."
+    </string>
+    <string name="common_google_play_services_install_title" msgid="7442193194585196676">"Kry Google
+        Play-dienste"
+    </string>
+    <string name="common_google_play_services_notification_ticker" msgid="180394615667698242">
+        "Google Play Services-fout"
+    </string>
+    <string name="common_google_play_services_unknown_issue" msgid="2518680582564677258">"<ns1:g
+        id="APP_NAME">%1$s
+    </ns1:g> ondervind probleme met Google Play Dienste. Probeer asseblief weer."
+    </string>
+    <string name="common_google_play_services_unsupported_text" msgid="5501187292256987189">"<ns1:g
+        id="APP_NAME">%1$s
+    </ns1:g> sal nie werk sonder Google Play Dienste nie, wat nie deur jou toestel gesteun word
+        nie."
+    </string>
+    <string name="common_google_play_services_update_button" msgid="8172070149091615356">"Dateer
+        op"
+    </string>
+    <string name="common_google_play_services_update_text" msgid="7773943415006962566">"<ns1:g
+        id="APP_NAME">%1$s
+    </ns1:g> sal nie werk nie tensy jy Google Play Dienste opdateer."
+    </string>
+    <string name="common_google_play_services_update_title" msgid="8706675115216073244">"Dateer
+        Google Play-dienste op"
+    </string>
+    <string name="common_google_play_services_updating_text" msgid="7894275749778928941">"<ns1:g
+        id="APP_NAME">%1$s
+    </ns1:g> sal nie sonder Google Play-dienste werk nie, wat tans opdateer."
+    </string>
+    <string name="common_google_play_services_wear_update_text" msgid="2804989272736383918">"Nuwe
+        weergawe van Google Play-dienste is nodig. Dit sal binnekort self opdateer."
+    </string>
+    <string name="common_open_on_phone" msgid="5201977337835724196">"Maak oop op foon"</string>
+    <string name="common_signin_button_text" msgid="3441753203274453993">"Meld aan"</string>
+    <string name="common_signin_button_text_long" msgid="669893613918351210">"Meld aan met Google"
+    </string>
+    <string name="search_menu_title" msgid="146198913615257606">"Soek"</string>
+    <string name="status_bar_notification_info_overflow" msgid="2869576371154716097">"999+"</string>
+</resources>

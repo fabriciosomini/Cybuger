@@ -1,0 +1,34 @@
+[
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_chevron_left.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_chevron_left.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_chevron_right.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_chevron_right.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_monetization_on_black_48dp.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_monetization_on_black_48dp.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_create_black_36dp.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_create_black_36dp.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_profile.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_profile.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_action_add.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_add.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_overflow_menu.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_overflow_menu.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_closeicon.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable-xxhdpi\\ic_closeicon.png"
+  }
+]

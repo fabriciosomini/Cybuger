@@ -1,0 +1,350 @@
+[
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_bottom_navigation_item_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\58807af8d159ebea30d8526500182219515c6b40\\output\\res\\drawable\\design_bottom_navigation_item_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_clear_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_clear_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_vector_test.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_vector_test.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\rbtn_textcolor_selector.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\rbtn_textcolor_selector.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_dark.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_list_selector_holo_dark.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\idp_button_background_google.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\fc45416e3afca75f1acd19cb3b2caf1c4194b43e\\output\\res\\drawable\\idp_button_background_google.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_notifications_black_24dp.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\ic_notifications_black_24dp.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ratingbar_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\idp_button_background_email.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\fc45416e3afca75f1acd19cb3b2caf1c4194b43e\\output\\res\\drawable\\idp_button_background_email.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_login_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\6fe2e354ffab4b46ebfd8246c92ccaf783b7a4c6\\output\\res\\drawable\\com_facebook_button_login_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_button_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_check_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_btn_check_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_password_eye.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\58807af8d159ebea30d8526500182219515c6b40\\output\\res\\drawable\\design_password_eye.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_disabled.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_disabled.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_light.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_light.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_dashboard_black_24dp.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\ic_dashboard_black_24dp.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_login_silver_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\6fe2e354ffab4b46ebfd8246c92ccaf783b7a4c6\\output\\res\\drawable\\com_facebook_button_login_silver_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_thumb_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_seekbar_thumb_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_tile_bg.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\55ec6e4604cf2b274984a1e2c9de91a04e968226\\output\\res\\drawable\\notification_tile_bg.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\tooltip_frame_dark.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\tooltip_frame_dark.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_favicon_blue.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_favicon_blue.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_icon_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\55ec6e4604cf2b274984a1e2c9de91a04e968226\\output\\res\\drawable\\notification_icon_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_voice_search_api_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messenger_button_white_bg_round.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\9e463f59a2c07ed55a61e0d41dfc5abe3a7f2b77\\output\\res\\drawable\\messenger_button_white_bg_round.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg_low.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\55ec6e4604cf2b274984a1e2c9de91a04e968226\\output\\res\\drawable\\notification_bg_low.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\idp_button_background_facebook.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\fc45416e3afca75f1acd19cb3b2caf1c4194b43e\\output\\res\\drawable\\idp_button_background_facebook.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_dark.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_item_background_holo_dark.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messenger_button_blue_bg_round.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\9e463f59a2c07ed55a61e0d41dfc5abe3a7f2b77\\output\\res\\drawable\\messenger_button_blue_bg_round.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_text_cursor_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_text_cursor_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\button_shape.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\button_shape.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_search_api_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_seekbar_track_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_home_black_24dp.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\ic_home_black_24dp.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_auth_dialog_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_auth_dialog_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_dialog_material_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_tab_indicator_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_dark_focused.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_dark_focused.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messenger_button_blue_bg_selector.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\9e463f59a2c07ed55a61e0d41dfc5abe3a7f2b77\\output\\res\\drawable\\messenger_button_blue_bg_selector.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_cab_background_top_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\edit_text_shape.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\edit_text_shape.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\tooltip_frame_light.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\tooltip_frame_light.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_dark_normal.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_dark_normal.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_light_normal.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_light_normal.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ratingbar_small_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_login_logo.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\6fe2e354ffab4b46ebfd8246c92ccaf783b7a4c6\\output\\res\\drawable\\com_facebook_button_login_logo.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\idp_button_background_phone.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\fc45416e3afca75f1acd19cb3b2caf1c4194b43e\\output\\res\\drawable\\idp_button_background_phone.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_internal_bg.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_cab_background_internal_bg.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messenger_button_white_bg_selector.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\9e463f59a2c07ed55a61e0d41dfc5abe3a7f2b77\\output\\res\\drawable\\messenger_button_white_bg_selector.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_go_search_api_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_icon.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_button_icon.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_light.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_light.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_like_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_button_like_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_switch_thumb_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_switch_thumb_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_button_send_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\afba43ab2b291e63da34d59cd603f4ee7f10449b\\output\\res\\drawable\\com_facebook_button_send_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_ab_back_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_ic_ab_back_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_light_focused.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_light_focused.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_dark_normal.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_dark_normal.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_dark.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_dark.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_dark_focused.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_dark_focused.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_light_normal.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_text_light_normal.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_item_background_holo_light.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_textfield_search_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_textfield_search_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_disabled.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_disabled.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_auth_dialog_cancel_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_auth_dialog_cancel_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_light_focused.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_light_focused.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_colored_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_btn_colored_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\navigation_empty_icon.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\58807af8d159ebea30d8526500182219515c6b40\\output\\res\\drawable\\navigation_empty_icon.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_light.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_list_selector_holo_light.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_send_button_icon.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\afba43ab2b291e63da34d59cd603f4ee7f10449b\\output\\res\\drawable\\com_facebook_send_button_icon.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_btn_radio_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_borderless_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_btn_borderless_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\55ec6e4604cf2b274984a1e2c9de91a04e968226\\output\\res\\drawable\\notification_bg.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_snackbar_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\58807af8d159ebea30d8526500182219515c6b40\\output\\res\\drawable\\design_snackbar_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\idp_button_background_twitter.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\fc45416e3afca75f1acd19cb3b2caf1c4194b43e\\output\\res\\drawable\\idp_button_background_twitter.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_fab_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\58807af8d159ebea30d8526500182219515c6b40\\output\\res\\drawable\\design_fab_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\rbtn_selector.xml",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\drawable\\rbtn_selector.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_edit_text_material.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\e5e470b5887c603ed191829bc50aaf88c15eb826\\output\\res\\drawable\\abc_edit_text_material.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\com_facebook_auth_dialog_header_background.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\91b01f71137339f3247e124c614faeec4cd7bfda\\output\\res\\drawable\\com_facebook_auth_dialog_header_background.xml"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_icon_dark.xml",
+    "source": "C:\\Users\\fabri\\.android\\build-cache\\75241b0bfe473feec3e4e0623bdc2f1889110078\\output\\res\\drawable\\common_google_signin_btn_icon_dark.xml"
+  }
+]

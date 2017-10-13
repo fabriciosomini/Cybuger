@@ -1,0 +1,26 @@
+[
+  {
+    "outputFile": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
+    "map": [
+      {
+        "to": {
+          "startLine": 2,
+          "startColumn": 4,
+          "startOffset": 55,
+          "endColumn": 45,
+          "endOffset": 96
+        },
+        "from": {
+          "file": "C:\\Users\\fabri\\.android\\build-cache\\0f88950e8ff46c2b355d1bb872ca5c1c2f93a0f3\\output\\res\\values\\values.xml",
+          "position": {
+            "startLine": 4,
+            "startColumn": 4,
+            "startOffset": 229,
+            "endColumn": 45,
+            "endOffset": 270
+          }
+        }
+      }
+    ]
+  }
+]

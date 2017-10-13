@@ -1,0 +1,14 @@
+[
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_launcher.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_launcher_round.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+  },
+  {
+    "merged": "D:\\Development\\Git\\Source\\Cyburger\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_appicon.png",
+    "source": "D:\\Development\\Git\\Source\\Cyburger\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_appicon.png"
+  }
+]
