@@ -5,22 +5,21 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.adapters.TagAdapter;
 import com.cynerds.cyburger.models.Tag;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by comp8 on 11/10/2017.
@@ -38,6 +37,7 @@ public class TagInput extends ConstraintLayout {
 
         initializeViews(context);
         this.context = context;
+        tagList = new ArrayList<>();
         selectedTags = new ArrayList<>();
     }
 
@@ -55,126 +55,62 @@ public class TagInput extends ConstraintLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        final EditText searchTagItemBox = findViewById(R.id.searchTagItemBox);
-        searchTagItemBox.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-        searchTagItemBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                String input = s.toString().toLowerCase();
-                if (!input.isEmpty()) {
-
-                    List<Tag> temp = new ArrayList<Tag>();
-                    for (Tag tag :
-                            tagList) {
-
-                        String tagDescription = tag.getDescription().toLowerCase();
-                        Pattern p = Pattern.compile("[A-Za-z\\d]+");
-                        Matcher mInput = p.matcher(input);
-                        Matcher mTagDescription = p.matcher(tagDescription);
-
-                        if (mInput.find()) {
-                            input = mInput.group();
-                        }
-
-                        if (mTagDescription.find()) {
-                            tagDescription = mTagDescription.group();
-                        }
-
-
-                        if (tagDescription.contains(input)) {
-                            temp.add(tag);
-                        }
-                    }
-                    generateTags(temp);
-                } else {
-                    generateTags(tagList);
-                }
-
-            }
-        });
-
-        searchTagItemBox.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (searchTagItemBox.getText().toString().isEmpty()) {
-                        final FlexboxLayout flexboxLayout = findViewById(R.id.tagItemsContainer);
-                        flexboxLayout.removeAllViews();
-                    }
-
-                } else {
-                    generateTags(tagList);
-                }
-            }
-        });
     }
 
 
     public void setFilterableList(List<Tag> tagList){
 
-        this.tagList = tagList;
+        this.tagList.clear();
+        this.tagList.addAll(tagList);
+
+        final AutoCompleteTextView searchTagItemBox = findViewById(R.id.searchTagItemBox);
+        TagAdapter adapter = new TagAdapter(tagList, getContext());
+
+        searchTagItemBox.setThreshold(1);
+        searchTagItemBox.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchTagItemBox.setAdapter(adapter);
+        searchTagItemBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                generateTag((Tag) view.getTag());
+            }
+        });
 
 
     }
 
-    private void generateTags(List<Tag> tags) {
+    private void generateTag(final Tag tag) {
         final FlexboxLayout flexboxLayoutAddedItems = findViewById(R.id.addedTagItemsContainer);
-        FlexboxLayout flexboxLayout =  findViewById(R.id.tagItemsContainer);
-        flexboxLayout.setFlexDirection(FlexDirection.ROW);
-        flexboxLayout.removeAllViews();
+        flexboxLayoutAddedItems.setFlexDirection(FlexDirection.ROW);
 
-        for (final Tag tag :
-                tags) {
+        selectedTags.add(tag);
+        int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
+        Drawable newBackground = new TagItem(getContext()).getTextView().getBackground().getConstantState().newDrawable();
+        newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
+
+        int white = ContextCompat.getColor(getContext(), R.color.white);
+
+        Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_close);
+        mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
+        final TagItem topTagItem = new TagItem(context);
+        topTagItem.setText(tag.getDescription());
+        topTagItem.getTextView().setBackground(newBackground);
+        topTagItem.getTextView().setTextColor(white);
+        topTagItem.getTextView().setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
+
+        topTagItem.setTagItemStateChangeListener(new TagItem.TagItemStateChangeListener() {
+            @Override
+            public void onTagItemStateChanged(TagItem item) {
+                flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
+                selectedTags.remove(tag);
+            }
+        });
+
+        flexboxLayoutAddedItems.addView(topTagItem.getTextView());
 
 
-            final TagItem bottomTagItem = new TagItem(context);
-            bottomTagItem.setText(tag.getDescription());
-            bottomTagItem.setTagItemStateChangeListener(new TagItem.TagItemStateChangeListener() {
-                @Override
-                public void onTagItemStateChanged(TagItem item) {
 
-                    selectedTags.add(tag);
-                    int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
-                    Drawable newBackground = item.getTextView().getBackground().getConstantState().newDrawable();
-                    newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
-
-                    int white = ContextCompat.getColor(getContext(), R.color.white);
-
-                    Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_close);
-                    mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
-                    final TagItem topTagItem = new TagItem(context);
-                    topTagItem.setText(tag.getDescription());
-                    topTagItem.getTextView().setBackground(newBackground);
-                    topTagItem.getTextView().setTextColor(white);
-                    topTagItem.getTextView().setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
-
-                    topTagItem.setTagItemStateChangeListener(new TagItem.TagItemStateChangeListener() {
-                        @Override
-                        public void onTagItemStateChanged(TagItem item) {
-                            flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
-                            selectedTags.remove(tag);
-                        }
-                    });
-
-                    flexboxLayoutAddedItems.addView(topTagItem.getTextView());
-
-                }
-            });
-
-            flexboxLayout.addView(bottomTagItem.getTextView());
-
-        }
     }
 
 
