@@ -1,5 +1,6 @@
 package com.cynerds.cyburger.activities;
 
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -60,6 +61,10 @@ public class BaseActivity extends AppCompatActivity {
         return order;
     }
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public Badge getBadge() {
         return badge;
     }
@@ -69,8 +74,6 @@ public class BaseActivity extends AppCompatActivity {
 
         return findViewById(android.R.id.content);
     }
-
-
 
     public View.OnClickListener getOnSaveListener() {
         return onSaveListener;
@@ -124,14 +127,10 @@ public class BaseActivity extends AppCompatActivity {
         return dirty.size() > 0;
     }
 
-
-
-
     protected void setActionBarTitle(String title) {
         actionBarTitle.setText(title);
 
     }
-
 
     protected void closeActivity() {
 
@@ -164,8 +163,6 @@ public class BaseActivity extends AppCompatActivity {
 
 
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,85 +232,8 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                final DialogManager dialogManager = new DialogManager(BaseActivity.this);
-                dialogManager.setContentView(R.layout.dialog_ordering_items);
-                dialogManager.showDialog("Seu pedido", "");
 
-                TextView orderedItemsTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsTxtView);
-                TextView orderedItemsAmountTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsAmountTxtView);
-
-                String orderedItemsString = "";
-                String orderedItemsAmountString = "";
-                float orderedItemsAmount = 0;
-
-                for (Combo combo :
-                        order.getOrderedCombos()) {
-
-                    orderedItemsAmount += combo.getComboAmount();
-                    orderedItemsString += combo.getComboName() + " - R$ " + combo.getComboAmount() + "\n";
-                }
-
-                for (Item item :
-                        order.getOrderedItems()) {
-
-                    orderedItemsAmount += item.getPrice();
-                    orderedItemsString += item.getDescription() + " - R$ " + item.getPrice() + "\n";
-                }
-
-
-                orderedItemsAmountString = "R$ " + String.valueOf(orderedItemsAmount);
-                orderedItemsAmountTxtView.setText(orderedItemsAmountString);
-
-                if (!orderedItemsString.isEmpty()) {
-                    orderedItemsTxtView.setText(orderedItemsString);
-                }
-
-                if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0) {
-
-                    Button confirmOrderBtn = dialogManager.getContentView().findViewById(R.id.confirmOrderBtn);
-                    Button removeOrderBtn = dialogManager.getContentView().findViewById(R.id.removeOrderBtn);
-
-                    confirmOrderBtn.setVisibility(View.VISIBLE);
-                    removeOrderBtn.setVisibility(View.VISIBLE);
-
-                    confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                            Customer customer = new Customer();
-                            customer.setCustomerName(customerName);
-                            customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
-
-                            order.setCustomer(customer);
-                            firebaseRealtimeDatabaseHelperOrders.insert(order);
-
-                            Toast.makeText(BaseActivity.this, "Pedido confirmado", Toast.LENGTH_SHORT).show();
-
-                            //Reset - pedido confirmado
-                            badge.setBadgeCount(0);
-                            order = new Order();
-                            dialogManager.closeDialog();
-                        }
-                    });
-
-                    removeOrderBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Toast.makeText(BaseActivity.this, "Pedido cancelado", Toast.LENGTH_SHORT).show();
-
-                            //Reset - pedido cancelado
-                            badge.setBadgeCount(0);
-                            order = new Order();
-                            dialogManager.closeDialog();
-
-                        }
-                    });
-
-
-                }
-
+                displayOrderDialog();
 
 
                 return false;
@@ -322,6 +242,107 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    public void displayOrderDialog() {
+
+        final boolean isPreview = order.getKey() != null;
+
+        final DialogManager dialogManager = new DialogManager(BaseActivity.this);
+        dialogManager.setContentView(R.layout.dialog_ordering_items);
+        dialogManager.showDialog("Seu pedido", "");
+
+
+        TextView orderedItemsTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsTxtView);
+        TextView orderedItemsAmountTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsAmountTxtView);
+
+        String orderedItemsString = "";
+        String orderedItemsAmountString = "";
+        float orderedItemsAmount = 0;
+
+        for (Combo combo :
+                order.getOrderedCombos()) {
+
+            orderedItemsAmount += combo.getComboAmount();
+            orderedItemsString += combo.getComboName() + " - R$ " + combo.getComboAmount() + "\n";
+        }
+
+        for (Item item :
+                order.getOrderedItems()) {
+
+            orderedItemsAmount += item.getPrice();
+            orderedItemsString += item.getDescription() + " - R$ " + item.getPrice() + "\n";
+        }
+
+
+        orderedItemsAmountString = "R$ " + String.valueOf(orderedItemsAmount);
+        orderedItemsAmountTxtView.setText(orderedItemsAmountString);
+
+        if (!orderedItemsString.isEmpty()) {
+            orderedItemsTxtView.setText(orderedItemsString);
+        }
+
+        if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || isPreview) {
+
+            Button confirmOrderBtn = dialogManager.getContentView().findViewById(R.id.confirmOrderBtn);
+            Button removeOrderBtn = dialogManager.getContentView().findViewById(R.id.removeOrderBtn);
+
+
+            if (!isPreview) {
+                confirmOrderBtn.setVisibility(View.VISIBLE);
+                confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                        Customer customer = new Customer();
+                        customer.setCustomerName(customerName);
+                        customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
+
+                        order.setCustomer(customer);
+                        firebaseRealtimeDatabaseHelperOrders.insert(order);
+
+                        Toast.makeText(BaseActivity.this, "Pedido confirmado", Toast.LENGTH_SHORT).show();
+
+                        //Reset - pedido confirmado
+                        badge.setBadgeCount(0);
+                        order = new Order();
+                        dialogManager.closeDialog();
+                    }
+                });
+            } else {
+                dialogManager.setOnCanceListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        order = new Order();
+                        Toast.makeText(BaseActivity.this, "reset order", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+
+            removeOrderBtn.setVisibility(View.VISIBLE);
+            removeOrderBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(BaseActivity.this, "Pedido cancelado", Toast.LENGTH_SHORT).show();
+
+                    if (!isPreview) {
+                        firebaseRealtimeDatabaseHelperOrders.delete(order);
+                    }
+
+                    //Reset - pedido cancelado
+                    badge.setBadgeCount(0);
+                    order = new Order();
+                    dialogManager.closeDialog();
+
+                }
+            });
+
+
+        }
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -391,7 +412,5 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
 

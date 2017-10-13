@@ -141,18 +141,32 @@ public class OrdersFragment extends Fragment {
 
         List<Order> orders = getOrders();
 
-        for (Order order :
+        for (final Order order :
                 orders) {
 
 
             Profile profile = CyburgerApplication.getProfile();
             Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
-            DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
+            final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
             dashboardCardViewItem.setExtra(order);
 
             if (customer.getLinkedProfileId().equals(profile.getUserId())) {
                 dashboardCardViewItem.setTitle("Seu pedido");
+
+                dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Order newOrder = new Order();
+                        newOrder.setCustomer(order.getCustomer());
+                        newOrder.setOrderedCombos(order.getOrderedCombos());
+                        newOrder.setOrderedItems(order.getOrderedItems());
+
+                        currentActivty.setOrder(newOrder);
+                        currentActivty.displayOrderDialog();
+
+                    }
+                });
                 dashboardCardViewItem.setTitleColor(R.color.colorAccent);
             } else {
                 dashboardCardViewItem.setTitle(customerName);
@@ -180,7 +194,6 @@ public class OrdersFragment extends Fragment {
 
             //------------------------------
             dashboardCardViewItem.setContent(orderedItemsString);
-
 
             dashboardCardViewItems.add(dashboardCardViewItem);
 

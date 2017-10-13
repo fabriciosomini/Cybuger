@@ -23,7 +23,7 @@ public class DialogManager {
     private AlertDialog alertDialog;
     private int layoutResId = -1;
     private View contentView;
-    private DialogAction action;
+    private DialogInterface.OnCancelListener onCanceListener;
 
     public DialogManager(Context context, DialogType dialogType) {
 
@@ -38,6 +38,10 @@ public class DialogManager {
         this.context = context;
 
 
+    }
+
+    public void setOnCanceListener(DialogInterface.OnCancelListener onCanceListener) {
+        this.onCanceListener = onCanceListener;
     }
 
     public void showDialog(String message) {
@@ -101,6 +105,8 @@ public class DialogManager {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         alertDialog = builder.create();
         alertDialog.setCancelable(true);
+        alertDialog.setCanceledOnTouchOutside(true);
+
 
         title = title == null ? "" : title;
         message = message == null ? "" : message;
@@ -109,6 +115,11 @@ public class DialogManager {
         titleText.setText(title);
         alertDialog.setCustomTitle(titleView);
 
+        if (onCanceListener != null) {
+
+            alertDialog.setOnCancelListener(onCanceListener);
+
+        }
 
         if (layoutResId > -1) {
 
