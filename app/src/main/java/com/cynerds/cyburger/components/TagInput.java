@@ -86,13 +86,14 @@ public class TagInput extends ConstraintLayout {
 
         selectedTags.add(tag);
         int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
+        int white = ContextCompat.getColor(getContext(), R.color.white);
+
         Drawable newBackground = new TagItem(getContext()).getTextView().getBackground().getConstantState().newDrawable();
         newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
 
-        int white = ContextCompat.getColor(getContext(), R.color.white);
-
         Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_close);
         mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
+
         final TagItem topTagItem = new TagItem(context);
         topTagItem.setText(tag.getDescription());
         topTagItem.getTextView().setBackground(newBackground);
@@ -101,7 +102,7 @@ public class TagInput extends ConstraintLayout {
 
         topTagItem.setTagItemStateChangeListener(new TagItem.TagItemStateChangeListener() {
             @Override
-            public void onTagItemStateChanged(TagItem item) {
+            public void onTagItemStateChanged() {
                 flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
                 selectedTags.remove(tag);
             }
