@@ -98,7 +98,7 @@
                     android:id="@+id/orderConfirmBtn"
                     style="@style/AppTheme.CyburgerButton"
 
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/default_width"
                     android:layout_height="@dimen/default_height"
                     android:text="@string/ordering_confirm"
                     android:visibility="gone"

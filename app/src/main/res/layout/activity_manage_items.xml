@@ -104,7 +104,7 @@
     <Button
         android:id="@+id/saveItemBtn"
         style="@style/AppTheme.CyburgerButton"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/default_width"
         android:layout_height="@dimen/default_height"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
