@@ -334,6 +334,7 @@ public class BaseActivity extends AppCompatActivity {
                         //Reset - pedido confirmado
                         badge.setBadgeCount(0);
                         order = new Order();
+                        previousOrder = new Order();
                         dialogManager.closeDialog();
                     }
                 });
