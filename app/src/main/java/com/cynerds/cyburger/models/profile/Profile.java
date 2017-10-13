@@ -28,4 +28,9 @@ public class Profile extends BaseModel {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public boolean isAdmin() {
+
+        return role == Role.ADMIN;
+    }
 }
