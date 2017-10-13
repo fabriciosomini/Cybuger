@@ -52,4 +52,5 @@
     <string name="ordering_confirm">Confirmar</string>
     <string name="general_remove">Remover</string>
     <string name="ordering_add_to_order">Adicionar</string>
+    <string name="login_error_no_connection">Não foi possível conectar.</string>
 </resources>

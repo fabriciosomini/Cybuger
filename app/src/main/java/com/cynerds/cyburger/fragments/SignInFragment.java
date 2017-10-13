@@ -17,9 +17,11 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.facebook.CallbackManager;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +36,7 @@ public class SignInFragment extends Fragment {
     private EditText signInPasswordTxt;
     private Button signInBtn;
     private Button signInFacebookBtn;
-   private CheckBox signInRememberCbx;
+    private CheckBox signInRememberCbx;
 
     private Preferences preferences;
     private FirebaseAuth mAuth;
@@ -44,6 +46,7 @@ public class SignInFragment extends Fragment {
     private Permissions permissions;
     private CallbackManager mCallbackManager;
     private AuthenticationHelper authenticationHelper;
+
     public SignInFragment() {
 
 
@@ -91,7 +94,7 @@ public class SignInFragment extends Fragment {
     }
 
 
-   // @Override
+    // @Override
    /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -201,6 +204,13 @@ public class SignInFragment extends Fragment {
                             if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
 
                                 signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
+
+                            }
+
+                            if (exception != null && exception.getClass() == FirebaseNetworkException.class) {
+
+                                DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                                dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
 
                             }
                         }

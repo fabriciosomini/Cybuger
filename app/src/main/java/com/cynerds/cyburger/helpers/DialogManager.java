@@ -152,19 +152,15 @@ public class DialogManager {
 
         if (dialogType != null) {
 
+
             switch (dialogType) {
 
                 case OK:
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
+                    break;
 
                 case OK_CANCEL:
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogClickListener);
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
-
-                case SAVE_NO_CANCEL:
-
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Salvar", dialogClickListener);
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Não", dialogClickListener);
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancelar", dialogClickListener);
                     break;
 
