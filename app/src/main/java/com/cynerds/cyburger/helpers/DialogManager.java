@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 
@@ -23,13 +24,16 @@ public class DialogManager {
     private AlertDialog alertDialog;
     private int layoutResId = -1;
     private View contentView;
-    private DialogInterface.OnCancelListener onCanceListener;
-
+    private AlertDialog.Builder builder;
+    
     public DialogManager(Context context, DialogType dialogType) {
 
         this.context = context;
         this.dialogType = dialogType;
         this.dialogAction = dialogAction;
+
+        builder = new AlertDialog.Builder(context);
+        alertDialog = builder.create();
     }
 
 
@@ -37,11 +41,19 @@ public class DialogManager {
 
         this.context = context;
 
+        builder = new AlertDialog.Builder(context);
+        alertDialog = builder.create();
 
     }
 
     public void setOnCanceListener(DialogInterface.OnCancelListener onCanceListener) {
-        this.onCanceListener = onCanceListener;
+
+        if (onCanceListener != null) {
+
+            alertDialog.setOnCancelListener(onCanceListener);
+
+        }
+
     }
 
     public void showDialog(String message) {
@@ -102,11 +114,9 @@ public class DialogManager {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        alertDialog = builder.create();
+
         alertDialog.setCancelable(true);
         alertDialog.setCanceledOnTouchOutside(true);
-
 
         title = title == null ? "" : title;
         message = message == null ? "" : message;
@@ -115,15 +125,22 @@ public class DialogManager {
         titleText.setText(title);
         alertDialog.setCustomTitle(titleView);
 
-        if (onCanceListener != null) {
-
-            alertDialog.setOnCancelListener(onCanceListener);
-
-        }
-
         if (layoutResId > -1) {
 
             contentView = inflater.inflate(layoutResId, null);
+            contentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+
+                    Toast.makeText(dialogContext, "Cancel Dialog", Toast.LENGTH_SHORT).show();
+                    alertDialog.cancel();
+                }
+            });
             alertDialog.setView(contentView);
 
         } else {

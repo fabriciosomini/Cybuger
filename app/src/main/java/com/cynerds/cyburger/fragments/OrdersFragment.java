@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
@@ -108,7 +107,7 @@ public class OrdersFragment extends Fragment {
 
     private void updateList(View view) {
 
-        Toast.makeText(currentActivty, "UpdateList " + this.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(currentActivty, "UpdateList " + this.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
 
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
@@ -161,6 +160,7 @@ public class OrdersFragment extends Fragment {
                         newOrder.setCustomer(order.getCustomer());
                         newOrder.setOrderedCombos(order.getOrderedCombos());
                         newOrder.setOrderedItems(order.getOrderedItems());
+                        newOrder.setKey(order.getKey());
 
                         currentActivty.setOrder(newOrder);
                         currentActivty.displayOrderDialog();

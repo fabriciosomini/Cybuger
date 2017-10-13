@@ -51,6 +51,7 @@ public class BaseActivity extends AppCompatActivity {
     private Badge badge;
     private View hamburgerMenu;
     private Order order;
+    private Order previousOrder;
 
     public BaseActivity() {
 
@@ -244,11 +245,16 @@ public class BaseActivity extends AppCompatActivity {
 
     public void displayOrderDialog() {
 
-        final boolean isPreview = order.getKey() != null;
+        final boolean readOnly = order.getKey() != null;
+
+        String title = "Fazer pedido";
+        if (readOnly) {
+            title = "PEDIDO CONFIRMADO";
+        }
 
         final DialogManager dialogManager = new DialogManager(BaseActivity.this);
         dialogManager.setContentView(R.layout.dialog_ordering_items);
-        dialogManager.showDialog("Seu pedido", "");
+        dialogManager.showDialog(title, "");
 
 
         TextView orderedItemsTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsTxtView);
@@ -280,13 +286,36 @@ public class BaseActivity extends AppCompatActivity {
             orderedItemsTxtView.setText(orderedItemsString);
         }
 
-        if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || isPreview) {
+        if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || readOnly) {
 
             Button confirmOrderBtn = dialogManager.getContentView().findViewById(R.id.confirmOrderBtn);
             Button removeOrderBtn = dialogManager.getContentView().findViewById(R.id.removeOrderBtn);
 
 
-            if (!isPreview) {
+            if (readOnly) {
+
+                removeOrderBtn.setText("Cancelar pedido");
+                removeOrderBtn.getLayoutParams().width *= 2;
+
+                dialogManager.setOnCanceListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+
+                        if (previousOrder != null) {
+                            order = previousOrder;
+                            Toast.makeText(BaseActivity.this, "Restore previous order", Toast.LENGTH_SHORT).show();
+                        } else {
+                            order = new Order();
+                            Toast.makeText(BaseActivity.this, "reset order", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+
+            } else {
+
+                previousOrder = order;
                 confirmOrderBtn.setVisibility(View.VISIBLE);
                 confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -308,15 +337,6 @@ public class BaseActivity extends AppCompatActivity {
                         dialogManager.closeDialog();
                     }
                 });
-            } else {
-                dialogManager.setOnCanceListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        order = new Order();
-                        Toast.makeText(BaseActivity.this, "reset order", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
             }
 
 
@@ -327,8 +347,10 @@ public class BaseActivity extends AppCompatActivity {
 
                     Toast.makeText(BaseActivity.this, "Pedido cancelado", Toast.LENGTH_SHORT).show();
 
-                    if (!isPreview) {
+                    if (readOnly) {
                         firebaseRealtimeDatabaseHelperOrders.delete(order);
+                    } else {
+                        previousOrder = new Order();
                     }
 
                     //Reset - pedido cancelado
