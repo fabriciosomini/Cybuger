@@ -270,10 +270,13 @@ public class BaseActivity extends AppCompatActivity {
 
                 if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0) {
 
-                    Button orderConfirmBtn = dialogManager.getContentView().findViewById(R.id.orderConfirmBtn);
-                    orderConfirmBtn.setVisibility(View.VISIBLE);
+                    Button confirmOrderBtn = dialogManager.getContentView().findViewById(R.id.confirmOrderBtn);
+                    Button removeOrderBtn = dialogManager.getContentView().findViewById(R.id.removeOrderBtn);
 
-                    orderConfirmBtn.setOnClickListener(new View.OnClickListener() {
+                    confirmOrderBtn.setVisibility(View.VISIBLE);
+                    removeOrderBtn.setVisibility(View.VISIBLE);
+
+                    confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
@@ -291,6 +294,20 @@ public class BaseActivity extends AppCompatActivity {
                             badge.setBadgeCount(0);
                             order = new Order();
                             dialogManager.closeDialog();
+                        }
+                    });
+
+                    removeOrderBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Toast.makeText(BaseActivity.this, "Pedido cancelado", Toast.LENGTH_SHORT).show();
+
+                            //Reset - pedido cancelado
+                            badge.setBadgeCount(0);
+                            order = new Order();
+                            dialogManager.closeDialog();
+
                         }
                     });
 

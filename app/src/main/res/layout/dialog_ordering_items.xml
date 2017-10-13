@@ -95,16 +95,27 @@
                 app:layout_constraintRight_toRightOf="parent">
 
                 <Button
-                    android:id="@+id/orderConfirmBtn"
+                    android:id="@+id/confirmOrderBtn"
                     style="@style/AppTheme.CyburgerButton"
-
-                    android:layout_width="@dimen/default_width"
+                    android:layout_width="130dp"
                     android:layout_height="@dimen/default_height"
                     android:text="@string/ordering_confirm"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
+
+                <Button
+                    android:id="@+id/removeOrderBtn"
+                    style="@style/AppTheme.CyburgerSecondaryButton"
+
+                    android:layout_width="130dp"
+                    android:layout_height="@dimen/default_height"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/general_remove"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>

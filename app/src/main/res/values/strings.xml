@@ -49,5 +49,6 @@
     <string name="menu_manage_combos">Gerenciar combos</string>
     <string name="menu_manage_onsale">Gerenciar promoções</string>
     <string name="manage_combos_combo_day">Dia do combo</string>
-    <string name="ordering_confirm">Confirmar pedido</string>
+    <string name="ordering_confirm">Confirmar</string>
+    <string name="general_remove">Remover</string>
 </resources>
