@@ -75,6 +75,7 @@ public class ManageCombosActivity extends BaseActivity {
             comboPriceTxt.setText(String.valueOf(loadedCombo.getComboAmount()));
             List<TagModel> tagModels = generateTagModels(loadedCombo.getComboItems());
             itemsTagInput.setFilterableList(tagModels);
+            itemsTagInput.addAllTags();
         }
 
 

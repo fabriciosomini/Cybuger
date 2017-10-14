@@ -79,6 +79,14 @@ public class TagInput extends ConstraintLayout {
 
     }
 
+    public void addAllTags() {
+        for (TagModel tagModel :
+                tagModelList) {
+            generateTag(tagModel);
+        }
+    }
+
+
     private void generateTag(final TagModel tagModel) {
         final FlexboxLayout flexboxLayoutAddedItems = findViewById(R.id.addedTagItemsContainer);
         flexboxLayoutAddedItems.setFlexDirection(FlexDirection.ROW);
