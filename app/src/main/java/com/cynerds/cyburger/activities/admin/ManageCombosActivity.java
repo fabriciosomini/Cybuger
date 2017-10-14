@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.components.TagInput;
+import com.cynerds.cyburger.components.TagItem;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.models.combos.Combo;
@@ -60,6 +61,25 @@ public class ManageCombosActivity extends BaseActivity {
 
         comboNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         comboDayCbx.setAdapter(arrayAdapter);
+
+
+        itemsTagInput.setOnItemAddedListener(new TagInput.OnItemAddedListener() {
+            @Override
+            public void onAddItem(TagItem tagItem) {
+
+                String suggestedPrice = recalcuteSuggestedPrice(itemsTagInput.getSelectedTagModels());
+                comboPriceTxt.setHint(suggestedPrice);
+
+            }
+
+            @Override
+            public void onRemoveItem(TagItem tagItem) {
+
+                String suggestedPrice = recalcuteSuggestedPrice(itemsTagInput.getSelectedTagModels());
+                comboPriceTxt.setHint(suggestedPrice);
+
+            }
+        });
 
         if (loadedCombo != null) {
             int selectedItemIndex = 0;
@@ -129,6 +149,7 @@ public class ManageCombosActivity extends BaseActivity {
             }
         });
 
+
         FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
@@ -144,6 +165,18 @@ public class ManageCombosActivity extends BaseActivity {
         };
 
         firebaseRealtimeDatabaseHelperItems.setDataChangeListener(dataChangeListener);
+    }
+
+    private String recalcuteSuggestedPrice(List<TagModel> tagModels) {
+        float suggestedPrice = 0;
+        for (TagModel tagModel : tagModels) {
+            Item item = (Item) tagModel.getObject();
+
+            suggestedPrice += item.getPrice();
+
+        }
+
+        return "Preço sugerido: R$ " + String.format("%.2f", suggestedPrice);
     }
 
     private void updateTags() {

@@ -29,6 +29,7 @@ public class TagInput extends ConstraintLayout {
     private List<TagModel> tagModelList;
     private List<TagModel> selectedTagModels;
     private AutoCompleteTextView searchTagItemBox;
+    private OnItemAddedListener onItemAddedListener;
 
     public TagInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,6 +38,10 @@ public class TagInput extends ConstraintLayout {
         this.context = context;
         tagModelList = new ArrayList<>();
         selectedTagModels = new ArrayList<>();
+    }
+
+    public void setOnItemAddedListener(OnItemAddedListener onItemAddedListener) {
+        this.onItemAddedListener = onItemAddedListener;
     }
 
     public AutoCompleteTextView getSearchTagItemBox() {
@@ -60,7 +65,6 @@ public class TagInput extends ConstraintLayout {
         searchTagItemBox.setThreshold(1);
         searchTagItemBox.setInputType(InputType.TYPE_CLASS_TEXT);
     }
-
 
     public void setFilterableList(List<TagModel> tagModelList) {
 
@@ -88,7 +92,6 @@ public class TagInput extends ConstraintLayout {
         }
     }
 
-
     private void generateTag(final TagModel tagModel) {
         final FlexboxLayout flexboxLayoutAddedItems = findViewById(R.id.addedTagItemsContainer);
         flexboxLayoutAddedItems.setFlexDirection(FlexDirection.ROW);
@@ -103,13 +106,29 @@ public class TagInput extends ConstraintLayout {
                 flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
                 selectedTagModels.remove(tagModel);
 
+                if (onItemAddedListener != null) {
+                    onItemAddedListener.onRemoveItem(topTagItem);
+                }
+
             }
         });
 
 
+
         flexboxLayoutAddedItems.addView(topTagItem.getTextView());
 
+        if (onItemAddedListener != null) {
+            onItemAddedListener.onAddItem(topTagItem);
+        }
 
+    }
+
+
+    public interface OnItemAddedListener {
+
+        void onAddItem(TagItem tagItem);
+
+        void onRemoveItem(TagItem tagItem);
     }
 
 
