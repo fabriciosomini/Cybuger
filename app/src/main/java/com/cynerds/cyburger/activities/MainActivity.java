@@ -117,7 +117,7 @@ public class MainActivity extends BaseActivity {
         order = new Order();
         badge = findViewById(R.id.badge);
         hamburgerMenu = findViewById(R.id.hamburgerMenu);
-        
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_combos);
