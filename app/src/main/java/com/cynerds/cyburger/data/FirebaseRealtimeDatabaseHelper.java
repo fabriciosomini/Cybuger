@@ -29,7 +29,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         database = FirebaseDatabase.getInstance();
         mainReference = database.getReference();
         databaseReference = mainReference.child(classType.getSimpleName());
-
+        // databaseReference.keepSynced(false);
         items = new ArrayList<>();
 
         createDataWatcher();

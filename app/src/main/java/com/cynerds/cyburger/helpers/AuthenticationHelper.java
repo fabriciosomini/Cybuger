@@ -80,7 +80,7 @@ public class AuthenticationHelper {
 
                                     onSignInListener.onSuccess();
                                 }
-                            } catch (FirebaseAuthException e) {
+                            } catch (FirebaseAuthException exception) {
 
                                 DialogManager dialogManager = new DialogManager(activity);
 
@@ -89,7 +89,7 @@ public class AuthenticationHelper {
 
                                 if (onSignInListener != null) {
 
-                                    onSignInListener.onError(e);
+                                    onSignInListener.onError(exception);
                                 }
                             }
 
@@ -155,7 +155,12 @@ public class AuthenticationHelper {
                         if (task.isSuccessful()) {
                             Toast.makeText(activity, "E-mail atualizado!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(activity, "Falha ao atualizar e-mail", Toast.LENGTH_SHORT).show();
+                            Exception exception = task.getException();
+                            if (exception != null) {
+                                Toast.makeText(activity, "Falha ao atualizar e-mail - "
+                                        + exception.getClass().getSimpleName()
+                                        + ": " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });

@@ -73,8 +73,6 @@ public class SignUpFragment extends Fragment {
         signUpUserTxt.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
 
-
-
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,7 +141,6 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
 
 
-
                     authenticationHelper.createProfile(task.getResult().getUser());
                     authenticationHelper.updateDisplayName(displayName);
 
@@ -171,19 +168,27 @@ public class SignUpFragment extends Fragment {
                     currentActivity.displayProgressBar(false);
 
                     FirebaseAuthException exception = (FirebaseAuthException) task.getException();
-                    String errorCode = exception.getErrorCode();
-                    if (errorCode.equals("ERROR_INVALID_EMAIL")) {
-                        signUpUserTxt.setError(getString(R.string.login_error_invalid_email));
+                    if (exception != null) {
+                        String errorCode = exception.getErrorCode();
 
-                    } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
+                        if (errorCode.equals("ERROR_INVALID_EMAIL")) {
+                            signUpUserTxt.setError(getString(R.string.login_error_invalid_email));
 
-                        signUpPasswordTxt.setError(getString(R.string.login_error_weakPassword));
-                        signUpConfirmPasswordTxt.setError(getString(R.string.login_error_weakPassword));
-                    } else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
+                        } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
 
-                        signUpUserTxt.setError(getString(R.string.login_error_email_already_taken));
+                            signUpPasswordTxt.setError(getString(R.string.login_error_weakPassword));
+                            signUpConfirmPasswordTxt.setError(getString(R.string.login_error_weakPassword));
+                        } else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
+
+                            signUpUserTxt.setError(getString(R.string.login_error_email_already_taken));
+                        } else {
+
+                            Toast.makeText(currentActivity,
+                                    exception.getClass().getSimpleName()
+                                            + ": " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    Toast.makeText(getActivity(), "Algo deu errado ao criar o usuário", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(currentActivity, "Algo deu errado ao criar o usuário", Toast.LENGTH_SHORT).show();
                 }
             }
         });

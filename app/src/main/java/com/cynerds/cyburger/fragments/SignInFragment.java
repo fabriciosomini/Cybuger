@@ -52,7 +52,6 @@ public class SignInFragment extends Fragment {
     public SignInFragment() {
 
 
-
     }
 
 
@@ -210,19 +209,25 @@ public class SignInFragment extends Fragment {
                             signInBtn.setEnabled(true);
                             currentActivity.displayProgressBar(false);
 
-                            if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
+                            if (exception != null) {
+                                if (exception.getClass() == FirebaseAuthInvalidUserException.class) {
 
-                                signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
+                                    signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
 
-                            }
+                                } else if (exception.getClass() == FirebaseNetworkException.class) {
 
-                            if (exception != null && exception.getClass() == FirebaseNetworkException.class) {
+                                    DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                                    dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
 
-                                DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
-                                dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
+                                } else {
 
+                                    Toast.makeText(currentActivity,
+                                            exception.getClass().getSimpleName()
+                                                    + ": " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
+
                     });
                     authenticationHelper.signIn(email, password);
 
