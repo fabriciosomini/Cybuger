@@ -9,7 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.cynerds.cyburger.models.Tag;
+import com.cynerds.cyburger.models.views.TagModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,13 @@ import java.util.List;
 
 
 public class TagAdapter extends BaseAdapter implements Filterable {
-    final List<Tag> listItems;
-    final List<Tag> suggestions = new ArrayList<>();
+    final List<TagModel> listItems;
+    final List<TagModel> suggestions = new ArrayList<>();
     Context context;
     LayoutInflater inflater;
     private Filter filter = new CustomFilter();
 
-    public TagAdapter(List<Tag> listItems, Context context) {
+    public TagAdapter(List<TagModel> listItems, Context context) {
         this.listItems = listItems;
         this.suggestions.addAll(listItems);
         this.context = context;

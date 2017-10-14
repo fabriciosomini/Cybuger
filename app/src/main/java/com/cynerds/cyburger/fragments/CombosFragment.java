@@ -15,13 +15,13 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.adapters.DashboardCardAdapter;
+import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.models.combos.Combo;
-import com.cynerds.cyburger.views.DashboardCardViewItem;
+import com.cynerds.cyburger.models.views.CardModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +35,15 @@ public class CombosFragment extends Fragment {
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
 
-    List<DashboardCardViewItem> dashboardCardViewItems;
-    DashboardCardAdapter adapter;
+    List<CardModel> cardModels;
+    CardAdapter adapter;
     private boolean isListCreated;
     private MainActivity currentActivty;
 
     public CombosFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Combo.class);
-        dashboardCardViewItems = new ArrayList<>();
+        cardModels = new ArrayList<>();
 
     }
 
@@ -116,8 +116,8 @@ public class CombosFragment extends Fragment {
 
         if (adapter == null) {
             adapter =
-                    new DashboardCardAdapter(getContext(),
-                            R.layout.dashboard_card_view, dashboardCardViewItems);
+                    new CardAdapter(getContext(),
+                            R.layout.dashboard_card_view, cardModels);
 
 
             listview.setAdapter(adapter);
@@ -138,7 +138,7 @@ public class CombosFragment extends Fragment {
 
     public void getDashboardCardViewItems() {
 
-        dashboardCardViewItems.clear();
+        cardModels.clear();
 
         List<Combo> combos = getCombos();
 
@@ -147,15 +147,15 @@ public class CombosFragment extends Fragment {
                 combos) {
 
 
-            final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
-            dashboardCardViewItem.setTitle(combo.getComboName());
-            dashboardCardViewItem.setExtra(combo);
-            dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
-            dashboardCardViewItem.setContent(combo.getComboInfo() + "\n"
+            final CardModel cardModel = new CardModel();
+            cardModel.setTitle(combo.getComboName());
+            cardModel.setExtra(combo);
+            cardModel.setActionIconId(R.drawable.ic_action_add);
+            cardModel.setContent(combo.getComboInfo() + "\n"
                     + "Esse combo está por R$" + combo.getComboAmount());
 
             final DialogManager addComboToOrderingDialogManager = new DialogManager(getContext());
-            dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
+            cardModel.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -206,7 +206,7 @@ public class CombosFragment extends Fragment {
                 }
             });
 
-            dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
+            cardModel.setOnPictureClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final DialogManager previewItemDialogManager = new DialogManager(getContext());
@@ -225,7 +225,7 @@ public class CombosFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
 
-                                    Combo comboToDelete = (Combo) dashboardCardViewItem.getExtra();
+                                    Combo comboToDelete = (Combo) cardModel.getExtra();
                                     firebaseRealtimeDatabaseHelper.delete(comboToDelete);
                                     previewItemDialogManager.closeDialog();
                                     Toast.makeText(getContext(), "Combo removido", Toast.LENGTH_SHORT).show();
@@ -241,7 +241,7 @@ public class CombosFragment extends Fragment {
             });
 
 
-            dashboardCardViewItems.add(dashboardCardViewItem);
+            cardModels.add(cardModel);
         }
 
 

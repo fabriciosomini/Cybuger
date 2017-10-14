@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.adapters.DashboardCardAdapter;
+import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.combos.Combo;
@@ -21,7 +21,7 @@ import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.models.orders.Order;
 import com.cynerds.cyburger.models.profile.Profile;
-import com.cynerds.cyburger.views.DashboardCardViewItem;
+import com.cynerds.cyburger.models.views.CardModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,14 @@ public class OrdersFragment extends Fragment {
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
-    List<DashboardCardViewItem> dashboardCardViewItems;
-    DashboardCardAdapter adapter;
+    List<CardModel> cardModels;
+    CardAdapter adapter;
     private boolean isListCreated;
     private MainActivity currentActivty;
     public OrdersFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Order.class);
-        dashboardCardViewItems = new ArrayList<>();
+        cardModels = new ArrayList<>();
 
     }
 
@@ -114,8 +114,8 @@ public class OrdersFragment extends Fragment {
 
         if (adapter == null) {
             adapter =
-                    new DashboardCardAdapter(getContext(),
-                            R.layout.dashboard_card_view, dashboardCardViewItems);
+                    new CardAdapter(getContext(),
+                            R.layout.dashboard_card_view, cardModels);
 
 
             listview.setAdapter(adapter);
@@ -136,7 +136,7 @@ public class OrdersFragment extends Fragment {
 
     public void getDashboardCardViewItems() {
 
-        dashboardCardViewItems.clear();
+        cardModels.clear();
 
         List<Order> orders = getOrders();
 
@@ -147,13 +147,13 @@ public class OrdersFragment extends Fragment {
             Profile profile = CyburgerApplication.getProfile();
             Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
-            final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
-            dashboardCardViewItem.setExtra(order);
+            final CardModel cardModel = new CardModel();
+            cardModel.setExtra(order);
 
             if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                dashboardCardViewItem.setTitle("Seu pedido");
+                cardModel.setTitle("Seu pedido");
 
-                dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
+                cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Order newOrder = new Order();
@@ -167,10 +167,10 @@ public class OrdersFragment extends Fragment {
 
                     }
                 });
-                dashboardCardViewItem.setTitleColor(R.color.colorAccent);
+                cardModel.setTitleColor(R.color.colorAccent);
             } else {
-                dashboardCardViewItem.setTitle(customerName);
-                dashboardCardViewItem.setTitleColor(R.color.black);
+                cardModel.setTitle(customerName);
+                cardModel.setTitleColor(R.color.black);
             }
 
             //Pega Items do pedido-----------
@@ -193,9 +193,9 @@ public class OrdersFragment extends Fragment {
 
 
             //------------------------------
-            dashboardCardViewItem.setContent(orderedItemsString);
+            cardModel.setContent(orderedItemsString);
 
-            dashboardCardViewItems.add(dashboardCardViewItem);
+            cardModels.add(cardModel);
 
 
         }

@@ -15,13 +15,13 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.adapters.DashboardCardAdapter;
+import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.models.items.Item;
-import com.cynerds.cyburger.views.DashboardCardViewItem;
+import com.cynerds.cyburger.models.views.CardModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,8 @@ public class ItemsMenuFragment extends Fragment {
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
-    List<DashboardCardViewItem> dashboardCardViewItems;
-    DashboardCardAdapter adapter;
+    List<CardModel> cardModels;
+    CardAdapter adapter;
     private boolean isListCreated;
     private MainActivity currentActivty;
 
@@ -43,7 +43,7 @@ public class ItemsMenuFragment extends Fragment {
     public ItemsMenuFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Item.class);
-        dashboardCardViewItems = new ArrayList<>();
+        cardModels = new ArrayList<>();
 
     }
 
@@ -117,8 +117,8 @@ public class ItemsMenuFragment extends Fragment {
 
         if (adapter == null) {
             adapter =
-                    new DashboardCardAdapter(getContext(),
-                            R.layout.dashboard_card_view, dashboardCardViewItems);
+                    new CardAdapter(getContext(),
+                            R.layout.dashboard_card_view, cardModels);
 
 
             listview.setAdapter(adapter);
@@ -147,18 +147,18 @@ public class ItemsMenuFragment extends Fragment {
 
     public void getDashboardCardViewItems() {
 
-        dashboardCardViewItems.clear();
+        cardModels.clear();
 
         List<Item> items = getItems();
 
         for (final Item item :
                 items) {
 
-            final DashboardCardViewItem dashboardCardViewItem = new DashboardCardViewItem();
-            dashboardCardViewItem.setExtra(item);
-            dashboardCardViewItem.setTitle(item.getDescription());
-            dashboardCardViewItem.setActionIconId(R.drawable.ic_action_add);
-            dashboardCardViewItem.setContent(
+            final CardModel cardModel = new CardModel();
+            cardModel.setExtra(item);
+            cardModel.setTitle(item.getDescription());
+            cardModel.setActionIconId(R.drawable.ic_action_add);
+            cardModel.setContent(
                     "Ingredientes: " + item.getIngredients()
                     + "\nUnidade de medida: "
                     + item.getSize()
@@ -166,7 +166,7 @@ public class ItemsMenuFragment extends Fragment {
 
 
             final DialogManager addItemToOrderingDialogManager = new DialogManager(getContext());
-            dashboardCardViewItem.setOnManageClickListener(new View.OnClickListener() {
+            cardModel.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -217,7 +217,7 @@ public class ItemsMenuFragment extends Fragment {
                 }
             });
 
-            dashboardCardViewItem.setOnCardViewClickListener(new View.OnClickListener() {
+            cardModel.setOnPictureClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final DialogManager previewItemDialogManager = new DialogManager(getContext());
@@ -236,7 +236,7 @@ public class ItemsMenuFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
 
-                                    Item itemToDelete = (Item) dashboardCardViewItem.getExtra();
+                                    Item itemToDelete = (Item) cardModel.getExtra();
                                     firebaseRealtimeDatabaseHelper.delete(itemToDelete);
                                     previewItemDialogManager.closeDialog();
                                     Toast.makeText(getContext(), "Item removido", Toast.LENGTH_SHORT).show();
@@ -252,7 +252,7 @@ public class ItemsMenuFragment extends Fragment {
             });
 
 
-            dashboardCardViewItems.add(dashboardCardViewItem);
+            cardModels.add(cardModel);
 
 
         }

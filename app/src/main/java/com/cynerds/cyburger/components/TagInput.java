@@ -14,7 +14,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.TagAdapter;
-import com.cynerds.cyburger.models.Tag;
+import com.cynerds.cyburger.models.views.TagModel;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -29,8 +29,8 @@ public class TagInput extends ConstraintLayout {
 
 
     private final Context context;
-    private List<Tag> tagList;
-    private List<Tag> selectedTags;
+    private List<TagModel> tagModelList;
+    private List<TagModel> selectedTagModels;
     private int measuredHeight = -1;
 
     public TagInput(Context context, AttributeSet attrs) {
@@ -38,12 +38,12 @@ public class TagInput extends ConstraintLayout {
 
         initializeViews(context);
         this.context = context;
-        tagList = new ArrayList<>();
-        selectedTags = new ArrayList<>();
+        tagModelList = new ArrayList<>();
+        selectedTagModels = new ArrayList<>();
     }
 
-    public List<Tag> getSelectedTags() {
-        return selectedTags;
+    public List<TagModel> getSelectedTagModels() {
+        return selectedTagModels;
     }
 
     private void initializeViews(Context context) {
@@ -69,13 +69,13 @@ public class TagInput extends ConstraintLayout {
 
     }
 
-    public void setFilterableList(List<Tag> tagList){
+    public void setFilterableList(List<TagModel> tagModelList) {
 
-        this.tagList.clear();
-        this.tagList.addAll(tagList);
+        this.tagModelList.clear();
+        this.tagModelList.addAll(tagModelList);
 
         final AutoCompleteTextView searchTagItemBox = findViewById(R.id.searchTagItemBox);
-        TagAdapter adapter = new TagAdapter(tagList, getContext());
+        TagAdapter adapter = new TagAdapter(tagModelList, getContext());
 
         searchTagItemBox.setThreshold(1);
         searchTagItemBox.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -84,18 +84,18 @@ public class TagInput extends ConstraintLayout {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                generateTag((Tag) view.getTag());
+                generateTag((TagModel) view.getTag());
             }
         });
 
 
     }
 
-    private void generateTag(final Tag tag) {
+    private void generateTag(final TagModel tagModel) {
         final FlexboxLayout flexboxLayoutAddedItems = findViewById(R.id.addedTagItemsContainer);
         flexboxLayoutAddedItems.setFlexDirection(FlexDirection.ROW);
 
-        selectedTags.add(tag);
+        selectedTagModels.add(tagModel);
         int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
         int white = ContextCompat.getColor(getContext(), R.color.white);
 
@@ -106,7 +106,7 @@ public class TagInput extends ConstraintLayout {
         mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
 
         final TagItem topTagItem = new TagItem(context);
-        topTagItem.setText(tag.getDescription());
+        topTagItem.setText(tagModel.getDescription());
         topTagItem.getTextView().setBackground(newBackground);
         topTagItem.getTextView().setTextColor(white);
         topTagItem.getTextView().setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
@@ -115,8 +115,8 @@ public class TagInput extends ConstraintLayout {
             @Override
             public void onTagItemStateChanged() {
                 flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
-                selectedTags.remove(tag);
-              
+                selectedTagModels.remove(tagModel);
+
             }
         });
 

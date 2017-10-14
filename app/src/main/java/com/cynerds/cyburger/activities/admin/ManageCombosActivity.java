@@ -11,10 +11,10 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
-import com.cynerds.cyburger.models.Tag;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.combos.ComboDay;
 import com.cynerds.cyburger.models.items.Item;
+import com.cynerds.cyburger.models.views.TagModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,8 +77,8 @@ public class ManageCombosActivity extends BaseActivity {
                 combo.setComboInfo(comboInfo);
 
                 List<Item> items = new ArrayList<Item>();
-                for (Tag tag : itemsTagInput.getSelectedTags()) {
-                    Object o = tag.getObject();
+                for (TagModel tagModel : itemsTagInput.getSelectedTagModels()) {
+                    Object o = tagModel.getObject();
                     if (o instanceof Item) {
                         items.add((Item) o);
                     }
@@ -107,19 +107,19 @@ public class ManageCombosActivity extends BaseActivity {
     }
 
     private void updateTags() {
-        List<Tag> tagList = new ArrayList<>();
+        List<TagModel> tagModelList = new ArrayList<>();
         List<Item> items = getItems();
 
         for (Item item :
                 items) {
-            Tag tag = new Tag();
-            tag.setDescription(item.getDescription());
-            tag.setObject(item);
-            tagList.add(tag);
+            TagModel tagModel = new TagModel();
+            tagModel.setDescription(item.getDescription());
+            tagModel.setObject(item);
+            tagModelList.add(tagModel);
         }
 
         TagInput tagInput = findViewById(R.id.itemsTagInput);
-        tagInput.setFilterableList(tagList);
+        tagInput.setFilterableList(tagModelList);
     }
 
     List<Item> getItems() {
