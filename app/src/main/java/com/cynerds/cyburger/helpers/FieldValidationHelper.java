@@ -1,9 +1,6 @@
 package com.cynerds.cyburger.helpers;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
 import android.widget.EditText;
 
 import com.cynerds.cyburger.R;
@@ -42,25 +39,25 @@ public class FieldValidationHelper {
     public static void setFieldAsInvalid(EditText editText) {
 
         editText.setError(editText.getContext().getString(R.string.general_label_requiredfield));
-        GradientDrawable drawable = (GradientDrawable) editText.getBackground().getConstantState().newDrawable();
+       /* GradientDrawable drawable = (GradientDrawable) editText.getBackground().getConstantState().newDrawable();
         drawable.setStroke(2, Color.RED); // set stroke width and stroke color
-        editText.setBackground(drawable);
+        editText.setBackground(drawable);*/
     }
 
     public static void setFieldAsInvalid(EditText editText, @StringRes int stringRef) {
 
         editText.setError(editText.getContext().getString(stringRef));
-        GradientDrawable drawable = (GradientDrawable) editText.getBackground().getConstantState().newDrawable();
+      /*  GradientDrawable drawable = (GradientDrawable) editText.getBackground().getConstantState().newDrawable();
         drawable.setStroke(2, Color.RED); // set stroke width and stroke color
-        editText.setBackground(drawable);
+        editText.setBackground(drawable);*/
     }
 
     public static void setFieldAsValid(EditText editText) {
 
         editText.setError(null);
-        GradientDrawable drawable = (GradientDrawable) editText.getBackground().getConstantState().newDrawable();
+       /* GradientDrawable drawable = (GradientDrawable) editText.getBackground().getConstantState().newDrawable();
         drawable.setStroke(2, ContextCompat.getColor(editText.getContext(), R.color.borderColor)); // set stroke width and stroke color
-        editText.setBackground(drawable);
+        editText.setBackground(drawable);*/
 
 
     }

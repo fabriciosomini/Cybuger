@@ -17,6 +17,7 @@ import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -82,42 +83,22 @@ public class SignUpFragment extends Fragment {
                 String password = signUpPasswordTxt.getText().toString().trim();
                 String confirmPassword = signUpConfirmPasswordTxt.getText().toString().trim();
 
-                boolean isFilledOut = true;
 
-                if (displayName.isEmpty()) {
-
-                    signUpDisplayNameTxt.setError(getString(R.string.general_label_requiredfield));
-                    isFilledOut = false;
-                }
-
-                if (email.isEmpty()) {
-
-                    signUpUserTxt.setError(getString(R.string.general_label_requiredfield));
-                    isFilledOut = false;
-                }
-
-                if (password.isEmpty()) {
-
-                    signUpPasswordTxt.setError(getString(R.string.general_label_requiredfield));
-                    isFilledOut = false;
-                }
-
-                if (confirmPassword.isEmpty()) {
-
-                    signUpConfirmPasswordTxt.setError(getString(R.string.general_label_requiredfield));
-                    isFilledOut = false;
-                }
-                if (isFilledOut) {
+                if (FieldValidationHelper.isEditTextValidated(signUpDisplayNameTxt) &&
+                        FieldValidationHelper.isEditTextValidated(signUpUserTxt) &&
+                        FieldValidationHelper.isEditTextValidated(signUpPasswordTxt) &&
+                        FieldValidationHelper.isEditTextValidated(signUpConfirmPasswordTxt)) {
 
                     if (password.equals(confirmPassword)) {
 
-                        signUpPasswordTxt.setError(null);
-                        signUpConfirmPasswordTxt.setError(null);
+                        FieldValidationHelper.setFieldAsValid(signUpConfirmPasswordTxt);
+                        FieldValidationHelper.setFieldAsValid(signUpConfirmPasswordTxt);
+
                         createUser(displayName, email, password);
                     } else {
 
-                        signUpPasswordTxt.setError(getString(R.string.general_unmatching_password));
-                        signUpConfirmPasswordTxt.setError(getString(R.string.general_unmatching_password));
+                        FieldValidationHelper.setFieldAsInvalid(signUpPasswordTxt, R.string.general_unmatching_password);
+                        FieldValidationHelper.setFieldAsInvalid(signUpConfirmPasswordTxt, R.string.general_unmatching_password);
                     }
 
                 }
@@ -172,15 +153,17 @@ public class SignUpFragment extends Fragment {
                         String errorCode = exception.getErrorCode();
 
                         if (errorCode.equals("ERROR_INVALID_EMAIL")) {
-                            signUpUserTxt.setError(getString(R.string.login_error_invalid_email));
+
+                            FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_invalid_email);
 
                         } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
 
-                            signUpPasswordTxt.setError(getString(R.string.login_error_weakPassword));
-                            signUpConfirmPasswordTxt.setError(getString(R.string.login_error_weakPassword));
+                            FieldValidationHelper.setFieldAsInvalid(signUpPasswordTxt, R.string.login_error_weakPassword);
+                            FieldValidationHelper.setFieldAsInvalid(signUpConfirmPasswordTxt, R.string.login_error_weakPassword);
+
                         } else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
 
-                            signUpUserTxt.setError(getString(R.string.login_error_email_already_taken));
+                            FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_email_already_taken);
                         } else {
 
                             Toast.makeText(currentActivity,
