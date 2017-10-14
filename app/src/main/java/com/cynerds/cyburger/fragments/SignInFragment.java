@@ -196,7 +196,7 @@ public class SignInFragment extends Fragment {
                         @Override
                         public void onSuccess() {
 
-                         
+
                             signInPasswordTxt.setError(null);
                             preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
 
