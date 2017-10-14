@@ -63,9 +63,9 @@ public class TagInput extends ConstraintLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (heightMeasureSpec > 0 && measuredHeight < 0) {
+
             this.measuredHeight = getMeasuredHeight();
-        }
+
 
     }
 
@@ -116,12 +116,12 @@ public class TagInput extends ConstraintLayout {
             public void onTagItemStateChanged() {
                 flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
                 selectedTags.remove(tag);
+              
             }
         });
 
 
         flexboxLayoutAddedItems.addView(topTagItem.getTextView());
-        getLayoutParams().height = measuredHeight + topTagItem.getTextView().getMeasuredHeight();
 
 
     }
