@@ -10,4 +10,9 @@
     <color name="grey">#bfbfbf</color>
     <color name="transparent">#80000000</color>
     <color name="borderColor">#BDBDBD</color>
+
+    <color name="randomColor0">#F44336</color>
+    <color name="randomColor1">#FF5252</color>
+    <color name="randomColor2">#EF5350</color>
+
 </resources>

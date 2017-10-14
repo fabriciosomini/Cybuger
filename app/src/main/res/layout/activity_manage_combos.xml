@@ -31,10 +31,11 @@
                 android:id="@+id/comboDayLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/manage_combos_combo_day"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comboPriceTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/comboInfoTxt" />
 
             <EditText
                 android:id="@+id/comboNameTxt"
@@ -61,17 +62,18 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/requiredFieldLabel" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Preço do combo"
+                android:layout_marginLeft="0dp"
 
+                android:layout_marginTop="8dp"
+                android:text="Preço do combo *"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comboInfoTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/itemsTagInput" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -80,7 +82,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Itens do combo"
+                android:text="Itens do combo*"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comboDayCbx" />
 
@@ -110,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
 
-                android:text="Nome do Combo"
+                android:text="Nome do Combo *"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,13 +128,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/comboDayLbl" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/requiredFieldLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Descrição do combo"
+                android:text="Descrição do combo *"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comboNameTxt" />
 
@@ -145,9 +147,10 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/general_button_save"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemsTagInput" />
+                app:layout_constraintTop_toBottomOf="@+id/comboPriceTxt" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 

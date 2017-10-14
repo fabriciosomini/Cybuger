@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 
+import java.util.Random;
+
 /**
  * Created by comp8 on 11/10/2017.
  */
@@ -22,6 +24,7 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
     private boolean isAdded = false;
     private LayoutInflater inflater;
     private TagItemStateChangeListener tagItemStateChangeListener;
+    private int randomColor;
 
     public TagItem(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,7 +50,7 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         textView = (TextView) inflater.inflate(R.layout.component_tag, null);
 
-        int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
+        int accentColor = getRandomColor();
         newBackground = textView.getBackground().getConstantState().newDrawable();
         newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
         textView.setBackground(newBackground);
@@ -90,6 +93,29 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
 
     public TextView getTextView() {
         return textView;
+    }
+
+    public int getRandomColor() {
+
+        Random r = new Random();
+        int i1 = r.nextInt(4 - 1) + 1;
+
+        int randomColor = i1;
+
+        switch (randomColor) {
+            case 1:
+                randomColor = ContextCompat.getColor(getContext(), R.color.randomColor0);
+                break;
+            case 2:
+                randomColor = ContextCompat.getColor(getContext(), R.color.randomColor1);
+                break;
+            case 3:
+                randomColor = ContextCompat.getColor(getContext(), R.color.randomColor2);
+                break;
+
+        }
+
+        return randomColor;
     }
 
     public interface TagItemStateChangeListener {
