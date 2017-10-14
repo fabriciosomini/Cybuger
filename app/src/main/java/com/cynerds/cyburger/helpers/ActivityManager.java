@@ -16,6 +16,12 @@ public abstract class ActivityManager<T> {
         activity.startActivity(intent);
     }
 
+    public static void startActivity(Activity activity, Class tClass, Object extra) {
+        Intent intent = new Intent(activity, tClass);
+        intent.putExtra(extra.getClass().getSimpleName(), GsonHelper.ToGson(extra));
+        activity.startActivity(intent);
+    }
+
     public static void startActivityKillingThis(Activity activity, Class tClass) {
         Intent intent = new Intent(activity, tClass);
         activity.startActivity(intent);

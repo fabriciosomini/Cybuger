@@ -1,10 +1,7 @@
 package com.cynerds.cyburger.components;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -31,7 +28,7 @@ public class TagInput extends ConstraintLayout {
     private final Context context;
     private List<TagModel> tagModelList;
     private List<TagModel> selectedTagModels;
-    private int measuredHeight = -1;
+
 
     public TagInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -60,15 +57,6 @@ public class TagInput extends ConstraintLayout {
     }
 
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-            this.measuredHeight = getMeasuredHeight();
-
-
-    }
-
     public void setFilterableList(List<TagModel> tagModelList) {
 
         this.tagModelList.clear();
@@ -96,21 +84,9 @@ public class TagInput extends ConstraintLayout {
         flexboxLayoutAddedItems.setFlexDirection(FlexDirection.ROW);
 
         selectedTagModels.add(tagModel);
-        int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
-        int white = ContextCompat.getColor(getContext(), R.color.white);
-
-        Drawable newBackground = new TagItem(getContext()).getTextView().getBackground().getConstantState().newDrawable();
-        newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
-
-        Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_close);
-        mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
 
         final TagItem topTagItem = new TagItem(context);
         topTagItem.setText(tagModel.getDescription());
-        topTagItem.getTextView().setBackground(newBackground);
-        topTagItem.getTextView().setTextColor(white);
-        topTagItem.getTextView().setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
-
         topTagItem.setTagItemStateChangeListener(new TagItem.TagItemStateChangeListener() {
             @Override
             public void onTagItemStateChanged() {

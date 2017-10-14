@@ -212,7 +212,7 @@ public class MainActivity extends BaseActivity {
         }
 
 
-        orderedItemsAmountString = "R$ " + String.valueOf(orderedItemsAmount);
+        orderedItemsAmountString = "R$ " + String.format("%.2f", orderedItemsAmount);
         orderedItemsAmountTxtView.setText(orderedItemsAmountString);
 
         if (!orderedItemsString.isEmpty()) {

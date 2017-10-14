@@ -55,11 +55,27 @@ public class ManageCombosActivity extends BaseActivity {
         final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final TagInput itemsTagInput = findViewById(R.id.itemsTagInput);
         final Button saveComboBtn = findViewById(R.id.saveComboBtn);
+        final Combo loadedCombo = (Combo) getExtra(Combo.class);
 
         comboNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-
-
         comboDayCbx.setAdapter(arrayAdapter);
+
+        if (loadedCombo != null) {
+            int selectedItemIndex = 0;
+            for (int i = 0; i < ComboDay.values().length; i++) {
+                ComboDay c = ComboDay.values()[i];
+                if (c == loadedCombo.getComboDay()) {
+                    selectedItemIndex = i;
+                    break;
+                }
+            }
+            comboDayCbx.setSelection(selectedItemIndex);
+            comboNameTxt.setText(loadedCombo.getComboName());
+            comboInfoTxt.setText(loadedCombo.getComboInfo());
+            comboPriceTxt.setText(String.valueOf(loadedCombo.getComboAmount()));
+            List<TagModel> tagModels = generateTagModels(loadedCombo.getComboItems());
+            itemsTagInput.setFilterableList(tagModels);
+        }
 
 
         saveComboBtn.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +86,7 @@ public class ManageCombosActivity extends BaseActivity {
                 Float comboAmount = Float.valueOf(comboPriceTxt.getText().toString());
                 ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString());
 
-                Combo combo = new Combo();
+                Combo combo = loadedCombo == null ? new Combo() : loadedCombo;
                 combo.setComboName(comboName);
                 combo.setComboAmount(comboAmount);
                 combo.setComboDay(comboDay);
@@ -84,7 +100,11 @@ public class ManageCombosActivity extends BaseActivity {
                     }
                 }
                 combo.setComboItems(items);
-                firebaseRealtimeDatabaseHelper.insert(combo);
+                if (loadedCombo != null) {
+                    firebaseRealtimeDatabaseHelper.update(combo);
+                } else {
+                    firebaseRealtimeDatabaseHelper.insert(combo);
+                }
                 finish();
             }
         });
@@ -107,9 +127,18 @@ public class ManageCombosActivity extends BaseActivity {
     }
 
     private void updateTags() {
-        List<TagModel> tagModelList = new ArrayList<>();
+
         List<Item> items = getItems();
 
+        List<TagModel> tagModelList = generateTagModels(items);
+
+
+        TagInput tagInput = findViewById(R.id.itemsTagInput);
+        tagInput.setFilterableList(tagModelList);
+    }
+
+    private List<TagModel> generateTagModels(List<Item> items) {
+        List<TagModel> tagModelList = new ArrayList<>();
         for (Item item :
                 items) {
             TagModel tagModel = new TagModel();
@@ -117,9 +146,7 @@ public class ManageCombosActivity extends BaseActivity {
             tagModel.setObject(item);
             tagModelList.add(tagModel);
         }
-
-        TagInput tagInput = findViewById(R.id.itemsTagInput);
-        tagInput.setFilterableList(tagModelList);
+        return tagModelList;
     }
 
     List<Item> getItems() {

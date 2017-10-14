@@ -1,6 +1,10 @@
 package com.cynerds.cyburger.data;
 
+import android.support.annotation.NonNull;
+
 import com.cynerds.cyburger.models.BaseModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +39,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
         tableReference = databaseReference.child(tableName);
-        // tableReference.keepSynced(false);
+        tableReference.keepSynced(true);
         items = new ArrayList<>();
 
         createDataWatcher();
@@ -173,8 +177,11 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                         items.remove(index);
                     }
 
-                    if (dataChangeListener != null && tableChildCount == items.size()) {
-                        dataChangeListener.onDataChanged(object);
+                    if (dataChangeListener != null) {
+                        if (tableChildCount == items.size() || items.size() == 0) {
+                            dataChangeListener.onDataChanged(object);
+                        }
+
 
                     }
                 }
@@ -223,7 +230,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         return -1;
     }
 
-    public FirebaseRealtimeDatabaseResult insert(BaseModel baseModel) {
+    public void insert(BaseModel baseModel) {
 
         if (baseModel != null) {
             if (baseModel.getId() != null) {
@@ -237,14 +244,25 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         }
 
 
-        FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
-        firebaseRealtimeDatabaseResult.setMessage("Success");
-        firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+        final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
 
-        tableReference.push().setValue(baseModel);
+        tableReference.push().setValue(baseModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                firebaseRealtimeDatabaseResult.setMessage("Success");
+                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-        return firebaseRealtimeDatabaseResult;
+                firebaseRealtimeDatabaseResult.setMessage(e.getClass().getSimpleName() + ": " + e.getMessage());
+                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
+            }
+        });
+
+
     }
 
     public List<BaseModel> get() {
@@ -258,6 +276,27 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     public void removeListenters() {
         tableReference.removeEventListener(tableListener);
+    }
+
+    public void update(BaseModel baseModel) {
+
+        final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
+
+
+        tableReference.child(baseModel.getKey()).setValue(baseModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                firebaseRealtimeDatabaseResult.setMessage("Success");
+                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                firebaseRealtimeDatabaseResult.setMessage(e.getClass().getSimpleName() + ": " + e.getMessage());
+                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
+            }
+        });
+
     }
 
 

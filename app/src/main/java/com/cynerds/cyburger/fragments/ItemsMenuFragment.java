@@ -180,7 +180,7 @@ public class ItemsMenuFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
 
 
                             Badge badge = currentActivty.getBadge();

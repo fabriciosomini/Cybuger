@@ -41,9 +41,6 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         this.tagItemStateChangeListener = tagItemStateChangeListener;
     }
 
-    public boolean isAdded() {
-        return isAdded;
-    }
 
     private void initializeViews(final Context context) {
         inflater = (LayoutInflater) getContext()
@@ -53,8 +50,13 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         int accentColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
         newBackground = textView.getBackground().getConstantState().newDrawable();
         newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
+        textView.setBackground(newBackground);
 
-
+        int white = ContextCompat.getColor(getContext(), R.color.white);
+        Drawable mDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_action_close);
+        mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
+        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
+        textView.setTextColor(white);
 
         textView.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -80,13 +82,6 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
 
 
         });
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-
     }
 
     public void setText(String text) {

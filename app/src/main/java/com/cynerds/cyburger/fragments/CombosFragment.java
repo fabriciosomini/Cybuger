@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.models.combos.Combo;
@@ -170,7 +172,7 @@ public class CombosFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
 
 
                             Badge badge = currentActivty.getBadge();
@@ -234,6 +236,14 @@ public class CombosFragment extends Fragment {
                             DialogManager confirmDeleteDialog = new DialogManager(getContext(), DialogManager.DialogType.YES_NO);
                             confirmDeleteDialog.setAction(deleteComboAction);
                             confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse combo?");
+                        }
+                    });
+
+                    editComboBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
                         }
                     });
 
