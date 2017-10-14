@@ -3,6 +3,7 @@ package com.cynerds.cyburger.application;
 import android.app.Application;
 
 import com.cynerds.cyburger.models.profile.Profile;
+import com.cynerds.cyburger.models.roles.Role;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
@@ -19,6 +20,11 @@ public class CyburgerApplication extends Application {
 
     public static void setProfile(Profile profile) {
         CyburgerApplication.profile = profile;
+    }
+
+    public static boolean isAdmin() {
+
+        return profile != null && profile.getRole() == Role.ADMIN;
     }
 
     @Override

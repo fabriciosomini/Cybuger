@@ -29,8 +29,4 @@ public class Profile extends BaseModel {
         this.userId = userId;
     }
 
-    public boolean isAdmin() {
-
-        return role == Role.ADMIN;
-    }
 }

@@ -3,12 +3,39 @@
 
     <item
         is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\6373923c9cee485a2afa292fc87c8edf1e52af8d\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="d4acacbab67243d9eb026ea759aefd401d070f3e">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ec16c71b6680632477601f2eccdadeef17ea2431\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\855d1ddc7ad3df64a446a466d7179be05f10563e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="32054268e6c9fdff0c9c5deafafd0bd105120fb6">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ffe46680f5703c640ecb9fc157bdb99d137dd31b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="D:\Development\Git\Source\Cyburger\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.2"
-        sha1="eb8a8655f70117cbeac6b4bcd688998e57b3fcd6">
+        sha1="20a372dbf0029b7dcdfa1a5166016f38717cd2e1">
         <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_86b456239c49fe3ef14b067e65ab13f9fb69ce8e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\12357ebd1f18a7c06fc347279450302d2e3d0e9b\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="e00b71dcf2fbecaf59b0d487d11839522dd7863d">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d3cfcf56078bf4eac1546969a1e322008d8b8a19\classes.dex" />
     </item>
     <item
         is-multidex="true"
