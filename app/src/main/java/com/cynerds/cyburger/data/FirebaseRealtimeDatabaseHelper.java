@@ -17,19 +17,25 @@ import java.util.UUID;
 
 public class FirebaseRealtimeDatabaseHelper<T> {
     private final Class<BaseModel> classType;
-    private final DatabaseReference mainReference;
+    private final DatabaseReference databaseReference;
+    private final String tableName;
     FirebaseDatabase database;
-    DatabaseReference databaseReference;
+    DatabaseReference tableReference;
     private List<BaseModel> items;
     private DataChangeListener dataChangeListener;
+    private ChildEventListener tableListener;
+    private ChildEventListener databaseListener;
+    private long tableChildCount = 0;
+    private boolean notified;
 
     public FirebaseRealtimeDatabaseHelper(Class<BaseModel> classType) {
 
+        tableName = classType.getSimpleName();
         this.classType = classType;
         database = FirebaseDatabase.getInstance();
-        mainReference = database.getReference();
-        databaseReference = mainReference.child(classType.getSimpleName());
-        // databaseReference.keepSynced(false);
+        databaseReference = database.getReference();
+        tableReference = databaseReference.child(tableName);
+        // tableReference.keepSynced(false);
         items = new ArrayList<>();
 
         createDataWatcher();
@@ -44,7 +50,63 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     }
 
     private void createDataWatcher() {
-        ChildEventListener postListener = new ChildEventListener() {
+
+
+        databaseListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if (dataSnapshot.getKey().equals(tableName) && !notified) {
+
+
+                    tableChildCount = dataSnapshot.getChildrenCount();
+                    tableReference.addChildEventListener(tableListener);
+
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getKey().equals(tableName) && !notified) {
+
+
+                    tableChildCount = dataSnapshot.getChildrenCount();
+                    tableReference.addChildEventListener(tableListener);
+
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getKey().equals(tableName) && !notified) {
+
+
+                    tableChildCount = dataSnapshot.getChildrenCount();
+                    tableReference.addChildEventListener(tableListener);
+
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getKey().equals(tableName) && !notified) {
+
+
+                    tableChildCount = dataSnapshot.getChildrenCount();
+                    tableReference.addChildEventListener(tableListener);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        databaseReference.addChildEventListener(databaseListener);
+
+        tableListener = new ChildEventListener() {
 
 
             @Override
@@ -66,7 +128,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                         items.add(object);
                     }
 
-                    if (dataChangeListener != null) {
+                    if (dataChangeListener != null && tableChildCount == items.size()) {
                         dataChangeListener.onDataChanged(object);
 
                     }
@@ -92,7 +154,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                     }
 
 
-                    if (dataChangeListener != null) {
+                    if (dataChangeListener != null && tableChildCount == items.size()) {
                         dataChangeListener.onDataChanged(object);
                     }
                 }
@@ -111,7 +173,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                         items.remove(index);
                     }
 
-                    if (dataChangeListener != null) {
+                    if (dataChangeListener != null && tableChildCount == items.size()) {
                         dataChangeListener.onDataChanged(object);
 
                     }
@@ -132,7 +194,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                         items.set(index, object);
 
                     }
-                    if (dataChangeListener != null) {
+                    if (dataChangeListener != null && tableChildCount == items.size()) {
                         dataChangeListener.onDataChanged(object);
                     }
                 }
@@ -145,7 +207,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         };
 
 
-        databaseReference.addChildEventListener(postListener);
+
 
     }
 
@@ -180,7 +242,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
 
 
-        databaseReference.push().setValue(baseModel);
+        tableReference.push().setValue(baseModel);
 
         return firebaseRealtimeDatabaseResult;
     }
@@ -190,9 +252,14 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     }
 
     public void delete(BaseModel object) {
-        databaseReference.child(object.getKey()).removeValue();
+        tableReference.child(object.getKey()).removeValue();
 
     }
+
+    public void removeListenters() {
+        tableReference.removeEventListener(tableListener);
+    }
+
 
     public enum DatabaseOperationResultType {
 

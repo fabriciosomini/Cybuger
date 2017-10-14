@@ -20,7 +20,6 @@ import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
-import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.views.DashboardCardViewItem;
 
@@ -237,8 +236,8 @@ public class ItemsMenuFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
 
-                                    Combo comboToDelete = (Combo) dashboardCardViewItem.getExtra();
-                                    firebaseRealtimeDatabaseHelper.delete(comboToDelete);
+                                    Item itemToDelete = (Item) dashboardCardViewItem.getExtra();
+                                    firebaseRealtimeDatabaseHelper.delete(itemToDelete);
                                     previewItemDialogManager.closeDialog();
                                     Toast.makeText(getContext(), "Item removido", Toast.LENGTH_SHORT).show();
                                 }

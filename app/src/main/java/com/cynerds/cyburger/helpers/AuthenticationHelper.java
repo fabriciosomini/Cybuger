@@ -27,21 +27,25 @@ import java.util.List;
 public class AuthenticationHelper {
 
     private final Activity activity;
+    FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     private UserProfileChangeRequest profileUpdates;
     private UserProfileChangeRequest.Builder profileBuilder;
     private FirebaseAuth mAuth;
     private Preferences preferences;
-    private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     private OnSignInListener onSignInListener;
     private FirebaseUser user;
 
+
     public AuthenticationHelper(Activity activity) {
         this.activity = activity;
-        mAuth = FirebaseAuth.getInstance();
+
         preferences = new Preferences(activity);
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+
 
         profileBuilder = new UserProfileChangeRequest.Builder();
+        mAuth = FirebaseAuth.getInstance();
+
+
     }
 
     public void createProfile(FirebaseUser user) {
@@ -50,9 +54,23 @@ public class AuthenticationHelper {
         profile.setRole(Role.USER);
         profile.setUserId(user.getUid());
 
+        if (user == null) {
+            this.user = FirebaseAuth.getInstance().getCurrentUser();
+        }
+
+        if (firebaseRealtimeDatabaseHelper == null) {
+            firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+        }
+
         firebaseRealtimeDatabaseHelper.insert(profile);
 
         CyburgerApplication.setProfile(profile);
+
+        if (onSignInListener != null) {
+
+            onSignInListener.onSuccess();
+
+        }
 
     }
 
@@ -72,27 +90,15 @@ public class AuthenticationHelper {
                         boolean isSuccessful = task.isSuccessful();
                         if (isSuccessful) {
 
-
-                            try {
+                            if (user == null) {
                                 user = FirebaseAuth.getInstance().getCurrentUser();
-                                loadUserProfile();
-
-                                if (onSignInListener != null) {
-
-                                    onSignInListener.onSuccess();
-                                }
-                            } catch (FirebaseAuthException exception) {
-
-                                DialogManager dialogManager = new DialogManager(activity);
-
-                                dialogManager.showDialog("",
-                                        activity.getString(R.string.login_error_unable_load_profile));
-
-                                if (onSignInListener != null) {
-
-                                    onSignInListener.onError(exception);
-                                }
                             }
+
+                            if (firebaseRealtimeDatabaseHelper == null) {
+                                firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+                            }
+
+                            getProfilesList();
 
 
                         } else {
@@ -117,32 +123,52 @@ public class AuthenticationHelper {
                 });
     }
 
-    private void loadUserProfile() throws FirebaseAuthException {
+    private void getProfilesList() {
+        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+            @Override
+            public void onDataChanged(Object item) {
 
 
-        List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
+                loadUserProfile();
 
 
-        if (profiles.size() > 0) {
+            }
+        };
+
+        firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
+    }
+
+    private void loadUserProfile() {
+
+        List<Profile> profiles = getProfiles();
 
 
-            for (Profile profile :
-                    profiles) {
+        for (Profile profile :
+                profiles) {
 
-                if (profile != null && user != null) {
-                    if (profile.getUserId().equals(user.getUid())) {
-                        CyburgerApplication.setProfile(profile);
+            if (profile != null && user != null) {
+                if (profile.getUserId().equals(user.getUid())) {
+                    CyburgerApplication.setProfile(profile);
 
+                    if (onSignInListener != null) {
+
+                        onSignInListener.onSuccess();
                         return;
                     }
+
+
                 }
             }
 
-
         }
 
+        if (onSignInListener != null) {
 
-        throw new FirebaseAuthException("ERROR_CANT_LOAD_PROFILE", activity.getString(R.string.login_error_unable_load_profile));
+
+            Exception exception = new FirebaseAuthException("ERROR_CANT_LOAD_PROFILE", activity.getString(R.string.login_error_unable_load_profile));
+
+            onSignInListener.onError(exception);
+        }
 
 
     }
@@ -151,6 +177,11 @@ public class AuthenticationHelper {
         if (!email.isEmpty()) {
             profileBuilder.setDisplayName(email);
         }
+
+        if (user == null) {
+            this.user = FirebaseAuth.getInstance().getCurrentUser();
+        }
+
         user.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -170,6 +201,10 @@ public class AuthenticationHelper {
     }
 
     public void updatePassword(@NonNull String password) {
+
+        if (user == null) {
+            this.user = FirebaseAuth.getInstance().getCurrentUser();
+        }
 
         user.updatePassword(password)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -193,6 +228,10 @@ public class AuthenticationHelper {
 
         profileUpdates = profileBuilder.build();
 
+        if (user == null) {
+            this.user = FirebaseAuth.getInstance().getCurrentUser();
+        }
+
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -213,6 +252,10 @@ public class AuthenticationHelper {
         profileBuilder.setPhotoUri(profileUri);
         profileUpdates = profileBuilder.build();
 
+        if (user == null) {
+            this.user = FirebaseAuth.getInstance().getCurrentUser();
+        }
+
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -225,6 +268,11 @@ public class AuthenticationHelper {
                     }
                 });
 
+    }
+
+    public List<Profile> getProfiles() {
+        List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
+        return profiles;
     }
 
     public interface OnSignInListener {
