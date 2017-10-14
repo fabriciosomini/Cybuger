@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
@@ -37,6 +38,7 @@ public class SignUpFragment extends Fragment {
     private Button signUpBtn;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private AuthenticationHelper authenticationHelper;
+    private LoginActivity currentActivity;
 
     public SignUpFragment() {
 
@@ -51,6 +53,8 @@ public class SignUpFragment extends Fragment {
         authenticationHelper = new AuthenticationHelper(getActivity());
 
         setUIEvents(inflatedView);
+
+        this.currentActivity = (LoginActivity) getActivity();
 
         return inflatedView;
     }
@@ -129,6 +133,7 @@ public class SignUpFragment extends Fragment {
 
 
         signUpBtn.setEnabled(false);
+        currentActivity.displayProgressBar(true);
 
         Task<AuthResult> createNewUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
 
@@ -153,6 +158,7 @@ public class SignUpFragment extends Fragment {
 
                         @Override
                         public void onError(Exception exception) {
+                            currentActivity.displayProgressBar(false);
                             Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -162,7 +168,7 @@ public class SignUpFragment extends Fragment {
                 } else {
 
                     signUpBtn.setEnabled(true);
-
+                    currentActivity.displayProgressBar(false);
 
                     FirebaseAuthException exception = (FirebaseAuthException) task.getException();
                     String errorCode = exception.getErrorCode();

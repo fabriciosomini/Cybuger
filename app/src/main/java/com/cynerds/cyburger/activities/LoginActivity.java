@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,14 +23,25 @@ public class LoginActivity extends BaseActivity {
     Button signInBtn;
     CheckBox signInRememberCbx;
     private Preferences preferences;
-
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
-
     private Permissions permissions;
 
+    public void displayProgressBar(boolean display) {
+        View progressBackground = findViewById(R.id.progressBackground);
+        View progressBar = findViewById(R.id.progressBar);
 
+        if (display) {
+
+            progressBackground.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+        } else {
+            progressBackground.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+
+        }
+    }
 
     @Override
     public void onStart() {

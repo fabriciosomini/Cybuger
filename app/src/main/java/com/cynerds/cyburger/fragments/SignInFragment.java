@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
@@ -32,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignInFragment extends Fragment {
 
     public static boolean isRememberMeChecked;
+    private LoginActivity currentActivity;
     private EditText signInUserTxt;
     private EditText signInPasswordTxt;
     private Button signInBtn;
@@ -50,6 +52,7 @@ public class SignInFragment extends Fragment {
     public SignInFragment() {
 
 
+
     }
 
 
@@ -63,6 +66,7 @@ public class SignInFragment extends Fragment {
         authenticationHelper = new AuthenticationHelper(getActivity());
         setUIEvents(inflatedView);
 
+        this.currentActivity = (LoginActivity) getActivity();
 
         return inflatedView;
     }
@@ -161,6 +165,7 @@ public class SignInFragment extends Fragment {
             public void onClick(View v) {
 
                 signInBtn.setEnabled(false);
+                currentActivity.displayProgressBar(true);
 
                 String email = "";
                 String password = "";
@@ -190,6 +195,8 @@ public class SignInFragment extends Fragment {
                     authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
                         @Override
                         public void onSuccess() {
+
+                         
                             signInPasswordTxt.setError(null);
                             preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
 
@@ -199,7 +206,9 @@ public class SignInFragment extends Fragment {
 
                         @Override
                         public void onError(Exception exception) {
+
                             signInBtn.setEnabled(true);
+                            currentActivity.displayProgressBar(false);
 
                             if (exception != null && exception.getClass() == FirebaseAuthInvalidUserException.class) {
 
