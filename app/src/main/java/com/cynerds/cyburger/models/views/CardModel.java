@@ -13,7 +13,7 @@ public class CardModel {
 
     private String title;
     private String content;
-    private int headerIconId = R.drawable.ic_food;
+    private int headerIconId = R.drawable.ic_closeicon;
     private int actionIconId;
     private View.OnClickListener onPictureClickListener;
     private View.OnClickListener onManageClickListener;
