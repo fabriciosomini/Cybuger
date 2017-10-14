@@ -40,7 +40,7 @@ public class AuthenticationHelper {
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(activity);
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         profileBuilder = new UserProfileChangeRequest.Builder();
     }
 
@@ -74,6 +74,7 @@ public class AuthenticationHelper {
 
 
                             try {
+                                user = FirebaseAuth.getInstance().getCurrentUser();
                                 loadUserProfile();
 
                                 if (onSignInListener != null) {

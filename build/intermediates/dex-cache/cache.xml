@@ -3,21 +3,75 @@
 
     <item
         is-multidex="true"
-        jar="C:\Users\fabri\.android\build-cache\6373923c9cee485a2afa292fc87c8edf1e52af8d\output\jars\classes.jar"
+        jar="C:\Users\fabri\.android\build-cache\749fcab818e224cf9186ae63bce462dafb4968bf\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.2"
-        sha1="d4acacbab67243d9eb026ea759aefd401d070f3e">
-        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ec16c71b6680632477601f2eccdadeef17ea2431\classes.dex" />
+        sha1="bd6a3b6e3c7c584a47479070fb9292a6c7468657">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_fe3a092a7cf8f8dfd351f061c744075640e3da9f\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\fabri\.android\build-cache\855d1ddc7ad3df64a446a466d7179be05f10563e\output\jars\classes.jar"
+        jar="C:\Users\fabri\.android\build-cache\de9cc906248d58c141252874a0060efb5f52bd0a\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.2"
-        sha1="32054268e6c9fdff0c9c5deafafd0bd105120fb6">
-        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ffe46680f5703c640ecb9fc157bdb99d137dd31b\classes.dex" />
+        sha1="d1fa63f06110477c59f154f96b7660c6bad9cf04">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_2c48957415e40d94cbfd89479081983eb2f5706c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\9ae760340b0fce248f8629ffd13ec51eae69a050\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ba98864d70e8e27b3109c76c5418d41962eb952d">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_021b37040bb8d31044e918f5ed0943d6b824d47f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\adc18fe7b80b3e58832c65f767c3c036fef2b93c\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="6679c7d77ad34dbdf04342adb254dc5892aa04ac">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_915781fa72433d56a39a9bd132097278ba1d4ce0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.7.2\20f6463eb19ac61960c5d91a094c2f4f0727dc2e\okhttp-2.7.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="20f6463eb19ac61960c5d91a094c2f4f0727dc2e">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-2.7.2_3cac29f3cb2fc32f980b41245024f2a11ece5ba0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.gradle\caches\modules-2\files-2.1\com.android.support.constraint\constraint-layout-solver\1.1.0-beta1\4205dd8c33ada1468ab377afff0be95304ef72a\constraint-layout-solver-1.1.0-beta1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="04205dd8c33ada1468ab377afff0be95304ef72a">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\constraint-layout-solver-1.1.0-beta1_ac8370d51af79fa5231c1ea1dbad94395ff9841f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\0cbfad1fdb2e2f86fec47876eac7d6916ec35db2\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="a5d1a5c33144f207810e851fba6c1533372bb935">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_9052e4dc46af36c981e01bb113f28ff35202fb47\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\1371ccea68e8d70cc7bb615d1701c3b36489ad55\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="241bafb36b47aee8c8c34acd08a1e7d735a66ff0">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4844615ddc7803dc454fa2b6fb3d42e5d94daa69\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -25,17 +79,98 @@
         jumboMode="true"
         optimize="true"
         revision="26.0.2"
-        sha1="20a372dbf0029b7dcdfa1a5166016f38717cd2e1">
+        sha1="390bc19ef402c6815c7e101163f9cad589b8af76">
         <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_86b456239c49fe3ef14b067e65ab13f9fb69ce8e\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\fabri\.android\build-cache\12357ebd1f18a7c06fc347279450302d2e3d0e9b\output\jars\classes.jar"
+        jar="C:\Users\fabri\.android\build-cache\e85c3d551bc35a73dde5c0108ca98ae9c0e75629\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.2"
-        sha1="e00b71dcf2fbecaf59b0d487d11839522dd7863d">
-        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d3cfcf56078bf4eac1546969a1e322008d8b8a19\classes.dex" />
+        sha1="e4efed89c18cda5bbc2309efe84bb4b67e1ef239">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e21548be56fe2e2d4f88a9c04286f5ec1b71782b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\302a2879c8f5d43a712ec965c1fb41d9712aa28e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="b614956bf77eb8201754ac10109e52c36691cb3f">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_922fbf4a2b7bad6842ac70b5c0c778667e0489aa\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\f645eba1e84c4c29da6de450eec95766e398cccf\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="bc0d71e8828a145ca4aebde8f6897608070f8863">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b968d3425e89490b4e51625e45fe0a5b3d2ca628\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\1e09a4795ac924edfbb96ac7617433a1e8fdcdcf\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="e6fff1d276738bb82cfc131c49d2e72a47dfd0aa">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_859f728b96cddbeb5e111ed9616b2c17a3413634\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.6.0\98476622f10715998eacf9240d6b479f12c66143\okio-1.6.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\okio-1.6.0_08249bbaf9ef0d72ee52f24015fc184728d9663a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\bdbe2208d0acc83e5f077ae5da249e1e6448cbba\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ccad5f56bf5c771ec3e85165be9ab0d0948c27aa">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d6e402ffdcde57d1bcc1c5a28af1a8ba8c1aab2e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\20.0\89507701249388e1ed5ddcf8c41f4ce1be7831ef\guava-20.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="89507701249388e1ed5ddcf8c41f4ce1be7831ef">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\guava-20.0_1de68ed23ade62dc7b0ccfeb8decde788a8e1c61\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\5c93a957c57015781d14b78c092ac1b82eefa0c5\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="3e1185bdde08224bf1275f6b4f9771df5e738e1b">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_64fab2078df44eac41b3a88ed44fe1e5f9220f3a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\b12dcdbd8311e0f2af21902ec267e935e9673151\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="97fb40924e83775c91374180494801cb022aa008">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e077a07902a921dd1be67f7e7dd21aa68c00d152\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\e14a0761a8731c8a4f0ed5a22d21c5ea6951efb7\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="9176f96bb623ac8bbd2b79942d9e419f72f95301">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a55a312468054de455e7bcf0b90a56098baf7a85\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -45,6 +180,42 @@
         revision="26.0.2"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
         <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_76edc12d09599493e05b8c11c44c889693c43897\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\47f40cb13d269ac2151498f9564d91bd3b9a471e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="782d63e5456a49596ef322036691e25c60de3b83">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d0651ed51d951f0fbd698a9bf6a13b05eede6241\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\8a9025ca3151ad1b8962de4711d3613a7fcc0f57\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="b4d6fbbb48b42dd03fd9c5a09b3b7a53266df6ed">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_52d7333aee268909226bdab2ec2284b94e7521c1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\efe7a5ffbbe160144b98e929b0751630310a58ff\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="5753660caa486676aacf05857930d76589a09af9">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_92858d49e573383cb961c9fc6431784c6511576e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\fabri\.android\build-cache\27ff8772c155cc9ab109cfc55b24f313287c8d0a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="8bdf5cd702d3d860cd85783a776c26605f557882">
+        <dex dex="D:\Development\Git\Source\Cyburger\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_edef8f3659cb10406744609f61a705a3b8bbf974\classes.dex" />
     </item>
 
 </items>
