@@ -11,6 +11,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.combos.ComboDay;
 import com.cynerds.cyburger.models.items.Item;
@@ -82,31 +83,49 @@ public class ManageCombosActivity extends BaseActivity {
         saveComboBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String comboName = comboNameTxt.getText().toString();
-                String comboInfo = comboInfoTxt.getText().toString();
-                Float comboAmount = Float.valueOf(comboPriceTxt.getText().toString());
-                ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString());
 
-                Combo combo = loadedCombo == null ? new Combo() : loadedCombo;
-                combo.setComboName(comboName);
-                combo.setComboAmount(comboAmount);
-                combo.setComboDay(comboDay);
-                combo.setComboInfo(comboInfo);
 
-                List<Item> items = new ArrayList<Item>();
-                for (TagModel tagModel : itemsTagInput.getSelectedTagModels()) {
-                    Object o = tagModel.getObject();
-                    if (o instanceof Item) {
-                        items.add((Item) o);
+                //VALIDAÇÕES -
+                //ANTES DE PEGAR O CONTEÚDO DOS CAMPOS
+                //E DENTRO DO EVENTO DE CLIQUE DO BOTÃO DE SALVAR
+                if (FieldValidationHelper.isEditTextValidated(comboNameTxt) &&
+                        FieldValidationHelper.isEditTextValidated(comboInfoTxt) &&
+                        FieldValidationHelper.isEditTextValidated(comboPriceTxt)
+                        ) {
+
+                    //Validação especial, SOMENTE para este caso
+                    if (itemsTagInput.getSelectedTagModels().size() == 0) {
+                        FieldValidationHelper.setFieldAsInvalid(itemsTagInput.getSearchTagItemBox(), R.string.manage_combos_required_field);
+                        return;
                     }
+
+                    String comboName = comboNameTxt.getText().toString();
+                    String comboInfo = comboInfoTxt.getText().toString();
+                    Float comboAmount = Float.valueOf(comboPriceTxt.getText().toString());
+                    ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString());
+                    int comboItems = itemsTagInput.getSelectedTagModels().size();
+
+                    Combo combo = loadedCombo == null ? new Combo() : loadedCombo;
+                    combo.setComboName(comboName);
+                    combo.setComboAmount(comboAmount);
+                    combo.setComboDay(comboDay);
+                    combo.setComboInfo(comboInfo);
+
+                    List<Item> items = new ArrayList<Item>();
+                    for (TagModel tagModel : itemsTagInput.getSelectedTagModels()) {
+                        Object o = tagModel.getObject();
+                        if (o instanceof Item) {
+                            items.add((Item) o);
+                        }
+                    }
+                    combo.setComboItems(items);
+                    if (loadedCombo != null) {
+                        firebaseRealtimeDatabaseHelper.update(combo);
+                    } else {
+                        firebaseRealtimeDatabaseHelper.insert(combo);
+                    }
+                    finish();
                 }
-                combo.setComboItems(items);
-                if (loadedCombo != null) {
-                    firebaseRealtimeDatabaseHelper.update(combo);
-                } else {
-                    firebaseRealtimeDatabaseHelper.insert(combo);
-                }
-                finish();
             }
         });
 

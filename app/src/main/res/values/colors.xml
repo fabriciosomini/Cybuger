@@ -9,4 +9,5 @@
     <color name="lightgrey">#00FFFFFF</color>
     <color name="grey">#bfbfbf</color>
     <color name="transparent">#80000000</color>
+    <color name="borderColor">#BDBDBD</color>
 </resources>

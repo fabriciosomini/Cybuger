@@ -19,6 +19,7 @@ import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.facebook.CallbackManager;
@@ -162,33 +163,15 @@ public class SignInFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                signInBtn.setEnabled(false);
-                currentActivity.displayProgressBar(true);
 
-                String email = "";
-                String password = "";
+                if (FieldValidationHelper.isEditTextValidated(signInUserTxt) &&
+                        FieldValidationHelper.isEditTextValidated(signInPasswordTxt)) {
 
+                    signInBtn.setEnabled(false);
+                    currentActivity.displayProgressBar(true);
 
-                email = String.valueOf(signInUserTxt.getText().toString());
-                password = String.valueOf(signInPasswordTxt.getText().toString());
-
-
-                boolean isFilledOut = true;
-                if (signInUserTxt.getText().toString().trim().equals("")) {
-
-                    signInUserTxt.setError(getString(R.string.general_label_requiredfield));
-                    isFilledOut = false;
-                }
-
-                if (signInPasswordTxt.getText().toString().trim().equals("")) {
-
-                    signInPasswordTxt.setError(getString(R.string.general_label_requiredfield));
-
-                    isFilledOut = false;
-                }
-
-
-                if (isFilledOut) {
+                    String email = String.valueOf(signInUserTxt.getText().toString());
+                    String password = String.valueOf(signInPasswordTxt.getText().toString());
 
                     authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
                         @Override

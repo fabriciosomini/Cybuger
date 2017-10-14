@@ -28,7 +28,7 @@ public class TagInput extends ConstraintLayout {
     private final Context context;
     private List<TagModel> tagModelList;
     private List<TagModel> selectedTagModels;
-
+    private AutoCompleteTextView searchTagItemBox;
 
     public TagInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,6 +37,10 @@ public class TagInput extends ConstraintLayout {
         this.context = context;
         tagModelList = new ArrayList<>();
         selectedTagModels = new ArrayList<>();
+    }
+
+    public AutoCompleteTextView getSearchTagItemBox() {
+        return searchTagItemBox;
     }
 
     public List<TagModel> getSelectedTagModels() {
@@ -52,8 +56,9 @@ public class TagInput extends ConstraintLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
-
+        searchTagItemBox = findViewById(R.id.searchTagItemBox);
+        searchTagItemBox.setThreshold(1);
+        searchTagItemBox.setInputType(InputType.TYPE_CLASS_TEXT);
     }
 
 
@@ -62,11 +67,8 @@ public class TagInput extends ConstraintLayout {
         this.tagModelList.clear();
         this.tagModelList.addAll(tagModelList);
 
-        final AutoCompleteTextView searchTagItemBox = findViewById(R.id.searchTagItemBox);
-        TagAdapter adapter = new TagAdapter(tagModelList, getContext());
 
-        searchTagItemBox.setThreshold(1);
-        searchTagItemBox.setInputType(InputType.TYPE_CLASS_TEXT);
+        TagAdapter adapter = new TagAdapter(tagModelList, getContext());
         searchTagItemBox.setAdapter(adapter);
         searchTagItemBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
