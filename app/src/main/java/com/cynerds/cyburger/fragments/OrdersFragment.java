@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -33,18 +34,40 @@ import java.util.List;
 public class OrdersFragment extends Fragment {
 
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    private final Profile profile;
     FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
     List<CardModel> cardModels;
     CardAdapter adapter;
     private boolean isListCreated;
     private MainActivity currentActivty;
+
     public OrdersFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Order.class);
         cardModels = new ArrayList<>();
 
+        profile = CyburgerApplication.getProfile();
+
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        currentActivty = (MainActivity) context;
+        LayoutInflater inflater = (LayoutInflater) getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.fragment_combos, null);
+
+
+        if (!isListCreated) {
+            isListCreated = true;
+            createList(view);
+        }
+
+        updateList(view);
+        setUIEvents(view);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -137,14 +160,13 @@ public class OrdersFragment extends Fragment {
     public void getDashboardCardViewItems() {
 
         cardModels.clear();
-
+        currentActivty.clearNotifications(MainActivity.ORDERS_TAB);
         List<Order> orders = getOrders();
 
         for (final Order order :
                 orders) {
 
 
-            Profile profile = CyburgerApplication.getProfile();
             Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
             final CardModel cardModel = new CardModel();
@@ -168,6 +190,8 @@ public class OrdersFragment extends Fragment {
                     }
                 });
                 cardModel.setTitleColor(R.color.colorAccent);
+
+                currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
             } else {
                 cardModel.setTitle(customerName);
                 cardModel.setTitleColor(R.color.black);

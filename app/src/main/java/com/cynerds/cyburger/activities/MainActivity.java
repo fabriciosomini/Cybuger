@@ -3,9 +3,8 @@ package com.cynerds.cyburger.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationAdapter;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
@@ -34,36 +36,36 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends BaseActivity {
 
+    public static final int COMBO_TAB = 0;
+    public static final int ITEMS_TAB = 1;
+    public static final int ORDERS_TAB = 2;
     FragmentManager fragmentManager = getSupportFragmentManager();
     CombosFragment combosFragment = new CombosFragment();
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
     private int backPressed = 0;
-
     private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperOrders;
     private Badge badge;
     private View hamburgerMenu;
     private Order order;
     private Order previousOrder;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
+    private AHBottomNavigation bottomNavigation;
+    private int[] notifications = new int[3];
+    private AHBottomNavigation.OnTabSelectedListener mOnNavigationItemSelectedListener = new AHBottomNavigation.OnTabSelectedListener() {
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        public boolean onTabSelected(int position, boolean wasSelected) {
+            switch (position) {
 
-
-            switch (item.getItemId()) {
-
-                case R.id.navigation_combos:
+                case COMBO_TAB:
 
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
                             combosFragment,
                             combosFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_combos));
-                    Toast.makeText(MainActivity.this, "CombosFragment", Toast.LENGTH_SHORT).show();
+
                     return true;
 
-                case R.id.navigation_foodMenu:
+                case ITEMS_TAB:
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
                             itemsMenuFragment,
                             itemsMenuFragment.getTag()).commit();
@@ -71,19 +73,18 @@ public class MainActivity extends BaseActivity {
 
                     return true;
 
-                case R.id.navigation_orders:
+                case ORDERS_TAB:
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
                             ordersFragment,
                             ordersFragment.getTag()).commit();
                     setActionBarTitle(getString(R.string.title_notifications));
 
-                    return true;
+
             }
-            return false;
-
+            return true;
         }
-
     };
+
 
     public MainActivity() {
         firebaseRealtimeDatabaseHelperOrders = new FirebaseRealtimeDatabaseHelper(Order.class);
@@ -118,9 +119,15 @@ public class MainActivity extends BaseActivity {
         badge = findViewById(R.id.badge);
         hamburgerMenu = findViewById(R.id.hamburgerMenu);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.navigation_combos);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        AHBottomNavigationAdapter navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.navigation);
+        navigationAdapter.setupWithBottomNavigation(bottomNavigation);
+        bottomNavigation.setOnTabSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigation.setCurrentItem(COMBO_TAB);
+
+
+        fragmentManager.beginTransaction().attach(ordersFragment).commit();
+
 
         setActionBarTitle(getString(R.string.title_combos));
         showActionBarMenu(true);
@@ -269,6 +276,8 @@ public class MainActivity extends BaseActivity {
                         order = new Order();
                         previousOrder = new Order();
                         dialogManager.closeDialog();
+
+
                     }
                 });
             }
@@ -291,6 +300,8 @@ public class MainActivity extends BaseActivity {
                     badge.setBadgeCount(0);
                     order = new Order();
                     dialogManager.closeDialog();
+
+                    removeNotification(ORDERS_TAB, 1);
 
                 }
             });
@@ -352,5 +363,32 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void addNotification(int tabIndex, int notificationCount) {
+        notifications[tabIndex] += notificationCount;
 
+        setNotification(tabIndex, notifications[tabIndex]);
+    }
+
+    public void removeNotification(int tabIndex, int notificationCount) {
+        notifications[tabIndex] -= notificationCount;
+
+        setNotification(tabIndex, notifications[tabIndex]);
+    }
+
+    private void setNotification(int tabIndex, Integer tabNotificationCount) {
+
+        AHNotification notification = new AHNotification.Builder()
+                .setText(String.valueOf(tabNotificationCount))
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setTextColor(ContextCompat.getColor(this, R.color.white))
+                .build();
+        bottomNavigation.setNotification(notification, tabIndex);
+    }
+
+
+    public void clearNotifications(int tabIndex) {
+
+        notifications[tabIndex] = 0;
+        setNotification(tabIndex, notifications[tabIndex]);
+    }
 }
