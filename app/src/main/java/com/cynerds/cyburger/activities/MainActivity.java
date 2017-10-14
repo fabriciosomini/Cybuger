@@ -375,10 +375,11 @@ public class MainActivity extends BaseActivity {
         setNotification(tabIndex, notifications[tabIndex]);
     }
 
-    private void setNotification(int tabIndex, Integer tabNotificationCount) {
+    private void setNotification(int tabIndex, int count) {
+
 
         AHNotification notification = new AHNotification.Builder()
-                .setText(String.valueOf(tabNotificationCount))
+                .setText(String.valueOf(count == 0 ? "" : count))
                 .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setTextColor(ContextCompat.getColor(this, R.color.white))
                 .build();

@@ -40,6 +40,7 @@ public class OrdersFragment extends Fragment {
     CardAdapter adapter;
     private boolean isListCreated;
     private MainActivity currentActivty;
+    private View view;
 
     public OrdersFragment() {
 
@@ -57,7 +58,7 @@ public class OrdersFragment extends Fragment {
         currentActivty = (MainActivity) context;
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_combos, null);
+        view = inflater.inflate(R.layout.fragment_combos, null);
 
 
         if (!isListCreated) {
@@ -73,8 +74,6 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        currentActivty = (MainActivity) getActivity();
-        View view = inflater.inflate(R.layout.fragment_combos, container, false);
 
         if (!isListCreated) {
             isListCreated = true;
