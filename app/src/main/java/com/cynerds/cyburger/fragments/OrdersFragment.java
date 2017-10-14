@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
@@ -37,7 +37,7 @@ public class OrdersFragment extends Fragment {
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
     private boolean isListCreated;
-    private BaseActivity currentActivty;
+    private MainActivity currentActivty;
     public OrdersFragment() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Order.class);
@@ -50,7 +50,7 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        currentActivty = (BaseActivity) getActivity();
+        currentActivty = (MainActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
 
         if (!isListCreated) {

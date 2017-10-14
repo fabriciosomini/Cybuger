@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.adapters.DashboardCardAdapter;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
@@ -38,7 +38,7 @@ public class CombosFragment extends Fragment {
     List<DashboardCardViewItem> dashboardCardViewItems;
     DashboardCardAdapter adapter;
     private boolean isListCreated;
-    private BaseActivity currentActivty;
+    private MainActivity currentActivty;
 
     public CombosFragment() {
 
@@ -52,7 +52,7 @@ public class CombosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        currentActivty = (BaseActivity) getActivity();
+        currentActivty = (MainActivity) getActivity();
 
         View view = inflater.inflate(R.layout.fragment_combos, container, false);
 
@@ -172,8 +172,8 @@ public class CombosFragment extends Fragment {
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show();
 
-                            BaseActivity baseActivity = ((BaseActivity) getActivity());
-                            Badge badge = baseActivity.getBadge();
+
+                            Badge badge = currentActivty.getBadge();
 
                             EditText confirmItemQuantityTxt = addComboToOrderingDialogManager.getContentView()
                                     .findViewById(R.id.confirmItemQuantityTxt);
@@ -187,7 +187,7 @@ public class CombosFragment extends Fragment {
                             int itemQuantity = Integer.valueOf(confirmItemQuatityStr);
                             for (int i = 0; i < itemQuantity; i++) {
 
-                                baseActivity.getOrder().getOrderedCombos().add(combo);
+                                currentActivty.getOrder().getOrderedCombos().add(combo);
                                 badge.setBadgeCount(badge.getBadgeCount() + 1);
                             }
                             addComboToOrderingDialogManager.closeDialog();

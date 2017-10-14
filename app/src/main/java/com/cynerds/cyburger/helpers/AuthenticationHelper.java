@@ -128,10 +128,12 @@ public class AuthenticationHelper {
             for (Profile profile :
                     profiles) {
 
-                if (profile.getUserId().equals(user.getUid())) {
-                    CyburgerApplication.setProfile(profile);
+                if (profile != null && user != null) {
+                    if (profile.getUserId().equals(user.getUid())) {
+                        CyburgerApplication.setProfile(profile);
 
-                    return;
+                        return;
+                    }
                 }
             }
 
