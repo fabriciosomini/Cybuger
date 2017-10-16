@@ -56,7 +56,7 @@ public class OrdersFragment extends Fragment {
         super.onAttach(context);
 
         currentActivty = (MainActivity) context;
-        LayoutInflater inflater = (LayoutInflater) getContext()
+        LayoutInflater inflater = (LayoutInflater) currentActivty
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.fragment_combos, null);
 
@@ -136,7 +136,7 @@ public class OrdersFragment extends Fragment {
 
         if (adapter == null) {
             adapter =
-                    new CardAdapter(getContext(),
+                    new CardAdapter(currentActivty,
                             R.layout.dashboard_card_view, cardModels);
 
 

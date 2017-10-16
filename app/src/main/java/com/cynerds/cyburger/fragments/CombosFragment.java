@@ -118,7 +118,7 @@ public class CombosFragment extends Fragment {
 
         if (adapter == null) {
             adapter =
-                    new CardAdapter(getContext(),
+                    new CardAdapter(currentActivty,
                             R.layout.dashboard_card_view, cardModels);
 
 
@@ -156,7 +156,7 @@ public class CombosFragment extends Fragment {
             cardModel.setContent(combo.getComboInfo() + "\n"
                     + "Esse combo está por R$" + combo.getComboAmount());
 
-            final DialogManager addComboToOrderingDialogManager = new DialogManager(getContext());
+            final DialogManager addComboToOrderingDialogManager = new DialogManager(currentActivty);
             cardModel.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -172,7 +172,7 @@ public class CombosFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(currentActivty, "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
 
 
                             Badge badge = currentActivty.getBadge();
@@ -211,7 +211,7 @@ public class CombosFragment extends Fragment {
             cardModel.setOnPictureClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final DialogManager previewItemDialogManager = new DialogManager(getContext());
+                    final DialogManager previewItemDialogManager = new DialogManager(currentActivty);
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(combo.getComboName(), "");
 
@@ -230,10 +230,10 @@ public class CombosFragment extends Fragment {
                                     Combo comboToDelete = (Combo) cardModel.getExtra();
                                     firebaseRealtimeDatabaseHelper.delete(comboToDelete);
                                     previewItemDialogManager.closeDialog();
-                                    Toast.makeText(getContext(), "Combo removido", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(currentActivty, "Combo removido", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            DialogManager confirmDeleteDialog = new DialogManager(getContext(), DialogManager.DialogType.YES_NO);
+                            DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
                             confirmDeleteDialog.setAction(deleteComboAction);
                             confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse combo?");
                         }

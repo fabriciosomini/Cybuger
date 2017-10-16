@@ -117,7 +117,7 @@ public class ItemsMenuFragment extends Fragment {
 
         if (adapter == null) {
             adapter =
-                    new CardAdapter(getContext(),
+                    new CardAdapter(currentActivty,
                             R.layout.dashboard_card_view, cardModels);
 
 
@@ -165,7 +165,7 @@ public class ItemsMenuFragment extends Fragment {
                             + "\nValor: " + item.getPrice());
 
 
-            final DialogManager addItemToOrderingDialogManager = new DialogManager(getContext());
+            final DialogManager addItemToOrderingDialogManager = new DialogManager(currentActivty);
             cardModel.setOnManageClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -180,7 +180,7 @@ public class ItemsMenuFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(currentActivty, "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
 
 
                             Badge badge = currentActivty.getBadge();
@@ -220,7 +220,7 @@ public class ItemsMenuFragment extends Fragment {
             cardModel.setOnPictureClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final DialogManager previewItemDialogManager = new DialogManager(getContext());
+                    final DialogManager previewItemDialogManager = new DialogManager(currentActivty);
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(item.getDescription(), "");
 
@@ -239,10 +239,10 @@ public class ItemsMenuFragment extends Fragment {
                                     Item itemToDelete = (Item) cardModel.getExtra();
                                     firebaseRealtimeDatabaseHelper.delete(itemToDelete);
                                     previewItemDialogManager.closeDialog();
-                                    Toast.makeText(getContext(), "Item removido", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(currentActivty, "Item removido", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            DialogManager confirmDeleteDialog = new DialogManager(getContext(), DialogManager.DialogType.YES_NO);
+                            DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
                             confirmDeleteDialog.setAction(deleteComboAction);
                             confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
                         }
