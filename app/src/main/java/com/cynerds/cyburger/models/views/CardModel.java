@@ -13,6 +13,7 @@ public class CardModel {
 
     private String title;
     private String content;
+    private String subContent;
     private int headerIconId = R.drawable.ic_closeicon;
     private int actionIconId;
     private View.OnClickListener onPictureClickListener;
@@ -20,6 +21,14 @@ public class CardModel {
     private View.OnClickListener onCardViewClickListener;
     private Object extra;
     private int titleColor;
+
+    public String getSubContent() {
+        return subContent;
+    }
+
+    public void setSubContent(String subContent) {
+        this.subContent = subContent;
+    }
 
     public View.OnClickListener getOnPictureClickListener() {
         return onPictureClickListener;

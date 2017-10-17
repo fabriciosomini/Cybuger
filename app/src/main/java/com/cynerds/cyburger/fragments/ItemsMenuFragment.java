@@ -161,8 +161,8 @@ public class ItemsMenuFragment extends Fragment {
             cardModel.setContent(
                     "Ingredientes: " + item.getIngredients()
                     + "\nUnidade de medida: "
-                    + item.getSize()
-                            + "\nValor: " + item.getPrice());
+                            + item.getSize());
+            cardModel.setSubContent("Valor: " + item.getPrice());
 
 
             final DialogManager addItemToOrderingDialogManager = new DialogManager(currentActivty);
