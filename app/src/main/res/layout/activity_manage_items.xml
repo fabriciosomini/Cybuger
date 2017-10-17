@@ -9,20 +9,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/manage_items_item_description"
-        app:layout_constraintLeft_toLeftOf="@+id/itemDescription"
+        app:layout_constraintLeft_toLeftOf="@+id/itemDescriptionTxt"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/itemDescription"
+        android:id="@+id/itemDescriptionTxt"
         style="@style/AppTheme.CyburgerEditText"
 
         android:layout_width="0dp"
         android:layout_height="@dimen/default_height"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -33,14 +33,14 @@
         android:id="@+id/itemPriceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/manage_items_item_price"
-        app:layout_constraintLeft_toLeftOf="@+id/itemPrice"
-        app:layout_constraintTop_toBottomOf="@+id/itemDescription" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemBonusPointTxt" />
 
     <EditText
-        android:id="@+id/itemPrice"
+        android:id="@+id/itemPriceTxt"
         style="@style/AppTheme.CyburgerEditText"
         android:layout_width="0dp"
         android:layout_height="@dimen/default_height"
@@ -59,13 +59,13 @@
         android:layout_height="wrap_content"
 
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="@string/manage_items_item_ingredients"
-        app:layout_constraintLeft_toLeftOf="@+id/itemIngredients"
-        app:layout_constraintTop_toBottomOf="@+id/itemPrice" />
+        app:layout_constraintLeft_toLeftOf="@+id/itemIngredientsTxt"
+        app:layout_constraintTop_toBottomOf="@+id/itemDescriptionTxt" />
 
     <EditText
-        android:id="@+id/itemIngredients"
+        android:id="@+id/itemIngredientsTxt"
         style="@style/AppTheme.CyburgerEditText"
         android:layout_width="0dp"
         android:layout_height="@dimen/default_height"
@@ -83,10 +83,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="@string/manage_items_item_measure_unit"
         app:layout_constraintLeft_toLeftOf="@+id/itemMeasureUnitCbx"
-        app:layout_constraintTop_toBottomOf="@+id/itemIngredients" />
+        app:layout_constraintTop_toBottomOf="@+id/itemIngredientsTxt" />
 
     <Spinner
         android:id="@+id/itemMeasureUnitCbx"
@@ -101,19 +101,46 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemMeasureUnitLabel" />
 
+    <TextView
+        android:id="@+id/comboBonusPointLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Pontos de bônus do item*"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemMeasureUnitCbx" />
+
+    <EditText
+        android:id="@+id/itemBonusPointTxt"
+        style="@style/AppTheme.CyburgerEditText"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:inputType="number"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comboBonusPointLbl">
+
+    </EditText>
+
     <Button
         android:id="@+id/saveItemBtn"
         style="@style/AppTheme.CyburgerButton"
         android:layout_width="@dimen/default_width"
         android:layout_height="@dimen/default_height"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/general_button_save"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemPriceTxt" />
 
 </android.support.constraint.ConstraintLayout>

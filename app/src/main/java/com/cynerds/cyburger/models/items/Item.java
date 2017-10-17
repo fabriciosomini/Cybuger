@@ -12,6 +12,7 @@ public class Item extends BaseModel {
     private String ingredients;
     private float price;
     private String size;
+    private int bonusPoints;
 
     public String getSize() {
         return size;
@@ -43,6 +44,14 @@ public class Item extends BaseModel {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public int getBonusPoints() {
+        return bonusPoints;
+    }
+
+    public void setBonusPoints(int bonusPoints) {
+        this.bonusPoints = bonusPoints;
     }
 
 }

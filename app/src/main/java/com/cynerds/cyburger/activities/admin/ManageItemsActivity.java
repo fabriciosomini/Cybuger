@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.models.items.Item;
 
 import java.util.ArrayList;
@@ -51,23 +52,40 @@ public class ManageItemsActivity extends BaseActivity {
         final Spinner spinner = findViewById(R.id.itemMeasureUnitCbx);
         spinner.setAdapter(spinnerArrayAdapter);
 
-        final EditText itemDescription = findViewById(R.id.itemDescription);
-        final EditText itemPrice = findViewById(R.id.itemPrice);
-        final EditText itemIngredients = findViewById(R.id.itemIngredients);
+        final EditText itemDescriptionTxt = findViewById(R.id.itemDescriptionTxt);
+        final EditText itemPriceTxt = findViewById(R.id.itemPriceTxt);
+        final EditText itemIngredientsTxt = findViewById(R.id.itemIngredientsTxt);
+        final EditText itemBonusPointTxt = findViewById(R.id.itemBonusPointTxt);
         final Button saveItemBtn = findViewById(R.id.saveItemBtn);
 
         saveItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (FieldValidationHelper.isEditTextValidated(itemDescriptionTxt) &&
+                        FieldValidationHelper.isEditTextValidated(itemIngredientsTxt) &&
+                        FieldValidationHelper.isEditTextValidated(itemBonusPointTxt) &&
+                        FieldValidationHelper.isEditTextValidated(itemPriceTxt)) {
 
-                Item item = new Item();
-                item.setDescription(itemDescription.getText().toString());
-                item.setPrice(Float.parseFloat(itemPrice.getText().toString()));
-                item.setIngredients(itemIngredients.getText().toString());
-                item.setSize(spinner.getSelectedItem().toString());
+                    String itemDescription = itemDescriptionTxt.getText().toString().trim();
+                    Float itemPrice = Float.valueOf(itemPriceTxt.getText().toString().trim());
+                    String itemIngredients = itemIngredientsTxt.getText().toString().trim();
+                    String size = spinner.getSelectedItem().toString();
+                    int bonusPoint = Integer.valueOf(itemBonusPointTxt.getText().toString().trim());
 
-                firebaseRealtimeDatabaseHelper.insert(item);
-                finish();
+                    Item item = new Item();
+                    item.setDescription(itemDescription);
+                    item.setPrice(itemPrice);
+                    item.setIngredients(itemIngredients);
+                    item.setSize(size);
+                    item.setBonusPoints(bonusPoint);
+
+                    firebaseRealtimeDatabaseHelper.insert(item);
+                    finish();
+
+                }
+
+
+
             }
         });
 

@@ -31,8 +31,8 @@
                 android:id="@+id/comboDayLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/manage_combos_combo_day"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comboInfoTxt" />
@@ -68,12 +68,12 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
 
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
                 android:text="Preço do combo *"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemsTagInput" />
+                app:layout_constraintTop_toBottomOf="@+id/comboBonusPointTxt" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="Itens do combo*"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comboDayCbx" />
@@ -100,8 +100,10 @@
                 style="@style/AppTheme.CyburgerEditText"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
+                android:layout_marginTop="8dp"
                 android:hint="Preço sugerido: R$ 0.00"
                 android:inputType="numberDecimal"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -110,8 +112,9 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
 
+                android:layout_marginTop="8dp"
                 android:text="Nome do Combo *"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -133,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="Descrição do combo *"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comboNameTxt" />
@@ -141,16 +144,44 @@
             <Button
                 android:id="@+id/saveComboBtn"
                 style="@style/AppTheme.CyburgerButton"
-                android:layout_width="@dimen/default_width"
-                android:layout_height="@dimen/default_height"
+                android:layout_width="180dp"
+                android:layout_height="48dp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/general_button_save"
-                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintHorizontal_bias="0.516"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comboPriceTxt" />
+
+            <TextView
+                android:id="@+id/comboBonusPointLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Pontos de bônus do combo*"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/itemsTagInput" />
+
+            <EditText
+                android:id="@+id/comboBonusPointTxt"
+                style="@style/AppTheme.CyburgerEditText"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="8dp"
+                android:hint="Pontos sugeridos 0"
+                android:inputType="number"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comboBonusPointLbl">
+
+            </EditText>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 

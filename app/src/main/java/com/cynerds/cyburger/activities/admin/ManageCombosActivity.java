@@ -54,8 +54,9 @@ public class ManageCombosActivity extends BaseActivity {
         final Spinner comboDayCbx = findViewById(R.id.comboDayCbx);
         final EditText comboNameTxt = findViewById(R.id.comboNameTxt);
         final EditText comboInfoTxt = findViewById(R.id.comboInfoTxt);
-        final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final TagInput itemsTagInput = findViewById(R.id.itemsTagInput);
+        final EditText comboBonusPointsTxt = findViewById(R.id.comboBonusPointTxt);
+        final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final Button saveComboBtn = findViewById(R.id.saveComboBtn);
         final Combo loadedCombo = (Combo) getExtra(Combo.class);
 
@@ -70,6 +71,9 @@ public class ManageCombosActivity extends BaseActivity {
                 String suggestedPrice = recalcuteSuggestedPrice(itemsTagInput.getSelectedTagModels());
                 comboPriceTxt.setHint(suggestedPrice);
 
+                String suggestedBonusPoints = recalcuteSuggestedBonutsPoints(itemsTagInput.getSelectedTagModels());
+                comboBonusPointsTxt.setHint(suggestedBonusPoints);
+
             }
 
             @Override
@@ -77,6 +81,9 @@ public class ManageCombosActivity extends BaseActivity {
 
                 String suggestedPrice = recalcuteSuggestedPrice(itemsTagInput.getSelectedTagModels());
                 comboPriceTxt.setHint(suggestedPrice);
+
+                String suggestedBonusPoints = recalcuteSuggestedBonutsPoints(itemsTagInput.getSelectedTagModels());
+                comboBonusPointsTxt.setHint(suggestedBonusPoints);
 
             }
         });
@@ -93,6 +100,7 @@ public class ManageCombosActivity extends BaseActivity {
             comboDayCbx.setSelection(selectedItemIndex);
             comboNameTxt.setText(loadedCombo.getComboName());
             comboInfoTxt.setText(loadedCombo.getComboInfo());
+            comboBonusPointsTxt.setText(String.valueOf(loadedCombo.getComboBonusPoints()));
             comboPriceTxt.setText(String.valueOf(loadedCombo.getComboAmount()));
             List<TagModel> tagModels = generateTagModels(loadedCombo.getComboItems());
             itemsTagInput.setFilterableList(tagModels);
@@ -110,8 +118,8 @@ public class ManageCombosActivity extends BaseActivity {
                 //E DENTRO DO EVENTO DE CLIQUE DO BOTÃO DE SALVAR
                 if (FieldValidationHelper.isEditTextValidated(comboNameTxt) &&
                         FieldValidationHelper.isEditTextValidated(comboInfoTxt) &&
-                        FieldValidationHelper.isEditTextValidated(comboPriceTxt)
-                        ) {
+                        FieldValidationHelper.isEditTextValidated(comboBonusPointsTxt) &&
+                        FieldValidationHelper.isEditTextValidated(comboPriceTxt)) {
 
                     //Validação especial, SOMENTE para este caso
                     if (itemsTagInput.getSelectedTagModels().size() == 0) {
@@ -119,10 +127,11 @@ public class ManageCombosActivity extends BaseActivity {
                         return;
                     }
 
-                    String comboName = comboNameTxt.getText().toString();
-                    String comboInfo = comboInfoTxt.getText().toString();
-                    Float comboAmount = Float.valueOf(comboPriceTxt.getText().toString());
-                    ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString());
+                    String comboName = comboNameTxt.getText().toString().trim();
+                    String comboInfo = comboInfoTxt.getText().toString().trim();
+                    int comboBonusPoints = Integer.valueOf(comboBonusPointsTxt.getText().toString().trim());
+                    Float comboAmount = Float.valueOf(comboPriceTxt.getText().toString().trim());
+                    ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString().trim());
                     int comboItems = itemsTagInput.getSelectedTagModels().size();
 
                     Combo combo = loadedCombo == null ? new Combo() : loadedCombo;
@@ -130,6 +139,7 @@ public class ManageCombosActivity extends BaseActivity {
                     combo.setComboAmount(comboAmount);
                     combo.setComboDay(comboDay);
                     combo.setComboInfo(comboInfo);
+                    combo.setComboBonusPoints(comboBonusPoints);
 
                     List<Item> items = new ArrayList<Item>();
                     for (TagModel tagModel : itemsTagInput.getSelectedTagModels()) {
@@ -177,6 +187,19 @@ public class ManageCombosActivity extends BaseActivity {
         }
 
         return "Preço sugerido: R$ " + String.format("%.2f", suggestedPrice);
+    }
+
+
+    private String recalcuteSuggestedBonutsPoints(List<TagModel> tagModels) {
+        int suggestedBonusPoints = 0;
+        for (TagModel tagModel : tagModels) {
+            Item item = (Item) tagModel.getObject();
+
+            suggestedBonusPoints += item.getBonusPoints();
+
+        }
+
+        return "Pontos sugeridos " + String.valueOf(suggestedBonusPoints);
     }
 
     private void updateTags() {

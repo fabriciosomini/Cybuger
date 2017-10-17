@@ -15,6 +15,7 @@ public class Combo extends BaseModel {
     private String comboInfo;
     private float comboAmount;
     private ComboDay comboDay;
+    private int comboBonusPoints;
 
     public String getComboInfo() {
         return comboInfo;
@@ -56,5 +57,12 @@ public class Combo extends BaseModel {
         this.comboItems = comboItems;
     }
 
+    public int getComboBonusPoints() {
+        return comboBonusPoints;
+    }
+
+    public void setComboBonusPoints(int comboBonusPoints) {
+        this.comboBonusPoints = comboBonusPoints;
+    }
 
 }

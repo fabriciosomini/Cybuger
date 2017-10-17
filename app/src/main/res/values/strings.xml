@@ -31,11 +31,11 @@
     <string name="facebook_app_id">[APP_ID]</string>
     <string name="fb_login_protocol_scheme">fb[APP_ID]</string>
     <string name="menu_manage_items">Gerenciar itens</string>
-    <string name="manage_items_item_description">Descrição do item</string>
-    <string name="manage_items_item_price">Preço do item</string>
+    <string name="manage_items_item_description">Descrição do item*</string>
+    <string name="manage_items_item_price">Preço do item*</string>
     <string name="manage_items_add_item">Adicionar item</string>
-    <string name="manage_items_item_ingredients">Ingredientes</string>
-    <string name="manage_items_item_measure_unit">Unidade de medida</string>
+    <string name="manage_items_item_ingredients">Ingredientes*</string>
+    <string name="manage_items_item_measure_unit">Unidade de medida*</string>
     <string name="general_search">Buscar</string>
     <string name="general_unmatching_password">Senhas não conferem</string>
     <string name="login_error_invalid_email">E-mail inválido</string>
