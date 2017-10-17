@@ -153,8 +153,9 @@ public class CombosFragment extends Fragment {
             cardModel.setTitle(combo.getComboName());
             cardModel.setExtra(combo);
             cardModel.setActionIconId(R.drawable.ic_action_add);
-            cardModel.setContent(combo.getComboInfo());
-            cardModel.setSubContent("R$ " + combo.getComboAmount() + " (+" + combo.getComboBonusPoints() + " pontos)");
+            cardModel.setContent(combo.getComboInfo()
+                    + "\n\n+" + combo.getComboBonusPoints() + " pontos");
+            cardModel.setSubContent("VALOR: R$ " + combo.getComboAmount());
 
             final DialogManager addComboToOrderingDialogManager = new DialogManager(currentActivty);
             cardModel.setOnManageClickListener(new View.OnClickListener() {
