@@ -292,6 +292,7 @@ public class MainActivity extends BaseActivity {
 
                     if (readOnly) {
                         firebaseRealtimeDatabaseHelperOrders.delete(order);
+                        removeNotification(ORDERS_TAB, 1);
                     } else {
                         previousOrder = new Order();
                     }
@@ -301,7 +302,6 @@ public class MainActivity extends BaseActivity {
                     order = new Order();
                     dialogManager.closeDialog();
 
-                    removeNotification(ORDERS_TAB, 1);
 
                 }
             });
@@ -370,8 +370,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void removeNotification(int tabIndex, int notificationCount) {
-        notifications[tabIndex] -= notificationCount;
 
+        notifications[tabIndex] -= notificationCount;
         setNotification(tabIndex, notifications[tabIndex]);
     }
 
