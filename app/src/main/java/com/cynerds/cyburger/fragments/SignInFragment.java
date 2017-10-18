@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
@@ -22,6 +21,7 @@ import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.facebook.CallbackManager;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,19 +79,19 @@ public class SignInFragment extends Fragment {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                LogHelper.show(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
+                LogHelper.show(TAG, "facebook:onCancel");
                 // ...
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
+                LogHelper.show(TAG, "facebook:onError", error);
                 // ...
             }
         });*/
@@ -129,10 +129,7 @@ public class SignInFragment extends Fragment {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-
-
-                    Toast.makeText(getActivity(), "Sessão expirada. Por favor, faça login novamente.",
-                            Toast.LENGTH_SHORT).show();
+                    LogHelper.show("Sessão expirada. Por favor, faça login novamente.");
                 }
 
             }
@@ -203,9 +200,9 @@ public class SignInFragment extends Fragment {
 
                                 } else {
 
-                                    Toast.makeText(currentActivity,
+                                    LogHelper.show(
                                             exception.getClass().getSimpleName()
-                                                    + ": " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    + ": " + exception.getMessage());
                                 }
                             }
                         }

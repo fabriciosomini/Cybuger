@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationAdapter;
@@ -28,6 +28,7 @@ import com.cynerds.cyburger.fragments.OrdersFragment;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.items.Item;
@@ -243,10 +244,10 @@ public class MainActivity extends BaseActivity {
 
                         if (previousOrder != null) {
                             order = previousOrder;
-                            Toast.makeText(MainActivity.this, "Restore previous order", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Restore previous order");
                         } else {
                             order = new Order();
-                            Toast.makeText(MainActivity.this, "reset order", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("reset order");
                         }
 
 
@@ -269,7 +270,7 @@ public class MainActivity extends BaseActivity {
                         order.setCustomer(customer);
                         firebaseRealtimeDatabaseHelperOrders.insert(order);
 
-                        Toast.makeText(MainActivity.this, "Pedido confirmado", Toast.LENGTH_SHORT).show();
+                        LogHelper.show( "Pedido confirmado");
 
                         //Reset - pedido confirmado
                         badge.setBadgeCount(0);
@@ -288,7 +289,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(MainActivity.this, "Pedido cancelado", Toast.LENGTH_SHORT).show();
+                    LogHelper.show( "Pedido cancelado");
 
                     if (readOnly) {
                         firebaseRealtimeDatabaseHelperOrders.delete(order);

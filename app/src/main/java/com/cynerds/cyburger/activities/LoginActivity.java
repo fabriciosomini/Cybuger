@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.SimpleFragmentPagerAdapter;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.google.firebase.auth.FirebaseAuth;

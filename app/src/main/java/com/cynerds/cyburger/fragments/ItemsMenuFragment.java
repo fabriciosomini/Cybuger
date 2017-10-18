@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
@@ -20,6 +19,7 @@ import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.models.views.CardModel;
 
@@ -111,7 +111,7 @@ public class ItemsMenuFragment extends Fragment {
 
     private void updateList(View view) {
 
-        //Toast.makeText(currentActivty, "UpdateList " + this.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+        //LogHelper.show( "UpdateList " + this.getClass().getSimpleName());
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();
 
@@ -179,7 +179,7 @@ public class ItemsMenuFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(currentActivty, "Item adicionado ao pedido", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Item adicionado ao pedido");
 
 
                             Badge badge = currentActivty.getBadge();
@@ -238,7 +238,7 @@ public class ItemsMenuFragment extends Fragment {
                                     Item itemToDelete = (Item) cardModel.getExtra();
                                     firebaseRealtimeDatabaseHelper.delete(itemToDelete);
                                     previewItemDialogManager.closeDialog();
-                                    Toast.makeText(currentActivty, "Item removido", Toast.LENGTH_SHORT).show();
+                                    LogHelper.show("Item removido");
                                 }
                             });
                             DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);

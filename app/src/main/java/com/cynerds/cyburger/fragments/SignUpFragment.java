@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
@@ -18,6 +17,7 @@ import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -137,7 +137,7 @@ public class SignUpFragment extends Fragment {
                         @Override
                         public void onError(Exception exception) {
                             currentActivity.displayProgressBar(false);
-                            Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            LogHelper.show(exception.getMessage());
                         }
                     });
 
@@ -166,12 +166,12 @@ public class SignUpFragment extends Fragment {
                             FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_email_already_taken);
                         } else {
 
-                            Toast.makeText(currentActivity,
+                            LogHelper.show(
                                     exception.getClass().getSimpleName()
-                                            + ": " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                            + ": " + exception.getMessage());
                         }
                     }
-                    Toast.makeText(currentActivity, "Algo deu errado ao criar o usuário", Toast.LENGTH_SHORT).show();
+                    LogHelper.show("Algo deu errado ao criar o usuário");
                 }
             }
         });

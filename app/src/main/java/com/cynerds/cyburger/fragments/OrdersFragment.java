@@ -129,7 +129,7 @@ public class OrdersFragment extends Fragment {
 
     private void updateList(View view) {
 
-        //Toast.makeText(currentActivty, "UpdateList " + this.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+        //LogHelper.show( "UpdateList " + this.getClass().getSimpleName());
 
         final ListView listview = view.findViewById(android.R.id.list);
         getDashboardCardViewItems();

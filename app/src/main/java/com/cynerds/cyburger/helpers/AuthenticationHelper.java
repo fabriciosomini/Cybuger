@@ -3,7 +3,6 @@ package com.cynerds.cyburger.helpers;
 import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
@@ -187,13 +186,13 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(activity, "E-mail atualizado!", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("E-mail atualizado!");
                         } else {
                             Exception exception = task.getException();
                             if (exception != null) {
-                                Toast.makeText(activity, "Falha ao atualizar e-mail - "
+                                LogHelper.show("Falha ao atualizar e-mail - "
                                         + exception.getClass().getSimpleName()
-                                        + ": " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        + ": " + exception.getMessage());
                             }
                         }
                     }
@@ -211,9 +210,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(activity, "Senha atualizada!", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Senha atualizada!");
                         } else {
-                            Toast.makeText(activity, "Falha ao atualizar senha", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Falha ao atualizar senha");
                         }
                     }
                 });
@@ -237,9 +236,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(activity, "Nome atualizado!", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Nome atualizado!");
                         } else {
-                            Toast.makeText(activity, "Falha ao atualizar nome", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Falha ao atualizar nome");
                         }
                     }
                 });
@@ -261,9 +260,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(activity, "Foto atualizada!", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Foto atualizada!");
                         } else {
-                            Toast.makeText(activity, "Falha ao atualizar foto", Toast.LENGTH_SHORT).show();
+                            LogHelper.show("Falha ao atualizar foto");
                         }
                     }
                 });

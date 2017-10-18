@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
 
@@ -137,7 +136,7 @@ public class DialogManager {
                 @Override
                 public void onViewDetachedFromWindow(View v) {
 
-                    Toast.makeText(dialogContext, "Cancel Dialog", Toast.LENGTH_SHORT).show();
+                    LogHelper.show("Cancel Dialog");
                     alertDialog.cancel();
                 }
             });
