@@ -61,7 +61,9 @@ public class DialogManager {
     }
 
     public View getContentView() {
-        return contentView;
+
+
+        return alertDialog.findViewById(contentView.getId());
     }
 
     public void setContentView(@LayoutRes int layoutResID) {
@@ -127,6 +129,10 @@ public class DialogManager {
         if (layoutResId > -1) {
 
             contentView = inflater.inflate(layoutResId, null);
+            if(contentView.getId()< 0)
+            {
+                contentView.setId(R.id.dialog_content);
+            }
             contentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
                 public void onViewAttachedToWindow(View v) {
