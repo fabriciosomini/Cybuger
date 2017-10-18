@@ -209,14 +209,14 @@ public class MainActivity extends BaseActivity {
                 order.getOrderedCombos()) {
 
             orderedItemsAmount += combo.getComboAmount();
-            orderedItemsString += combo.getComboName() + " - R$ " + combo.getComboAmount() + "\n";
+            orderedItemsString += combo.getComboName() + ": R$ " + combo.getComboAmount() + " (" + combo.getComboBonusPoints() + " pontos)" + "\n";
         }
 
         for (Item item :
                 order.getOrderedItems()) {
 
             orderedItemsAmount += item.getPrice();
-            orderedItemsString += item.getDescription() + " - R$ " + item.getPrice() + "\n";
+            orderedItemsString += item.getDescription() + ": R$ " + item.getPrice() + " (" + item.getBonusPoints() + " pontos)" +"\n";
         }
 
 
