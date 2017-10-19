@@ -26,3 +26,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task clearData(type: Exec) {
+    def clearDataCommand = ['adb', 'shell', 'pm', 'clear', 'com.cynerds.cybuger']
+    commandLine clearDataCommand
+}
