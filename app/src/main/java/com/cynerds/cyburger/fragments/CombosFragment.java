@@ -245,6 +245,7 @@ public class CombosFragment extends Fragment {
                         public void onClick(View v) {
 
                             ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
+                            previewItemDialogManager.closeDialog();
                         }
                     });
 

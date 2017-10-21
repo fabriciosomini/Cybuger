@@ -14,9 +14,12 @@ import android.widget.ListView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
+import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
@@ -244,6 +247,15 @@ public class ItemsMenuFragment extends Fragment {
                             DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
                             confirmDeleteDialog.setAction(deleteComboAction);
                             confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
+                        }
+                    });
+
+                    editComboBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            ActivityManager.startActivity(currentActivty, ManageItemsActivity.class, cardModel.getExtra());
+                            previewItemDialogManager.closeDialog();
                         }
                     });
 

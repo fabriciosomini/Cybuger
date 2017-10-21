@@ -62,6 +62,7 @@ public class ManageCombosActivity extends BaseActivity {
         final Combo loadedCombo = (Combo) getExtra(Combo.class);
 
         comboNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
+        comboInfoTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         comboDayCbx.setAdapter(arrayAdapter);
 
 
