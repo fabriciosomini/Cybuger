@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
@@ -48,7 +49,7 @@ public class ManageCombosActivity extends BaseActivity {
     }
 
     private void setUIEvents() {
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this,
+        SpinnerArrayAdapter arrayAdapter = new SpinnerArrayAdapter(this,
                 R.layout.component_dropdown_item,
                 getNames(ComboDay.class));
         final Spinner comboDayCbx = findViewById(R.id.comboDayCbx);

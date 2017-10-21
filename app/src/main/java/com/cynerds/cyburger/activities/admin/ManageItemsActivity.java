@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.models.items.Item;
@@ -42,12 +43,11 @@ public class ManageItemsActivity extends BaseActivity {
     private void setUIEvents() {
 
 
-        ArrayAdapter<String> spinnerArrayAdapter =
-                new ArrayAdapter<String>(getApplicationContext(),
+        SpinnerArrayAdapter spinnerArrayAdapter =
+                new SpinnerArrayAdapter(getApplicationContext(),
                         R.layout.component_dropdown_item,
                         getMeasureUnitItems());
 
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         final Spinner spinner = findViewById(R.id.itemMeasureUnitCbx);
         spinner.setAdapter(spinnerArrayAdapter);
