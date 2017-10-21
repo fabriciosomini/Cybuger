@@ -98,23 +98,25 @@
             app:srcCompat="@drawable/ic_home_black_24dp"
             tools:layout_constraintBottom_creator="1" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/cardIcon"
             android:layout_width="120dp"
-            android:layout_height="0dp"
+            android:layout_height="120dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-
+            android:adjustViewBounds="true"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_burger_default"
+            android:src="@drawable/ic_burger_default"
             tools:layout_constraintTop_creator="1" />
 
     </android.support.constraint.ConstraintLayout>

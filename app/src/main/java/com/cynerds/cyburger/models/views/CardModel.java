@@ -14,7 +14,7 @@ public class CardModel {
     private String title;
     private String content;
     private String subContent;
-    private int headerIconId = R.mipmap.ic_burger_default;
+    private int headerIconId = R.drawable.ic_burger_default;
     private int actionIconId;
     private View.OnClickListener onPictureClickListener;
     private View.OnClickListener onManageClickListener;
