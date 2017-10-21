@@ -45,7 +45,6 @@ public class MainActivity extends BaseActivity {
     CombosFragment combosFragment = new CombosFragment();
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
-    private int backPressed = 0;
     private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperOrders;
     private Badge badge;
     private View hamburgerMenu;
@@ -353,28 +352,26 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        backPressed++;
-        if (backPressed > 0) {
 
+            final DialogManager dialogManager = new DialogManager(this);
+            dialogManager.setContentView(R.layout.dialog_confirm_exit);
+            dialogManager.showDialog("Sair do aplicativo", "");
 
-            DialogAction dialogAction = new DialogAction();
-            dialogAction.setPositiveAction(new View.OnClickListener() {
+            dialogManager.getContentView().findViewById(R.id.confirmExitBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
                 }
             });
-            dialogAction.setNegativeAction(new View.OnClickListener() {
+
+            dialogManager.getContentView().findViewById(R.id.cancelExitBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    backPressed = 0;
+
+                    dialogManager.closeDialog();
                 }
             });
 
-            DialogManager dialogManager = new DialogManager(this, DialogManager.DialogType.YES_NO);
-            dialogManager.setAction(dialogAction);
-            dialogManager.showDialog("Tem certeza que deseja sair?");
-        }
     }
 
     public void addNotification(int tabIndex, int notificationCount) {
