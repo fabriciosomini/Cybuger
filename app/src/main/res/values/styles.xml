@@ -8,12 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="titleTextColor">@android:color/white</item>
         <item name="subtitleTextColor">@android:color/white</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:windowBackground">@drawable/background_gradient</item>
+
+        <item name="android:actionMenuTextColor">@color/verylightgrey</item>
+        <item name="actionMenuTextColor">@color/verylightgrey</item>
+
+
+
     </style>
 
     <style name="AppTheme.CyburgerButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_shape</item>
 
     </style>
+
+
 
     <style name="AppTheme.CyburgerSecondaryButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/secondary_button_shape</item>
@@ -24,17 +34,24 @@
     <style name="AppTheme.CyburgerEditText" parent="Widget.AppCompat.EditText">
 
         <item name="android:background">@drawable/edit_text_shape</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/verylightgrey</item>
+        <item name="android:textColorHint">@color/mediumgrey</item>
         <item name="android:textSize">15dp</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
 
     </style>
 
+    <style name="AppTheme.CyburgerContainer" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/container_shape</item>
+
+    </style>
+
     <style name="AppTheme.CyburgerSpinner" parent="Widget.AppCompat.Spinner">
 
         <item name="android:background">@drawable/spinner_shape</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/verylightgrey</item>
+        <item name="android:dropDownItemStyle">@color/verylightgrey</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
         <item name="android:textSize">15dp</item>

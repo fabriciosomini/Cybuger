@@ -4,6 +4,7 @@
     android:id="@+id/orderingItemsDialog"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/cardview_dark_background"
     android:orientation="vertical">
 
 
@@ -98,7 +99,7 @@
                     android:id="@+id/confirmOrderBtn"
                     style="@style/AppTheme.CyburgerButton"
                     android:layout_width="130dp"
-                    android:layout_height="@dimen/default_height"
+                    android:layout_height="@dimen/default_middle_height"
                     android:text="@string/ordering_confirm"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -109,7 +110,7 @@
                     style="@style/AppTheme.CyburgerSecondaryButton"
 
                     android:layout_width="130dp"
-                    android:layout_height="@dimen/default_height"
+                    android:layout_height="@dimen/default_middle_height"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="8dp"
                     android:text="@string/general_remove"

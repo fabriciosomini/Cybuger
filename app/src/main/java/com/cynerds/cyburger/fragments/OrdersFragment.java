@@ -193,7 +193,7 @@ public class OrdersFragment extends Fragment {
                 currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
             } else {
                 cardModel.setTitle(customerName);
-                cardModel.setTitleColor(R.color.black);
+                cardModel.setTitleColor(R.color.lightGrey);
             }
 
             //Pega Items do pedido-----------

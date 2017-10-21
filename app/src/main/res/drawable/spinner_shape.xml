@@ -5,12 +5,19 @@
 
         <layer-list>
 
+
+
             <item>
                 <shape>
-                    <stroke android:width="0.7dp" android:color="@color/borderColor" />
                     <corners android:radius="100dp" />
+                    <gradient
+                        android:angle="180"
+                        android:endColor="@color/colorEditText"
+                        android:centerColor="@color/colorEditText"
+                        android:startColor="@color/colorEditText" />
 
                     <padding android:bottom="3dp" android:left="3dp" android:right="3dp" android:top="3dp" />
+
                 </shape>
 
             </item>
@@ -20,7 +27,11 @@
                 <bitmap android:gravity="center_vertical|right" android:src="@drawable/ic_expand" />
 
 
+
+
             </item>
+
+
 
         </layer-list>
 

@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorAccent">#d32f2f</color>
-    <color name="colorPrimary">#d32f2f</color>
-    <color name="colorNeutral">#d32f2f</color>
-    <color name="white">#ffff</color>
+    <color name="colorAccent">#EF7E47</color>
+    <color name="colorEditText">#11fdfbfb</color>
+    <color name="colorPrimary">#00000000</color>
+    <color name="colorNeutral">#1F1711</color>
+    <color name="verylightgrey">#f4f4f3</color>
+    <color name="lightGrey">#dadad7</color>
     <color name="black">#000</color>
     <color name="lightgrey">#00FFFFFF</color>
     <color name="grey">#bfbfbf</color>
-    <color name="transparent">#80000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="halfTransparent">#80000000</color>
     <color name="borderColor">#BDBDBD</color>
+
+    <color name="redishBrown">#251313</color>
+    <color name="redishPurple">#20131D</color>
+    <color name="redishBlack">#130f0b</color>
+
+
+    <color name="redishOrange0">#EF7E47</color>
+    <color name="redishOrange1">#f4ef7e47</color>
+    <color name="redishOrange2">#e5ef7e47</color>
+    <color name="redishOrangeYellow">#EF9955</color>
+    <color name="redishYellow">#F09F37</color>
+
+
 
     <color name="randomColor0">#F44336</color>
     <color name="randomColor1">#FF5252</color>
     <color name="randomColor2">#EF5350</color>
+
+    <color name="coralred">#d32f2f</color>
+
+    <color name="darkgrey">#1a1919</color>
+    <color name="mediumgrey">#616060</color>
+
+
 
 </resources>

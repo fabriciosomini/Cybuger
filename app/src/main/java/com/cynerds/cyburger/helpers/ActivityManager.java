@@ -22,7 +22,7 @@ public abstract class ActivityManager<T> {
         activity.startActivity(intent);
     }
 
-    public static void startActivityKillingThis(Activity activity, Class tClass) {
+    public static void startActivityKillingThis(final Activity activity, Class tClass) {
         Intent intent = new Intent(activity, tClass);
         activity.startActivity(intent);
         activity.finish();

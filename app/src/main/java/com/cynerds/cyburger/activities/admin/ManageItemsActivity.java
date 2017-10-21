@@ -44,7 +44,7 @@ public class ManageItemsActivity extends BaseActivity {
 
         ArrayAdapter<String> spinnerArrayAdapter =
                 new ArrayAdapter<String>(getApplicationContext(),
-                        android.R.layout.simple_spinner_item,
+                        R.layout.component_dropdown_item,
                         getMeasureUnitItems());
 
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

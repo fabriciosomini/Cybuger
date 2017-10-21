@@ -1,13 +1,17 @@
 package com.cynerds.cyburger.components;
 
 import android.content.Context;
+import android.os.Parcel;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.TagAdapter;
@@ -115,7 +119,9 @@ public class TagInput extends ConstraintLayout {
 
 
 
+
         flexboxLayoutAddedItems.addView(topTagItem.getTextView());
+
 
         if (onItemAddedListener != null) {
             onItemAddedListener.onAddItem(topTagItem);

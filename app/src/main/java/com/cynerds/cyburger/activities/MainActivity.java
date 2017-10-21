@@ -1,12 +1,13 @@
 package com.cynerds.cyburger.activities;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
+import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -114,6 +115,14 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+
+       /* bottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.redishBrown));
+        bottomNavigation.getBackground().setAlpha(25);*/
+        return super.onCreateView(name, context, attrs);
+    }
+
     private void setUIEvents() {
 
         order = new Order();
@@ -125,8 +134,9 @@ public class MainActivity extends BaseActivity {
         navigationAdapter.setupWithBottomNavigation(bottomNavigation);
         bottomNavigation.setOnTabSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigation.setCurrentItem(COMBO_TAB);
-
-
+        bottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor( this,R.color.transparent));
+        bottomNavigation.setAccentColor(ContextCompat.getColor( this,R.color.redishOrange0));
+        bottomNavigation.setInactiveColor(ContextCompat.getColor( this,R.color.mediumgrey));
         fragmentManager.beginTransaction().attach(ordersFragment).commit();
 
 
@@ -134,11 +144,14 @@ public class MainActivity extends BaseActivity {
         showActionBarMenu(true);
         showBadge(true);
 
+        final PopupMenu popupMenu = new PopupMenu(MainActivity.this, hamburgerMenu);
+        popupMenu.inflate(R.menu.menu_overflow);
+
+
         hamburgerMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, hamburgerMenu);
-                popupMenu.inflate(R.menu.menu_overflow);
+
 
                 popupMenu.getMenu().findItem(R.id.action_profile).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
@@ -382,7 +395,7 @@ public class MainActivity extends BaseActivity {
         AHNotification notification = new AHNotification.Builder()
                 .setText(String.valueOf(count == 0 ? "" : count))
                 .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setTextColor(ContextCompat.getColor(this, R.color.white))
+                .setTextColor(ContextCompat.getColor(this, R.color.verylightgrey))
                 .build();
         bottomNavigation.setNotification(notification, tabIndex);
     }

@@ -55,7 +55,7 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         newBackground.setColorFilter(accentColor, PorterDuff.Mode.ADD);
         textView.setBackground(newBackground);
 
-        int white = ContextCompat.getColor(getContext(), R.color.white);
+        int white = ContextCompat.getColor(getContext(), R.color.verylightgrey);
         Drawable mDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_action_close);
         mDrawable.setColorFilter(white, PorterDuff.Mode.SRC_IN);
         textView.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
