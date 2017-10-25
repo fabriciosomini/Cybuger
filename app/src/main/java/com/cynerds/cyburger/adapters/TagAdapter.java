@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.models.views.TagModel;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class TagAdapter extends BaseAdapter implements Filterable {
     LayoutInflater inflater;
     private Filter filter = new CustomFilter();
 
-    public TagAdapter(List<TagModel> listItems, Context context) {
+    public TagAdapter(Context context, List<TagModel> listItems) {
         this.listItems = listItems;
         this.suggestions.addAll(listItems);
         this.context = context;
@@ -52,6 +54,8 @@ public class TagAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = inflater.inflate(android.R.layout.simple_list_item_1, null);
+         v.setBackgroundColor(ContextCompat.getColor(context, R.color.redishBlack));
+
         TextView title = v.findViewById(android.R.id.text1);
 
         title.setText(suggestions.get(position).getDescription());

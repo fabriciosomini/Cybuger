@@ -76,7 +76,7 @@ public class TagInput extends ConstraintLayout {
         this.tagModelList.addAll(tagModelList);
 
 
-        TagAdapter adapter = new TagAdapter(tagModelList, getContext());
+        TagAdapter adapter = new TagAdapter(getContext(), tagModelList);
         searchTagItemBox.setAdapter(adapter);
         searchTagItemBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
