@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
@@ -138,8 +139,10 @@ public class SignInFragment extends Fragment {
         };
 
 
-        signInUserTxt.setText("admin@cynerds.com");
-        signInPasswordTxt.setText("123456");
+       if(BuildConfig.DEBUG){
+           signInUserTxt.setText("admin@cynerds.com");
+           signInPasswordTxt.setText("123456");
+       }
 
         signInRememberCbx.setChecked(isRememberMeChecked);
         String storedEmail;

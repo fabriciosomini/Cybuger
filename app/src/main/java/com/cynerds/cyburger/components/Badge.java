@@ -1,13 +1,19 @@
 package com.cynerds.cyburger.components;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+
 
 /**
  * Created by fabri on 12/10/2017.
@@ -65,5 +71,39 @@ public class Badge extends ConstraintLayout {
            badgeCountText.setText(String.valueOf(count));
        }
 
+        animateSize();
+
+    }
+
+    private void animateSize() {
+
+        /*
+         Animation anim = new ScaleAnimation(
+                0.25f, 1f, // Start and end values for the X axis scaling
+                0.25f, 1f, // Start and end values for the Y axis scaling
+                Animation.RELATIVE_TO_SELF, 0.25f, // Pivot point of X scaling
+                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
+        anim.setFillAfter(true); // Needed to keep the result of the animation
+        anim.setDuration(100);
+        badge.startAnimation(anim);
+         */
+
+        Animation anim = new ScaleAnimation(
+                1f, 1.25f, // Start and end values for the X axis scaling
+                1f, 1.25f, // Start and end values for the Y axis scaling
+                Animation.RELATIVE_TO_SELF, 0.25f, // Pivot point of X scaling
+                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
+        anim.setFillAfter(true); // Needed to keep the result of the animation
+        anim.setDuration(50);
+        badge.startAnimation(anim);
+
+        anim = new ScaleAnimation(
+                1.25f, 1f, // Start and end values for the X axis scaling
+                1.25f, 1f, // Start and end values for the Y axis scaling
+                Animation.RELATIVE_TO_SELF, 0.25f, // Pivot point of X scaling
+                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
+        anim.setFillAfter(true); // Needed to keep the result of the animation
+        anim.setDuration(50);
+        badge.startAnimation(anim);
     }
 }

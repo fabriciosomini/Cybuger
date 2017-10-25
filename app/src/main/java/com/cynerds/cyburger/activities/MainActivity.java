@@ -383,6 +383,7 @@ public class MainActivity extends BaseActivity {
                         previousOrder = new Order();
                         orderDialog.closeDialog();
 
+
                         MessageHelper.show(MessageType.SUCCESS, "Pedido confirmado!");
 
 
