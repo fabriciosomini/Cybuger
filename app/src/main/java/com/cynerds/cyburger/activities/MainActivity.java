@@ -33,11 +33,16 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.models.orders.Order;
+import com.cynerds.cyburger.models.profile.Profile;
 import com.google.firebase.auth.FirebaseAuth;
+
+
 
 public class MainActivity extends BaseActivity {
 
@@ -49,6 +54,7 @@ public class MainActivity extends BaseActivity {
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
     private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperOrders;
+    private FirebaseRealtimeDatabaseHelper<Profile> firebaseRealtimeDatabaseHelperProfile;
     private Badge badge;
     private View hamburgerMenu;
     private ImageButton hamburgerMenuIcon;
@@ -93,6 +99,7 @@ public class MainActivity extends BaseActivity {
 
     public MainActivity() {
         firebaseRealtimeDatabaseHelperOrders = new FirebaseRealtimeDatabaseHelper(Order.class);
+        firebaseRealtimeDatabaseHelperProfile = new FirebaseRealtimeDatabaseHelper(Profile.class);
     }
 
     public Order getOrder() {
@@ -223,13 +230,13 @@ public class MainActivity extends BaseActivity {
             title = "PEDIDO CONFIRMADO";
         }
 
-        final DialogManager dialogManager = new DialogManager(MainActivity.this);
-        dialogManager.setContentView(R.layout.dialog_ordering_items);
-        dialogManager.showDialog(title, "");
+        final DialogManager orderDialog = new DialogManager(MainActivity.this);
+        orderDialog.setContentView(R.layout.dialog_ordering_items);
+        orderDialog.showDialog(title, "");
 
 
-        TextView orderedItemsTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsTxtView);
-        TextView orderedItemsAmountTxtView = dialogManager.getContentView().findViewById(R.id.orderedItemsAmountTxtView);
+        TextView orderedItemsTxtView = orderDialog.getContentView().findViewById(R.id.orderedItemsTxtView);
+        TextView orderedItemsAmountTxtView = orderDialog.getContentView().findViewById(R.id.orderedItemsAmountTxtView);
 
         String orderedItemsString = "";
         String orderedItemsAmountString = "";
@@ -259,8 +266,8 @@ public class MainActivity extends BaseActivity {
 
         if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || readOnly) {
 
-            Button confirmOrderBtn = dialogManager.getContentView().findViewById(R.id.confirmOrderBtn);
-            Button removeOrderBtn = dialogManager.getContentView().findViewById(R.id.removeOrderBtn);
+            Button confirmOrderBtn = orderDialog.getContentView().findViewById(R.id.confirmOrderBtn);
+            Button removeOrderBtn = orderDialog.getContentView().findViewById(R.id.removeOrderBtn);
 
 
             if (readOnly) {
@@ -271,6 +278,63 @@ public class MainActivity extends BaseActivity {
                 {
                     confirmOrderBtn.setText(getString(R.string.order_finishOrder));
                     confirmOrderBtn.setVisibility(View.VISIBLE);
+
+                    confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                           final DialogManager confirmFinishOrderDialog = new DialogManager(MainActivity.this,
+                                    DialogManager.DialogType.YES_NO);
+
+                            DialogAction confirmFinishOrderDialogAction = new DialogAction();
+                            confirmFinishOrderDialogAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    for (Profile p :
+                                            firebaseRealtimeDatabaseHelperProfile.get()) {
+                                       if(order.getCustomer().getLinkedProfileId().equals(p.getUserId()))
+                                       {
+                                           int comboBonusPoints = 0;
+                                           int itemsBonusPoints = 0;
+
+
+                                           for (Combo combo :
+                                                   order.getOrderedCombos()) {
+                                               comboBonusPoints += combo.getComboBonusPoints();
+                                           }
+
+                                           for (Item item:
+                                                   order.getOrderedItems()) {
+                                               itemsBonusPoints += item.getBonusPoints();
+                                           }
+
+                                           int totalBonusPoints = comboBonusPoints + itemsBonusPoints;
+
+                                           p.setBonusPoints(totalBonusPoints);
+                                           firebaseRealtimeDatabaseHelperProfile.update(p);
+                                           firebaseRealtimeDatabaseHelperOrders.delete(order);
+                                           confirmFinishOrderDialog.closeDialog();
+                                           orderDialog.closeDialog();
+                                           MessageHelper.show(MessageType.SUCCESS, "Pedido do cliente '"
+                                                   +order.getCustomer().getCustomerName()
+                                                   + "'concluído!");
+                                           return;
+                                       }
+                                    }
+
+                                    MessageHelper.show(MessageType.ERROR, "Erro ao vincular os pontos ao perfil");
+                                }
+
+                            });
+
+
+                            confirmFinishOrderDialog.setAction(confirmFinishOrderDialogAction);
+                            confirmFinishOrderDialog.showDialog("CONCLUIR PEDIDO");
+                        }
+                    });
+
                 }else{
 
 
@@ -279,7 +343,7 @@ public class MainActivity extends BaseActivity {
 
 
 
-                dialogManager.setOnCanceListener(new DialogInterface.OnCancelListener() {
+                orderDialog.setOnCanceListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
 
@@ -317,7 +381,9 @@ public class MainActivity extends BaseActivity {
                         badge.setBadgeCount(0);
                         order = new Order();
                         previousOrder = new Order();
-                        dialogManager.closeDialog();
+                        orderDialog.closeDialog();
+
+                        MessageHelper.show(MessageType.SUCCESS, "Pedido confirmado!");
 
 
                     }
@@ -350,7 +416,7 @@ public class MainActivity extends BaseActivity {
                     }
 
 
-                    dialogManager.closeDialog();
+                    orderDialog.closeDialog();
 
 
                 }

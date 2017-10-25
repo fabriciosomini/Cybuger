@@ -1,6 +1,6 @@
 package com.cynerds.cyburger.models.profile;
 
-import com.cynerds.cyburger.models.BaseModel;
+import com.cynerds.cyburger.models.general.BaseModel;
 import com.cynerds.cyburger.models.roles.Role;
 
 /**
@@ -12,6 +12,15 @@ public class Profile extends BaseModel {
 
     private Role role;
     private String userId;
+    private int bonusPoints;
+
+    public int getBonusPoints() {
+        return bonusPoints;
+    }
+
+    public void setBonusPoints(int bonusPoints) {
+        this.bonusPoints = bonusPoints;
+    }
 
     public Role getRole() {
         return role;

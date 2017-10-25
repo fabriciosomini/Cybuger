@@ -1,6 +1,6 @@
 package com.cynerds.cyburger.models.customer;
 
-import com.cynerds.cyburger.models.BaseModel;
+import com.cynerds.cyburger.models.general.BaseModel;
 
 /**
  * Created by fabri on 07/10/2017.

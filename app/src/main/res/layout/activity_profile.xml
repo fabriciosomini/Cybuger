@@ -10,7 +10,7 @@
     <Button
         android:id="@+id/saveProfileBtn"
         style="@style/AppTheme.CyburgerButton"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/default_width"
         android:layout_height="@dimen/default_height"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
@@ -72,4 +72,15 @@
 
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:id="@+id/profileBonusPointsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTxt"
+        android:text="Você possui {totalBonusPoints} pontos"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="182dp" />
 </android.support.constraint.ConstraintLayout>

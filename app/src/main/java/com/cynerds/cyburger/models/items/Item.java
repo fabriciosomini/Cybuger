@@ -1,6 +1,6 @@
 package com.cynerds.cyburger.models.items;
 
-import com.cynerds.cyburger.models.BaseModel;
+import com.cynerds.cyburger.models.general.BaseModel;
 
 /**
  * Created by comp8 on 05/10/2017.

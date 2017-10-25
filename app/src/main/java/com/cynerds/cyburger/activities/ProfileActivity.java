@@ -8,10 +8,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.models.profile.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -46,7 +48,7 @@ public class ProfileActivity extends BaseActivity {
 
 
         if (user != null) {
-
+            Profile curentProfile = CyburgerApplication.getProfile();
             final String name = user.getDisplayName() == null ? "" : user.getDisplayName();
             final String email = user.getEmail() == null ? "" : user.getEmail();
             final Uri photoUrl = user.getPhotoUrl();
@@ -55,11 +57,15 @@ public class ProfileActivity extends BaseActivity {
             final Button saveProfileBtn = findViewById(R.id.saveProfileBtn);
             final TextView profileNameTxtEditText = findViewById(R.id.profileNameTxt);
             final EditText profileEmailTxt = findViewById(R.id.profileEmailTxt);
+            final TextView profileBonusPointsTextView = findViewById(R.id.profileBonusPointsTextView);
             final PhotoViewer profilePictureImg = findViewById(R.id.profilePictureImg);
 
+            String strTotalBonusPoints = String.valueOf(curentProfile.getBonusPoints());
             String profileName = profileNameTxtEditText.getText().toString();
+            String profileBonusPoints = profileBonusPointsTextView.getText().toString();
             profileNameTxtEditText.setText(profileName.replace("{user.name}", name));
             profileEmailTxt.setText(email);
+            profileBonusPointsTextView.setText(profileBonusPoints.replace("{totalBonusPoints}",strTotalBonusPoints ));
             profilePictureImg.setEditable(true);
 
             profilePictureImg.setOnClickListener(new View.OnClickListener() {

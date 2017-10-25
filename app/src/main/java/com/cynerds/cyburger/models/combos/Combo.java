@@ -1,6 +1,6 @@
 package com.cynerds.cyburger.models.combos;
 
-import com.cynerds.cyburger.models.BaseModel;
+import com.cynerds.cyburger.models.general.BaseModel;
 import com.cynerds.cyburger.models.items.Item;
 
 import java.util.List;

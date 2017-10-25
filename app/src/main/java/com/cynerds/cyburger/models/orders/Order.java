@@ -1,6 +1,6 @@
 package com.cynerds.cyburger.models.orders;
 
-import com.cynerds.cyburger.models.BaseModel;
+import com.cynerds.cyburger.models.general.BaseModel;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.items.Item;

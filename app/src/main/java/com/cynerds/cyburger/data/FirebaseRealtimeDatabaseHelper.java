@@ -1,10 +1,9 @@
 package com.cynerds.cyburger.data;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.models.BaseModel;
+import com.cynerds.cyburger.models.general.BaseModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -21,7 +20,7 @@ import java.util.UUID;
  * Created by fabri on 07/07/2017.
  */
 
-public class FirebaseRealtimeDatabaseHelper<T> {
+public class FirebaseRealtimeDatabaseHelper< T> {
     private final Class<BaseModel> classType;
     private final DatabaseReference databaseReference;
     private final String tableName;
@@ -275,12 +274,22 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     }
 
-    public List<BaseModel> get() {
-        return items;
-    }
 
+
+    public List<T> get() {
+        return (List<T>)items;
+    }
     public void delete(BaseModel object) {
-        tableReference.child(object.getKey()).removeValue();
+
+        if(object!=null)
+        {
+            if(object.getKey()!=null)
+            {
+                tableReference.child(object.getKey()).removeValue();
+            }
+
+        }
+
 
     }
 
