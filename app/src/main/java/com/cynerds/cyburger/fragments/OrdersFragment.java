@@ -118,8 +118,7 @@ public class OrdersFragment extends Fragment {
             public void onDataChanged(Object item) {
 
 
-
-                    updateList(view);
+                updateList(view);
 
             }
         };
@@ -171,9 +170,7 @@ public class OrdersFragment extends Fragment {
             final CardModel cardModel = new CardModel();
             cardModel.setExtra(order);
 
-            if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                cardModel.setTitle("Seu pedido");
-
+            if (CyburgerApplication.isAdmin()) {
                 cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -192,9 +189,33 @@ public class OrdersFragment extends Fragment {
 
                 currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
             } else {
-                cardModel.setTitle(customerName);
-                cardModel.setTitleColor(R.color.lightGrey);
+
+                if (customer.getLinkedProfileId().equals(profile.getUserId())) {
+                    cardModel.setTitle("Seu pedido");
+
+                    cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Order newOrder = new Order();
+                            newOrder.setCustomer(order.getCustomer());
+                            newOrder.setOrderedCombos(order.getOrderedCombos());
+                            newOrder.setOrderedItems(order.getOrderedItems());
+                            newOrder.setKey(order.getKey());
+
+                            currentActivty.setOrder(newOrder);
+                            currentActivty.displayOrderDialog();
+
+                        }
+                    });
+                    cardModel.setTitleColor(R.color.colorAccent);
+
+                    currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                } else {
+                    cardModel.setTitle(customerName);
+                    cardModel.setTitleColor(R.color.lightGrey);
+                }
             }
+
 
             //Pega Items do pedido-----------
             String orderedItemsString = "";

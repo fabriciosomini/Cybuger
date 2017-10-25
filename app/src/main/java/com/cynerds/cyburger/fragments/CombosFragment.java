@@ -153,23 +153,42 @@ public class CombosFragment extends Fragment {
             final CardModel cardModel = new CardModel();
             cardModel.setTitle(combo.getComboName());
             cardModel.setExtra(combo);
-            cardModel.setActionIconId(R.drawable.ic_action_add);
             cardModel.setContent(combo.getComboInfo()
                     + "\n\n+" + combo.getComboBonusPoints() + " pontos");
             cardModel.setSubContent("VALOR: R$ " + combo.getComboAmount());
 
-            final DialogManager addComboToOrderingDialogManager = new DialogManager(currentActivty);
-            cardModel.setOnManageClickListener(new View.OnClickListener() {
+
+            cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final DialogManager previewItemDialogManager = new DialogManager(currentActivty);
+                    previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
+                    previewItemDialogManager.showDialog(combo.getComboName(), "");
+
+                    Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
+                    Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+
+                    if(CyburgerApplication.isAdmin())
+                    {
+
+                        editRecordBtn.setVisibility(View.VISIBLE);
 
 
-                    addComboToOrderingDialogManager.setContentView(R.layout.dialog_ordering_confirm);
-                    addComboToOrderingDialogManager.showDialog("Adicionar item", "");
 
+                        editRecordBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                    Button addToOrderBtn = addComboToOrderingDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
-                    Button cancelAddToOrderBtn = addComboToOrderingDialogManager.getContentView().findViewById(R.id.cancelAddToOrderBtn);
+                                ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
+                                previewItemDialogManager.closeDialog();
+                            }
+                        });
+                    }
+                    else{
+
+                        editRecordBtn.setVisibility(View.INVISIBLE);
+                    }
+
 
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -179,83 +198,14 @@ public class CombosFragment extends Fragment {
 
                             Badge badge = currentActivty.getBadge();
 
-                            EditText confirmItemQuantityTxt = addComboToOrderingDialogManager.getContentView()
-                                    .findViewById(R.id.confirmItemQuantityTxt);
-                            String confirmItemQuatityStr = confirmItemQuantityTxt.getText().toString();
+                            currentActivty.getOrder().getOrderedCombos().add(combo);
+                            badge.setBadgeCount(badge.getBadgeCount() + 1);
 
-                            if (confirmItemQuatityStr.isEmpty()) {
-
-                                confirmItemQuatityStr = confirmItemQuantityTxt.getHint().toString();
-                            }
-
-                            int itemQuantity = Integer.valueOf(confirmItemQuatityStr);
-                            for (int i = 0; i < itemQuantity; i++) {
-
-                                currentActivty.getOrder().getOrderedCombos().add(combo);
-                                badge.setBadgeCount(badge.getBadgeCount() + 1);
-                            }
-                            addComboToOrderingDialogManager.closeDialog();
+                            previewItemDialogManager.closeDialog();
 
 
                         }
                     });
-
-                    cancelAddToOrderBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            addComboToOrderingDialogManager.closeDialog();
-                        }
-                    });
-
-                }
-            });
-
-            cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final DialogManager previewItemDialogManager = new DialogManager(currentActivty);
-                    previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
-                    previewItemDialogManager.showDialog(combo.getComboName(), "");
-
-                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteRecordBtn);
-                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
-                    Button addComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
-
-                    if(CyburgerApplication.isAdmin())
-                    {
-                        deleteComboBtn.setVisibility(View.VISIBLE);
-                        editComboBtn.setVisibility(View.VISIBLE);
-
-                        deleteComboBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                DialogAction deleteComboAction = new DialogAction();
-                                deleteComboAction.setPositiveAction(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        Combo comboToDelete = (Combo) cardModel.getExtra();
-                                        firebaseRealtimeDatabaseHelper.delete(comboToDelete);
-                                        previewItemDialogManager.closeDialog();
-                                        LogHelper.show("Combo removido");
-                                    }
-                                });
-                                DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
-                                confirmDeleteDialog.setAction(deleteComboAction);
-                                confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse combo?");
-                            }
-                        });
-
-                        editComboBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
-                                previewItemDialogManager.closeDialog();
-                            }
-                        });
-                    }
-
 
 
                 }

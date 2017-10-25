@@ -55,4 +55,5 @@
     <string name="login_error_no_connection">Não foi possível conectar.</string>
     <string name="manage_combos_required_field">Escolha um ou mais itens para o combo</string>
     <string name="general_button_leave">Sair</string>
+    <string name="order_finishOrder">Finalizar</string>
 </resources>

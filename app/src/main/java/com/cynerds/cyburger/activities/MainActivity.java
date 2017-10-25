@@ -4,6 +4,7 @@ package com.cynerds.cyburger.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -136,9 +138,9 @@ public class MainActivity extends BaseActivity {
         navigationAdapter.setupWithBottomNavigation(bottomNavigation);
         bottomNavigation.setOnTabSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigation.setCurrentItem(COMBO_TAB);
-        bottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor( this,R.color.transparent));
-        bottomNavigation.setAccentColor(ContextCompat.getColor( this,R.color.redishOrange0));
-        bottomNavigation.setInactiveColor(ContextCompat.getColor( this,R.color.mediumgrey));
+        bottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.transparent));
+        bottomNavigation.setAccentColor(ContextCompat.getColor(this, R.color.redishOrange0));
+        bottomNavigation.setInactiveColor(ContextCompat.getColor(this, R.color.mediumgrey));
         fragmentManager.beginTransaction().attach(ordersFragment).commit();
 
 
@@ -153,6 +155,8 @@ public class MainActivity extends BaseActivity {
         View.OnTouchListener hamburgerMenuTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
+
                 popupMenu.getMenu().findItem(R.id.action_profile).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -162,21 +166,30 @@ public class MainActivity extends BaseActivity {
                 });
 
 
-                popupMenu.getMenu().findItem(R.id.action_manage_items).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        ActivityManager.startActivity(MainActivity.this, ManageItemsActivity.class);
-                        return false;
-                    }
-                });
+                if (CyburgerApplication.isAdmin()) {
+                    popupMenu.getMenu().findItem(R.id.action_manage_items).setVisible(true);
+                    popupMenu.getMenu().findItem(R.id.action_manage_combos).setVisible(true);
 
-                popupMenu.getMenu().findItem(R.id.action_manage_combos).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        ActivityManager.startActivity(MainActivity.this, ManageCombosActivity.class);
-                        return false;
-                    }
-                });
+                    popupMenu.getMenu().findItem(R.id.action_manage_items).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            ActivityManager.startActivity(MainActivity.this, ManageItemsActivity.class);
+                            return false;
+                        }
+                    });
+
+                    popupMenu.getMenu().findItem(R.id.action_manage_combos).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            ActivityManager.startActivity(MainActivity.this, ManageCombosActivity.class);
+                            return false;
+                        }
+                    });
+                }
+                else{
+                    popupMenu.getMenu().findItem(R.id.action_manage_items).setVisible(false);
+                    popupMenu.getMenu().findItem(R.id.action_manage_combos).setVisible(false);
+                }
 
                 popupMenu.show();
 
@@ -233,7 +246,7 @@ public class MainActivity extends BaseActivity {
                 order.getOrderedItems()) {
 
             orderedItemsAmount += item.getPrice();
-            orderedItemsString += item.getDescription() + ": R$ " + item.getPrice() + " (" + item.getBonusPoints() + " pontos)" +"\n";
+            orderedItemsString += item.getDescription() + ": R$ " + item.getPrice() + " (" + item.getBonusPoints() + " pontos)" + "\n";
         }
 
 
@@ -252,8 +265,19 @@ public class MainActivity extends BaseActivity {
 
             if (readOnly) {
 
-                removeOrderBtn.setText("Cancelar pedido");
-                removeOrderBtn.getLayoutParams().width *= 2;
+
+
+                if(CyburgerApplication.isAdmin())
+                {
+                    confirmOrderBtn.setText(getString(R.string.order_finishOrder));
+                    confirmOrderBtn.setVisibility(View.VISIBLE);
+                }else{
+
+
+                    removeOrderBtn.getLayoutParams().width = (int)getResources().getDimension(R.dimen.default_width);
+                }
+
+
 
                 dialogManager.setOnCanceListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -287,7 +311,7 @@ public class MainActivity extends BaseActivity {
                         order.setCustomer(customer);
                         firebaseRealtimeDatabaseHelperOrders.insert(order);
 
-                        LogHelper.show( "Pedido confirmado");
+                        LogHelper.show("Pedido confirmado");
 
                         //Reset - pedido confirmado
                         badge.setBadgeCount(0);
@@ -306,7 +330,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    LogHelper.show( "Pedido cancelado");
+                    LogHelper.show("Pedido cancelado");
 
                     if (readOnly) {
                         firebaseRealtimeDatabaseHelperOrders.delete(order);
@@ -366,24 +390,24 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
 
-            final DialogManager dialogManager = new DialogManager(this);
-            dialogManager.setContentView(R.layout.dialog_confirm_exit);
-            dialogManager.showDialog("Sair do aplicativo", "");
+        final DialogManager dialogManager = new DialogManager(this);
+        dialogManager.setContentView(R.layout.dialog_confirm_exit);
+        dialogManager.showDialog("Sair do aplicativo", "");
 
-            dialogManager.getContentView().findViewById(R.id.confirmExitBtn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+        dialogManager.getContentView().findViewById(R.id.confirmExitBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-            dialogManager.getContentView().findViewById(R.id.cancelExitBtn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        dialogManager.getContentView().findViewById(R.id.cancelExitBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    dialogManager.closeDialog();
-                }
-            });
+                dialogManager.closeDialog();
+            }
+        });
 
     }
 

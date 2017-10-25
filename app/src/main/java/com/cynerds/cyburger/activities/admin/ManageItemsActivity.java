@@ -6,12 +6,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.items.Item;
 
 import java.util.ArrayList;
@@ -57,6 +62,7 @@ public class ManageItemsActivity extends BaseActivity {
         final EditText itemIngredientsTxt = findViewById(R.id.itemIngredientsTxt);
         final EditText itemBonusPointTxt = findViewById(R.id.itemBonusPointTxt);
         final Button saveItemBtn = findViewById(R.id.saveItemBtn);
+        final TextView deleteItemLink = findViewById(R.id.deleteItemLink);
         final Item loadedItem = (Item) getExtra(Item.class);
 
         itemDescriptionTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
@@ -107,6 +113,40 @@ public class ManageItemsActivity extends BaseActivity {
 
             }
         });
+
+        if(CyburgerApplication.isAdmin()) {
+            if (loadedItem != null) {
+                deleteItemLink.setVisibility(View.VISIBLE);
+                deleteItemLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogAction deleteComboAction = new DialogAction();
+                        deleteComboAction.setPositiveAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+
+                                firebaseRealtimeDatabaseHelper.delete(loadedItem);
+
+                                LogHelper.show("Item removido");
+                            }
+                        });
+                        DialogManager confirmDeleteDialog = new DialogManager(ManageItemsActivity.this,
+                                DialogManager.DialogType.YES_NO);
+                        confirmDeleteDialog.setAction(deleteComboAction);
+                        confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
+                    }
+                });
+
+
+            }else{
+
+                deleteItemLink.setVisibility(View.GONE);
+            }
+        }else{
+
+            deleteItemLink.setVisibility(View.GONE);
+        }
 
 
     }

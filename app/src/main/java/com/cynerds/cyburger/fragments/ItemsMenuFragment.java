@@ -16,6 +16,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
@@ -101,8 +102,7 @@ public class ItemsMenuFragment extends Fragment {
             public void onDataChanged(Object item) {
 
 
-
-                    updateList(view);
+                updateList(view);
 
 
             }
@@ -159,64 +159,11 @@ public class ItemsMenuFragment extends Fragment {
             final CardModel cardModel = new CardModel();
             cardModel.setExtra(item);
             cardModel.setTitle(item.getDescription());
-            cardModel.setActionIconId(R.drawable.ic_action_add);
             cardModel.setContent("Unidade de medida: "
                     + item.getSize()
                     + "\n\n+" + item.getBonusPoints() + " pontos");
             cardModel.setSubContent("Valor: R$" + item.getPrice());
 
-
-            final DialogManager addItemToOrderingDialogManager = new DialogManager(currentActivty);
-            cardModel.setOnManageClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    addItemToOrderingDialogManager.setContentView(R.layout.dialog_ordering_confirm);
-                    addItemToOrderingDialogManager.showDialog("Adicionar item", "");
-
-                    Button addToOrderBtn = addItemToOrderingDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
-                    Button cancelAddToOrderBtn = addItemToOrderingDialogManager.getContentView().findViewById(R.id.cancelAddToOrderBtn);
-
-                    addToOrderBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            LogHelper.show("Item adicionado ao pedido");
-
-
-                            Badge badge = currentActivty.getBadge();
-
-                            EditText confirmItemQuantityTxt = addItemToOrderingDialogManager.getContentView()
-                                    .findViewById(R.id.confirmItemQuantityTxt);
-
-                            String confirmItemQuatityStr = confirmItemQuantityTxt.getText().toString();
-
-                            if (confirmItemQuatityStr.isEmpty()) {
-
-                                confirmItemQuatityStr = confirmItemQuantityTxt.getHint().toString();
-                            }
-
-                            int itemQuantity = Integer.valueOf(confirmItemQuatityStr);
-                            for (int i = 0; i < itemQuantity; i++) {
-
-                                currentActivty.getOrder().getOrderedItems().add(item);
-                                badge.setBadgeCount(badge.getBadgeCount() + 1);
-                            }
-
-                            addItemToOrderingDialogManager.closeDialog();
-
-                        }
-                    });
-
-                    cancelAddToOrderBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            addItemToOrderingDialogManager.closeDialog();
-                        }
-                    });
-
-                }
-            });
 
             cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
@@ -225,36 +172,43 @@ public class ItemsMenuFragment extends Fragment {
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(item.getDescription(), "");
 
-                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteRecordBtn);
-                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
+
+                    Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
+                    Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+
+                    if (CyburgerApplication.isAdmin()) {
+
+                        editRecordBtn.setVisibility(View.VISIBLE);
 
 
-                    deleteComboBtn.setOnClickListener(new View.OnClickListener() {
+
+                        editRecordBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                ActivityManager.startActivity(currentActivty, ManageItemsActivity.class, cardModel.getExtra());
+                                previewItemDialogManager.closeDialog();
+                            }
+                        });
+                    } else {
+
+                        editRecordBtn.setVisibility(View.INVISIBLE);
+                    }
+
+                    addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DialogAction deleteComboAction = new DialogAction();
-                            deleteComboAction.setPositiveAction(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
 
-                                    Item itemToDelete = (Item) cardModel.getExtra();
-                                    firebaseRealtimeDatabaseHelper.delete(itemToDelete);
-                                    previewItemDialogManager.closeDialog();
-                                    LogHelper.show("Item removido");
-                                }
-                            });
-                            DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
-                            confirmDeleteDialog.setAction(deleteComboAction);
-                            confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
-                        }
-                    });
+                            LogHelper.show("Item adicionado ao pedido");
 
-                    editComboBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                            Badge badge = currentActivty.getBadge();
 
-                            ActivityManager.startActivity(currentActivty, ManageItemsActivity.class, cardModel.getExtra());
+                            currentActivty.getOrder().getOrderedItems().add(item);
+                            badge.setBadgeCount(badge.getBadgeCount() + 1);
+
                             previewItemDialogManager.closeDialog();
+
+
                         }
                     });
 

@@ -2,18 +2,22 @@ package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.combos.ComboDay;
 import com.cynerds.cyburger.models.items.Item;
@@ -59,6 +63,7 @@ public class ManageCombosActivity extends BaseActivity {
         final EditText comboBonusPointsTxt = findViewById(R.id.comboBonusPointTxt);
         final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final Button saveComboBtn = findViewById(R.id.saveComboBtn);
+        final TextView deleteComboLink = findViewById(R.id.deleteComboLink);
         final Combo loadedCombo = (Combo) getExtra(Combo.class);
 
         comboNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
@@ -160,6 +165,43 @@ public class ManageCombosActivity extends BaseActivity {
                 }
             }
         });
+
+        if(CyburgerApplication.isAdmin()) {
+            if(loadedCombo!=null)
+            {
+                deleteComboLink.setVisibility(View.VISIBLE);
+                deleteComboLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogAction deleteComboAction = new DialogAction();
+                        deleteComboAction.setPositiveAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+
+                                firebaseRealtimeDatabaseHelper.delete(loadedCombo);
+                                finish();
+                                LogHelper.show("Combo removido");
+                            }
+                        });
+
+                        DialogManager confirmDeleteDialog = new DialogManager(ManageCombosActivity.this,
+                                DialogManager.DialogType.YES_NO);
+                        confirmDeleteDialog.setAction(deleteComboAction);
+                        confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
+
+                    }
+                });
+            }else{
+                deleteComboLink.setVisibility(View.GONE);
+
+            }
+
+
+        } else{
+            deleteComboLink.setVisibility(View.GONE);
+
+        }
 
 
         FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
