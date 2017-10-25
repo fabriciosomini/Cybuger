@@ -147,11 +147,14 @@ public class AuthenticationHelper {
 
             if (profile != null && user != null) {
                 if (profile.getUserId().equals(user.getUid())) {
+                    LogHelper.show("Profile Loaded: " + profile.getUserId());
                     CyburgerApplication.setProfile(profile);
 
                     if (onSignInListener != null) {
 
+                        firebaseRealtimeDatabaseHelper.removeListenters();
                         onSignInListener.onSuccess();
+
                         return;
                     }
 
@@ -272,6 +275,10 @@ public class AuthenticationHelper {
     public List<Profile> getProfiles() {
         List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
         return profiles;
+    }
+
+    public void removeOnSignInListener() {
+        onSignInListener = null;
     }
 
     public interface OnSignInListener {

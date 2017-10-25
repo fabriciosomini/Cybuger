@@ -16,6 +16,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
@@ -216,38 +217,46 @@ public class CombosFragment extends Fragment {
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(combo.getComboName(), "");
 
-                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteComboBtn);
-                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editComboBtn);
+                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteRecordBtn);
+                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
+                    Button addComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+
+                    if(CyburgerApplication.isAdmin())
+                    {
+                        deleteComboBtn.setVisibility(View.VISIBLE);
+                        editComboBtn.setVisibility(View.VISIBLE);
+
+                        deleteComboBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DialogAction deleteComboAction = new DialogAction();
+                                deleteComboAction.setPositiveAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Combo comboToDelete = (Combo) cardModel.getExtra();
+                                        firebaseRealtimeDatabaseHelper.delete(comboToDelete);
+                                        previewItemDialogManager.closeDialog();
+                                        LogHelper.show("Combo removido");
+                                    }
+                                });
+                                DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
+                                confirmDeleteDialog.setAction(deleteComboAction);
+                                confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse combo?");
+                            }
+                        });
+
+                        editComboBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
+                                previewItemDialogManager.closeDialog();
+                            }
+                        });
+                    }
 
 
-                    deleteComboBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DialogAction deleteComboAction = new DialogAction();
-                            deleteComboAction.setPositiveAction(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    Combo comboToDelete = (Combo) cardModel.getExtra();
-                                    firebaseRealtimeDatabaseHelper.delete(comboToDelete);
-                                    previewItemDialogManager.closeDialog();
-                                    LogHelper.show("Combo removido");
-                                }
-                            });
-                            DialogManager confirmDeleteDialog = new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
-                            confirmDeleteDialog.setAction(deleteComboAction);
-                            confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse combo?");
-                        }
-                    });
-
-                    editComboBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
-                            previewItemDialogManager.closeDialog();
-                        }
-                    });
 
                 }
             });

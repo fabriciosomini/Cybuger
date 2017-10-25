@@ -51,11 +51,12 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        authenticationHelper = new AuthenticationHelper(getActivity());
+        this.currentActivity = (LoginActivity) getActivity();
+
+        authenticationHelper = new AuthenticationHelper(currentActivity);
 
         setUIEvents(inflatedView);
 
-        this.currentActivity = (LoginActivity) getActivity();
 
         return inflatedView;
     }
@@ -116,7 +117,7 @@ public class SignUpFragment extends Fragment {
 
         Task<AuthResult> createNewUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
 
-        createNewUser.addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+        createNewUser.addOnCompleteListener(currentActivity, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -130,8 +131,9 @@ public class SignUpFragment extends Fragment {
                         public void onSuccess() {
 
 
-                            ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
-                            getActivity().finish();
+                            authenticationHelper.removeOnSignInListener();
+                            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+
                         }
 
                         @Override

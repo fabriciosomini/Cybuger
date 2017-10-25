@@ -62,11 +62,12 @@ public class SignInFragment extends Fragment {
 
 
         View inflatedView = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        this.currentActivity = (LoginActivity) getActivity();
 
-        authenticationHelper = new AuthenticationHelper(getActivity());
+        authenticationHelper = new AuthenticationHelper(currentActivity);
         setUIEvents(inflatedView);
 
-        this.currentActivity = (LoginActivity) getActivity();
+
 
         return inflatedView;
     }
@@ -111,8 +112,8 @@ public class SignInFragment extends Fragment {
 
 
         mAuth = FirebaseAuth.getInstance();
-        preferences = new Preferences(getActivity());
-        permissions = new Permissions(getActivity());
+        preferences = new Preferences(currentActivity);
+        permissions = new Permissions(currentActivity);
         signInUserTxt = inflatedView.findViewById(R.id.signUserInTxt);
         signInPasswordTxt = inflatedView.findViewById(R.id.signInPasswordTxt);
         signInBtn = inflatedView.findViewById(R.id.signInBtn);
@@ -178,8 +179,9 @@ public class SignInFragment extends Fragment {
                             signInPasswordTxt.setError(null);
                             preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
 
-                            ActivityManager.startActivityKillingThis(getActivity(), MainActivity.class);
-                            getActivity().finish();
+                            authenticationHelper.removeOnSignInListener();
+                            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+
                         }
 
                         @Override

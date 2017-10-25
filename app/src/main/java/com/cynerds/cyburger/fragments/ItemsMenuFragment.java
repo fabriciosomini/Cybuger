@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.components.Badge;
@@ -226,8 +225,8 @@ public class ItemsMenuFragment extends Fragment {
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(item.getDescription(), "");
 
-                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteComboBtn);
-                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editComboBtn);
+                    Button deleteComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.deleteRecordBtn);
+                    Button editComboBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
 
 
                     deleteComboBtn.setOnClickListener(new View.OnClickListener() {
