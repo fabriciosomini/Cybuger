@@ -86,7 +86,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:alpha="0.80"
-        android:background="@color/transparent"
+        android:background="@drawable/background_gradient"
         android:clickable="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
