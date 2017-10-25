@@ -209,7 +209,7 @@ public class CombosFragment extends Fragment {
                 }
             });
 
-            cardModel.setOnPictureClickListener(new View.OnClickListener() {
+            cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final DialogManager previewItemDialogManager = new DialogManager(currentActivty);

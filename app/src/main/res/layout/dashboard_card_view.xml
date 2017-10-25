@@ -10,6 +10,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/dashboard_cardview"
         android:layout_width="0dp"
+        android:clickable="true"
         android:layout_height="180dp"
         style="@style/AppTheme.CyburgerContainer"
         android:layout_marginRight="0dp"

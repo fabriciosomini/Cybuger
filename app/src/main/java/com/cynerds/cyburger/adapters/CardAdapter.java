@@ -37,13 +37,13 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.dashboard_card_view, parent, false);
         }
         // Lookup view for data population
-        ImageView cardIcon = convertView.findViewById(R.id.cardIcon);
+        ImageView cardPicture = convertView.findViewById(R.id.cardIcon);
         TextView cardTitle = convertView.findViewById(R.id.cardTitle);
         TextView cardContent = convertView.findViewById(R.id.cardContent);
         TextView cardSubContent = convertView.findViewById(R.id.cardSubContent);
         ImageView cardManageIcon = convertView.findViewById(R.id.cardManageIcon);
         ConstraintLayout baseComponentContainer = convertView.findViewById(R.id.dashboard_cardview);
-        View.OnClickListener onCardViewClickListener = cardModel.getOnCardViewClickListener();
+        final View.OnClickListener onCardViewClickListener = cardModel.getOnCardViewClickListener();
         View.OnClickListener onManageClickListener = cardModel.getOnManageClickListener();
         View.OnClickListener onPictureViewClickListener = cardModel.getOnPictureClickListener();
 
@@ -55,14 +55,8 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         }
 
         if (onPictureViewClickListener != null) {
-            cardIcon.setClickable(true);
-            cardIcon.setOnClickListener(onPictureViewClickListener);
-
-        }
-
-        if(onCardViewClickListener !=null)
-        {
-            baseComponentContainer.setOnClickListener(onCardViewClickListener);
+            cardPicture.setClickable(true);
+            cardPicture.setOnClickListener(onPictureViewClickListener);
 
         }
 
@@ -72,7 +66,37 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
         }
 
-        cardIcon.setImageResource(cardModel.getHeaderIconId());
+        if(onCardViewClickListener !=null)
+        {
+            baseComponentContainer.setOnClickListener(onCardViewClickListener);
+            baseComponentContainer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus)
+                    {
+                        onCardViewClickListener.onClick(v);
+                    }
+                }
+            });
+
+            if(onPictureViewClickListener ==null){
+                cardPicture.setOnClickListener(onCardViewClickListener);
+                cardPicture.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                        {
+                            onCardViewClickListener.onClick(v);
+                        }
+                    }
+                });
+            }
+
+        }
+
+
+
+        cardPicture.setImageResource(cardModel.getHeaderIconId());
         cardTitle.setText(cardModel.getTitle());
         cardContent.setText(cardModel.getContent());
         cardSubContent.setText(cardModel.getSubContent());
