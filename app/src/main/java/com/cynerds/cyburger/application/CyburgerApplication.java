@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.roles.Role;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,6 +23,8 @@ public class CyburgerApplication extends Application {
     }
 
     public static void setProfile(Profile profile) {
+        LogHelper.show("Set the new CyburgerApplication profile!");
+
         CyburgerApplication.profile = profile;
     }
 

@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Random;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +77,9 @@ public class SignUpFragment extends Fragment {
         signUpUserTxt.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
 
+        //test
+        //test_fill();
+
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,9 +114,18 @@ public class SignUpFragment extends Fragment {
         });
     }
 
+    private void test_fill() {
+        signUpDisplayNameTxt.setText(String.valueOf(new Random().nextInt()));
+        signUpUserTxt.setText(new Random().nextInt()+"@test.com");
+        signUpPasswordTxt.setText("123456");
+        signUpConfirmPasswordTxt.setText("123456");
+
+    }
+
     private void createUser(final String displayName, final String email, final String password) {
 
 
+        LogHelper.show("Trying to create a new user using email and password");
         signUpBtn.setEnabled(false);
         currentActivity.displayProgressBar(true);
 
@@ -123,6 +137,8 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
 
 
+                    LogHelper.show("New user created successfully");
+
                     authenticationHelper.createProfile(task.getResult().getUser());
                     authenticationHelper.updateDisplayName(displayName);
 
@@ -130,9 +146,8 @@ public class SignUpFragment extends Fragment {
                         @Override
                         public void onSuccess() {
 
-
-                            authenticationHelper.removeOnSignInListener();
                             ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                            authenticationHelper.removeOnSignInListener();
 
                         }
 
@@ -146,6 +161,8 @@ public class SignUpFragment extends Fragment {
                     authenticationHelper.signIn(email, password);
 
                 } else {
+
+                    LogHelper.show("Failed to create user");
 
                     signUpBtn.setEnabled(true);
                     currentActivity.displayProgressBar(false);

@@ -179,8 +179,9 @@ public class SignInFragment extends Fragment {
                             signInPasswordTxt.setError(null);
                             preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
 
-                            authenticationHelper.removeOnSignInListener();
+
                             ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                            authenticationHelper.removeOnSignInListener();
 
                         }
 

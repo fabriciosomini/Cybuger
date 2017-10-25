@@ -49,6 +49,8 @@ public class AuthenticationHelper {
 
     public void createProfile(FirebaseUser user) {
 
+        LogHelper.show("Trying to create a new profile for the new user");
+
         Profile profile = new Profile();
         profile.setRole(Role.USER);
         profile.setUserId(user.getUid());
@@ -65,12 +67,6 @@ public class AuthenticationHelper {
 
         CyburgerApplication.setProfile(profile);
 
-        if (onSignInListener != null) {
-
-            onSignInListener.onSuccess();
-
-        }
-
     }
 
     public void setOnSignInListener(OnSignInListener onSignInListener) {
@@ -79,6 +75,7 @@ public class AuthenticationHelper {
 
     public void signIn(final String email, final String password) {
 
+        LogHelper.show("Tentando fazer signIn...");
 
         mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -89,6 +86,8 @@ public class AuthenticationHelper {
                         boolean isSuccessful = task.isSuccessful();
                         if (isSuccessful) {
 
+                            LogHelper.show("Sign in task result: isSuccessful");
+
                             if (user == null) {
                                 user = FirebaseAuth.getInstance().getCurrentUser();
                             }
@@ -97,7 +96,11 @@ public class AuthenticationHelper {
                                 firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
                             }
 
-                            getProfilesList();
+                            if(!findUserProfileAndSetToApplication())
+                            {
+                                createProfilesList();
+                            }
+
 
 
                         } else {
@@ -107,9 +110,11 @@ public class AuthenticationHelper {
 
                             if (exception != null) {
 
+                                LogHelper.show("Sign in task result: error - " + exception.getMessage());
 
                                 if (onSignInListener != null) {
 
+                                    LogHelper.show("Callback Sign-in onError");
                                     onSignInListener.onError(exception);
                                 }
 
@@ -122,13 +127,24 @@ public class AuthenticationHelper {
                 });
     }
 
-    private void getProfilesList() {
+    private void createProfilesList() {
+        LogHelper.show("Initializing a new dataChangeListener for Profile");
         FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
 
 
-                loadUserProfile();
+                if(!findUserProfileAndSetToApplication())
+                {
+                    if (onSignInListener != null) {
+
+
+                        Exception exception = new FirebaseAuthException("ERROR_CANT_LOAD_PROFILE", activity.getString(R.string.login_error_unable_load_profile));
+
+                        onSignInListener.onError(exception);
+                    }
+
+                }
 
 
             }
@@ -137,7 +153,8 @@ public class AuthenticationHelper {
         firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
     }
 
-    private void loadUserProfile() {
+    private boolean findUserProfileAndSetToApplication() {
+        LogHelper.show("Trying to get profiles list");
 
         List<Profile> profiles = getProfiles();
 
@@ -147,15 +164,17 @@ public class AuthenticationHelper {
 
             if (profile != null && user != null) {
                 if (profile.getUserId().equals(user.getUid())) {
-                    LogHelper.show("Profile Loaded: " + profile.getUserId());
+                    LogHelper.show("Found a matching profile in the list: " + profile.getUserId());
                     CyburgerApplication.setProfile(profile);
 
                     if (onSignInListener != null) {
 
-                        firebaseRealtimeDatabaseHelper.removeListenters();
+                        LogHelper.show("Callback Sign-in onSuccess");
                         onSignInListener.onSuccess();
 
-                        return;
+                        firebaseRealtimeDatabaseHelper.removeListenters();
+
+                        return true;
                     }
 
 
@@ -164,13 +183,8 @@ public class AuthenticationHelper {
 
         }
 
-        if (onSignInListener != null) {
+        return false;
 
-
-            Exception exception = new FirebaseAuthException("ERROR_CANT_LOAD_PROFILE", activity.getString(R.string.login_error_unable_load_profile));
-
-            onSignInListener.onError(exception);
-        }
 
 
     }
@@ -274,6 +288,7 @@ public class AuthenticationHelper {
 
     public List<Profile> getProfiles() {
         List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
+        LogHelper.show("Profiles loaded: " + profiles.size());
         return profiles;
     }
 

@@ -1,7 +1,9 @@
 package com.cynerds.cyburger.data;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.BaseModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,8 +51,15 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     public void setDataChangeListener(DataChangeListener dataChangeListener) {
 
+        LogHelper.show("create a new dataChangeListener of type: " + classType.getSimpleName());
         this.dataChangeListener = dataChangeListener;
 
+    }
+
+
+    public void removeListenters() {
+        LogHelper.show("Remove the dataChangeListener of type: " + classType.getSimpleName());
+        tableReference.removeEventListener(tableListener);
     }
 
     private void createDataWatcher() {
@@ -232,6 +241,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     public void insert(BaseModel baseModel) {
 
+        LogHelper.show("Insert new object into the database of type: " + classType.getSimpleName());
         if (baseModel != null) {
             if (baseModel.getId() != null) {
                 if (baseModel.getId().isEmpty()) {
@@ -274,11 +284,10 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     }
 
-    public void removeListenters() {
-        tableReference.removeEventListener(tableListener);
-    }
 
     public void update(BaseModel baseModel) {
+
+        LogHelper.show("Update an object into the database of type: " + classType.getSimpleName());
 
         final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
