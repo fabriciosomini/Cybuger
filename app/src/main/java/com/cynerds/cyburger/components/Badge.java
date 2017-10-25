@@ -59,6 +59,11 @@ public class Badge extends ConstraintLayout {
     public void setBadgeCount(int count) {
 
         this.badgeCount = count;
-        badgeCountText.setText(String.valueOf(count));
+
+       if(count>-1)
+       {
+           badgeCountText.setText(String.valueOf(count));
+       }
+
     }
 }

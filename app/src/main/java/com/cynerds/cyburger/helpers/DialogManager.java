@@ -141,8 +141,6 @@ public class DialogManager {
 
                 @Override
                 public void onViewDetachedFromWindow(View v) {
-
-                    LogHelper.show("Cancel Dialog");
                     alertDialog.cancel();
                 }
             });

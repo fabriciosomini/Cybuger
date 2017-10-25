@@ -306,13 +306,21 @@ public class MainActivity extends BaseActivity {
                     if (readOnly) {
                         firebaseRealtimeDatabaseHelperOrders.delete(order);
                         removeNotification(ORDERS_TAB, 1);
+
                     } else {
                         previousOrder = new Order();
+                        badge.setBadgeCount(0);
                     }
 
-                    //Reset - pedido cancelado
-                    badge.setBadgeCount(0);
-                    order = new Order();
+                    if (previousOrder != null) {
+                        order = previousOrder;
+                        LogHelper.show("Restore previous order");
+                    } else {
+                        order = new Order();
+                        LogHelper.show("reset order");
+                    }
+
+
                     dialogManager.closeDialog();
 
 
