@@ -164,7 +164,6 @@ public class OrdersFragment extends Fragment {
         for (final Order order :
                 orders) {
 
-
             Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
             final CardModel cardModel = new CardModel();
@@ -179,19 +178,18 @@ public class OrdersFragment extends Fragment {
                         newOrder.setOrderedCombos(order.getOrderedCombos());
                         newOrder.setOrderedItems(order.getOrderedItems());
                         newOrder.setKey(order.getKey());
-
                         currentActivty.setOrder(newOrder);
                         currentActivty.displayOrderDialog();
 
                     }
                 });
-                cardModel.setTitleColor(R.color.colorAccent);
+
 
                 currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
             } else {
 
                 if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                    cardModel.setTitle("Seu pedido");
+
 
                     cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                         @Override
@@ -207,13 +205,18 @@ public class OrdersFragment extends Fragment {
 
                         }
                     });
-                    cardModel.setTitleColor(R.color.colorAccent);
+
 
                     currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
-                } else {
-                    cardModel.setTitle(customerName);
-                    cardModel.setTitleColor(R.color.lightGrey);
                 }
+            }
+
+            if (customer.getLinkedProfileId().equals(profile.getUserId())) {
+                cardModel.setTitle("Seu pedido");
+                cardModel.setTitleColor(R.color.colorAccent);
+            } else {
+                cardModel.setTitle(customerName);
+                cardModel.setTitleColor(R.color.lightGrey);
             }
 
 
