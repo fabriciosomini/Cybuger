@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity {
     private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperOrders;
     private Badge badge;
     private View hamburgerMenu;
+    private ImageButton hamburgerMenuIcon;
     private Order order;
     private Order previousOrder;
     private AHBottomNavigation bottomNavigation;
@@ -127,6 +129,7 @@ public class MainActivity extends BaseActivity {
         order = new Order();
         badge = findViewById(R.id.badge);
         hamburgerMenu = findViewById(R.id.hamburgerMenu);
+        hamburgerMenuIcon = findViewById(R.id.hamburgerMenuIcon);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
         AHBottomNavigationAdapter navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.navigation);
@@ -147,11 +150,9 @@ public class MainActivity extends BaseActivity {
         popupMenu.inflate(R.menu.menu_overflow);
 
 
-        hamburgerMenu.setOnClickListener(new View.OnClickListener() {
+        View.OnTouchListener hamburgerMenuTouchListener = new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-
-
+            public boolean onTouch(View v, MotionEvent event) {
                 popupMenu.getMenu().findItem(R.id.action_profile).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -179,8 +180,12 @@ public class MainActivity extends BaseActivity {
 
                 popupMenu.show();
 
+                return false;
             }
-        });
+        };
+
+        hamburgerMenuIcon.setOnTouchListener(hamburgerMenuTouchListener);
+        hamburgerMenu.setOnTouchListener(hamburgerMenuTouchListener);
 
 
         badge.setOnTouchListener(new View.OnTouchListener() {

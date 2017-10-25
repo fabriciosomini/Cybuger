@@ -23,7 +23,6 @@ public class ManageItemsActivity extends BaseActivity {
     final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
 
 
-
     public ManageItemsActivity() {
 
         firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Item.class);
@@ -58,11 +57,11 @@ public class ManageItemsActivity extends BaseActivity {
         final EditText itemIngredientsTxt = findViewById(R.id.itemIngredientsTxt);
         final EditText itemBonusPointTxt = findViewById(R.id.itemBonusPointTxt);
         final Button saveItemBtn = findViewById(R.id.saveItemBtn);
-        final Item  loadedItem = (Item)getExtra(Item.class);
+        final Item loadedItem = (Item) getExtra(Item.class);
 
         itemDescriptionTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
 
-        if(loadedItem!=null){
+        if (loadedItem != null) {
 
             itemDescriptionTxt.setText(loadedItem.getDescription());
             itemPriceTxt.setText(String.valueOf(loadedItem.getPrice()));
@@ -85,7 +84,7 @@ public class ManageItemsActivity extends BaseActivity {
                     String size = spinner.getSelectedItem().toString();
                     int bonusPoint = Integer.valueOf(itemBonusPointTxt.getText().toString().trim());
 
-                    Item item = loadedItem == null? new Item(): loadedItem;
+                    Item item = loadedItem == null ? new Item() : loadedItem;
                     item.setDescription(itemDescription);
                     item.setPrice(itemPrice);
                     item.setIngredients(itemIngredients);
@@ -93,11 +92,10 @@ public class ManageItemsActivity extends BaseActivity {
                     item.setBonusPoints(bonusPoint);
 
 
-                    if(loadedItem == null){
+                    if (loadedItem == null) {
 
                         firebaseRealtimeDatabaseHelper.insert(item);
-                    }
-                    else {
+                    } else {
 
                         firebaseRealtimeDatabaseHelper.update(item);
                     }
@@ -105,7 +103,6 @@ public class ManageItemsActivity extends BaseActivity {
                     finish();
 
                 }
-
 
 
             }
