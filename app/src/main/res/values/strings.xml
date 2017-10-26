@@ -56,4 +56,5 @@
     <string name="manage_combos_required_field">Escolha um ou mais itens para o combo</string>
     <string name="general_button_leave">Sair</string>
     <string name="order_finishOrder">Concluir</string>
+    <string name="order_cancel">Cancelar</string>
 </resources>

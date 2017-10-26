@@ -1,7 +1,9 @@
 package com.cynerds.cyburger.helpers;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.R;
@@ -14,32 +16,33 @@ import com.cynerds.cyburger.models.general.MessageType;
 
 public class MessageHelper {
 
-    private static boolean isInitialized;
-    private static MessageToast messageToast;
-    private static Toast toast;
-    private static Context context;
-
-    public static void initialize(Context context) {
-
-        if (!isInitialized) {
-
-            MessageHelper.context = context;
-
-            toast = new Toast(context);
-            isInitialized = true;
-            messageToast = new MessageToast(context);
-        }
 
 
-    }
+    public static void show(Context context, MessageType messageType, String message) {
 
-
-    public static void show(MessageType messageType, String message) {
-
+        MessageToast messageToast = new MessageToast(context);
         messageToast.setType(messageType);
         messageToast.setText(message);
+
+        final Toast toast  = new Toast(context);
         toast.setView(messageToast);
-        toast.show();
+
+
+        LogHelper.show("Show MessageToast:" + String.valueOf(toast.getDuration()));
+
+
+        new CountDownTimer(10000, 1000) {
+            @Override
+            public void onFinish() {
+                toast.show();
+            }
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                LogHelper.show("Show again");
+                toast.show();
+            }
+        }.start();
     }
 
 

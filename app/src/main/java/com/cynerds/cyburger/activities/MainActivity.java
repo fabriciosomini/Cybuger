@@ -317,14 +317,17 @@ public class MainActivity extends BaseActivity {
                                            firebaseRealtimeDatabaseHelperOrders.delete(order);
                                            confirmFinishOrderDialog.closeDialog();
                                            orderDialog.closeDialog();
-                                           MessageHelper.show(MessageType.SUCCESS, "Pedido do cliente '"
+                                           MessageHelper.show(MainActivity.this,
+                                                   MessageType.SUCCESS, "Pedido do cliente '"
                                                    +order.getCustomer().getCustomerName()
                                                    + "'concluído!");
                                            return;
                                        }
                                     }
 
-                                    MessageHelper.show(MessageType.ERROR, "Erro ao vincular os pontos ao perfil");
+                                    MessageHelper.show(MainActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao vincular os pontos ao perfil");
                                 }
 
                             });
@@ -384,7 +387,9 @@ public class MainActivity extends BaseActivity {
                         orderDialog.closeDialog();
 
 
-                        MessageHelper.show(MessageType.SUCCESS, "Pedido confirmado!");
+                        MessageHelper.show(MainActivity.this,
+                                MessageType.SUCCESS,
+                                "Tudo certo! Seu pedido vai chegar logo");
 
 
                     }
@@ -399,25 +404,37 @@ public class MainActivity extends BaseActivity {
 
                     LogHelper.show("Pedido cancelado");
 
-                    if (readOnly) {
-                        firebaseRealtimeDatabaseHelperOrders.delete(order);
-                        removeNotification(ORDERS_TAB, 1);
+                    DialogAction removeOrderDialogAction = new DialogAction();
+                    removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (readOnly) {
+                                firebaseRealtimeDatabaseHelperOrders.delete(order);
+                                removeNotification(ORDERS_TAB, 1);
 
-                    } else {
-                        previousOrder = new Order();
-                        badge.setBadgeCount(0);
-                    }
+                            } else {
+                                previousOrder = new Order();
+                                badge.setBadgeCount(0);
+                            }
 
-                    if (previousOrder != null) {
-                        order = previousOrder;
-                        LogHelper.show("Restore previous order");
-                    } else {
-                        order = new Order();
-                        LogHelper.show("reset order");
-                    }
+                            if (previousOrder != null) {
+                                order = previousOrder;
+                                LogHelper.show("Restore previous order");
+                            } else {
+                                order = new Order();
+                                LogHelper.show("reset order");
+                            }
 
 
-                    orderDialog.closeDialog();
+                            orderDialog.closeDialog();
+                        }
+                    });
+
+                    DialogManager removeOrderDialog = new DialogManager(MainActivity.this,
+                            DialogManager.DialogType.YES_NO);
+                    removeOrderDialog.setAction(removeOrderDialogAction);
+                    removeOrderDialog.showDialog("Cancelar Pedido","Deseja cancelar o pedido?");
+
 
 
                 }

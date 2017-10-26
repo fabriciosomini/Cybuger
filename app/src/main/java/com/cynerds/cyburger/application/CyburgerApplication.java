@@ -40,7 +40,6 @@ public class CyburgerApplication extends Application {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         registerActivityLifecycleCallbacks(new ApplicationLifecycleHandler());
 
-        MessageHelper.initialize(getApplicationContext());
     }
 
 

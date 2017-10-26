@@ -112,7 +112,7 @@
                     android:layout_height="@dimen/default_middle_height"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="8dp"
-                    android:text="@string/general_remove"
+                    android:text="@string/order_cancel"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent" />
