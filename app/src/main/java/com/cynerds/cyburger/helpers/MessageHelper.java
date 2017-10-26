@@ -39,7 +39,7 @@ public class MessageHelper {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                LogHelper.show("Show again");
+
                 toast.show();
             }
         }.start();

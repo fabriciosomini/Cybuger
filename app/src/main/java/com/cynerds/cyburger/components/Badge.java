@@ -13,6 +13,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.helpers.LogHelper;
 
 
 /**
@@ -26,7 +27,6 @@ public class Badge extends ConstraintLayout {
     private int badgeCount;
     private View badge;
     private LayoutInflater inflater;
-
 
 
     public Badge(Context context, AttributeSet attrs) {
@@ -66,27 +66,22 @@ public class Badge extends ConstraintLayout {
 
         this.badgeCount = count;
 
-       if(count>-1)
-       {
-           badgeCountText.setText(String.valueOf(count));
-       }
-
-        animateSize();
+        badge.clearAnimation();
+        
+        if (count < 1) {
+            LogHelper.show("Hide the badge");
+            this.setVisibility(INVISIBLE);
+            this.refreshDrawableState();
+        } else {
+            LogHelper.show("Show the badge");
+            this.setVisibility(VISIBLE);
+            badgeCountText.setText(String.valueOf(count));
+            animateSize();
+        }
 
     }
 
     private void animateSize() {
-
-        /*
-         Animation anim = new ScaleAnimation(
-                0.25f, 1f, // Start and end values for the X axis scaling
-                0.25f, 1f, // Start and end values for the Y axis scaling
-                Animation.RELATIVE_TO_SELF, 0.25f, // Pivot point of X scaling
-                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-        anim.setFillAfter(true); // Needed to keep the result of the animation
-        anim.setDuration(100);
-        badge.startAnimation(anim);
-         */
 
         Animation anim = new ScaleAnimation(
                 1f, 1.25f, // Start and end values for the X axis scaling
@@ -105,5 +100,6 @@ public class Badge extends ConstraintLayout {
         anim.setFillAfter(true); // Needed to keep the result of the animation
         anim.setDuration(50);
         badge.startAnimation(anim);
+
     }
 }

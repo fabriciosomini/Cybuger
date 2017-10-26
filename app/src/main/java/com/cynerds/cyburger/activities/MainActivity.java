@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity {
 
         setActionBarTitle(getString(R.string.title_combos));
         showActionBarMenu(true);
-        showBadge(true);
+
 
         final PopupMenu popupMenu = new PopupMenu(MainActivity.this, hamburgerMenu);
         popupMenu.inflate(R.menu.menu_overflow);
@@ -443,17 +443,6 @@ public class MainActivity extends BaseActivity {
 
         }
 
-    }
-
-    private void showBadge(boolean showBadge) {
-
-        if (showBadge) {
-            badge.setVisibility(View.VISIBLE);
-
-        } else {
-            badge.setVisibility(View.INVISIBLE);
-
-        }
     }
 
     private void showActionBarMenu(boolean showMenu) {
