@@ -13,9 +13,16 @@
 
         <item name="android:actionMenuTextColor">@color/verylightgrey</item>
         <item name="actionMenuTextColor">@color/verylightgrey</item>
+        <item name="dropDownListViewStyle">@style/AppTheme.CyburgerPopupMenu</item>
 
 
 
+    </style>
+
+
+    <style name="AppTheme.CyburgerPopupMenu" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:background">@color/redishBlack</item>
+        <item name="android:textColor">@color/verylightgrey</item>
     </style>
 
     <style name="AppTheme.CyburgerButton" parent="Widget.AppCompat.Button.Colored">
