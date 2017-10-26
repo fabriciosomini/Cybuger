@@ -67,7 +67,7 @@ public class Badge extends ConstraintLayout {
         this.badgeCount = count;
 
         badge.clearAnimation();
-        
+
         if (count < 1) {
             LogHelper.show("Hide the badge");
             this.setVisibility(INVISIBLE);
