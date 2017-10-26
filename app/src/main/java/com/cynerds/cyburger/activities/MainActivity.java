@@ -310,7 +310,9 @@ public class MainActivity extends BaseActivity {
                                                itemsBonusPoints += item.getBonusPoints();
                                            }
 
-                                           int totalBonusPoints = comboBonusPoints + itemsBonusPoints;
+                                           int totalBonusPoints = comboBonusPoints
+                                                   + itemsBonusPoints
+                                                   + p.getBonusPoints();
 
                                            p.setBonusPoints(totalBonusPoints);
                                            firebaseRealtimeDatabaseHelperProfile.update(p);
