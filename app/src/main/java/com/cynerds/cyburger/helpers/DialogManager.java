@@ -3,9 +3,11 @@ package com.cynerds.cyburger.helpers;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.LayoutRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
@@ -185,7 +187,25 @@ public class DialogManager {
         }
 
 
+
         alertDialog.show();
+
+        Button negativeBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        Button positiveBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+        Button neutralBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
+        if(negativeBtn!=null){
+            negativeBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        }
+
+        if(positiveBtn !=null){
+            positiveBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        }
+
+        if(neutralBtn!=null){
+
+            neutralBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        }
 
 
     }
