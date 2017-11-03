@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
@@ -70,53 +71,56 @@ public class SignUpFragment extends Fragment {
         signUpConfirmPasswordTxt = inflatedView.findViewById(R.id.signUpConfirmPasswordTxt);
         signUpBtn = inflatedView.findViewById(R.id.signInBtn);
 
+        signUpBtn.setFocusableInTouchMode(true);
         signUpDisplayNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         signUpDisplayNameTxt.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-
         signUpUserTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         signUpUserTxt.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
-
         //test
-        //test_fill();
+        if (BuildConfig.DEBUG) {
+            test_fill();
+        }
 
-        signUpBtn.setOnClickListener(new View.OnClickListener() {
+
+        signUpBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
 
-                String displayName = signUpDisplayNameTxt.getText().toString().trim();
-                String email = signUpUserTxt.getText().toString().trim();
-                String password = signUpPasswordTxt.getText().toString().trim();
-                String confirmPassword = signUpConfirmPasswordTxt.getText().toString().trim();
+                    String displayName = signUpDisplayNameTxt.getText().toString().trim();
+                    String email = signUpUserTxt.getText().toString().trim();
+                    String password = signUpPasswordTxt.getText().toString().trim();
+                    String confirmPassword = signUpConfirmPasswordTxt.getText().toString().trim();
 
 
-                if (FieldValidationHelper.isEditTextValidated(signUpDisplayNameTxt) &&
-                        FieldValidationHelper.isEditTextValidated(signUpUserTxt) &&
-                        FieldValidationHelper.isEditTextValidated(signUpPasswordTxt) &&
-                        FieldValidationHelper.isEditTextValidated(signUpConfirmPasswordTxt)) {
+                    if (FieldValidationHelper.isEditTextValidated(signUpDisplayNameTxt) &&
+                            FieldValidationHelper.isEditTextValidated(signUpUserTxt) &&
+                            FieldValidationHelper.isEditTextValidated(signUpPasswordTxt) &&
+                            FieldValidationHelper.isEditTextValidated(signUpConfirmPasswordTxt)) {
 
-                    if (password.equals(confirmPassword)) {
+                        if (password.equals(confirmPassword)) {
 
-                        FieldValidationHelper.setFieldAsValid(signUpConfirmPasswordTxt);
-                        FieldValidationHelper.setFieldAsValid(signUpConfirmPasswordTxt);
+                            FieldValidationHelper.setFieldAsValid(signUpConfirmPasswordTxt);
+                            FieldValidationHelper.setFieldAsValid(signUpConfirmPasswordTxt);
 
-                        createUser(displayName, email, password);
-                    } else {
+                            createUser(displayName, email, password);
+                        } else {
 
-                        FieldValidationHelper.setFieldAsInvalid(signUpPasswordTxt, R.string.general_unmatching_password);
-                        FieldValidationHelper.setFieldAsInvalid(signUpConfirmPasswordTxt, R.string.general_unmatching_password);
+                            FieldValidationHelper.setFieldAsInvalid(signUpPasswordTxt, R.string.general_unmatching_password);
+                            FieldValidationHelper.setFieldAsInvalid(signUpConfirmPasswordTxt, R.string.general_unmatching_password);
+                        }
+
                     }
 
                 }
-
-
             }
         });
     }
 
     private void test_fill() {
         signUpDisplayNameTxt.setText(String.valueOf(new Random().nextInt()));
-        signUpUserTxt.setText(new Random().nextInt()+"@test.com");
+        signUpUserTxt.setText(new Random().nextInt() + "@test.com");
         signUpPasswordTxt.setText("123456");
         signUpConfirmPasswordTxt.setText("123456");
 

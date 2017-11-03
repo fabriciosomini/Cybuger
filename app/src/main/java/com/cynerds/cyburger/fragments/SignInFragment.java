@@ -20,9 +20,11 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.facebook.CallbackManager;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,23 +122,27 @@ public class SignInFragment extends Fragment {
         signInBtn = inflatedView.findViewById(R.id.signInBtn);
         signInFacebookBtn = inflatedView.findViewById(R.id.signInFacebookBtn);
         signInRememberCbx = inflatedView.findViewById(R.id.signInRememberCbx);
-
         rememberMePref = "rememberMe";
-
-
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
                     LogHelper.show("Sessão expirada. Por favor, faça login novamente.");
+                    DialogManager sessionExpiredDialogManager = new DialogManager(currentActivity,
+                            DialogManager.DialogType.OK);
+
+
+                    sessionExpiredDialogManager.showDialog("Sessão expirada",
+                            "Sua sessão expirou, você precisa fazer login outra vez");
                 }
 
             }
 
         };
+
+        signInBtn.setFocusableInTouchMode(true);
 
 
        if(BuildConfig.DEBUG){
@@ -160,65 +166,65 @@ public class SignInFragment extends Fragment {
             e.printStackTrace();
         }
 
-        signInBtn.setOnClickListener(new View.OnClickListener() {
+        signInBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+
+                    if (FieldValidationHelper.isEditTextValidated(signInUserTxt) &&
+                            FieldValidationHelper.isEditTextValidated(signInPasswordTxt)) {
+
+                        signInBtn.setEnabled(false);
+                        currentActivity.displayProgressBar(true);
+
+                        String email = String.valueOf(signInUserTxt.getText().toString());
+                        String password = String.valueOf(signInPasswordTxt.getText().toString());
+
+                        authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
+                            @Override
+                            public void onSuccess() {
 
 
-                if (FieldValidationHelper.isEditTextValidated(signInUserTxt) &&
-                        FieldValidationHelper.isEditTextValidated(signInPasswordTxt)) {
-
-                    signInBtn.setEnabled(false);
-                    currentActivity.displayProgressBar(true);
-
-                    String email = String.valueOf(signInUserTxt.getText().toString());
-                    String password = String.valueOf(signInPasswordTxt.getText().toString());
-
-                    authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
-                        @Override
-                        public void onSuccess() {
+                                signInPasswordTxt.setError(null);
+                                preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
 
 
-                            signInPasswordTxt.setError(null);
-                            preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
+                                ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                                authenticationHelper.removeOnSignInListener();
 
+                            }
 
-                            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-                            authenticationHelper.removeOnSignInListener();
+                            @Override
+                            public void onError(Exception exception) {
 
-                        }
+                                signInBtn.setEnabled(true);
+                                currentActivity.displayProgressBar(false);
 
-                        @Override
-                        public void onError(Exception exception) {
+                                if (exception != null) {
+                                    if (exception.getClass() == FirebaseAuthInvalidUserException.class) {
 
-                            signInBtn.setEnabled(true);
-                            currentActivity.displayProgressBar(false);
+                                        signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
 
-                            if (exception != null) {
-                                if (exception.getClass() == FirebaseAuthInvalidUserException.class) {
+                                    } else if (exception.getClass() == FirebaseNetworkException.class) {
 
-                                    signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
+                                        DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                                        dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
 
-                                } else if (exception.getClass() == FirebaseNetworkException.class) {
+                                    } else {
 
-                                    DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
-                                    dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
-
-                                } else {
-
-                                    LogHelper.show(
-                                            exception.getClass().getSimpleName()
-                                                    + ": " + exception.getMessage());
+                                        LogHelper.show(
+                                                exception.getClass().getSimpleName()
+                                                        + ": " + exception.getMessage());
+                                    }
                                 }
                             }
-                        }
 
-                    });
-                    authenticationHelper.signIn(email, password);
+                        });
+                        authenticationHelper.signIn(email, password);
+
+                    }
 
                 }
-
-
             }
         });
 
