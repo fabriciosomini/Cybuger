@@ -20,11 +20,9 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
-import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.models.general.MessageType;
 import com.facebook.CallbackManager;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,19 +81,19 @@ public class SignInFragment extends Fragment {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                LogHelper.show(TAG, "facebook:onSuccess:" + loginResult);
+                LogHelper.error(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                LogHelper.show(TAG, "facebook:onCancel");
+                LogHelper.error(TAG, "facebook:onCancel");
                 // ...
             }
 
             @Override
             public void onError(FacebookException error) {
-                LogHelper.show(TAG, "facebook:onError", error);
+                LogHelper.error(TAG, "facebook:onError", error);
                 // ...
             }
         });*/
@@ -129,7 +127,7 @@ public class SignInFragment extends Fragment {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-                    LogHelper.show("Sessão expirada. Por favor, faça login novamente.");
+                    LogHelper.error("Sessão expirada. Por favor, faça login novamente.");
                     DialogManager sessionExpiredDialogManager = new DialogManager(currentActivity,
                             DialogManager.DialogType.OK);
 
@@ -212,7 +210,7 @@ public class SignInFragment extends Fragment {
 
                                     } else {
 
-                                        LogHelper.show(
+                                        LogHelper.error(
                                                 exception.getClass().getSimpleName()
                                                         + ": " + exception.getMessage());
                                     }

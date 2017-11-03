@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -20,7 +21,7 @@ import java.util.UUID;
  * Created by fabri on 07/07/2017.
  */
 
-public class FirebaseRealtimeDatabaseHelper< T> {
+public class FirebaseRealtimeDatabaseHelper<T> {
     private final Class<BaseModel> classType;
     private final DatabaseReference databaseReference;
     private final String tableName;
@@ -50,14 +51,14 @@ public class FirebaseRealtimeDatabaseHelper< T> {
 
     public void setDataChangeListener(DataChangeListener dataChangeListener) {
 
-        LogHelper.show("create a new dataChangeListener of type: " + classType.getSimpleName());
+        LogHelper.error("create a new dataChangeListener of type: " + classType.getSimpleName());
         this.dataChangeListener = dataChangeListener;
 
     }
 
 
     public void removeListenters() {
-        LogHelper.show("Remove the dataChangeListener of type: " + classType.getSimpleName());
+        LogHelper.error("Remove the dataChangeListener of type: " + classType.getSimpleName());
         tableReference.removeEventListener(tableListener);
     }
 
@@ -124,27 +125,32 @@ public class FirebaseRealtimeDatabaseHelper< T> {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                BaseModel object = dataSnapshot.getValue(classType);
-                object.setKey(dataSnapshot.getKey());
+                try {
 
-                if (object != null) {
+                    BaseModel object = dataSnapshot.getValue(classType);
+                    object.setKey(dataSnapshot.getKey());
 
-                    int index = getIndexOfObject(object);
+                    if (object != null) {
 
-                    if (index > -1) {
+                        int index = getIndexOfObject(object);
 
-                        items.set(index, object);
+                        if (index > -1) {
 
-                    } else {
+                            items.set(index, object);
 
-                        items.add(object);
+                        } else {
+
+                            items.add(object);
+                        }
+
+                        if (dataChangeListener != null && tableChildCount == items.size()) {
+                            dataChangeListener.onDataChanged(object);
+
+                        }
+
                     }
-
-                    if (dataChangeListener != null && tableChildCount == items.size()) {
-                        dataChangeListener.onDataChanged(object);
-
-                    }
-
+                } catch (DatabaseException exception) {
+                    LogHelper.error(exception.getMessage());
                 }
 
 
@@ -152,67 +158,90 @@ public class FirebaseRealtimeDatabaseHelper< T> {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                BaseModel object = dataSnapshot.getValue(classType);
-                object.setKey(dataSnapshot.getKey());
-                if (object != null) {
 
-                    int index = getIndexOfObject(object);
+                try {
+                    BaseModel object = dataSnapshot.getValue(classType);
+                    object.setKey(dataSnapshot.getKey());
+                    if (object != null) {
 
-                    if (index > -1) {
+                        int index = getIndexOfObject(object);
+
+                        if (index > -1) {
 
 
-                        items.set(index, object);
+                            items.set(index, object);
 
+                        }
+
+
+                        if (dataChangeListener != null && tableChildCount == items.size()) {
+                            dataChangeListener.onDataChanged(object);
+                        }
                     }
 
-
-                    if (dataChangeListener != null && tableChildCount == items.size()) {
-                        dataChangeListener.onDataChanged(object);
-                    }
+                } catch (DatabaseException exception) {
+                    LogHelper.error(exception.getMessage());
                 }
+
+
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                BaseModel object = dataSnapshot.getValue(classType);
-                object.setKey(dataSnapshot.getKey());
-                if (object != null) {
+                try {
+                    BaseModel object = dataSnapshot.getValue(classType);
+                    object.setKey(dataSnapshot.getKey());
+                    if (object != null) {
 
-                    int index = getIndexOfObject(object);
+                        int index = getIndexOfObject(object);
 
-                    if (index > -1) {
+                        if (index > -1) {
 
-                        items.remove(index);
-                    }
-
-                    if (dataChangeListener != null) {
-                        if (tableChildCount == items.size() || items.size() == 0) {
-                            dataChangeListener.onDataChanged(object);
+                            items.remove(index);
                         }
 
+                        if (dataChangeListener != null) {
+                            if (tableChildCount == items.size() || items.size() == 0) {
+                                dataChangeListener.onDataChanged(object);
+                            }
 
+
+                        }
                     }
+                } catch (DatabaseException exception) {
+                    LogHelper.error(exception.getMessage());
                 }
+
+
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                BaseModel object = dataSnapshot.getValue(classType);
-                object.setKey(dataSnapshot.getKey());
-                if (object != null) {
+
+                try {
+
+                    BaseModel object = dataSnapshot.getValue(classType);
+                    object.setKey(dataSnapshot.getKey());
+                    if (object != null) {
 
 
-                    int index = getIndexOfObject(object);
+                        int index = getIndexOfObject(object);
 
-                    if (index > -1) {
+                        if (index > -1) {
 
-                        items.set(index, object);
+                            items.set(index, object);
 
+                        }
+                        if (dataChangeListener != null && tableChildCount == items.size()) {
+                            dataChangeListener.onDataChanged(object);
+                        }
                     }
-                    if (dataChangeListener != null && tableChildCount == items.size()) {
-                        dataChangeListener.onDataChanged(object);
-                    }
+
+                } catch (DatabaseException exception) {
+                    LogHelper.error(exception.getMessage());
                 }
+
+
             }
 
             @Override
@@ -220,8 +249,6 @@ public class FirebaseRealtimeDatabaseHelper< T> {
 
             }
         };
-
-
 
 
     }
@@ -240,7 +267,7 @@ public class FirebaseRealtimeDatabaseHelper< T> {
 
     public void insert(BaseModel baseModel) {
 
-        LogHelper.show("Insert new object into the database of type: " + classType.getSimpleName());
+        LogHelper.error("Insert new object into the database of type: " + classType.getSimpleName());
         if (baseModel != null) {
             if (baseModel.getId() != null) {
                 if (baseModel.getId().isEmpty()) {
@@ -275,16 +302,14 @@ public class FirebaseRealtimeDatabaseHelper< T> {
     }
 
 
-
     public List<T> get() {
-        return (List<T>)items;
+        return (List<T>) items;
     }
+
     public void delete(BaseModel object) {
 
-        if(object!=null)
-        {
-            if(object.getKey()!=null)
-            {
+        if (object != null) {
+            if (object.getKey() != null) {
                 tableReference.child(object.getKey()).removeValue();
             }
 
@@ -296,7 +321,7 @@ public class FirebaseRealtimeDatabaseHelper< T> {
 
     public void update(BaseModel baseModel) {
 
-        LogHelper.show("Update an object into the database of type: " + classType.getSimpleName());
+        LogHelper.error("Update an object into the database of type: " + classType.getSimpleName());
 
         final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 

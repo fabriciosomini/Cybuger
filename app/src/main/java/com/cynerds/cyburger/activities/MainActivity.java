@@ -4,7 +4,6 @@ package com.cynerds.cyburger.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -14,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -352,10 +350,10 @@ public class MainActivity extends BaseActivity {
 
                         if (previousOrder != null) {
                             order = previousOrder;
-                            LogHelper.show("Restore previous order");
+                            LogHelper.error("Restore previous order");
                         } else {
                             order = new Order();
-                            LogHelper.show("reset order");
+                            LogHelper.error("reset order");
                         }
 
 
@@ -378,7 +376,7 @@ public class MainActivity extends BaseActivity {
                         order.setCustomer(customer);
                         firebaseRealtimeDatabaseHelperOrders.insert(order);
 
-                        LogHelper.show("Pedido confirmado");
+                        LogHelper.error("Pedido confirmado");
 
                         //Reset - pedido confirmado
                         badge.setBadgeCount(0);
@@ -402,7 +400,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    LogHelper.show("Pedido cancelado");
+                    LogHelper.error("Pedido cancelado");
 
                     DialogAction removeOrderDialogAction = new DialogAction();
                     removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
@@ -419,10 +417,10 @@ public class MainActivity extends BaseActivity {
 
                             if (previousOrder != null) {
                                 order = previousOrder;
-                                LogHelper.show("Restore previous order");
+                                LogHelper.error("Restore previous order");
                             } else {
                                 order = new Order();
-                                LogHelper.show("reset order");
+                                LogHelper.error("reset order");
                             }
 
 

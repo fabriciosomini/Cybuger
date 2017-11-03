@@ -181,7 +181,7 @@ public class ManageCombosActivity extends BaseActivity {
 
                                 firebaseRealtimeDatabaseHelper.delete(loadedCombo);
                                 finish();
-                                LogHelper.show("Combo removido");
+                                LogHelper.error("Combo removido");
                             }
                         });
 

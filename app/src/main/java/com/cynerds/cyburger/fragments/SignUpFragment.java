@@ -129,7 +129,7 @@ public class SignUpFragment extends Fragment {
     private void createUser(final String displayName, final String email, final String password) {
 
 
-        LogHelper.show("Trying to create a new user using email and password");
+        LogHelper.error("Trying to create a new user using email and password");
         signUpBtn.setEnabled(false);
         currentActivity.displayProgressBar(true);
 
@@ -141,7 +141,7 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
 
 
-                    LogHelper.show("New user created successfully");
+                    LogHelper.error("New user created successfully");
 
                     authenticationHelper.createProfile(task.getResult().getUser());
                     authenticationHelper.updateDisplayName(displayName);
@@ -158,7 +158,7 @@ public class SignUpFragment extends Fragment {
                         @Override
                         public void onError(Exception exception) {
                             currentActivity.displayProgressBar(false);
-                            LogHelper.show(exception.getMessage());
+                            LogHelper.error(exception.getMessage());
                         }
                     });
 
@@ -166,7 +166,7 @@ public class SignUpFragment extends Fragment {
 
                 } else {
 
-                    LogHelper.show("Failed to create user");
+                    LogHelper.error("Failed to create user");
 
                     signUpBtn.setEnabled(true);
                     currentActivity.displayProgressBar(false);
@@ -189,12 +189,12 @@ public class SignUpFragment extends Fragment {
                             FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_email_already_taken);
                         } else {
 
-                            LogHelper.show(
+                            LogHelper.error(
                                     exception.getClass().getSimpleName()
                                             + ": " + exception.getMessage());
                         }
                     }
-                    LogHelper.show("Algo deu errado ao criar o usuário");
+                    LogHelper.error("Algo deu errado ao criar o usuário");
                 }
             }
         });

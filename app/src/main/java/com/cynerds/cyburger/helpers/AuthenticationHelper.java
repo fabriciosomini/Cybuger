@@ -49,7 +49,7 @@ public class AuthenticationHelper {
 
     public void createProfile(FirebaseUser user) {
 
-        LogHelper.show("Trying to create a new profile for the new user");
+        LogHelper.error("Trying to create a new profile for the new user");
 
         Profile profile = new Profile();
         profile.setRole(Role.USER);
@@ -75,7 +75,7 @@ public class AuthenticationHelper {
 
     public void signIn(final String email, final String password) {
 
-        LogHelper.show("Tentando fazer signIn...");
+        LogHelper.error("Tentando fazer signIn...");
 
         mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -86,7 +86,7 @@ public class AuthenticationHelper {
                         boolean isSuccessful = task.isSuccessful();
                         if (isSuccessful) {
 
-                            LogHelper.show("Sign in task result: isSuccessful");
+                            LogHelper.error("Sign in task result: isSuccessful");
 
                             if (user == null) {
                                 user = FirebaseAuth.getInstance().getCurrentUser();
@@ -110,11 +110,11 @@ public class AuthenticationHelper {
 
                             if (exception != null) {
 
-                                LogHelper.show("Sign in task result: error - " + exception.getMessage());
+                                LogHelper.error("Sign in task result: error - " + exception.getMessage());
 
                                 if (onSignInListener != null) {
 
-                                    LogHelper.show("Callback Sign-in onError");
+                                    LogHelper.error("Callback Sign-in onError");
                                     onSignInListener.onError(exception);
                                 }
 
@@ -128,7 +128,7 @@ public class AuthenticationHelper {
     }
 
     private void createProfilesList() {
-        LogHelper.show("Initializing a new dataChangeListener for Profile");
+        LogHelper.error("Initializing a new dataChangeListener for Profile");
         FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
@@ -154,7 +154,7 @@ public class AuthenticationHelper {
     }
 
     private boolean findUserProfileAndSetToApplication() {
-        LogHelper.show("Trying to get profiles list");
+        LogHelper.error("Trying to get profiles list");
 
         List<Profile> profiles = getProfiles();
 
@@ -164,12 +164,12 @@ public class AuthenticationHelper {
 
             if (profile != null && user != null) {
                 if (profile.getUserId().equals(user.getUid())) {
-                    LogHelper.show("Found a matching profile in the list: " + profile.getUserId());
+                    LogHelper.error("Found a matching profile in the list: " + profile.getUserId());
                     CyburgerApplication.setProfile(profile);
 
                     if (onSignInListener != null) {
 
-                        LogHelper.show("Callback Sign-in onSuccess");
+                        LogHelper.error("Callback Sign-in onSuccess");
                         onSignInListener.onSuccess();
 
                         firebaseRealtimeDatabaseHelper.removeListenters();
@@ -203,11 +203,11 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.show("E-mail atualizado!");
+                            LogHelper.error("E-mail atualizado!");
                         } else {
                             Exception exception = task.getException();
                             if (exception != null) {
-                                LogHelper.show("Falha ao atualizar e-mail - "
+                                LogHelper.error("Falha ao atualizar e-mail - "
                                         + exception.getClass().getSimpleName()
                                         + ": " + exception.getMessage());
                             }
@@ -227,9 +227,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.show("Senha atualizada!");
+                            LogHelper.error("Senha atualizada!");
                         } else {
-                            LogHelper.show("Falha ao atualizar senha");
+                            LogHelper.error("Falha ao atualizar senha");
                         }
                     }
                 });
@@ -253,9 +253,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.show("Nome atualizado!");
+                            LogHelper.error("Nome atualizado!");
                         } else {
-                            LogHelper.show("Falha ao atualizar nome");
+                            LogHelper.error("Falha ao atualizar nome");
                         }
                     }
                 });
@@ -277,9 +277,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.show("Foto atualizada!");
+                            LogHelper.error("Foto atualizada!");
                         } else {
-                            LogHelper.show("Falha ao atualizar foto");
+                            LogHelper.error("Falha ao atualizar foto");
                         }
                     }
                 });
@@ -288,7 +288,7 @@ public class AuthenticationHelper {
 
     public List<Profile> getProfiles() {
         List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
-        LogHelper.show("Profiles loaded: " + profiles.size());
+        LogHelper.error("Profiles loaded: " + profiles.size());
         return profiles;
     }
 

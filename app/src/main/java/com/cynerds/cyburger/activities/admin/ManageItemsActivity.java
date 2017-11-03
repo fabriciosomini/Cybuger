@@ -2,7 +2,6 @@ package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -128,7 +127,7 @@ public class ManageItemsActivity extends BaseActivity {
 
                                 firebaseRealtimeDatabaseHelper.delete(loadedItem);
 
-                                LogHelper.show("Item removido");
+                                LogHelper.error("Item removido");
                             }
                         });
                         DialogManager confirmDeleteDialog = new DialogManager(ManageItemsActivity.this,

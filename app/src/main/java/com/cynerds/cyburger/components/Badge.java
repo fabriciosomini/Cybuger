@@ -1,13 +1,10 @@
 package com.cynerds.cyburger.components;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
@@ -69,11 +66,11 @@ public class Badge extends ConstraintLayout {
         badge.clearAnimation();
 
         if (count < 1) {
-            LogHelper.show("Hide the badge");
+            LogHelper.error("Hide the badge");
             this.setVisibility(INVISIBLE);
             this.refreshDrawableState();
         } else {
-            LogHelper.show("Show the badge");
+            LogHelper.error("Show the badge");
             this.setVisibility(VISIBLE);
             badgeCountText.setText(String.valueOf(count));
             animateSize();

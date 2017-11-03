@@ -210,7 +210,7 @@ public class ItemsMenuFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            LogHelper.show("Item adicionado ao pedido");
+                            LogHelper.error("Item adicionado ao pedido");
 
                             Badge badge = currentActivty.getBadge();
 

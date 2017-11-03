@@ -205,7 +205,7 @@ public class CombosFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            LogHelper.show("Item adicionado ao pedido");
+                            LogHelper.error("Item adicionado ao pedido");
 
 
                             Badge badge = currentActivty.getBadge();

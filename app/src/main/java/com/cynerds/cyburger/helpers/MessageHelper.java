@@ -2,11 +2,8 @@ package com.cynerds.cyburger.helpers;
 
 import android.content.Context;
 import android.os.CountDownTimer;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.components.MessageToast;
 import com.cynerds.cyburger.models.general.MessageType;
 
@@ -28,7 +25,7 @@ public class MessageHelper {
         toast.setView(messageToast);
 
 
-        LogHelper.show("Show MessageToast:" + String.valueOf(toast.getDuration()));
+        LogHelper.error("Show MessageToast:" + String.valueOf(toast.getDuration()));
 
 
         new CountDownTimer(10000, 1000) {
