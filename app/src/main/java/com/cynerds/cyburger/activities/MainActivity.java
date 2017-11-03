@@ -320,9 +320,7 @@ public class MainActivity extends BaseActivity {
                                            confirmFinishOrderDialog.closeDialog();
                                            orderDialog.closeDialog();
                                            MessageHelper.show(MainActivity.this,
-                                                   MessageType.SUCCESS, "Pedido do cliente '"
-                                                   +order.getCustomer().getCustomerName()
-                                                   + "'concluído!");
+                                                   MessageType.SUCCESS, "Pedido concluído!");
                                            return;
                                        }
                                     }
