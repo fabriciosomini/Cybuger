@@ -20,7 +20,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
-import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.combos.Combo;
@@ -36,12 +36,12 @@ import java.util.List;
 public class CombosFragment extends Fragment {
 
 
-    final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
-
-    List<CardModel> cardModels;
-    CardAdapter adapter;
-    private boolean isListCreated;
+    private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
     private MainActivity currentActivty;
+    private List<CardModel> cardModels;
+    private CardAdapter adapter;
+    private boolean isListCreated;
+    private String filter = "";
 
     public CombosFragment() {
 
@@ -61,7 +61,7 @@ public class CombosFragment extends Fragment {
 
         if (!isListCreated) {
             isListCreated = true;
-            createList(view);
+            setListDataListener(view);
         }
 
         updateList(view);
@@ -85,6 +85,9 @@ public class CombosFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                generateDashboardCardViewItems();
+                filterList(s.toString());
+
             }
 
             @Override
@@ -94,16 +97,26 @@ public class CombosFragment extends Fragment {
         });
     }
 
-    private void createList(final View view) {
+    private void filterList(String filter) {
+        this.filter = filter;
+        List<CardModel> filteredCardModels = CardModelFilterHelper.filterCardModel(cardModels, filter);
+        cardModels.clear();
+        cardModels.addAll(filteredCardModels);
+        currentActivty.runOnUiThread(new Runnable() {
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void setListDataListener(final View view) {
 
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener
+                = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
-
-
-                    updateList(view);
-
+                updateList(view);
             }
         };
 
@@ -112,10 +125,12 @@ public class CombosFragment extends Fragment {
 
     private void updateList(View view) {
 
-        // LogHelper.show( "UpdateList " + this.getClass().getSimpleName());
-
         final ListView listview = view.findViewById(android.R.id.list);
-        getDashboardCardViewItems();
+        generateDashboardCardViewItems();
+
+        if(!filter.isEmpty()){
+            filterList(filter);
+        }
 
         if (adapter == null) {
             adapter =
@@ -139,7 +154,7 @@ public class CombosFragment extends Fragment {
         }
     }
 
-    public void getDashboardCardViewItems() {
+    public void generateDashboardCardViewItems() {
 
         cardModels.clear();
 
@@ -168,11 +183,9 @@ public class CombosFragment extends Fragment {
                     Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
 
-                    if(CyburgerApplication.isAdmin())
-                    {
+                    if (CyburgerApplication.isAdmin()) {
 
                         editRecordBtn.setVisibility(View.VISIBLE);
-
 
 
                         editRecordBtn.setOnClickListener(new View.OnClickListener() {
@@ -183,8 +196,7 @@ public class CombosFragment extends Fragment {
                                 previewItemDialogManager.closeDialog();
                             }
                         });
-                    }
-                    else{
+                    } else {
 
                         editRecordBtn.setVisibility(View.INVISIBLE);
                     }

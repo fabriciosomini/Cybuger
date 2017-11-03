@@ -16,6 +16,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:hint="@string/general_search"
+        android:maxLines="1"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

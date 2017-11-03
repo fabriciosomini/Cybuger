@@ -17,6 +17,7 @@ import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.models.combos.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.items.Item;
@@ -41,6 +42,7 @@ public class OrdersFragment extends Fragment {
     private boolean isListCreated;
     private MainActivity currentActivty;
     private View view;
+    private String filter = "";
 
     public OrdersFragment() {
 
@@ -63,7 +65,7 @@ public class OrdersFragment extends Fragment {
 
         if (!isListCreated) {
             isListCreated = true;
-            createList(view);
+            setListDataListener(view);
         }
 
         updateList(view);
@@ -77,7 +79,7 @@ public class OrdersFragment extends Fragment {
 
         if (!isListCreated) {
             isListCreated = true;
-            createList(view);
+            setListDataListener(view);
         }
 
         updateList(view);
@@ -87,7 +89,6 @@ public class OrdersFragment extends Fragment {
     }
 
     private void setUIEvents(View view) {
-
 
         EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
 
@@ -101,6 +102,9 @@ public class OrdersFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                generateDashboardCardViewItems();
+                filterList(s.toString());
+
             }
 
             @Override
@@ -110,16 +114,25 @@ public class OrdersFragment extends Fragment {
         });
     }
 
-    private void createList(final View view) {
+    private void filterList(String filter) {
+        this.filter = filter;
+        List<CardModel> filteredCardModels = CardModelFilterHelper.filterCardModel(cardModels, filter);
+        cardModels.clear();
+        cardModels.addAll(filteredCardModels);
+        currentActivty.runOnUiThread(new Runnable() {
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
 
+    private void setListDataListener(final View view) {
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener
+                = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
-
-
                 updateList(view);
-
             }
         };
 
@@ -128,10 +141,12 @@ public class OrdersFragment extends Fragment {
 
     private void updateList(View view) {
 
-        //LogHelper.show( "UpdateList " + this.getClass().getSimpleName());
-
         final ListView listview = view.findViewById(android.R.id.list);
-        getDashboardCardViewItems();
+        generateDashboardCardViewItems();
+
+        if(!filter.isEmpty()){
+            filterList(filter);
+        }
 
         if (adapter == null) {
             adapter =
@@ -155,7 +170,7 @@ public class OrdersFragment extends Fragment {
         }
     }
 
-    public void getDashboardCardViewItems() {
+    public void generateDashboardCardViewItems() {
 
         cardModels.clear();
         currentActivty.clearNotifications(MainActivity.ORDERS_TAB);

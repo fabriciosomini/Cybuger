@@ -20,7 +20,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
-import com.cynerds.cyburger.helpers.DialogAction;
+import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.items.Item;
@@ -41,7 +41,7 @@ public class ItemsMenuFragment extends Fragment {
     CardAdapter adapter;
     private boolean isListCreated;
     private MainActivity currentActivty;
-
+    private String filter = "";
 
     public ItemsMenuFragment() {
 
@@ -61,7 +61,7 @@ public class ItemsMenuFragment extends Fragment {
 
         if (!isListCreated) {
             isListCreated = true;
-            createList(view);
+            setListDataListener(view);
         }
 
         updateList(view);
@@ -72,9 +72,7 @@ public class ItemsMenuFragment extends Fragment {
 
     private void setUIEvents(View view) {
 
-
         EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
-
 
         searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -85,6 +83,8 @@ public class ItemsMenuFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                generateDashboardCardViewItems();
+                filterList(s.toString());
             }
 
             @Override
@@ -94,17 +94,25 @@ public class ItemsMenuFragment extends Fragment {
         });
     }
 
-    private void createList(final View view) {
+    private void filterList(String filter) {
+        this.filter = filter;
+        List<CardModel> filteredCardModels = CardModelFilterHelper.filterCardModel(cardModels, filter);
+        cardModels.clear();
+        cardModels.addAll(filteredCardModels);
+        currentActivty.runOnUiThread(new Runnable() {
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
 
+    private void setListDataListener(final View view) {
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener
+                = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
-
-
                 updateList(view);
-
-
             }
         };
 
@@ -113,9 +121,12 @@ public class ItemsMenuFragment extends Fragment {
 
     private void updateList(View view) {
 
-        //LogHelper.show( "UpdateList " + this.getClass().getSimpleName());
         final ListView listview = view.findViewById(android.R.id.list);
-        getDashboardCardViewItems();
+        generateDashboardCardViewItems();
+
+        if(!filter.isEmpty()){
+            filterList(filter);
+        }
 
         if (adapter == null) {
             adapter =
@@ -147,7 +158,7 @@ public class ItemsMenuFragment extends Fragment {
 
     }
 
-    public void getDashboardCardViewItems() {
+    public void generateDashboardCardViewItems() {
 
         cardModels.clear();
 
