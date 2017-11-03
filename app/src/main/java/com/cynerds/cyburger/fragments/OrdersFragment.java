@@ -227,7 +227,7 @@ public class OrdersFragment extends Fragment {
             }
 
             if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                cardModel.setTitle("Seu pedido");
+                cardModel.setTitle("Meu pedido");
                 cardModel.setTitleColor(R.color.colorAccent);
             } else {
                 cardModel.setTitle(customerName);
