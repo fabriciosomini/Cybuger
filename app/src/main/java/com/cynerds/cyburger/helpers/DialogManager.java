@@ -35,6 +35,7 @@ public class DialogManager {
 
         builder = new AlertDialog.Builder(context);
         alertDialog = builder.create();
+
     }
 
 
@@ -185,8 +186,6 @@ public class DialogManager {
 
             }
         }
-
-
 
         alertDialog.show();
 

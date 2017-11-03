@@ -96,8 +96,8 @@ public class MainActivity extends BaseActivity {
 
 
     public MainActivity() {
-        firebaseRealtimeDatabaseHelperOrders = new FirebaseRealtimeDatabaseHelper(Order.class);
-        firebaseRealtimeDatabaseHelperProfile = new FirebaseRealtimeDatabaseHelper(Profile.class);
+        firebaseRealtimeDatabaseHelperOrders = new FirebaseRealtimeDatabaseHelper(this,  Order.class);
+        firebaseRealtimeDatabaseHelperProfile = new FirebaseRealtimeDatabaseHelper(this, Profile.class);
     }
 
     public Order getOrder() {
@@ -468,7 +468,7 @@ public class MainActivity extends BaseActivity {
         dialogManager.getContentView().findViewById(R.id.confirmExitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishAffinity();
             }
         });
 

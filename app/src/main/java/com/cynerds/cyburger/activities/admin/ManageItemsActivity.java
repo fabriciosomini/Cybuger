@@ -29,7 +29,7 @@ public class ManageItemsActivity extends BaseActivity {
 
     public ManageItemsActivity() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Item.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(this, Item.class);
 
     }
 

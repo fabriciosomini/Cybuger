@@ -46,7 +46,7 @@ public class OrdersFragment extends Fragment {
 
     public OrdersFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Order.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(),Order.class);
         cardModels = new ArrayList<>();
 
         profile = CyburgerApplication.getProfile();

@@ -45,7 +45,7 @@ public class ItemsMenuFragment extends Fragment {
 
     public ItemsMenuFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Item.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(), Item.class);
         cardModels = new ArrayList<>();
 
     }

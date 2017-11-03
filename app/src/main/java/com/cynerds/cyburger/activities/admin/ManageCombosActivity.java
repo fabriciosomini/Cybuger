@@ -33,8 +33,8 @@ public class ManageCombosActivity extends BaseActivity {
     private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperItems;
 
     public ManageCombosActivity() {
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Combo.class);
-        firebaseRealtimeDatabaseHelperItems = new FirebaseRealtimeDatabaseHelper(Item.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(this, Combo.class);
+        firebaseRealtimeDatabaseHelperItems = new FirebaseRealtimeDatabaseHelper(this, Item.class);
 
     }
 

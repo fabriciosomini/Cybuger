@@ -45,7 +45,7 @@ public class CombosFragment extends Fragment {
 
     public CombosFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Combo.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(),Combo.class);
         cardModels = new ArrayList<>();
 
     }

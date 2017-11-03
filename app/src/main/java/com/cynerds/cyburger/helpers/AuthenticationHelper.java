@@ -60,7 +60,7 @@ public class AuthenticationHelper {
         }
 
         if (firebaseRealtimeDatabaseHelper == null) {
-            firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+            firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(activity, Profile.class);
         }
 
         firebaseRealtimeDatabaseHelper.insert(profile);
@@ -93,7 +93,7 @@ public class AuthenticationHelper {
                             }
 
                             if (firebaseRealtimeDatabaseHelper == null) {
-                                firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(Profile.class);
+                                firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(activity, Profile.class);
                             }
 
                             if(!findUserProfileAndSetToApplication())
