@@ -54,7 +54,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     }
 
- 
+
     public FirebaseRealtimeDatabaseHelper(Context context, Class<BaseModel> classType) {
 
         this(classType);

@@ -188,7 +188,7 @@ public class DialogManager {
             }
         }
 
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+       
         alertDialog.show();
 
         Button negativeBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
