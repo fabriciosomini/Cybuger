@@ -21,10 +21,20 @@
         </activity>
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="OPEN_ACTIVITY_1" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.admin.ManageItemsActivity" />
         <activity android:name=".activities.admin.ManageCombosActivity"></activity>
+        <service android:name=".services.FirebaeNotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

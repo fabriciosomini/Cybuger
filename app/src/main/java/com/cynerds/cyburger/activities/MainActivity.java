@@ -39,7 +39,7 @@ import com.cynerds.cyburger.models.items.Item;
 import com.cynerds.cyburger.models.orders.Order;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends BaseActivity {
@@ -118,16 +118,17 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         setUIEvents();
 
+        CyburgerApplication.subscribeToUserTopic();
+
     }
+
+
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
 
-       /* bottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.redishBrown));
-        bottomNavigation.getBackground().setAlpha(25);*/
         return super.onCreateView(name, context, attrs);
     }
 

@@ -19,6 +19,8 @@ import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.roles.Role;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -56,7 +58,9 @@ public class CyburgerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
+        FirebaseDatabase firebaseInstance = FirebaseDatabase.getInstance();
+        firebaseInstance.setPersistenceEnabled(false);
+
         registerActivityLifecycleCallbacks(new ApplicationLifecycleHandler());
         onFatalErrorListener = new OnFatalErrorListener() {
             @Override
@@ -118,5 +122,23 @@ public class CyburgerApplication extends Application {
 
     }
 
+    public  static String getUserTopicName (){
 
+        String topicName = "";
+        if(profile!=null) {
+            String userId = profile.getUserId();
+            topicName = "cyburger-" + userId;
+        }
+
+        return topicName;
+    }
+
+    public static void subscribeToUserTopic() {
+
+            if(profile!=null){
+                FirebaseMessaging.getInstance().subscribeToTopic(getUserTopicName());
+            }
+
+
+    }
 }
