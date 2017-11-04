@@ -461,6 +461,9 @@ public class MainActivity extends BaseActivity {
 
 
                             orderDialog.closeDialog();
+
+                            MessageHelper.show(MainActivity.this,
+                                    MessageType.SUCCESS, "Pedido cancelado!");
                         }
                     });
 
