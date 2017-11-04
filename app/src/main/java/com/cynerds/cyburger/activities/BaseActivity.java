@@ -33,6 +33,7 @@ public class BaseActivity extends AppCompatActivity {
     private View.OnClickListener onSaveListener;
     private View.OnClickListener onCancelListener;
     private TextView actionBarTitle;
+    private boolean finishApp;
 
 
     public BaseActivity() {
@@ -216,6 +217,19 @@ public class BaseActivity extends AppCompatActivity {
         return newObject;
     }
 
+    public void finishApplication(){
+        this.finishApp = true;
+        finish();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(finishApp){
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+
+    }
 
 }
 

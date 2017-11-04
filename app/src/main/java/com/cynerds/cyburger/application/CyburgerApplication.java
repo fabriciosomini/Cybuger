@@ -3,14 +3,18 @@ package com.cynerds.cyburger.application;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 
+import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.helpers.OnFatalErrorListener;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.roles.Role;
@@ -52,69 +56,67 @@ public class CyburgerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
         registerActivityLifecycleCallbacks(new ApplicationLifecycleHandler());
         onFatalErrorListener = new OnFatalErrorListener() {
             @Override
             public void onFatalError(final Context context, final Exception ex) {
-                final Activity activity =  ((Activity)(context));
 
-                DialogAction sendToDevsDialogAction = new DialogAction();
-                sendToDevsDialogAction.setPositiveAction(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FirebaseRealtimeDatabaseHelper<CrashReport> crashReportFirebaseRealtimeDatabaseHelper
-                                = new FirebaseRealtimeDatabaseHelper(CrashReport.class);
+                if (context != null) {
+                    final BaseActivity activity = ((BaseActivity) (context));
 
-                        StringWriter sw = new StringWriter();
-                        PrintWriter pw = new PrintWriter(sw);
-                        ex.printStackTrace(pw);
-                        String sStackTrace = sw.toString(); // stack trace as a string
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-                        String date = simpleDateFormat.format(new Date());
+                    reportError(ex, activity.getClass().getSimpleName());
 
-                        String userId ="not_logged_in";
 
-                        if(profile!=null){
-                            userId = profile.getUserId();
+                    MessageHelper.OnMessageDismissListener onDismissListener  = new MessageHelper.OnMessageDismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            activity.finishApplication();
                         }
+                    };
 
-                        CrashReport crashReport = new CrashReport();
-                        crashReport.setActivityName(activity.getClass().getSimpleName());
-                        crashReport.setUserId(userId);
-                        crashReport.setErrorMessage(ex.getMessage());
-                        crashReport.setStackTrace(sStackTrace);
-                        crashReport.setDate(date);
+                    MessageHelper.show(activity, MessageType.ERROR,"Erro interno", onDismissListener);
 
-                        crashReportFirebaseRealtimeDatabaseHelper.insert(crashReport);
-                        activity.finishAffinity();
-                    }
-                });
 
-                sendToDevsDialogAction.setNegativeAction(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                       activity.finishAffinity();
-                    }
-                });
-                if(context!=null){
-                    DialogManager fatalErrorDialogManager = new DialogManager(context,
-                            DialogManager.DialogType.YES_NO);
-                    fatalErrorDialogManager.setAction(sendToDevsDialogAction);
-                    fatalErrorDialogManager.showDialog("Erro","Ocorreu um erro fatal e aplicação será encerrada."
-                            +" Você deseja enviar este erro para os desenvolvedores avaliarem o que houve?");
-                }else{
+
+
+                } else {
 
                 }
 
             }
         };
-
-
-
     }
 
+    private void reportError(Exception ex, String activityName) {
+        FirebaseRealtimeDatabaseHelper<CrashReport> crashReportFirebaseRealtimeDatabaseHelper
+                = new FirebaseRealtimeDatabaseHelper(CrashReport.class);
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String sStackTrace = sw.toString(); // stack trace as a string
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        String date = simpleDateFormat.format(new Date());
+
+        String userId = "not_logged_in";
+
+        if (profile != null) {
+            userId = profile.getUserId();
+        }
+
+        CrashReport crashReport = new CrashReport();
+        crashReport.setActivityName(activityName);
+        crashReport.setUserId(userId);
+        crashReport.setErrorMessage(ex.getMessage());
+        crashReport.setStackTrace(sStackTrace);
+        crashReport.setDate(date);
+
+        crashReportFirebaseRealtimeDatabaseHelper.insert(crashReport);
+
+    }
 
 
 }

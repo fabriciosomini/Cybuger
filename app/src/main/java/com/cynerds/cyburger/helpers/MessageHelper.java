@@ -2,6 +2,7 @@ package com.cynerds.cyburger.helpers;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.cynerds.cyburger.components.MessageToast;
@@ -14,9 +15,20 @@ import com.cynerds.cyburger.models.general.MessageType;
 public class MessageHelper {
 
 
+    public  interface OnMessageDismissListener
+    {
+        public void onDismiss();
+    }
+
 
     public static void show(Context context, MessageType messageType, String message) {
 
+
+        show(context, messageType, message,null);
+
+    }
+
+    public static void show(Context context, MessageType messageType, String message, final OnMessageDismissListener onMessageDismissListener) {
         MessageToast messageToast = new MessageToast(context);
         messageToast.setType(messageType);
         messageToast.setText(message);
@@ -27,22 +39,29 @@ public class MessageHelper {
 
         LogHelper.error("Show MessageToast:" + String.valueOf(toast.getDuration()));
 
-
-        new CountDownTimer(10000, 1000) {
+         new CountDownTimer(4000, 1000) {
             @Override
             public void onFinish() {
+
                 toast.show();
+
+                if(onMessageDismissListener!=null){
+                    onMessageDismissListener.onDismiss();
+                }
+
             }
 
             @Override
             public void onTick(long millisUntilFinished) {
 
+
                 toast.show();
+
+
+
             }
         }.start();
     }
-
-
 
 
 }

@@ -30,8 +30,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     private final String tableName;
 
 
-
-    private  Context context;
+    private Context context;
     private FirebaseDatabase database;
     private DatabaseReference tableReference;
     private List<BaseModel> items;
@@ -42,8 +41,6 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     private boolean notified;
 
 
-
-
     public FirebaseRealtimeDatabaseHelper(Class<BaseModel> classType) {
 
         tableName = classType.getSimpleName();
@@ -51,16 +48,13 @@ public class FirebaseRealtimeDatabaseHelper<T> {
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
         tableReference = databaseReference.child(tableName);
-        tableReference.keepSynced(true);
+        tableReference.keepSynced(false);
         items = new ArrayList<>();
-
         createDataWatcher();
-
-
-
 
     }
 
+ 
     public FirebaseRealtimeDatabaseHelper(Context context, Class<BaseModel> classType) {
 
         this(classType);
@@ -169,7 +163,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
                     }
                 } catch (DatabaseException exception) {
-                    CyburgerApplication.onFatalErrorListener.onFatalError(context,exception);
+                    CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
 
 
@@ -199,7 +193,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                     }
 
                 } catch (DatabaseException exception) {
-                    CyburgerApplication.onFatalErrorListener.onFatalError(context,exception);
+                    CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
 
 
@@ -228,7 +222,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                         }
                     }
                 } catch (DatabaseException exception) {
-                    CyburgerApplication.onFatalErrorListener.onFatalError(context,exception);
+                    CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
 
 
@@ -257,7 +251,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                     }
 
                 } catch (DatabaseException exception) {
-                    CyburgerApplication.onFatalErrorListener.onFatalError(context,exception);
+                    CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
 
 
