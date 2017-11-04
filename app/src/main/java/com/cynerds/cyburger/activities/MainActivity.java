@@ -336,14 +336,14 @@ public class MainActivity extends BaseActivity {
                                            String topic = "cyburger-" + p.getUserId();
                                            String customerName = order.getCustomer().getCustomerName();
 
-                                           PostNotificationHelper.post(MainActivity.this,
-                                                   "", customerName
-                                                           +" seu pedido está pronto!", topic);
-
                                            confirmFinishOrderDialog.closeDialog();
                                            orderDialog.closeDialog();
                                            MessageHelper.show(MainActivity.this,
                                                    MessageType.SUCCESS, "Pedido concluído!");
+
+                                           PostNotificationHelper.post(MainActivity.this,
+                                                   "", customerName
+                                                           +" seu pedido está pronto!", topic);
                                            return;
                                        }
                                     }
@@ -420,6 +420,7 @@ public class MainActivity extends BaseActivity {
             }
 
 
+
             removeOrderBtn.setVisibility(View.VISIBLE);
             removeOrderBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -434,6 +435,16 @@ public class MainActivity extends BaseActivity {
                             if (readOnly) {
                                 firebaseRealtimeDatabaseHelperOrders.delete(order);
                                 removeNotification(ORDERS_TAB, 1);
+
+                                if(CyburgerApplication.isAdmin()){
+
+                                    Customer customer = order.getCustomer();
+                                    String topic = "cyburger-" + customer.getLinkedProfileId();
+                                    String customerName = order.getCustomer().getCustomerName();
+                                    PostNotificationHelper.post(MainActivity.this,
+                                            "", customerName
+                                                    +" seu pedido foi cancelado!", topic);
+                                }
 
                             } else {
                                 previousOrder = new Order();
