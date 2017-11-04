@@ -1,7 +1,7 @@
 package com.cynerds.cyburger.models.profile;
 
 import com.cynerds.cyburger.models.general.BaseModel;
-import com.cynerds.cyburger.models.roles.Role;
+import com.cynerds.cyburger.models.role.Role;
 
 /**
  * Created by fabri on 07/10/2017.

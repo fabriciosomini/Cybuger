@@ -32,14 +32,17 @@ import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
-import com.cynerds.cyburger.models.combos.Combo;
+import com.cynerds.cyburger.helpers.PostNotificationHelper;
+import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.general.MessageType;
-import com.cynerds.cyburger.models.items.Item;
-import com.cynerds.cyburger.models.orders.Order;
+import com.cynerds.cyburger.models.item.Item;
+import com.cynerds.cyburger.models.order.Order;
 import com.cynerds.cyburger.models.profile.Profile;
+import com.cynerds.cyburger.services.FirebaseNotificationService;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
@@ -313,9 +316,30 @@ public class MainActivity extends BaseActivity {
                                                    + itemsBonusPoints
                                                    + p.getBonusPoints();
 
+
+                                           List<Order> orderList = firebaseRealtimeDatabaseHelperOrders.get();
+                                           if(orderList.size()>1){
+                                               Order nextOrder = orderList.get(1);
+                                               Customer nextCustomer = nextOrder.getCustomer();
+                                               String nextCustomerName = nextCustomer.getCustomerName();
+                                               String topic = "cyburger-" + nextCustomer.getLinkedProfileId();
+                                               PostNotificationHelper.post(MainActivity.this,
+                                                       "", nextCustomerName
+                                                               + " você é o próximo!", topic);
+                                           }
+
+
                                            p.setBonusPoints(totalBonusPoints);
                                            firebaseRealtimeDatabaseHelperProfile.update(p);
                                            firebaseRealtimeDatabaseHelperOrders.delete(order);
+
+                                           String topic = "cyburger-" + p.getUserId();
+                                           String customerName = order.getCustomer().getCustomerName();
+
+                                           PostNotificationHelper.post(MainActivity.this,
+                                                   "", customerName
+                                                           +" seu pedido está pronto!", topic);
+
                                            confirmFinishOrderDialog.closeDialog();
                                            orderDialog.closeDialog();
                                            MessageHelper.show(MainActivity.this,

@@ -8,7 +8,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.models.profile.Profile;
-import com.cynerds.cyburger.models.roles.Role;
+import com.cynerds.cyburger.models.role.Role;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

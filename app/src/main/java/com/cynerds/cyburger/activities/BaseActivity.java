@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.GsonHelper;
@@ -226,6 +227,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
 
         if(finishApp){
+            CyburgerApplication.unsubscribeToUserTopic();
             android.os.Process.killProcess(android.os.Process.myPid());
         }
 

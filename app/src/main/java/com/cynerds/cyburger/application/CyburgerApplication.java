@@ -1,31 +1,24 @@
 package com.cynerds.cyburger.application;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.view.View;
 
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
-import com.cynerds.cyburger.helpers.DialogAction;
-import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.helpers.OnFatalErrorListener;
 import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
-import com.cynerds.cyburger.models.roles.Role;
+import com.cynerds.cyburger.models.role.Role;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Date;
 
 /**
@@ -122,7 +115,7 @@ public class CyburgerApplication extends Application {
 
     }
 
-    public  static String getUserTopicName (){
+    public   static String getUserTopicName (){
 
         String topicName = "";
         if(profile!=null) {
@@ -138,6 +131,15 @@ public class CyburgerApplication extends Application {
             if(profile!=null){
                 FirebaseMessaging.getInstance().subscribeToTopic(getUserTopicName());
             }
+
+
+    }
+
+    public static void unsubscribeToUserTopic() {
+
+        if(profile!=null){
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(getUserTopicName());
+        }
 
 
     }

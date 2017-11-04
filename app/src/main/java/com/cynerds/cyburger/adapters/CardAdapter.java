@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.models.views.CardModel;
+import com.cynerds.cyburger.models.view.CardModel;
 
 import java.util.List;
 

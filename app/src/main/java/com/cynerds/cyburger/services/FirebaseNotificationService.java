@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -17,10 +18,10 @@ import com.google.firebase.messaging.RemoteMessage;
 /**
  * Created by fabri on 04/11/2017.
  */
-public class FirebaeNotificationService extends com.google.firebase.messaging.FirebaseMessagingService {
+public class FirebaseNotificationService extends com.google.firebase.messaging.FirebaseMessagingService {
 
 
-    public FirebaeNotificationService() {
+    public FirebaseNotificationService() {
 
     }
 
@@ -29,31 +30,19 @@ public class FirebaeNotificationService extends com.google.firebase.messaging.Fi
 
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        // Check if message contains a data payload.
 
-        if (remoteMessage.getData().size() > 0) {
+        if (remoteMessage.getFrom().equals("/topics/" + CyburgerApplication.getUserTopicName())) {
+            if (remoteMessage.getNotification() != null) {
 
-            LogHelper.error("Message data payload: " + remoteMessage.getData());
+                String title = remoteMessage.getNotification().getTitle(); //get title
+                String message = remoteMessage.getNotification().getBody(); //get message
 
+                LogHelper.error("Message Notification Title: " + title);
+                LogHelper.error("Message Notification Body: " + message);
 
-        }
+                sendNotification(title, message);
+            }
 
-
-        // Check if message contains a notification payload.
-
-        if (remoteMessage.getNotification() != null) {
-
-            String title = remoteMessage.getNotification().getTitle(); //get title
-
-            String message = remoteMessage.getNotification().getBody(); //get message
-
-
-            LogHelper.error("Message Notification Title: " + title);
-
-            LogHelper.error("Message Notification Body: " + message);
-
-
-            sendNotification(title, message);
 
         }
 
@@ -61,7 +50,6 @@ public class FirebaeNotificationService extends com.google.firebase.messaging.Fi
 
 
     @Override
-
     public void onDeletedMessages() {
 
 
@@ -96,7 +84,7 @@ public class FirebaeNotificationService extends com.google.firebase.messaging.Fi
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0 /* ID of SubscribeNotification */, notificationBuilder.build());
 
     }
 

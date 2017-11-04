@@ -11,7 +11,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.models.views.TagModel;
+import com.cynerds.cyburger.models.view.TagModel;
 
 import java.util.ArrayList;
 import java.util.List;

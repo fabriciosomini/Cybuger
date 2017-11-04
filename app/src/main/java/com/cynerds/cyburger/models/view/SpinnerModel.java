@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.models.views;
+package com.cynerds.cyburger.models.view;
 
 /**
  * Created by fabri on 08/07/2017.

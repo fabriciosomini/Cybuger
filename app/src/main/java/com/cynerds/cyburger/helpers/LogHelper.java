@@ -8,6 +8,10 @@ public class LogHelper {
 
     public static void error(String message) {
 
+        if(message == null){
+            message = "NO_MESSAGE";
+        }
+
         if (BuildConfig.DEBUG) {
             Log.e("UI Log",message);
         }

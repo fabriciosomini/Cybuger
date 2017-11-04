@@ -18,10 +18,10 @@ import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.models.combos.Combo;
-import com.cynerds.cyburger.models.combos.ComboDay;
-import com.cynerds.cyburger.models.items.Item;
-import com.cynerds.cyburger.models.views.TagModel;
+import com.cynerds.cyburger.models.combo.Combo;
+import com.cynerds.cyburger.models.combo.ComboDay;
+import com.cynerds.cyburger.models.item.Item;
+import com.cynerds.cyburger.models.view.TagModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

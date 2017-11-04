@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.models.views;
+package com.cynerds.cyburger.models.view;
 
 import android.view.View;
 

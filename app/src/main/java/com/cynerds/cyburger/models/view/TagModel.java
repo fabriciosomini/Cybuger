@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.models.views;
+package com.cynerds.cyburger.models.view;
 
 /**
  * Created by comp8 on 11/10/2017.

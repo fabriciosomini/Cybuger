@@ -1,6 +1,6 @@
 package com.cynerds.cyburger.helpers;
 
-import com.cynerds.cyburger.models.views.CardModel;
+import com.cynerds.cyburger.models.view.CardModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -16,7 +16,7 @@ import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.models.items.Item;
+import com.cynerds.cyburger.models.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.models.items;
+package com.cynerds.cyburger.models.item;
 
 import com.cynerds.cyburger.models.general.BaseModel;
 

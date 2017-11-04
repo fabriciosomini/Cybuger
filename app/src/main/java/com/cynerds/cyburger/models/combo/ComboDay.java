@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.models.combos;
+package com.cynerds.cyburger.models.combo;
 
 /**
  * Created by fabri on 09/10/2017.

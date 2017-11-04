@@ -23,8 +23,8 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.models.combos.Combo;
-import com.cynerds.cyburger.models.views.CardModel;
+import com.cynerds.cyburger.models.combo.Combo;
+import com.cynerds.cyburger.models.view.CardModel;
 
 import java.util.ArrayList;
 import java.util.List;

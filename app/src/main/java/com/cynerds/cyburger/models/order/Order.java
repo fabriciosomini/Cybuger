@@ -1,9 +1,9 @@
-package com.cynerds.cyburger.models.orders;
+package com.cynerds.cyburger.models.order;
 
 import com.cynerds.cyburger.models.general.BaseModel;
-import com.cynerds.cyburger.models.combos.Combo;
+import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
-import com.cynerds.cyburger.models.items.Item;
+import com.cynerds.cyburger.models.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

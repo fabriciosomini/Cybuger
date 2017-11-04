@@ -18,12 +18,12 @@ import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
-import com.cynerds.cyburger.models.combos.Combo;
+import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
-import com.cynerds.cyburger.models.items.Item;
-import com.cynerds.cyburger.models.orders.Order;
+import com.cynerds.cyburger.models.item.Item;
+import com.cynerds.cyburger.models.order.Order;
 import com.cynerds.cyburger.models.profile.Profile;
-import com.cynerds.cyburger.models.views.CardModel;
+import com.cynerds.cyburger.models.view.CardModel;
 
 import java.util.ArrayList;
 import java.util.List;
