@@ -1,8 +1,12 @@
 package com.cynerds.cyburger.fragments;
 
 
+import android.accounts.Account;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
@@ -20,14 +25,27 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.facebook.CallbackManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.auth.api.credentials.CredentialRequest;
+import com.google.android.gms.auth.api.credentials.CredentialRequestResult;
+import com.google.android.gms.auth.api.credentials.IdentityProviders;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +68,8 @@ public class SignInFragment extends Fragment {
     private Permissions permissions;
     private CallbackManager mCallbackManager;
     private AuthenticationHelper authenticationHelper;
+    private GoogleApiClient mCredentialsApiClient;
+    final static int RC_SAVE = 100;
 
     public SignInFragment() {
 
@@ -67,7 +87,6 @@ public class SignInFragment extends Fragment {
 
         authenticationHelper = new AuthenticationHelper(currentActivity);
         setUIEvents(inflatedView);
-
 
 
         return inflatedView;
@@ -109,6 +128,93 @@ public class SignInFragment extends Fragment {
     }*/
 
 
+    private void storeCredentials(String email, String password) {
+
+
+        Credential credential = new Credential.Builder(email)
+                .setPassword(password)
+                .build();
+
+        Auth.CredentialsApi.save(mCredentialsApiClient, credential).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        if (status.isSuccess()) {
+
+                            LogHelper.error("Credential Saved");
+                            //hideProgress();
+                        } else {
+
+                            if (status.hasResolution()) {
+                                // Try to resolve the save request. This will prompt the user if
+                                // the credential is new.
+                                try {
+                                    status.startResolutionForResult(currentActivity, RC_SAVE);
+                                } catch (IntentSender.SendIntentException e) {
+                                    // Could not resolve the request
+                                    LogHelper.error("Failed to save credential - Could not resolve the request: ["
+                                            + status.getStatusCode() + "]"
+                                            + status.getStatusMessage());
+
+                                }
+                            } else {
+                                // Request has no resolution
+                                LogHelper.error("Failed to save credential - Request has no resolution: ["
+                                        + status.getStatusCode() + "]"
+                                        + status.getStatusMessage());
+                            }
+
+                        }
+                    }
+                });
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SAVE) {
+            if (resultCode == RESULT_OK) {
+                LogHelper.error("Credentials saved");
+            } else {
+                LogHelper.error("User cancelled saving credentials");
+            }
+        }
+
+
+    }
+
+    private void loadCredentials() {
+
+        CredentialRequest mCredentialRequest = new CredentialRequest.Builder()
+                .setPasswordLoginSupported(true)
+                //.setAccountTypes(IdentityProviders.GOOGLE)
+                .build();
+
+        Auth.CredentialsApi.request(mCredentialsApiClient, mCredentialRequest).setResultCallback(
+                new ResultCallback<CredentialRequestResult>() {
+                    @Override
+                    public void onResult(CredentialRequestResult credentialRequestResult) {
+                        if (credentialRequestResult.getStatus().isSuccess()) {
+
+                            Credential credential = credentialRequestResult.getCredential();
+
+                            signInUserTxt.setText(credential.getId());
+                            signInPasswordTxt.setText(credential.getPassword());
+                            signInRememberCbx.setChecked(isRememberMeChecked);
+                            performSignIn();
+
+                            //onCredentialRetrieved(credentialRequestResult.getCredential());
+                        } else {
+
+                            // resolveResult(credentialRequestResult.getStatus());
+                        }
+                    }
+                });
+    }
+
     public void setUIEvents(View inflatedView) {
 
 
@@ -140,87 +246,44 @@ public class SignInFragment extends Fragment {
 
         };
 
+        mCredentialsApiClient = new GoogleApiClient.Builder(currentActivity)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                    }
+                })
+                .addApi(Auth.CREDENTIALS_API)
+                .build();
+
+        mCredentialsApiClient.connect();
+
         signInBtn.setFocusableInTouchMode(true);
 
 
-       if(BuildConfig.DEBUG){
-           signInUserTxt.setText("admin@cynerds.com");
-           signInPasswordTxt.setText("123456");
-       }
+      /*  if (BuildConfig.DEBUG) {
+            signInUserTxt.setText("admin@cynerds.com");
+            signInPasswordTxt.setText("123456");
+        }*/
 
-        signInRememberCbx.setChecked(isRememberMeChecked);
-        String storedEmail;
-        String storedPwd;
-        try {
-            boolean anyAccounts = false;//Existem contas salvas
-            if (anyAccounts) {
-                storedEmail = "";//pega email do registro
-                storedPwd = "";//pega senha do registro
-
-                signInUserTxt.setText(storedEmail);
-                signInPasswordTxt.setText(storedPwd);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         signInBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
 
-                    if (FieldValidationHelper.isEditTextValidated(signInUserTxt) &&
-                            FieldValidationHelper.isEditTextValidated(signInPasswordTxt)) {
-
-                        signInBtn.setEnabled(false);
-                        currentActivity.displayProgressBar(true);
-
-                        String email = String.valueOf(signInUserTxt.getText().toString());
-                        String password = String.valueOf(signInPasswordTxt.getText().toString());
-
-                        authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
-                            @Override
-                            public void onSuccess() {
-
-
-                                signInPasswordTxt.setError(null);
-                                preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
-
-
-                                ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-                                authenticationHelper.removeOnSignInListener();
-
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-
-                                signInBtn.setEnabled(true);
-                                currentActivity.displayProgressBar(false);
-
-                                if (exception != null) {
-                                    if (exception.getClass() == FirebaseAuthInvalidUserException.class) {
-
-                                        signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
-
-                                    } else if (exception.getClass() == FirebaseNetworkException.class) {
-
-                                        DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
-                                        dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
-
-                                    } else {
-
-                                        LogHelper.error(
-                                                exception.getClass().getSimpleName()
-                                                        + ": " + exception.getMessage());
-                                    }
-                                }
-                            }
-
-                        });
-                        authenticationHelper.signIn(email, password);
-
-                    }
+                    performSignIn();
 
                 }
             }
@@ -250,6 +313,70 @@ public class SignInFragment extends Fragment {
             }
         });
 
+        if(isRememberMeChecked){
+            loadCredentials();
+        }
 
+
+    }
+
+    private void performSignIn() {
+
+        if (FieldValidationHelper.isEditTextValidated(signInUserTxt) &&
+                FieldValidationHelper.isEditTextValidated(signInPasswordTxt)) {
+
+            signInBtn.setEnabled(false);
+            currentActivity.displayProgressBar(true);
+
+            final String email = String.valueOf(signInUserTxt.getText().toString());
+            final String password = String.valueOf(signInPasswordTxt.getText().toString());
+
+            authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
+                @Override
+                public void onSuccess() {
+
+
+                    signInPasswordTxt.setError(null);
+                    preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
+
+                    if (isRememberMeChecked) {
+                        storeCredentials(email, password);
+                    }
+
+
+                    ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                    authenticationHelper.removeOnSignInListener();
+
+                }
+
+                @Override
+                public void onError(Exception exception) {
+
+                    signInBtn.setEnabled(true);
+                    currentActivity.displayProgressBar(false);
+
+                    if (exception != null) {
+                        if (exception.getClass() == FirebaseAuthInvalidUserException.class) {
+
+                            signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
+
+                        } else if (exception.getClass() == FirebaseNetworkException.class) {
+
+                            DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                            dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
+
+                        } else {
+
+                            LogHelper.error(
+                                    exception.getClass().getSimpleName()
+                                            + ": " + exception.getMessage());
+                        }
+                    }
+                }
+
+            });
+            authenticationHelper.signIn(email, password);
+
+        }
     }
 }
