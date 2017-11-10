@@ -1,8 +1,11 @@
 package com.cynerds.cyburger.fragments;
 
 
+import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -17,16 +20,26 @@ import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Random;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -43,7 +56,8 @@ public class SignUpFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private AuthenticationHelper authenticationHelper;
     private LoginActivity currentActivity;
-
+    private GoogleApiClient mCredentialsApiClient;
+    final static int RC_SAVE = 100;
     public SignUpFragment() {
 
     }
@@ -116,6 +130,29 @@ public class SignUpFragment extends Fragment {
                 }
             }
         });
+
+        mCredentialsApiClient = new GoogleApiClient.Builder(currentActivity)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                    }
+                })
+                .addApi(Auth.CREDENTIALS_API)
+                .build();
+
+        mCredentialsApiClient.connect();
     }
 
     private void test_fill() {
@@ -152,6 +189,7 @@ public class SignUpFragment extends Fragment {
 
                             ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
                             authenticationHelper.removeOnSignInListener();
+                            storeCredentials(email, password);
 
                         }
 
@@ -171,33 +209,102 @@ public class SignUpFragment extends Fragment {
                     signUpBtn.setEnabled(true);
                     currentActivity.displayProgressBar(false);
 
-                    FirebaseAuthException exception = (FirebaseAuthException) task.getException();
-                    if (exception != null) {
-                        String errorCode = exception.getErrorCode();
+                    if(task.getException() instanceof FirebaseAuthException){
+                        FirebaseAuthException authException = (FirebaseAuthException) task.getException();
+                        if (authException != null) {
+                            String errorCode = authException.getErrorCode();
 
-                        if (errorCode.equals("ERROR_INVALID_EMAIL")) {
+                            if (errorCode.equals("ERROR_INVALID_EMAIL")) {
 
-                            FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_invalid_email);
+                                FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_invalid_email);
 
-                        } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
+                            } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
 
-                            FieldValidationHelper.setFieldAsInvalid(signUpPasswordTxt, R.string.login_error_weakPassword);
-                            FieldValidationHelper.setFieldAsInvalid(signUpConfirmPasswordTxt, R.string.login_error_weakPassword);
+                                FieldValidationHelper.setFieldAsInvalid(signUpPasswordTxt, R.string.login_error_weakPassword);
+                                FieldValidationHelper.setFieldAsInvalid(signUpConfirmPasswordTxt, R.string.login_error_weakPassword);
 
-                        } else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
+                            } else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
 
-                            FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_email_already_taken);
-                        } else {
+                                FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_email_already_taken);
+                            } else {
 
-                            LogHelper.error(
-                                    exception.getClass().getSimpleName()
-                                            + ": " + exception.getMessage());
+                                LogHelper.error(
+                                        authException.getClass().getSimpleName()
+                                                + ": " + authException.getMessage());
+                            }
                         }
                     }
+
+                    if(task.getException() instanceof FirebaseNetworkException){
+
+                        DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                        dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
+
+                    }
+
+
                     LogHelper.error("Algo deu errado ao criar o usuário");
                 }
             }
         });
+
+    }
+
+    private void storeCredentials(String email, String password) {
+
+
+        Credential credential = new Credential.Builder(email)
+                .setPassword(password)
+                .build();
+
+        Auth.CredentialsApi.save(mCredentialsApiClient, credential).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        if (status.isSuccess()) {
+
+                            LogHelper.error("Credential Saved");
+                            //hideProgress();
+                        } else {
+
+                            if (status.hasResolution()) {
+                                // Try to resolve the save request. This will prompt the user if
+                                // the credential is new.
+                                try {
+                                    status.startResolutionForResult(currentActivity, RC_SAVE);
+                                } catch (IntentSender.SendIntentException e) {
+                                    // Could not resolve the request
+                                    LogHelper.error("Failed to save credential - Could not resolve the request: ["
+                                            + status.getStatusCode() + "]"
+                                            + status.getStatusMessage());
+
+                                }
+                            } else {
+                                // Request has no resolution
+                                LogHelper.error("Failed to save credential - Request has no resolution: ["
+                                        + status.getStatusCode() + "]"
+                                        + status.getStatusMessage());
+                            }
+
+                        }
+                    }
+                });
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SAVE) {
+            if (resultCode == RESULT_OK) {
+                LogHelper.error("Credentials saved");
+            } else {
+                LogHelper.error("User cancelled saving credentials");
+            }
+        }
+
 
     }
 

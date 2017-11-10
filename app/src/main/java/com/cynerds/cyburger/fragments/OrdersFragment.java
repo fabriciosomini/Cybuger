@@ -46,7 +46,7 @@ public class OrdersFragment extends Fragment {
 
     public OrdersFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(),Order.class);
+        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(), Order.class);
         cardModels = new ArrayList<>();
 
         profile = CyburgerApplication.getProfile();
@@ -144,7 +144,7 @@ public class OrdersFragment extends Fragment {
         final ListView listview = view.findViewById(android.R.id.list);
         generateDashboardCardViewItems();
 
-        if(!filter.isEmpty()){
+        if (!filter.isEmpty()) {
             filterList(filter);
         }
 
@@ -203,26 +203,29 @@ public class OrdersFragment extends Fragment {
                 currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
             } else {
 
-                if (customer.getLinkedProfileId().equals(profile.getUserId())) {
+                String profileId = customer.getLinkedProfileId();
+                if (profileId != null && profile!=null) {
+                    if (profileId.equals(profile.getUserId())) {
 
 
-                    cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Order newOrder = new Order();
-                            newOrder.setCustomer(order.getCustomer());
-                            newOrder.setOrderedCombos(order.getOrderedCombos());
-                            newOrder.setOrderedItems(order.getOrderedItems());
-                            newOrder.setKey(order.getKey());
+                        cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Order newOrder = new Order();
+                                newOrder.setCustomer(order.getCustomer());
+                                newOrder.setOrderedCombos(order.getOrderedCombos());
+                                newOrder.setOrderedItems(order.getOrderedItems());
+                                newOrder.setKey(order.getKey());
 
-                            currentActivty.setOrder(newOrder);
-                            currentActivty.displayOrderDialog();
+                                currentActivty.setOrder(newOrder);
+                                currentActivty.displayOrderDialog();
 
-                        }
-                    });
+                            }
+                        });
 
 
-                    currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                        currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                    }
                 }
             }
 

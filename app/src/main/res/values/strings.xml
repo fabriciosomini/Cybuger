@@ -57,4 +57,5 @@
     <string name="general_button_leave">Sair</string>
     <string name="order_finishOrder">Concluir</string>
     <string name="order_cancel">Cancelar</string>
+    <string name="menu_sign_out">Sair</string>
 </resources>

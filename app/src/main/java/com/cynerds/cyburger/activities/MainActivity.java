@@ -200,6 +200,15 @@ public class MainActivity extends BaseActivity {
                     popupMenu.getMenu().findItem(R.id.action_manage_combos).setVisible(false);
                 }
 
+                popupMenu.getMenu().findItem(R.id.action_sign_out).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        CyburgerApplication.autoLogin = false;
+                        ActivityManager.startActivityKillingThis(MainActivity.this, LoginActivity.class);
+                        return false;
+                    }
+                });
+
                 popupMenu.show();
 
                 return false;

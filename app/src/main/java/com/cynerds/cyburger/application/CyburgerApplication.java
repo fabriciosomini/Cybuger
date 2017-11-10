@@ -31,6 +31,7 @@ public class CyburgerApplication extends Application {
 
 
     private static Profile profile;
+    public static boolean autoLogin = true;
 
     public static Profile getProfile() {
         return profile;

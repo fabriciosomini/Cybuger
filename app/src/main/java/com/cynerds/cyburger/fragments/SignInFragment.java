@@ -21,6 +21,7 @@ import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -52,24 +53,27 @@ import static android.app.Activity.RESULT_OK;
  */
 public class SignInFragment extends Fragment {
 
+    private final static  int RC_LOAD = 50;
+    private final static int RC_SAVE = 100;
     public static boolean isRememberMeChecked;
     private LoginActivity currentActivity;
     private EditText signInUserTxt;
     private EditText signInPasswordTxt;
     private Button signInBtn;
     private Button signInFacebookBtn;
+
     private CheckBox signInRememberCbx;
-
     private Preferences preferences;
-    private FirebaseAuth mAuth;
 
+    private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String rememberMePref;
     private Permissions permissions;
     private CallbackManager mCallbackManager;
     private AuthenticationHelper authenticationHelper;
     private GoogleApiClient mCredentialsApiClient;
-    final static int RC_SAVE = 100;
+    private CredentialRequestResult credentialRequestResultGlobal;
+
 
     public SignInFragment() {
 
@@ -128,6 +132,100 @@ public class SignInFragment extends Fragment {
     }*/
 
 
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SAVE) {
+            if (resultCode == RESULT_OK) {
+                LogHelper.error("Credentials saved");
+            } else {
+                LogHelper.error("User cancelled saving credentials");
+            }
+        }
+
+        if (requestCode == RC_LOAD) {
+            if (resultCode == RESULT_OK) {
+                LogHelper.error("Credentials loaded");
+                fillCredentials();
+            } else {
+                LogHelper.error("User cancelled loading credentials");
+            }
+        }
+
+
+    }
+
+
+
+    private void loadCredentials() {
+
+        CredentialRequest mCredentialRequest = new CredentialRequest.Builder()
+                .setPasswordLoginSupported(true)
+                //.setAccountTypes(IdentityProviders.GOOGLE)
+                .build();
+
+        Auth.CredentialsApi.request(mCredentialsApiClient, mCredentialRequest).setResultCallback(
+                new ResultCallback<CredentialRequestResult>() {
+                    @Override
+                    public void onResult(CredentialRequestResult credentialRequestResult) {
+                        Status status = credentialRequestResult.getStatus();
+                        if (status.isSuccess()) {
+
+                            credentialRequestResultGlobal = credentialRequestResult;
+                            fillCredentials();
+
+                        } else {
+
+                            if (status.hasResolution()) {
+                                // Try to resolve the save request. This will prompt the user if
+                                // the credential is new.
+                                try {
+                                    credentialRequestResultGlobal = credentialRequestResult;
+                                    status.startResolutionForResult(currentActivity, RC_LOAD);
+
+                                } catch (IntentSender.SendIntentException e) {
+                                    // Could not resolve the request
+                                    LogHelper.error("Failed to load credential - Could not resolve the request: ["
+                                            + status.getStatusCode() + "]"
+                                            + status.getStatusMessage());
+
+                                }
+                            } else {
+                                // Request has no resolution
+                                LogHelper.error("Failed to load credential - Request has no resolution: ["
+                                        + status.getStatusCode() + "]"
+                                        + status.getStatusMessage());
+                            }
+
+                        }
+                    }
+                });
+    }
+
+    private void fillCredentials() {
+
+        if(credentialRequestResultGlobal!=null){
+
+            Credential credential = credentialRequestResultGlobal.getCredential();
+
+            String currentEmail = String.valueOf(signInUserTxt.getText().toString());
+            String currentPassword = String.valueOf(signInPasswordTxt.getText().toString());
+            String email = credential.getId();
+            if(currentEmail.isEmpty() && currentPassword.isEmpty()){
+                signInUserTxt.setText(email);
+                signInPasswordTxt.setText(credential.getPassword());
+
+                if(CyburgerApplication.autoLogin){
+                    performSignIn();
+                }
+            }
+        }
+
+    }
+
     private void storeCredentials(String email, String password) {
 
 
@@ -171,49 +269,6 @@ public class SignInFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SAVE) {
-            if (resultCode == RESULT_OK) {
-                LogHelper.error("Credentials saved");
-            } else {
-                LogHelper.error("User cancelled saving credentials");
-            }
-        }
-
-
-    }
-
-    private void loadCredentials() {
-
-        CredentialRequest mCredentialRequest = new CredentialRequest.Builder()
-                .setPasswordLoginSupported(true)
-                //.setAccountTypes(IdentityProviders.GOOGLE)
-                .build();
-
-        Auth.CredentialsApi.request(mCredentialsApiClient, mCredentialRequest).setResultCallback(
-                new ResultCallback<CredentialRequestResult>() {
-                    @Override
-                    public void onResult(CredentialRequestResult credentialRequestResult) {
-                        if (credentialRequestResult.getStatus().isSuccess()) {
-
-                            Credential credential = credentialRequestResult.getCredential();
-
-                            signInUserTxt.setText(credential.getId());
-                            signInPasswordTxt.setText(credential.getPassword());
-                            signInRememberCbx.setChecked(isRememberMeChecked);
-                            performSignIn();
-
-                            //onCredentialRetrieved(credentialRequestResult.getCredential());
-                        } else {
-
-                            // resolveResult(credentialRequestResult.getStatus());
-                        }
-                    }
-                });
-    }
 
     public void setUIEvents(View inflatedView) {
 
@@ -313,9 +368,8 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        if(isRememberMeChecked){
-            loadCredentials();
-        }
+        loadCredentials();
+
 
 
     }
@@ -336,16 +390,7 @@ public class SignInFragment extends Fragment {
                 public void onSuccess() {
 
 
-                    signInPasswordTxt.setError(null);
-                    preferences.setPreferenceValue(rememberMePref, String.valueOf(isRememberMeChecked));
-
-                    if (isRememberMeChecked) {
-                        storeCredentials(email, password);
-                    }
-
-
-                    ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-                    authenticationHelper.removeOnSignInListener();
+                   signInSuccess(email, password);
 
                 }
 
@@ -362,7 +407,9 @@ public class SignInFragment extends Fragment {
 
                         } else if (exception.getClass() == FirebaseNetworkException.class) {
 
-                            DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                           // signInSuccess(email, password);
+
+                           DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                             dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
 
                         } else {
@@ -378,5 +425,13 @@ public class SignInFragment extends Fragment {
             authenticationHelper.signIn(email, password);
 
         }
+    }
+
+    private void signInSuccess(String email, String  password) {
+        signInPasswordTxt.setError(null);
+        storeCredentials(email, password);
+
+        ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+        authenticationHelper.removeOnSignInListener();
     }
 }

@@ -47,8 +47,9 @@ public class ProfileActivity extends BaseActivity {
 
 
 
-        if (user != null) {
-            Profile curentProfile = CyburgerApplication.getProfile();
+        Profile curentProfile = CyburgerApplication.getProfile();
+        if (user != null && curentProfile !=null) {
+
             final String name = user.getDisplayName() == null ? "" : user.getDisplayName();
             final String email = user.getEmail() == null ? "" : user.getEmail();
             final Uri photoUrl = user.getPhotoUrl();
