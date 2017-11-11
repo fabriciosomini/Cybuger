@@ -312,12 +312,14 @@ public class SignUpFragment extends Fragment {
                     Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
                     CyburgerApplication.setCredential(credential);
                     CyburgerApplication.setCredential(credential);
-                    signInSuccess();
+
                 } else {
                     LogHelper.error("User cancelled saving credentials");
                 }
             }
         }
+
+        signInSuccess();
 
     }
 
