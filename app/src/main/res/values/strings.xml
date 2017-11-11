@@ -58,4 +58,6 @@
     <string name="order_finishOrder">Concluir</string>
     <string name="order_cancel">Cancelar</string>
     <string name="menu_sign_out">Sair</string>
+    <string name="sign_in_fragment">sign_in_fragment</string>
+    <string name="sign_up_fragment">sign_up_fragment</string>
 </resources>

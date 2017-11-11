@@ -53,7 +53,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class SignInFragment extends Fragment {
 
-    private final static  int RC_LOAD = 50;
+    private final static int RC_LOAD = 50;
     private final static int RC_SAVE = 100;
     public static boolean isRememberMeChecked;
     private LoginActivity currentActivity;
@@ -72,7 +72,6 @@ public class SignInFragment extends Fragment {
     private CallbackManager mCallbackManager;
     private AuthenticationHelper authenticationHelper;
     private GoogleApiClient mCredentialsApiClient;
-    private CredentialRequestResult credentialRequestResultGlobal;
 
 
     public SignInFragment() {
@@ -87,7 +86,8 @@ public class SignInFragment extends Fragment {
 
 
         View inflatedView = inflater.inflate(R.layout.fragment_sign_in, container, false);
-        this.currentActivity = (LoginActivity) getActivity();
+        currentActivity = (LoginActivity) getActivity();
+        currentActivity.signInFragment = this;
 
         authenticationHelper = new AuthenticationHelper(currentActivity);
         setUIEvents(inflatedView);
@@ -132,39 +132,41 @@ public class SignInFragment extends Fragment {
     }*/
 
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SAVE) {
-            if (resultCode == RESULT_OK) {
-                LogHelper.error("Credentials saved");
-            } else {
-                LogHelper.error("User cancelled saving credentials");
+        if (data != null) {
+
+            if (requestCode == RC_SAVE) {
+                if (resultCode == RESULT_OK) {
+                    LogHelper.error("Credentials SignIn RC_SAVE");
+                    Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                    CyburgerApplication.setCredential(credential);
+                } else {
+                    LogHelper.error("User cancelled saving credentials");
+                }
+            }
+
+            if (requestCode == RC_LOAD) {
+                if (resultCode == RESULT_OK) {
+                    LogHelper.error("Credentials RC_LOAD");
+                    Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                    CyburgerApplication.setCredential(credential);
+                    fillCredentials(credential);
+                } else {
+                    LogHelper.error("User cancelled loading credentials");
+                }
             }
         }
-
-        if (requestCode == RC_LOAD) {
-            if (resultCode == RESULT_OK) {
-                LogHelper.error("Credentials loaded");
-                fillCredentials();
-            } else {
-                LogHelper.error("User cancelled loading credentials");
-            }
-        }
-
 
     }
-
 
 
     private void loadCredentials() {
 
         CredentialRequest mCredentialRequest = new CredentialRequest.Builder()
                 .setPasswordLoginSupported(true)
-                //.setAccountTypes(IdentityProviders.GOOGLE)
                 .build();
 
         Auth.CredentialsApi.request(mCredentialsApiClient, mCredentialRequest).setResultCallback(
@@ -174,8 +176,9 @@ public class SignInFragment extends Fragment {
                         Status status = credentialRequestResult.getStatus();
                         if (status.isSuccess()) {
 
-                            credentialRequestResultGlobal = credentialRequestResult;
-                            fillCredentials();
+                            Credential credential = credentialRequestResult.getCredential();
+
+                            fillCredentials(credential);
 
                         } else {
 
@@ -183,7 +186,7 @@ public class SignInFragment extends Fragment {
                                 // Try to resolve the save request. This will prompt the user if
                                 // the credential is new.
                                 try {
-                                    credentialRequestResultGlobal = credentialRequestResult;
+
                                     status.startResolutionForResult(currentActivity, RC_LOAD);
 
                                 } catch (IntentSender.SendIntentException e) {
@@ -205,24 +208,21 @@ public class SignInFragment extends Fragment {
                 });
     }
 
-    private void fillCredentials() {
+    private void fillCredentials(Credential credential) {
 
-        if(credentialRequestResultGlobal!=null){
 
-            Credential credential = credentialRequestResultGlobal.getCredential();
+        String currentEmail = String.valueOf(signInUserTxt.getText().toString());
+        String currentPassword = String.valueOf(signInPasswordTxt.getText().toString());
+        String email = credential.getId();
+        if (currentEmail.isEmpty() && currentPassword.isEmpty()) {
+            signInUserTxt.setText(email);
+            signInPasswordTxt.setText(credential.getPassword());
 
-            String currentEmail = String.valueOf(signInUserTxt.getText().toString());
-            String currentPassword = String.valueOf(signInPasswordTxt.getText().toString());
-            String email = credential.getId();
-            if(currentEmail.isEmpty() && currentPassword.isEmpty()){
-                signInUserTxt.setText(email);
-                signInPasswordTxt.setText(credential.getPassword());
-
-                if(CyburgerApplication.autoLogin){
-                    performSignIn();
-                }
+            if (CyburgerApplication.autoLogin) {
+                performSignIn();
             }
         }
+
 
     }
 
@@ -368,8 +368,12 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        loadCredentials();
-
+        Credential credential = CyburgerApplication.getCredential();
+        if (credential != null) {
+            fillCredentials(credential);
+        } else {
+            loadCredentials();
+        }
 
 
     }
@@ -390,7 +394,7 @@ public class SignInFragment extends Fragment {
                 public void onSuccess() {
 
 
-                   signInSuccess(email, password);
+                    signInSuccess(email, password);
 
                 }
 
@@ -407,9 +411,9 @@ public class SignInFragment extends Fragment {
 
                         } else if (exception.getClass() == FirebaseNetworkException.class) {
 
-                           // signInSuccess(email, password);
+                            // signInSuccess(email, password);
 
-                           DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                            DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                             dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
 
                         } else {
@@ -427,7 +431,7 @@ public class SignInFragment extends Fragment {
         }
     }
 
-    private void signInSuccess(String email, String  password) {
+    private void signInSuccess(String email, String password) {
         signInPasswordTxt.setError(null);
         storeCredentials(email, password);
 

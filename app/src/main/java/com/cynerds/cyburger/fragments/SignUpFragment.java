@@ -18,6 +18,7 @@ import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -58,6 +59,7 @@ public class SignUpFragment extends Fragment {
     private LoginActivity currentActivity;
     private GoogleApiClient mCredentialsApiClient;
     final static int RC_SAVE = 100;
+
     public SignUpFragment() {
 
     }
@@ -68,7 +70,8 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        this.currentActivity = (LoginActivity) getActivity();
+        currentActivity = (LoginActivity) getActivity();
+        currentActivity.signUpFragment = this;
 
         authenticationHelper = new AuthenticationHelper(currentActivity);
 
@@ -187,9 +190,8 @@ public class SignUpFragment extends Fragment {
                         @Override
                         public void onSuccess() {
 
-                            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-                            authenticationHelper.removeOnSignInListener();
                             storeCredentials(email, password);
+
 
                         }
 
@@ -209,7 +211,7 @@ public class SignUpFragment extends Fragment {
                     signUpBtn.setEnabled(true);
                     currentActivity.displayProgressBar(false);
 
-                    if(task.getException() instanceof FirebaseAuthException){
+                    if (task.getException() instanceof FirebaseAuthException) {
                         FirebaseAuthException authException = (FirebaseAuthException) task.getException();
                         if (authException != null) {
                             String errorCode = authException.getErrorCode();
@@ -235,7 +237,7 @@ public class SignUpFragment extends Fragment {
                         }
                     }
 
-                    if(task.getException() instanceof FirebaseNetworkException){
+                    if (task.getException() instanceof FirebaseNetworkException) {
 
                         DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                         dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
@@ -248,6 +250,11 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+    }
+
+    private void signInSuccess() {
+        ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+        authenticationHelper.removeOnSignInListener();
     }
 
     private void storeCredentials(String email, String password) {
@@ -264,7 +271,7 @@ public class SignUpFragment extends Fragment {
                         if (status.isSuccess()) {
 
                             LogHelper.error("Credential Saved");
-                            //hideProgress();
+                            signInSuccess();
                         } else {
 
                             if (status.hasResolution()) {
@@ -297,14 +304,20 @@ public class SignUpFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SAVE) {
-            if (resultCode == RESULT_OK) {
-                LogHelper.error("Credentials saved");
-            } else {
-                LogHelper.error("User cancelled saving credentials");
+        if (data != null) {
+
+            if (requestCode == RC_SAVE) {
+                if (resultCode == RESULT_OK) {
+                    LogHelper.error("Credentials SignUp RC_SAVE");
+                    Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                    CyburgerApplication.setCredential(credential);
+                    CyburgerApplication.setCredential(credential);
+                    signInSuccess();
+                } else {
+                    LogHelper.error("User cancelled saving credentials");
+                }
             }
         }
-
 
     }
 

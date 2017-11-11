@@ -1,5 +1,7 @@
 package com.cynerds.cyburger.activities;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -11,10 +13,15 @@ import android.widget.EditText;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.SimpleFragmentPagerAdapter;
+import com.cynerds.cyburger.components.NonSwipeableViewPager;
+import com.cynerds.cyburger.fragments.SignInFragment;
+import com.cynerds.cyburger.fragments.SignUpFragment;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 
 public class LoginActivity extends BaseActivity {
@@ -27,6 +34,9 @@ public class LoginActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private Permissions permissions;
+    public static SignInFragment signInFragment;
+    public static SignUpFragment signUpFragment;
+
 
     public void displayProgressBar(boolean display) {
         View progressBackground = findViewById(R.id.progressBackground);
@@ -48,7 +58,21 @@ public class LoginActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-      //  mAuth.addAuthStateListener(mAuthListener);
+        //  mAuth.addAuthStateListener(mAuthListener);
+
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        NonSwipeableViewPager nonSwipeableViewPager = findViewById(R.id.viewpager);
+        SimpleFragmentPagerAdapter simpleFragmentPagerAdapter =
+                (SimpleFragmentPagerAdapter)nonSwipeableViewPager.getAdapter();
+        android.support.v4.app.Fragment fragment = simpleFragmentPagerAdapter.getCurrentSelectedItem(nonSwipeableViewPager.getCurrentItem());
+        fragment.onActivityResult(requestCode, resultCode, data);
 
 
     }
@@ -72,11 +96,10 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-
-    public void generateTabs(){
+    public void generateTabs() {
 
         // Set the content of the activity to use the  activity_main.xml layout file
-       // setContentView(R.layout.activity_main);
+        // setContentView(R.layout.activity_main);
 
         // Find the view pager that will allow the user to swipe between fragments
         ViewPager viewPager = findViewById(R.id.viewpager);
@@ -91,7 +114,7 @@ public class LoginActivity extends BaseActivity {
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
-    }
+}
 
 
 

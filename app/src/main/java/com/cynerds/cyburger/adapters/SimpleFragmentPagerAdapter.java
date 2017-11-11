@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.adapters;
 
 import android.content.Context;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,19 +17,26 @@ import com.cynerds.cyburger.fragments.SignUpFragment;
 public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
+    private SignInFragment signInFragment;
+    private SignUpFragment signUpFragment;
+
 
     public SimpleFragmentPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
+
+
     }
 
     // This determines the fragment for each tab
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new SignInFragment();
+              signInFragment = new SignInFragment();
+            return signInFragment;
         } else {
-            return new SignUpFragment();
+             signUpFragment =  new SignUpFragment();
+            return signUpFragment;
         }
     }
 
@@ -53,4 +61,12 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+
+    public Fragment getCurrentSelectedItem(int currentSelectedItem) {
+        if (currentSelectedItem == 0) {
+            return signInFragment;
+        } else {
+            return signUpFragment;
+        }
+    }
 }

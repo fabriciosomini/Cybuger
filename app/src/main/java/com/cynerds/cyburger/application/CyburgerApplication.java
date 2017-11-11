@@ -3,6 +3,7 @@ package com.cynerds.cyburger.application;
 import android.app.Application;
 import android.content.Context;
 
+
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
@@ -13,6 +14,7 @@ import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.role.Role;
+import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -31,6 +33,17 @@ public class CyburgerApplication extends Application {
 
 
     private static Profile profile;
+
+    public static Credential getCredential() {
+        return credential;
+    }
+
+    public static void setCredential(Credential credential) {
+        CyburgerApplication.credential = credential;
+    }
+
+    private static Credential credential;
+
     public static boolean autoLogin = true;
 
     public static Profile getProfile() {
