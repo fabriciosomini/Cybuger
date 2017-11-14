@@ -2,7 +2,6 @@ package com.cynerds.cyburger.fragments;
 
 
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,12 +23,11 @@ import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.OnSignInListener;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
@@ -169,7 +167,7 @@ public class SignUpFragment extends Fragment {
     private void createUser(final String displayName, final String email, final String password) {
 
 
-        LogHelper.error("Trying to create a new user using email and password");
+        LogHelper.log("Trying to create a new user using email and password");
         signUpBtn.setEnabled(false);
         currentActivity.displayProgressBar(true);
 
@@ -181,12 +179,12 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
 
 
-                    LogHelper.error("New user created successfully");
+                    LogHelper.log("New user created successfully");
 
                     authenticationHelper.createProfile(task.getResult().getUser());
                     authenticationHelper.updateDisplayName(displayName);
 
-                    authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
+                    authenticationHelper.setOnSignInListener(new OnSignInListener() {
                         @Override
                         public void onSuccess() {
 
@@ -198,7 +196,7 @@ public class SignUpFragment extends Fragment {
                         @Override
                         public void onError(Exception exception) {
                             currentActivity.displayProgressBar(false);
-                            LogHelper.error(exception.getMessage());
+                            LogHelper.log(exception.getMessage());
                         }
                     });
 
@@ -206,7 +204,7 @@ public class SignUpFragment extends Fragment {
 
                 } else {
 
-                    LogHelper.error("Failed to create user");
+                    LogHelper.log("Failed to create user");
 
                     signUpBtn.setEnabled(true);
                     currentActivity.displayProgressBar(false);
@@ -230,7 +228,7 @@ public class SignUpFragment extends Fragment {
                                 FieldValidationHelper.setFieldAsInvalid(signUpUserTxt, R.string.login_error_email_already_taken);
                             } else {
 
-                                LogHelper.error(
+                                LogHelper.log(
                                         authException.getClass().getSimpleName()
                                                 + ": " + authException.getMessage());
                             }
@@ -245,7 +243,7 @@ public class SignUpFragment extends Fragment {
                     }
 
 
-                    LogHelper.error("Algo deu errado ao criar o usuário");
+                    LogHelper.log("Algo deu errado ao criar o usuário");
                 }
             }
         });
@@ -258,7 +256,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void storeCredentials(String email, String password) {
-
+/*
 
         Credential credential = new Credential.Builder(email)
                 .setPassword(password)
@@ -270,7 +268,7 @@ public class SignUpFragment extends Fragment {
                     public void onResult(Status status) {
                         if (status.isSuccess()) {
 
-                            LogHelper.error("Credential Saved");
+                            LogHelper.log("Credential Saved");
                             signInSuccess();
                         } else {
 
@@ -281,14 +279,14 @@ public class SignUpFragment extends Fragment {
                                     status.startResolutionForResult(currentActivity, RC_SAVE);
                                 } catch (IntentSender.SendIntentException e) {
                                     // Could not resolve the request
-                                    LogHelper.error("Failed to save credential - Could not resolve the request: ["
+                                    LogHelper.log("Failed to save credential - Could not resolve the request: ["
                                             + status.getStatusCode() + "]"
                                             + status.getStatusMessage());
 
                                 }
                             } else {
                                 // Request has no resolution
-                                LogHelper.error("Failed to save credential - Request has no resolution: ["
+                                LogHelper.log("Failed to save credential - Request has no resolution: ["
                                         + status.getStatusCode() + "]"
                                         + status.getStatusMessage());
                             }
@@ -297,7 +295,7 @@ public class SignUpFragment extends Fragment {
                     }
                 });
 
-
+*/
     }
 
     @Override
@@ -308,13 +306,13 @@ public class SignUpFragment extends Fragment {
 
             if (requestCode == RC_SAVE) {
                 if (resultCode == RESULT_OK) {
-                    LogHelper.error("Credentials SignUp RC_SAVE");
+                    LogHelper.log("Credentials SignUp RC_SAVE");
                     Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
                     CyburgerApplication.setCredential(credential);
                     CyburgerApplication.setCredential(credential);
 
                 } else {
-                    LogHelper.error("User cancelled saving credentials");
+                    LogHelper.log("User cancelled saving credentials");
                 }
             }
         }

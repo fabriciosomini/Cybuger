@@ -5,15 +5,18 @@ import android.content.Context;
 
 
 import com.cynerds.cyburger.activities.BaseActivity;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
-import com.cynerds.cyburger.helpers.OnFatalErrorListener;
+import com.cynerds.cyburger.interfaces.OnFatalErrorListener;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
+import com.cynerds.cyburger.interfaces.OnSyncResultListener;
 import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.role.Role;
+import com.cynerds.cyburger.models.sync.Sync;
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -30,9 +33,12 @@ import java.util.Date;
 public class CyburgerApplication extends Application {
 
     public static OnFatalErrorListener onFatalErrorListener;
-
-
+    public static boolean autoLogin = true;
     private static Profile profile;
+
+    private static Credential credential;
+    private static OnSyncResultListener onSyncResultListener;
+    private static Context context;
 
     public static Credential getCredential() {
         return credential;
@@ -42,16 +48,12 @@ public class CyburgerApplication extends Application {
         CyburgerApplication.credential = credential;
     }
 
-    private static Credential credential;
-
-    public static boolean autoLogin = true;
-
     public static Profile getProfile() {
         return profile;
     }
 
     public static void setProfile(Profile profile) {
-        LogHelper.error("Set the new CyburgerApplication profile!");
+        LogHelper.log("Set the new CyburgerApplication profile!");
 
         CyburgerApplication.profile = profile;
     }
@@ -61,12 +63,88 @@ public class CyburgerApplication extends Application {
         return profile != null && profile.getRole() == Role.ADMIN;
     }
 
+
+    public   static String getUserTopicName (){
+
+        String topicName = "";
+        if(profile!=null) {
+            String userId = profile.getUserId();
+            topicName = "cyburger-" + userId;
+        }
+
+        return topicName;
+    }
+
+    public static void subscribeToUserTopic() {
+
+            if(profile!=null){
+                FirebaseMessaging.getInstance().subscribeToTopic(getUserTopicName());
+            }
+
+
+    }
+
+    public static void unsubscribeToUserTopic() {
+
+        if(profile!=null){
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(getUserTopicName());
+        }
+
+
+    }
+
+    public static void setOnSyncResultListener(OnSyncResultListener onSyncResultListener) {
+      if(onSyncResultListener !=null){
+          if(CyburgerApplication.onSyncResultListener == null){
+              CyburgerApplication.onSyncResultListener = onSyncResultListener;
+
+              if(CyburgerApplication.onSyncResultListener!=null){
+                  getSyncResponse(onSyncResultListener);
+              }
+          }else{
+
+              LogHelper.log("There's already a onSyncResultListener");
+          }
+      }
+
+    }
+
+    private static void getSyncResponse(final OnSyncResultListener onSyncResultListener) {
+        if(onSyncResultListener !=null){
+
+            final FirebaseDatabaseManager firebaseDatabaseManager = new FirebaseDatabaseManager(Sync.class);
+
+            firebaseDatabaseManager.setOnDataChangeListener(new OnDataChangeListener() {
+                @Override
+                public void onDataChanged(Object item) {
+                    if(item!=null)
+                    {
+                        Sync sync = (Sync)item;
+                        boolean isSynced = sync.isSynced();
+                        onSyncResultListener.onSyncResult(isSynced);
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    onSyncResultListener.onSyncResult(false);
+                }
+
+
+            });
+
+
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        context = getApplicationContext();
+
         FirebaseDatabase firebaseInstance = FirebaseDatabase.getInstance();
-        firebaseInstance.setPersistenceEnabled(false);
+        firebaseInstance.setPersistenceEnabled(true);
 
         registerActivityLifecycleCallbacks(new ApplicationLifecycleHandler());
         onFatalErrorListener = new OnFatalErrorListener() {
@@ -101,8 +179,8 @@ public class CyburgerApplication extends Application {
     }
 
     private void reportError(Exception ex, String activityName) {
-        FirebaseRealtimeDatabaseHelper<CrashReport> crashReportFirebaseRealtimeDatabaseHelper
-                = new FirebaseRealtimeDatabaseHelper(CrashReport.class);
+        FirebaseDatabaseManager<CrashReport> crashReportFirebaseDatabaseManager
+                = new FirebaseDatabaseManager(CrashReport.class);
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -125,36 +203,7 @@ public class CyburgerApplication extends Application {
         crashReport.setStackTrace(sStackTrace);
         crashReport.setDate(date);
 
-        crashReportFirebaseRealtimeDatabaseHelper.insert(crashReport);
-
-    }
-
-    public   static String getUserTopicName (){
-
-        String topicName = "";
-        if(profile!=null) {
-            String userId = profile.getUserId();
-            topicName = "cyburger-" + userId;
-        }
-
-        return topicName;
-    }
-
-    public static void subscribeToUserTopic() {
-
-            if(profile!=null){
-                FirebaseMessaging.getInstance().subscribeToTopic(getUserTopicName());
-            }
-
-
-    }
-
-    public static void unsubscribeToUserTopic() {
-
-        if(profile!=null){
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getUserTopicName());
-        }
-
+        crashReportFirebaseDatabaseManager.insert(crashReport);
 
     }
 }

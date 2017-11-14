@@ -11,6 +11,8 @@ import android.widget.AutoCompleteTextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.adapters.TagAdapter;
+import com.cynerds.cyburger.interfaces.OnItemAddedListener;
+import com.cynerds.cyburger.interfaces.OnTagItemStateChangedListener;
 import com.cynerds.cyburger.models.view.TagModel;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
@@ -100,7 +102,7 @@ public class TagInput extends ConstraintLayout {
 
         final TagItem topTagItem = new TagItem(context);
         topTagItem.setText(tagModel.getDescription());
-        topTagItem.setTagItemStateChangeListener(new TagItem.TagItemStateChangeListener() {
+        topTagItem.setOnTagItemStateChangedListener(new OnTagItemStateChangedListener() {
             @Override
             public void onTagItemStateChanged() {
                 flexboxLayoutAddedItems.removeView(topTagItem.getTextView());
@@ -123,14 +125,6 @@ public class TagInput extends ConstraintLayout {
             onItemAddedListener.onAddItem(topTagItem);
         }
 
-    }
-
-
-    public interface OnItemAddedListener {
-
-        void onAddItem(TagItem tagItem);
-
-        void onRemoveItem(TagItem tagItem);
     }
 
 

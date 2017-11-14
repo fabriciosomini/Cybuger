@@ -1,7 +1,6 @@
 package com.cynerds.cyburger.fragments;
 
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
@@ -26,19 +24,17 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
-import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.OnSignInListener;
 import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.CredentialRequest;
 import com.google.android.gms.auth.api.credentials.CredentialRequestResult;
-import com.google.android.gms.auth.api.credentials.IdentityProviders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.FirebaseNetworkException;
@@ -104,19 +100,19 @@ public class SignInFragment extends Fragment {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                LogHelper.error(TAG, "facebook:onSuccess:" + loginResult);
+                LogHelper.log(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                LogHelper.error(TAG, "facebook:onCancel");
+                LogHelper.log(TAG, "facebook:onCancel");
                 // ...
             }
 
             @Override
-            public void onError(FacebookException error) {
-                LogHelper.error(TAG, "facebook:onError", error);
+            public void onError(FacebookException log) {
+                LogHelper.log(TAG, "facebook:onError", log);
                 // ...
             }
         });*/
@@ -140,22 +136,22 @@ public class SignInFragment extends Fragment {
 
             if (requestCode == RC_SAVE) {
                 if (resultCode == RESULT_OK) {
-                    LogHelper.error("Credentials SignIn RC_SAVE");
+                    LogHelper.log("Credentials SignIn RC_SAVE");
                     Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
                     CyburgerApplication.setCredential(credential);
                 } else {
-                    LogHelper.error("User cancelled saving credentials");
+                    LogHelper.log("User cancelled saving credentials");
                 }
             }
 
             if (requestCode == RC_LOAD) {
                 if (resultCode == RESULT_OK) {
-                    LogHelper.error("Credentials RC_LOAD");
+                    LogHelper.log("Credentials RC_LOAD");
                     Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
                     CyburgerApplication.setCredential(credential);
                     fillCredentials(credential);
                 } else {
-                    LogHelper.error("User cancelled loading credentials");
+                    LogHelper.log("User cancelled loading credentials");
                 }
             }
         }
@@ -191,14 +187,14 @@ public class SignInFragment extends Fragment {
 
                                 } catch (IntentSender.SendIntentException e) {
                                     // Could not resolve the request
-                                    LogHelper.error("Failed to load credential - Could not resolve the request: ["
+                                    LogHelper.log("Failed to load credential - Could not resolve the request: ["
                                             + status.getStatusCode() + "]"
                                             + status.getStatusMessage());
 
                                 }
                             } else {
                                 // Request has no resolution
-                                LogHelper.error("Failed to load credential - Request has no resolution: ["
+                                LogHelper.log("Failed to load credential - Request has no resolution: ["
                                         + status.getStatusCode() + "]"
                                         + status.getStatusMessage());
                             }
@@ -229,7 +225,7 @@ public class SignInFragment extends Fragment {
     private void storeCredentials(String email, String password) {
 
 
-        Credential credential = new Credential.Builder(email)
+      /*  Credential credential = new Credential.Builder(email)
                 .setPassword(password)
                 .build();
 
@@ -239,32 +235,32 @@ public class SignInFragment extends Fragment {
                     public void onResult(Status status) {
                         if (status.isSuccess()) {
 
-                            LogHelper.error("Credential Saved");
+                            LogHelper.log("Credential Saved");
                             //hideProgress();
                         } else {
 
                             if (status.hasResolution()) {
-                                // Try to resolve the save request. This will prompt the user if
+                                // Try to resolve the save request. This will prompt therr user if
                                 // the credential is new.
                                 try {
                                     status.startResolutionForResult(currentActivity, RC_SAVE);
                                 } catch (IntentSender.SendIntentException e) {
                                     // Could not resolve the request
-                                    LogHelper.error("Failed to save credential - Could not resolve the request: ["
+                                    LogHelper.log("Failed to save credential - Could not resolve the request: ["
                                             + status.getStatusCode() + "]"
                                             + status.getStatusMessage());
 
                                 }
                             } else {
                                 // Request has no resolution
-                                LogHelper.error("Failed to save credential - Request has no resolution: ["
+                                LogHelper.log("Failed to save credential - Request has no resolution: ["
                                         + status.getStatusCode() + "]"
                                         + status.getStatusMessage());
                             }
 
                         }
                     }
-                });
+                });*/
 
 
     }
@@ -288,7 +284,7 @@ public class SignInFragment extends Fragment {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-                    LogHelper.error("Sessão expirada. Por favor, faça login novamente.");
+                    LogHelper.log("Sessão expirada. Por favor, faça login novamente.");
                     DialogManager sessionExpiredDialogManager = new DialogManager(currentActivity,
                             DialogManager.DialogType.OK);
 
@@ -327,10 +323,10 @@ public class SignInFragment extends Fragment {
         signInBtn.setFocusableInTouchMode(true);
 
 
-      /*  if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             signInUserTxt.setText("admin@cynerds.com");
             signInPasswordTxt.setText("123456");
-        }*/
+        }
 
 
         signInBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -372,7 +368,7 @@ public class SignInFragment extends Fragment {
         if (credential != null) {
             fillCredentials(credential);
         } else {
-            loadCredentials();
+            //loadCredentials();
         }
 
 
@@ -389,13 +385,17 @@ public class SignInFragment extends Fragment {
             final String email = String.valueOf(signInUserTxt.getText().toString());
             final String password = String.valueOf(signInPasswordTxt.getText().toString());
 
-            authenticationHelper.setOnSignInListener(new AuthenticationHelper.OnSignInListener() {
+            authenticationHelper.setOnSignInListener(new OnSignInListener() {
                 @Override
                 public void onSuccess() {
 
-
                     signInSuccess(email, password);
 
+                    /*FirebaseDatabaseManager firebaseDatabaseManager = new FirebaseDatabaseManager(Sync.class);
+                    Sync sync = new Sync();
+                    sync.setSynced(true);
+                    sync.setLastSyncedDate(new DateHelper(currentActivity).getCurrentDate());
+                    firebaseDatabaseManager.insert(sync);*/
                 }
 
                 @Override
@@ -411,14 +411,13 @@ public class SignInFragment extends Fragment {
 
                         } else if (exception.getClass() == FirebaseNetworkException.class) {
 
-                            // signInSuccess(email, password);
-
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                             dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
 
+
                         } else {
 
-                            LogHelper.error(
+                            LogHelper.log(
                                     exception.getClass().getSimpleName()
                                             + ": " + exception.getMessage());
                         }
@@ -438,4 +437,6 @@ public class SignInFragment extends Fragment {
         ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
         authenticationHelper.removeOnSignInListener();
     }
+
+
 }

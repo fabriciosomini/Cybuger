@@ -1,4 +1,4 @@
-package com.cynerds.cyburger.helpers;
+package com.cynerds.cyburger.interfaces;
 
 import android.content.Context;
 

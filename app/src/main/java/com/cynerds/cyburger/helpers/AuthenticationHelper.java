@@ -6,11 +6,15 @@ import android.support.annotation.NonNull;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
+import com.cynerds.cyburger.interfaces.OnSignInListener;
+import com.cynerds.cyburger.interfaces.OnSyncResultListener;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.role.Role;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -26,7 +30,7 @@ import java.util.List;
 public class AuthenticationHelper {
 
     private final Activity activity;
-    FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    FirebaseDatabaseManager firebaseDatabaseManager;
     private UserProfileChangeRequest profileUpdates;
     private UserProfileChangeRequest.Builder profileBuilder;
     private FirebaseAuth mAuth;
@@ -49,7 +53,7 @@ public class AuthenticationHelper {
 
     public void createProfile(FirebaseUser user) {
 
-        LogHelper.error("Trying to create a new profile for the new user");
+        LogHelper.log("Trying to create a new profile for the new user");
 
         Profile profile = new Profile();
         profile.setRole(Role.USER);
@@ -59,11 +63,11 @@ public class AuthenticationHelper {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        if (firebaseRealtimeDatabaseHelper == null) {
-            firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(activity, Profile.class);
+        if (firebaseDatabaseManager == null) {
+            firebaseDatabaseManager = new FirebaseDatabaseManager(activity, Profile.class);
         }
 
-        firebaseRealtimeDatabaseHelper.insert(profile);
+        firebaseDatabaseManager.insert(profile);
 
         CyburgerApplication.setProfile(profile);
 
@@ -75,7 +79,7 @@ public class AuthenticationHelper {
 
     public void signIn(final String email, final String password) {
 
-        LogHelper.error("Tentando fazer signIn...");
+        LogHelper.log("Tentando fazer signIn...");
 
         mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -86,37 +90,40 @@ public class AuthenticationHelper {
                         boolean isSuccessful = task.isSuccessful();
                         if (isSuccessful) {
 
-                            LogHelper.error("Sign in task result: isSuccessful");
-
-                            if (user == null) {
-                                user = FirebaseAuth.getInstance().getCurrentUser();
-                            }
-
-                            if (firebaseRealtimeDatabaseHelper == null) {
-                                firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(activity, Profile.class);
-                            }
-
-                            if(!findUserProfileAndSetToApplication())
-                            {
-                                createProfilesList();
-                            }
+                            LogHelper.log("Sign in task result: isSuccessful");
+                            onSuccessfulSignIn();
 
 
 
                         } else {
 
 
-                            Exception exception = task.getException();
+                            final Exception exception = task.getException();
 
                             if (exception != null) {
 
-                                LogHelper.error("Sign in task result: error - " + exception.getMessage());
+                                CyburgerApplication.setOnSyncResultListener(new OnSyncResultListener() {
+                                    @Override
+                                    public void onSyncResult(boolean isSynced) {
+                                        if (exception.getClass().equals(FirebaseNetworkException.class)&& isSynced) {
+                                            LogHelper.log("Não tem internet, " +
+                                                    "mas os dados já estão sincronizados, " +
+                                                    "então pode entrar!");
+                                            onSuccessfulSignIn();
+                                            return;
+                                        }
 
-                                if (onSignInListener != null) {
+                                        LogHelper.log("Sign in task result: log - " + exception.getMessage());
 
-                                    LogHelper.error("Callback Sign-in onError");
-                                    onSignInListener.onError(exception);
-                                }
+                                        if (onSignInListener != null) {
+
+                                            LogHelper.log("Callback Sign-in onError");
+                                            onSignInListener.onError(exception);
+                                        }
+                                    }
+                                });
+
+
 
                             }
 
@@ -127,15 +134,28 @@ public class AuthenticationHelper {
                 });
     }
 
+    private void onSuccessfulSignIn() {
+        if (user == null) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+        }
+
+        if (firebaseDatabaseManager == null) {
+            firebaseDatabaseManager = new FirebaseDatabaseManager(activity, Profile.class);
+        }
+
+        if (!findUserProfileAndSetToApplication()) {
+            createProfilesList();
+        }
+    }
+
     private void createProfilesList() {
-        LogHelper.error("Initializing a new dataChangeListener for Profile");
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        LogHelper.log("Initializing a new onDataChangeListener for Profile");
+        OnDataChangeListener onDataChangeListener = new OnDataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
 
 
-                if(!findUserProfileAndSetToApplication())
-                {
+                if (!findUserProfileAndSetToApplication()) {
                     if (onSignInListener != null) {
 
 
@@ -148,13 +168,18 @@ public class AuthenticationHelper {
 
 
             }
+
+            @Override
+            public void onCancel() {
+
+            }
         };
 
-        firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
+        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
     }
 
     private boolean findUserProfileAndSetToApplication() {
-        LogHelper.error("Trying to get profiles list");
+        LogHelper.log("Trying to get profiles list");
 
         List<Profile> profiles = getProfiles();
 
@@ -164,15 +189,15 @@ public class AuthenticationHelper {
 
             if (profile != null && user != null) {
                 if (profile.getUserId().equals(user.getUid())) {
-                    LogHelper.error("Found a matching profile in the list: " + profile.getUserId());
+                    LogHelper.log("Found a matching profile in the list: " + profile.getUserId());
                     CyburgerApplication.setProfile(profile);
 
                     if (onSignInListener != null) {
 
-                        LogHelper.error("Callback Sign-in onSuccess");
+                        LogHelper.log("Callback Sign-in onSuccess");
                         onSignInListener.onSuccess();
 
-                        firebaseRealtimeDatabaseHelper.removeListenters();
+                        firebaseDatabaseManager.removeListenters();
 
                         return true;
                     }
@@ -184,7 +209,6 @@ public class AuthenticationHelper {
         }
 
         return false;
-
 
 
     }
@@ -203,11 +227,11 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.error("E-mail atualizado!");
+                            LogHelper.log("E-mail atualizado!");
                         } else {
                             Exception exception = task.getException();
                             if (exception != null) {
-                                LogHelper.error("Falha ao atualizar e-mail - "
+                                LogHelper.log("Falha ao atualizar e-mail - "
                                         + exception.getClass().getSimpleName()
                                         + ": " + exception.getMessage());
                             }
@@ -227,9 +251,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.error("Senha atualizada!");
+                            LogHelper.log("Senha atualizada!");
                         } else {
-                            LogHelper.error("Falha ao atualizar senha");
+                            LogHelper.log("Falha ao atualizar senha");
                         }
                     }
                 });
@@ -253,9 +277,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.error("Nome atualizado!");
+                            LogHelper.log("Nome atualizado!");
                         } else {
-                            LogHelper.error("Falha ao atualizar nome");
+                            LogHelper.log("Falha ao atualizar nome");
                         }
                     }
                 });
@@ -277,9 +301,9 @@ public class AuthenticationHelper {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            LogHelper.error("Foto atualizada!");
+                            LogHelper.log("Foto atualizada!");
                         } else {
-                            LogHelper.error("Falha ao atualizar foto");
+                            LogHelper.log("Falha ao atualizar foto");
                         }
                     }
                 });
@@ -287,8 +311,8 @@ public class AuthenticationHelper {
     }
 
     public List<Profile> getProfiles() {
-        List<Profile> profiles = firebaseRealtimeDatabaseHelper.get();
-        LogHelper.error("Profiles loaded: " + profiles.size());
+        List<Profile> profiles = firebaseDatabaseManager.get();
+        LogHelper.log("Profiles loaded: " + profiles.size());
         return profiles;
     }
 
@@ -296,11 +320,4 @@ public class AuthenticationHelper {
         onSignInListener = null;
     }
 
-    public interface OnSignInListener {
-
-        void onSuccess();
-
-        void onError(Exception exception);
-
-    }
 }

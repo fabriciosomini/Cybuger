@@ -13,11 +13,13 @@ import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
+import com.cynerds.cyburger.interfaces.OnItemAddedListener;
 import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.combo.ComboDay;
 import com.cynerds.cyburger.models.item.Item;
@@ -29,12 +31,12 @@ import java.util.List;
 
 public class ManageCombosActivity extends BaseActivity {
 
-    private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
-    private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperItems;
+    private final FirebaseDatabaseManager firebaseDatabaseManager;
+    private final FirebaseDatabaseManager firebaseDatabaseManagerItems;
 
     public ManageCombosActivity() {
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(this, Combo.class);
-        firebaseRealtimeDatabaseHelperItems = new FirebaseRealtimeDatabaseHelper(this, Item.class);
+        firebaseDatabaseManager = new FirebaseDatabaseManager(this, Combo.class);
+        firebaseDatabaseManagerItems = new FirebaseDatabaseManager(this, Item.class);
 
     }
 
@@ -71,7 +73,7 @@ public class ManageCombosActivity extends BaseActivity {
         comboDayCbx.setAdapter(arrayAdapter);
 
 
-        itemsTagInput.setOnItemAddedListener(new TagInput.OnItemAddedListener() {
+        itemsTagInput.setOnItemAddedListener(new OnItemAddedListener() {
             @Override
             public void onAddItem(TagItem tagItem) {
 
@@ -157,9 +159,9 @@ public class ManageCombosActivity extends BaseActivity {
                     }
                     combo.setComboItems(items);
                     if (loadedCombo != null) {
-                        firebaseRealtimeDatabaseHelper.update(combo);
+                        firebaseDatabaseManager.update(combo);
                     } else {
-                        firebaseRealtimeDatabaseHelper.insert(combo);
+                        firebaseDatabaseManager.insert(combo);
                     }
                     finish();
                 }
@@ -179,9 +181,9 @@ public class ManageCombosActivity extends BaseActivity {
                             public void onClick(View v) {
 
 
-                                firebaseRealtimeDatabaseHelper.delete(loadedCombo);
+                                firebaseDatabaseManager.delete(loadedCombo);
                                 finish();
-                                LogHelper.error("Combo removido");
+                                LogHelper.log("Combo removido");
                             }
                         });
 
@@ -204,21 +206,26 @@ public class ManageCombosActivity extends BaseActivity {
         }
 
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        OnDataChangeListener onDataChangeListener = new OnDataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
 
 
-                if (firebaseRealtimeDatabaseHelperItems.get().size() > 0) {
+                if (firebaseDatabaseManagerItems.get().size() > 0) {
 
 
                     updateTags();
                 }
 
             }
+
+            @Override
+            public void onCancel() {
+
+            }
         };
 
-        firebaseRealtimeDatabaseHelperItems.setDataChangeListener(dataChangeListener);
+        firebaseDatabaseManagerItems.setOnDataChangeListener(onDataChangeListener);
     }
 
     private String recalcuteSuggestedPrice(List<TagModel> tagModels) {
@@ -271,7 +278,7 @@ public class ManageCombosActivity extends BaseActivity {
 
     List<Item> getItems() {
 
-        List<Item> items = firebaseRealtimeDatabaseHelperItems.get();
+        List<Item> items = firebaseDatabaseManagerItems.get();
         return items;
 
     }

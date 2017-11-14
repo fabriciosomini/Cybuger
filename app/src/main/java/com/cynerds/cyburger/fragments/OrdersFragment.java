@@ -16,8 +16,9 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.item.Item;
@@ -34,9 +35,9 @@ import java.util.List;
  */
 public class OrdersFragment extends Fragment {
 
-    final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    final FirebaseDatabaseManager firebaseDatabaseManager;
     private final Profile profile;
-    FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
+    OnDataChangeListener onDataChangeListener;
     List<CardModel> cardModels;
     CardAdapter adapter;
     private boolean isListCreated;
@@ -46,7 +47,7 @@ public class OrdersFragment extends Fragment {
 
     public OrdersFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(), Order.class);
+        firebaseDatabaseManager = new FirebaseDatabaseManager(getContext(), Order.class);
         cardModels = new ArrayList<>();
 
         profile = CyburgerApplication.getProfile();
@@ -128,15 +129,20 @@ public class OrdersFragment extends Fragment {
 
     private void setListDataListener(final View view) {
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener
-                = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        OnDataChangeListener onDataChangeListener
+                = new OnDataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
                 updateList(view);
             }
+
+            @Override
+            public void onCancel() {
+
+            }
         };
 
-        firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
+        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -269,7 +275,7 @@ public class OrdersFragment extends Fragment {
 
     List<Order> getOrders() {
 
-        List<Order> orders = firebaseRealtimeDatabaseHelper.get();
+        List<Order> orders = firebaseDatabaseManager.get();
         return orders;
 
     }

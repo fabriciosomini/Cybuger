@@ -12,7 +12,6 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
@@ -37,8 +36,8 @@ public class FirebaseNotificationService extends com.google.firebase.messaging.F
                 String title = remoteMessage.getNotification().getTitle(); //get title
                 String message = remoteMessage.getNotification().getBody(); //get message
 
-                LogHelper.error("Message Notification Title: " + title);
-                LogHelper.error("Message Notification Body: " + message);
+                LogHelper.log("Message Notification Title: " + title);
+                LogHelper.log("Message Notification Body: " + message);
 
                 sendNotification(title, message);
             }

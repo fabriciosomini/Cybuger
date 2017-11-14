@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.interfaces.OnTagItemStateChangedListener;
 
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
     private Drawable newBackground;
     private boolean isAdded = false;
     private LayoutInflater inflater;
-    private TagItemStateChangeListener tagItemStateChangeListener;
+    private OnTagItemStateChangedListener onTagItemStateChangedListener;
     private int randomColor;
 
     public TagItem(Context context, AttributeSet attrs) {
@@ -40,8 +41,8 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
     }
 
 
-    public void setTagItemStateChangeListener(TagItemStateChangeListener tagItemStateChangeListener) {
-        this.tagItemStateChangeListener = tagItemStateChangeListener;
+    public void setOnTagItemStateChangedListener(OnTagItemStateChangedListener onTagItemStateChangedListener) {
+        this.onTagItemStateChangedListener = onTagItemStateChangedListener;
     }
 
 
@@ -73,8 +74,8 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
 
                         isAdded = !isAdded;
 
-                        if (tagItemStateChangeListener != null) {
-                            tagItemStateChangeListener.onTagItemStateChanged();
+                        if (onTagItemStateChangedListener != null) {
+                            onTagItemStateChangedListener.onTagItemStateChanged();
                         }
 
                         return true;
@@ -118,8 +119,4 @@ public class TagItem extends android.support.v7.widget.AppCompatTextView {
         return randomColor;
     }
 
-    public interface TagItemStateChangeListener {
-
-        void onTagItemStateChanged();
-    }
 }

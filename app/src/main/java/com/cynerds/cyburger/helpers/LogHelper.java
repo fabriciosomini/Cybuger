@@ -6,7 +6,7 @@ import com.cynerds.cyburger.BuildConfig;
 
 public class LogHelper {
 
-    public static void error(String message) {
+    public static void log(String message) {
 
         if(message == null){
             message = "NO_MESSAGE";

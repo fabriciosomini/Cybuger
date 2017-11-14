@@ -18,11 +18,12 @@ import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.view.CardModel;
 
@@ -35,8 +36,8 @@ import java.util.List;
  */
 public class ItemsMenuFragment extends Fragment {
 
-    final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
-    FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener;
+    final FirebaseDatabaseManager firebaseDatabaseManager;
+    OnDataChangeListener onDataChangeListener;
     List<CardModel> cardModels;
     CardAdapter adapter;
     private boolean isListCreated;
@@ -45,7 +46,7 @@ public class ItemsMenuFragment extends Fragment {
 
     public ItemsMenuFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(), Item.class);
+        firebaseDatabaseManager = new FirebaseDatabaseManager(getContext(), Item.class);
         cardModels = new ArrayList<>();
 
     }
@@ -108,15 +109,20 @@ public class ItemsMenuFragment extends Fragment {
 
     private void setListDataListener(final View view) {
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener
-                = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        OnDataChangeListener onDataChangeListener
+                = new OnDataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
                 updateList(view);
             }
+
+            @Override
+            public void onCancel() {
+
+            }
         };
 
-        firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
+        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -153,7 +159,7 @@ public class ItemsMenuFragment extends Fragment {
 
     List<Item> getItems() {
 
-        List<Item> items = firebaseRealtimeDatabaseHelper.get();
+        List<Item> items = firebaseDatabaseManager.get();
         return items;
 
     }
@@ -210,7 +216,7 @@ public class ItemsMenuFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            LogHelper.error("Item adicionado ao pedido");
+                            LogHelper.log("Item adicionado ao pedido");
 
                             Badge badge = currentActivty.getBadge();
 

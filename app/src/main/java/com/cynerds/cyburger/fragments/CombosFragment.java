@@ -18,11 +18,12 @@ import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.view.CardModel;
 
@@ -36,7 +37,7 @@ import java.util.List;
 public class CombosFragment extends Fragment {
 
 
-    private final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    private final FirebaseDatabaseManager firebaseDatabaseManager;
     private MainActivity currentActivty;
     private List<CardModel> cardModels;
     private CardAdapter adapter;
@@ -45,7 +46,7 @@ public class CombosFragment extends Fragment {
 
     public CombosFragment() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(getContext(),Combo.class);
+        firebaseDatabaseManager = new FirebaseDatabaseManager(getContext(),Combo.class);
         cardModels = new ArrayList<>();
 
     }
@@ -112,15 +113,20 @@ public class CombosFragment extends Fragment {
     private void setListDataListener(final View view) {
 
 
-        FirebaseRealtimeDatabaseHelper.DataChangeListener dataChangeListener
-                = new FirebaseRealtimeDatabaseHelper.DataChangeListener() {
+        OnDataChangeListener onDataChangeListener
+                = new OnDataChangeListener() {
             @Override
             public void onDataChanged(Object item) {
                 updateList(view);
             }
+
+            @Override
+            public void onCancel() {
+
+            }
         };
 
-        firebaseRealtimeDatabaseHelper.setDataChangeListener(dataChangeListener);
+        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -205,7 +211,7 @@ public class CombosFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            LogHelper.error("Item adicionado ao pedido");
+                            LogHelper.log("Item adicionado ao pedido");
 
 
                             Badge badge = currentActivty.getBadge();
@@ -232,7 +238,7 @@ public class CombosFragment extends Fragment {
 
     List<Combo> getCombos() {
 
-        List<Combo> combos = firebaseRealtimeDatabaseHelper.get();
+        List<Combo> combos = firebaseDatabaseManager.get();
         return combos;
 
     }

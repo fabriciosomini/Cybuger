@@ -23,7 +23,7 @@ import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.fragments.CombosFragment;
 import com.cynerds.cyburger.fragments.ItemsMenuFragment;
 import com.cynerds.cyburger.fragments.OrdersFragment;
@@ -39,7 +39,6 @@ import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.order.Order;
 import com.cynerds.cyburger.models.profile.Profile;
-import com.cynerds.cyburger.services.FirebaseNotificationService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -54,8 +53,8 @@ public class MainActivity extends BaseActivity {
     CombosFragment combosFragment = new CombosFragment();
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
-    private FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelperOrders;
-    private FirebaseRealtimeDatabaseHelper<Profile> firebaseRealtimeDatabaseHelperProfile;
+    private FirebaseDatabaseManager firebaseDatabaseManagerOrders;
+    private FirebaseDatabaseManager<Profile> firebaseDatabaseManagerProfile;
     private Badge badge;
     private View hamburgerMenu;
     private ImageButton hamburgerMenuIcon;
@@ -99,8 +98,8 @@ public class MainActivity extends BaseActivity {
 
 
     public MainActivity() {
-        firebaseRealtimeDatabaseHelperOrders = new FirebaseRealtimeDatabaseHelper(MainActivity.this,  Order.class);
-        firebaseRealtimeDatabaseHelperProfile = new FirebaseRealtimeDatabaseHelper(MainActivity.this, Profile.class);
+        firebaseDatabaseManagerOrders = new FirebaseDatabaseManager(MainActivity.this,  Order.class);
+        firebaseDatabaseManagerProfile = new FirebaseDatabaseManager(MainActivity.this, Profile.class);
     }
 
     public Order getOrder() {
@@ -304,7 +303,7 @@ public class MainActivity extends BaseActivity {
 
 
                                     for (Profile p :
-                                            firebaseRealtimeDatabaseHelperProfile.get()) {
+                                            firebaseDatabaseManagerProfile.get()) {
                                        if(order.getCustomer().getLinkedProfileId().equals(p.getUserId()))
                                        {
                                            int comboBonusPoints = 0;
@@ -326,7 +325,7 @@ public class MainActivity extends BaseActivity {
                                                    + p.getBonusPoints();
 
 
-                                           List<Order> orderList = firebaseRealtimeDatabaseHelperOrders.get();
+                                           List<Order> orderList = firebaseDatabaseManagerOrders.get();
                                            if(orderList.size()>1){
                                                Order nextOrder = orderList.get(1);
                                                Customer nextCustomer = nextOrder.getCustomer();
@@ -339,8 +338,8 @@ public class MainActivity extends BaseActivity {
 
 
                                            p.setBonusPoints(totalBonusPoints);
-                                           firebaseRealtimeDatabaseHelperProfile.update(p);
-                                           firebaseRealtimeDatabaseHelperOrders.delete(order);
+                                           firebaseDatabaseManagerProfile.update(p);
+                                           firebaseDatabaseManagerOrders.delete(order);
 
                                            String topic = "cyburger-" + p.getUserId();
                                            String customerName = order.getCustomer().getCustomerName();
@@ -384,10 +383,10 @@ public class MainActivity extends BaseActivity {
 
                         if (previousOrder != null) {
                             order = previousOrder;
-                            LogHelper.error("Restore previous order");
+                            LogHelper.log("Restore previous order");
                         } else {
                             order = new Order();
-                            LogHelper.error("reset order");
+                            LogHelper.log("reset order");
                         }
 
 
@@ -408,9 +407,9 @@ public class MainActivity extends BaseActivity {
                         customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
 
                         order.setCustomer(customer);
-                        firebaseRealtimeDatabaseHelperOrders.insert(order);
+                        firebaseDatabaseManagerOrders.insert(order);
 
-                        LogHelper.error("Pedido confirmado");
+                        LogHelper.log("Pedido confirmado");
 
                         //Reset - pedido confirmado
                         badge.setBadgeCount(0);
@@ -435,14 +434,14 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    LogHelper.error("Pedido cancelado");
+                    LogHelper.log("Pedido cancelado");
 
                     DialogAction removeOrderDialogAction = new DialogAction();
                     removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (readOnly) {
-                                firebaseRealtimeDatabaseHelperOrders.delete(order);
+                                firebaseDatabaseManagerOrders.delete(order);
                                 removeNotification(ORDERS_TAB, 1);
 
                                 if(CyburgerApplication.isAdmin()){
@@ -462,10 +461,10 @@ public class MainActivity extends BaseActivity {
 
                             if (previousOrder != null) {
                                 order = previousOrder;
-                                LogHelper.error("Restore previous order");
+                                LogHelper.log("Restore previous order");
                             } else {
                                 order = new Order();
-                                LogHelper.error("reset order");
+                                LogHelper.log("reset order");
                             }
 
 

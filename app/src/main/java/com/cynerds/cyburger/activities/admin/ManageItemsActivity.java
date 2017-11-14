@@ -11,7 +11,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.data.FirebaseRealtimeDatabaseHelper;
+import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
@@ -24,12 +24,12 @@ import java.util.List;
 public class ManageItemsActivity extends BaseActivity {
 
 
-    final FirebaseRealtimeDatabaseHelper firebaseRealtimeDatabaseHelper;
+    final FirebaseDatabaseManager firebaseDatabaseManager;
 
 
     public ManageItemsActivity() {
 
-        firebaseRealtimeDatabaseHelper = new FirebaseRealtimeDatabaseHelper(this, Item.class);
+        firebaseDatabaseManager = new FirebaseDatabaseManager(this, Item.class);
 
     }
 
@@ -99,10 +99,10 @@ public class ManageItemsActivity extends BaseActivity {
 
                     if (loadedItem == null) {
 
-                        firebaseRealtimeDatabaseHelper.insert(item);
+                        firebaseDatabaseManager.insert(item);
                     } else {
 
-                        firebaseRealtimeDatabaseHelper.update(item);
+                        firebaseDatabaseManager.update(item);
                     }
 
                     finish();
@@ -125,9 +125,9 @@ public class ManageItemsActivity extends BaseActivity {
                             public void onClick(View v) {
 
 
-                                firebaseRealtimeDatabaseHelper.delete(loadedItem);
+                                firebaseDatabaseManager.delete(loadedItem);
 
-                                LogHelper.error("Item removido");
+                                LogHelper.log("Item removido");
                             }
                         });
                         DialogManager confirmDeleteDialog = new DialogManager(ManageItemsActivity.this,

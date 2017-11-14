@@ -16,14 +16,10 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.application.CyburgerApplication;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,14 +97,14 @@ public class PostNotificationHelper {
 
             @Override
             public void onResponse(JSONObject response) {
-                LogHelper.error("Notification posted!");
+                LogHelper.log("Notification posted!");
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
 
-                LogHelper.error(error.getMessage());
+                LogHelper.log(error.getMessage());
             }
         }) {
 

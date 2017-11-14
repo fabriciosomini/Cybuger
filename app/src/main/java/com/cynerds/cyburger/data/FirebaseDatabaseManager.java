@@ -5,8 +5,11 @@ import android.support.annotation.NonNull;
 
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.helpers.OnFatalErrorListener;
+import com.cynerds.cyburger.helpers.MessageHelper;
+import com.cynerds.cyburger.interfaces.OnDataChangeListener;
+import com.cynerds.cyburger.models.general.FirebaseRealtimeDatabaseResult;
 import com.cynerds.cyburger.models.general.BaseModel;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -15,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,7 @@ import java.util.UUID;
  * Created by fabri on 07/07/2017.
  */
 
-public class FirebaseRealtimeDatabaseHelper<T> {
+public class FirebaseDatabaseManager<T> {
     private final Class<BaseModel> classType;
     private final DatabaseReference databaseReference;
     private final String tableName;
@@ -34,103 +38,61 @@ public class FirebaseRealtimeDatabaseHelper<T> {
     private FirebaseDatabase database;
     private DatabaseReference tableReference;
     private List<BaseModel> items;
-    private DataChangeListener dataChangeListener;
+    private OnDataChangeListener onDataChangeListener;
     private ChildEventListener tableListener;
     private ChildEventListener databaseListener;
     private long tableChildCount = 0;
-    private boolean notified;
 
 
-    public FirebaseRealtimeDatabaseHelper(Class<BaseModel> classType) {
+    public FirebaseDatabaseManager(Class<BaseModel> classType) {
 
         tableName = classType.getSimpleName();
         this.classType = classType;
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
         tableReference = databaseReference.child(tableName);
-        tableReference.keepSynced(false);
+        tableReference.keepSynced(true);
         items = new ArrayList<>();
         createDataWatcher();
 
     }
 
 
-    public FirebaseRealtimeDatabaseHelper(Context context, Class<BaseModel> classType) {
+    public FirebaseDatabaseManager(Context context, Class<BaseModel> classType) {
 
         this(classType);
         this.context = context;
 
     }
 
-    public void setDataChangeListener(DataChangeListener dataChangeListener) {
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener) {
 
-        LogHelper.error("create a new dataChangeListener of type: " + classType.getSimpleName());
-        this.dataChangeListener = dataChangeListener;
+        LogHelper.log("create a new onDataChangeListener of type: " + classType.getSimpleName());
+        this.onDataChangeListener = onDataChangeListener;
 
     }
 
 
     public void removeListenters() {
-        LogHelper.error("Remove the dataChangeListener of type: " + classType.getSimpleName());
+        LogHelper.log("Remove the onDataChangeListener of type: " + classType.getSimpleName());
         tableReference.removeEventListener(tableListener);
     }
 
     private void createDataWatcher() {
 
 
-        databaseListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                if (dataSnapshot.getKey().equals(tableName) && !notified) {
-
-
-                    tableChildCount = dataSnapshot.getChildrenCount();
-                    tableReference.addChildEventListener(tableListener);
-
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getKey().equals(tableName) && !notified) {
-
-
-                    tableChildCount = dataSnapshot.getChildrenCount();
-                    tableReference.addChildEventListener(tableListener);
-
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getKey().equals(tableName) && !notified) {
-
-
-                    tableChildCount = dataSnapshot.getChildrenCount();
-                    tableReference.addChildEventListener(tableListener);
-
-                }
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getKey().equals(tableName) && !notified) {
-
-
-                    tableChildCount = dataSnapshot.getChildrenCount();
-                    tableReference.addChildEventListener(tableListener);
-
-                }
+        tableReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tableChildCount = dataSnapshot.getChildrenCount();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
 
-        databaseReference.addChildEventListener(databaseListener);
+        });
+
 
         tableListener = new ChildEventListener() {
 
@@ -156,8 +118,8 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                             items.add(object);
                         }
 
-                        if (dataChangeListener != null && tableChildCount == items.size()) {
-                            dataChangeListener.onDataChanged(object);
+                        if (onDataChangeListener != null && tableChildCount == items.size()) {
+                            onDataChangeListener.onDataChanged(object);
 
                         }
 
@@ -187,8 +149,8 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                         }
 
 
-                        if (dataChangeListener != null && tableChildCount == items.size()) {
-                            dataChangeListener.onDataChanged(object);
+                        if (onDataChangeListener != null && tableChildCount == items.size()) {
+                            onDataChangeListener.onDataChanged(object);
                         }
                     }
 
@@ -213,9 +175,9 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                             items.remove(index);
                         }
 
-                        if (dataChangeListener != null) {
+                        if (onDataChangeListener != null) {
                             if (tableChildCount == items.size() || items.size() == 0) {
-                                dataChangeListener.onDataChanged(object);
+                                onDataChangeListener.onDataChanged(object);
                             }
 
 
@@ -245,8 +207,8 @@ public class FirebaseRealtimeDatabaseHelper<T> {
                             items.set(index, object);
 
                         }
-                        if (dataChangeListener != null && tableChildCount == items.size()) {
-                            dataChangeListener.onDataChanged(object);
+                        if (onDataChangeListener != null && tableChildCount == items.size()) {
+                            onDataChangeListener.onDataChanged(object);
                         }
                     }
 
@@ -259,9 +221,14 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                if (onDataChangeListener != null && tableChildCount == items.size()) {
+                    onDataChangeListener.onCancel();
+                    MessageHelper.show(context, MessageType.ERROR, databaseError.getMessage());
+                }
             }
         };
+
+        tableReference.addChildEventListener(tableListener);
 
 
     }
@@ -280,7 +247,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     public void insert(BaseModel baseModel) {
 
-        LogHelper.error("Insert new object into the database of type: " + classType.getSimpleName());
+        LogHelper.log("Insert new object into the database of type: " + classType.getSimpleName());
         if (baseModel != null) {
             if (baseModel.getId() != null) {
                 if (baseModel.getId().isEmpty()) {
@@ -334,7 +301,7 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     public void update(BaseModel baseModel) {
 
-        LogHelper.error("Update an object into the database of type: " + classType.getSimpleName());
+        LogHelper.log("Update an object into the database of type: " + classType.getSimpleName());
 
         final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
@@ -362,7 +329,4 @@ public class FirebaseRealtimeDatabaseHelper<T> {
 
     }
 
-    public interface DataChangeListener {
-        void onDataChanged(Object item);
-    }
 }

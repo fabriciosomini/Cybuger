@@ -20,7 +20,7 @@ public class ApplicationLifecycleHandler implements Application.ActivityLifecycl
     @Override
     public void onActivityStarted(Activity activity) {
 
-        LogHelper.error("Activity created!");
+        LogHelper.log("Activity created!");
     }
 
     @Override
