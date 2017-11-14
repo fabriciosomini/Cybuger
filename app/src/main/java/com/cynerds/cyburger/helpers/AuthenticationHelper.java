@@ -30,7 +30,7 @@ import java.util.List;
 public class AuthenticationHelper {
 
     private final Activity activity;
-    FirebaseDatabaseManager firebaseDatabaseManager;
+    FirebaseDatabaseManager<Profile> firebaseDatabaseManager;
     private UserProfileChangeRequest profileUpdates;
     private UserProfileChangeRequest.Builder profileBuilder;
     private FirebaseAuth mAuth;
@@ -192,10 +192,13 @@ public class AuthenticationHelper {
 
                     CyburgerApplication.setProfile(profile);
 
-                    if (onSignInListener != null) {
+                    if (onSignInListener != null && profile!=null) {
 
                         LogHelper.log("Callback Sign-in onSuccess");
                         onSignInListener.onSuccess();
+
+                        profile.setLastLogin(new DateHelper(activity).getCurrentDate());
+                        firebaseDatabaseManager.update(profile);
 
                         firebaseDatabaseManager.removeListenters();
 
