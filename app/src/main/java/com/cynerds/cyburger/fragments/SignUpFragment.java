@@ -128,6 +128,8 @@ public class SignUpFragment extends Fragment {
 
                     }
 
+                    signUpBtn.clearFocus();
+
                 }
             }
         });

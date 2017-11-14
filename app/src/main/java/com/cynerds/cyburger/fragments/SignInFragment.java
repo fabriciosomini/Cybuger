@@ -335,6 +335,7 @@ public class SignInFragment extends Fragment {
                 if (hasFocus) {
 
                     performSignIn();
+                    signInBtn.clearFocus();
 
                 }
             }
@@ -412,7 +413,7 @@ public class SignInFragment extends Fragment {
                         } else if (exception.getClass() == FirebaseNetworkException.class) {
 
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
-                            dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_no_connection));
+                            dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_unsynced));
 
 
                         } else {
