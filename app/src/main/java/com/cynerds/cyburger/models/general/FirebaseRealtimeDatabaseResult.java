@@ -1,5 +1,6 @@
 package com.cynerds.cyburger.models.general;
 
+
 import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 
 /**

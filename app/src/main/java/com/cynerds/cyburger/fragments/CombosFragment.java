@@ -116,7 +116,7 @@ public class CombosFragment extends Fragment {
         OnDataChangeListener onDataChangeListener
                 = new OnDataChangeListener() {
             @Override
-            public void onDataChanged(Object item) {
+            public void onDataChanged() {
                 updateList(view);
             }
 

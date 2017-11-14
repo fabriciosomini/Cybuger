@@ -64,10 +64,10 @@ public class CyburgerApplication extends Application {
     }
 
 
-    public   static String getUserTopicName (){
+    public static String getUserTopicName() {
 
         String topicName = "";
-        if(profile!=null) {
+        if (profile != null) {
             String userId = profile.getUserId();
             topicName = "cyburger-" + userId;
         }
@@ -77,16 +77,16 @@ public class CyburgerApplication extends Application {
 
     public static void subscribeToUserTopic() {
 
-            if(profile!=null){
-                FirebaseMessaging.getInstance().subscribeToTopic(getUserTopicName());
-            }
+        if (profile != null) {
+            FirebaseMessaging.getInstance().subscribeToTopic(getUserTopicName());
+        }
 
 
     }
 
     public static void unsubscribeToUserTopic() {
 
-        if(profile!=null){
+        if (profile != null) {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(getUserTopicName());
         }
 
@@ -94,35 +94,36 @@ public class CyburgerApplication extends Application {
     }
 
     public static void setOnSyncResultListener(OnSyncResultListener onSyncResultListener) {
-      if(onSyncResultListener !=null){
-          if(CyburgerApplication.onSyncResultListener == null){
-              CyburgerApplication.onSyncResultListener = onSyncResultListener;
+        if (onSyncResultListener != null) {
+            if (CyburgerApplication.onSyncResultListener == null) {
+                CyburgerApplication.onSyncResultListener = onSyncResultListener;
 
-              if(CyburgerApplication.onSyncResultListener!=null){
-                  getSyncResponse(onSyncResultListener);
-              }
-          }else{
+                if (CyburgerApplication.onSyncResultListener != null) {
+                    getSyncResponse(onSyncResultListener);
+                }
+            } else {
 
-              LogHelper.log("There's already a onSyncResultListener");
-          }
-      }
+                LogHelper.log("There's already a onSyncResultListener");
+            }
+        }
 
     }
 
     private static void getSyncResponse(final OnSyncResultListener onSyncResultListener) {
-        if(onSyncResultListener !=null){
+        if (onSyncResultListener != null) {
 
-            final FirebaseDatabaseManager firebaseDatabaseManager = new FirebaseDatabaseManager(Sync.class);
+            final FirebaseDatabaseManager<Sync> firebaseDatabaseManager = new FirebaseDatabaseManager(Sync.class);
 
             firebaseDatabaseManager.setOnDataChangeListener(new OnDataChangeListener() {
                 @Override
-                public void onDataChanged(Object item) {
-                    if(item!=null)
-                    {
-                        Sync sync = (Sync)item;
+                public void onDataChanged() {
+                    if(firebaseDatabaseManager.get().size()>0){
+                        Sync sync = firebaseDatabaseManager.get().get(0);
                         boolean isSynced = sync.isSynced();
                         onSyncResultListener.onSyncResult(isSynced);
+
                     }
+
                 }
 
                 @Override
@@ -158,16 +159,14 @@ public class CyburgerApplication extends Application {
                     reportError(ex, activity.getClass().getSimpleName());
 
 
-                    MessageHelper.OnMessageDismissListener onDismissListener  = new MessageHelper.OnMessageDismissListener() {
+                    MessageHelper.OnMessageDismissListener onDismissListener = new MessageHelper.OnMessageDismissListener() {
                         @Override
                         public void onDismiss() {
                             activity.finishApplication();
                         }
                     };
 
-                    MessageHelper.show(activity, MessageType.ERROR,"Erro interno", onDismissListener);
-
-
+                    MessageHelper.show(activity, MessageType.ERROR, "Erro interno", onDismissListener);
 
 
                 } else {

@@ -208,7 +208,7 @@ public class ManageCombosActivity extends BaseActivity {
 
         OnDataChangeListener onDataChangeListener = new OnDataChangeListener() {
             @Override
-            public void onDataChanged(Object item) {
+            public void onDataChanged() {
 
 
                 if (firebaseDatabaseManagerItems.get().size() > 0) {

@@ -2,6 +2,7 @@ package com.cynerds.cyburger.data;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.LogHelper;
@@ -41,7 +42,9 @@ public class FirebaseDatabaseManager<T> {
     private OnDataChangeListener onDataChangeListener;
     private ChildEventListener tableListener;
     private ChildEventListener databaseListener;
-    private long tableChildCount = 0;
+
+    private boolean notityPending;
+    private long loadedItemsCount;
 
 
     public FirebaseDatabaseManager(Class<BaseModel> classType) {
@@ -81,9 +84,15 @@ public class FirebaseDatabaseManager<T> {
     private void createDataWatcher() {
 
 
-        tableReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        tableReference.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
-                tableChildCount = dataSnapshot.getChildrenCount();
+
+                loadedItemsCount = dataSnapshot.getChildrenCount();
+
+                LogHelper.log("Loaded " + loadedItemsCount
+                        + " items of type: " + classType.getSimpleName());
+
+                checkForNotification();
             }
 
             @Override
@@ -118,12 +127,10 @@ public class FirebaseDatabaseManager<T> {
                             items.add(object);
                         }
 
-                        if (onDataChangeListener != null && tableChildCount == items.size()) {
-                            onDataChangeListener.onDataChanged(object);
-
-                        }
-
                     }
+
+                    checkForNotification();
+
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
@@ -148,11 +155,9 @@ public class FirebaseDatabaseManager<T> {
 
                         }
 
-
-                        if (onDataChangeListener != null && tableChildCount == items.size()) {
-                            onDataChangeListener.onDataChanged(object);
-                        }
                     }
+
+                    checkForNotification();
 
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
@@ -175,14 +180,10 @@ public class FirebaseDatabaseManager<T> {
                             items.remove(index);
                         }
 
-                        if (onDataChangeListener != null) {
-                            if (tableChildCount == items.size() || items.size() == 0) {
-                                onDataChangeListener.onDataChanged(object);
-                            }
 
-
-                        }
                     }
+
+                    checkForNotification();
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
@@ -207,10 +208,10 @@ public class FirebaseDatabaseManager<T> {
                             items.set(index, object);
 
                         }
-                        if (onDataChangeListener != null && tableChildCount == items.size()) {
-                            onDataChangeListener.onDataChanged(object);
-                        }
+
                     }
+
+                    checkForNotification();
 
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
@@ -221,7 +222,7 @@ public class FirebaseDatabaseManager<T> {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                if (onDataChangeListener != null && tableChildCount == items.size()) {
+                if (onDataChangeListener != null && loadedItemsCount == items.size()) {
                     onDataChangeListener.onCancel();
                     MessageHelper.show(context, MessageType.ERROR, databaseError.getMessage());
                 }
@@ -231,6 +232,16 @@ public class FirebaseDatabaseManager<T> {
         tableReference.addChildEventListener(tableListener);
 
 
+    }
+
+    private void checkForNotification() {
+        if(onDataChangeListener!=null && items.size() == loadedItemsCount){
+            notityPending = false;
+            onDataChangeListener.onDataChanged();
+
+        }else if(items.size() != loadedItemsCount){
+            notityPending = true;
+        }
     }
 
 
@@ -283,6 +294,7 @@ public class FirebaseDatabaseManager<T> {
 
 
     public List<T> get() {
+        LogHelper.log("Get items "+ loadedItemsCount +" of type: " + classType.getSimpleName());
         return (List<T>) items;
     }
 

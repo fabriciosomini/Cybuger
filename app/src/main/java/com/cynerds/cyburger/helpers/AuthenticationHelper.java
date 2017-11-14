@@ -152,8 +152,7 @@ public class AuthenticationHelper {
         LogHelper.log("Initializing a new onDataChangeListener for Profile");
         OnDataChangeListener onDataChangeListener = new OnDataChangeListener() {
             @Override
-            public void onDataChanged(Object item) {
-
+            public void onDataChanged() {
 
                 if (!findUserProfileAndSetToApplication()) {
                     if (onSignInListener != null) {
@@ -165,7 +164,6 @@ public class AuthenticationHelper {
                     }
 
                 }
-
 
             }
 
@@ -189,7 +187,9 @@ public class AuthenticationHelper {
 
             if (profile != null && user != null) {
                 if (profile.getUserId().equals(user.getUid())) {
+
                     LogHelper.log("Found a matching profile in the list: " + profile.getUserId());
+
                     CyburgerApplication.setProfile(profile);
 
                     if (onSignInListener != null) {
