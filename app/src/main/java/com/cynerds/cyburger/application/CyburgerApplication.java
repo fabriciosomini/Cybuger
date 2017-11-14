@@ -7,8 +7,10 @@ import android.content.Context;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
+import com.cynerds.cyburger.helpers.CountDownTimerHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
+import com.cynerds.cyburger.interfaces.CountDownTimeoutListener;
 import com.cynerds.cyburger.interfaces.OnFatalErrorListener;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnSyncResultListener;
@@ -39,6 +41,7 @@ public class CyburgerApplication extends Application {
     private static Credential credential;
     private static OnSyncResultListener onSyncResultListener;
     private static Context context;
+    private static boolean syncNotified;
 
     public static Credential getCredential() {
         return credential;
@@ -120,7 +123,9 @@ public class CyburgerApplication extends Application {
                     if(firebaseDatabaseManager.get().size()>0){
                         Sync sync = firebaseDatabaseManager.get().get(0);
                         boolean isSynced = sync.isSynced();
+
                         onSyncResultListener.onSyncResult(isSynced);
+                        syncNotified = true;
 
                     }
 
@@ -133,6 +138,20 @@ public class CyburgerApplication extends Application {
 
 
             });
+
+
+            CountDownTimerHelper.startCount(new CountDownTimeoutListener() {
+                @Override
+                public void onTimeout() {
+                    if(!syncNotified){
+                        firebaseDatabaseManager.removeListenters();
+                        onSyncResultListener.onSyncResult(false);
+                    }
+                    CyburgerApplication.onSyncResultListener = null;
+
+
+                }
+            }, 5000, 50);
 
 
         }
