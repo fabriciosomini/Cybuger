@@ -199,7 +199,7 @@ public class CombosFragment extends Fragment {
             cardModel.setExtra(combo);
             cardModel.setContent(combo.getComboInfo()
                     + "\n\n+" + combo.getComboBonusPoints() + " pontos");
-            cardModel.setSubContent("VALOR: R$ " + combo.getComboAmount());
+            cardModel.setSubContent("R$ " + combo.getComboAmount());
 
 
             cardModel.setOnCardViewClickListener(new View.OnClickListener() {

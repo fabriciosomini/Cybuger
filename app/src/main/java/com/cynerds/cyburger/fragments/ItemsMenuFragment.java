@@ -201,7 +201,7 @@ public class ItemsMenuFragment extends Fragment {
             cardModel.setContent("Unidade de medida: "
                     + item.getSize()
                     + "\n\n+" + item.getBonusPoints() + " pontos");
-            cardModel.setSubContent("Valor: R$" + item.getPrice());
+            cardModel.setSubContent("R$" + item.getPrice());
 
 
             cardModel.setOnCardViewClickListener(new View.OnClickListener() {
