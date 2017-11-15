@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.cynerds.cyburger.activities.admin.ManageParametersActivity">
+
+    <TextView
+        android:id="@+id/bonusAmountBaseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Valor da compra para os pontos*"
+        app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/bonusAmountBaseTxt"
+        style="@style/AppTheme.CyburgerEditText"
+        android:inputType="numberDecimal"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonusAmountBaseLabel" />
+
+    <TextView
+        android:id="@+id/bonusPointsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Pontos por compra*"
+        app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
+        app:layout_constraintTop_toBottomOf="@+id/bonusAmountBaseTxt" />
+
+    <EditText
+        android:id="@+id/bonusPointsBaseTxt"
+        style="@style/AppTheme.CyburgerEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:inputType="number"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonusPointsLabel" />
+
+    <TextView
+        android:id="@+id/bonusPointsExchangeBaseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Pontos na troca*"
+        app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
+        app:layout_constraintTop_toBottomOf="@+id/bonusPointsBaseTxt" />
+
+    <EditText
+        android:id="@+id/bonusPointsExchangeBaseTxt"
+        style="@style/AppTheme.CyburgerEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonusPointsExchangeBaseLabel" />
+
+    <TextView
+        android:id="@+id/bonusAmountExchangeBaseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Valor de pontos na troca*"
+        app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
+        app:layout_constraintTop_toBottomOf="@+id/bonusPointsExchangeBaseTxt" />
+
+    <EditText
+        android:id="@+id/bonusAmountExchangeBaseTxt"
+        style="@style/AppTheme.CyburgerEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonusAmountExchangeBaseLabel" />
+
+
+    <Button
+        android:id="@+id/saveItemBtn"
+        style="@style/AppTheme.CyburgerButton"
+        android:layout_width="@dimen/default_width"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/general_button_save"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonusAmountExchangeBaseTxt" />
+
+
+
+</android.support.constraint.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -58,7 +59,7 @@ public class ItemsMenuFragment extends Fragment {
 
         currentActivty = (MainActivity) getActivity();
 
-        View view = inflater.inflate(R.layout.fragment_combos, container, false);
+        View view = inflater.inflate(R.layout.fragment_items_menu, container, false);
 
         if (!isListCreated) {
             isListCreated = true;
@@ -73,9 +74,9 @@ public class ItemsMenuFragment extends Fragment {
 
     private void setUIEvents(View view) {
 
-        EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
+        final EditText searchBoxItemsTxt = view.findViewById(R.id.searchBoxItemsTxt);
 
-        searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
+        searchBoxItemsTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -83,7 +84,28 @@ public class ItemsMenuFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(s.toString().isEmpty()){
+                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                }
+                else{
+                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
+                    searchBoxItemsTxt.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                boolean clicked = event.getRawX() >=
+                                        searchBoxItemsTxt.getRight()
+                                                - searchBoxItemsTxt.getCompoundDrawables()[2].getBounds().width();
+                                if (clicked) {
+                                    searchBoxItemsTxt.setText("");
+                                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                }
                 generateDashboardCardViewItems();
                 filterList(s.toString());
             }

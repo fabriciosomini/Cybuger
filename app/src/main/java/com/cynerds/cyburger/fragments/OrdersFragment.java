@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -61,7 +62,7 @@ public class OrdersFragment extends Fragment {
         currentActivty = (MainActivity) context;
         LayoutInflater inflater = (LayoutInflater) currentActivty
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.fragment_combos, null);
+        view = inflater.inflate(R.layout.fragment_orders, null);
 
 
         if (!isListCreated) {
@@ -70,7 +71,7 @@ public class OrdersFragment extends Fragment {
         }
 
         updateList(view);
-        setUIEvents(view);
+
     }
 
     @Override
@@ -91,28 +92,50 @@ public class OrdersFragment extends Fragment {
 
     private void setUIEvents(View view) {
 
-        EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
+        final EditText searchBoxOrdersTxt = view.findViewById(R.id.searchBoxOrdersTxt);
 
+           searchBoxOrdersTxt.addTextChangedListener(new TextWatcher() {
+               @Override
+               public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+               }
 
-            }
+               @Override
+               public void onTextChanged(CharSequence s, int start, int before, int count) {
+                   if(s.toString().isEmpty()){
+                       searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                   }
+                   else{
+                       searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
+                       searchBoxOrdersTxt.setOnTouchListener(new View.OnTouchListener() {
+                           @Override
+                           public boolean onTouch(View v, MotionEvent event) {
+                               if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                   boolean clicked = event.getRawX() >=
+                                           searchBoxOrdersTxt.getRight()
+                                                   - searchBoxOrdersTxt.getCompoundDrawables()[2].getBounds().width();
+                                   if (clicked) {
+                                       searchBoxOrdersTxt.setText("");
+                                       searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                                       return true;
+                                   }
+                               }
+                               return false;
+                           }
+                       });
+                   }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                   generateDashboardCardViewItems();
+                   filterList(s.toString());
 
-                generateDashboardCardViewItems();
-                filterList(s.toString());
+               }
 
-            }
+               @Override
+               public void afterTextChanged(Editable s) {
 
-            @Override
-            public void afterTextChanged(Editable s) {
+               }
+           });
 
-            }
-        });
     }
 
     private void filterList(String filter) {

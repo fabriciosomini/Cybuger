@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -90,7 +91,23 @@ public class CombosFragment extends Fragment {
                     searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
                 }
                 else{
-                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_closeicon,0);
+                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
+                    searchBoxCombosTxt.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                boolean clicked = event.getRawX() >=
+                                        searchBoxCombosTxt.getRight()
+                                                - searchBoxCombosTxt.getCompoundDrawables()[2].getBounds().width();
+                                if (clicked) {
+                                    searchBoxCombosTxt.setText("");
+                                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                    });
                 }
                 generateDashboardCardViewItems();
                 filterList(s.toString());

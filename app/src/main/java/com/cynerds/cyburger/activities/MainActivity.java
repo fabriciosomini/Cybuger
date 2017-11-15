@@ -21,6 +21,7 @@ import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
+import com.cynerds.cyburger.activities.admin.ManageParametersActivity;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
@@ -38,6 +39,7 @@ import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.order.Order;
+import com.cynerds.cyburger.models.parameters.Parameters;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -53,8 +55,9 @@ public class MainActivity extends BaseActivity {
     CombosFragment combosFragment = new CombosFragment();
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
-    private FirebaseDatabaseHelper firebaseDatabaseHelperOrders;
+    private FirebaseDatabaseHelper<Order> firebaseDatabaseHelperOrders;
     private FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile;
+    private final FirebaseDatabaseHelper<Parameters> firebaseDatabaseHelperParameters;
     private Badge badge;
     private View hamburgerMenu;
     private ImageButton hamburgerMenuIcon;
@@ -62,6 +65,8 @@ public class MainActivity extends BaseActivity {
     private Order previousOrder;
     private AHBottomNavigation bottomNavigation;
     private int[] notifications = new int[3];
+
+
     private AHBottomNavigation.OnTabSelectedListener mOnNavigationItemSelectedListener = new AHBottomNavigation.OnTabSelectedListener() {
         @Override
         public boolean onTabSelected(int position, boolean wasSelected) {
@@ -97,9 +102,11 @@ public class MainActivity extends BaseActivity {
     };
 
 
+
     public MainActivity() {
         firebaseDatabaseHelperOrders = new FirebaseDatabaseHelper(MainActivity.this,  Order.class);
         firebaseDatabaseHelperProfile = new FirebaseDatabaseHelper(MainActivity.this, Profile.class);
+        firebaseDatabaseHelperParameters = new FirebaseDatabaseHelper(MainActivity.this, Parameters.class);
     }
 
     public Order getOrder() {
@@ -151,7 +158,6 @@ public class MainActivity extends BaseActivity {
         bottomNavigation.setInactiveColor(ContextCompat.getColor(this, R.color.mediumgrey));
         fragmentManager.beginTransaction().attach(ordersFragment).commit();
 
-
         setActionBarTitle(getString(R.string.title_combos));
         showActionBarMenu(true);
 
@@ -175,8 +181,11 @@ public class MainActivity extends BaseActivity {
 
 
                 if (CyburgerApplication.isAdmin()) {
+
                     popupMenu.getMenu().findItem(R.id.action_manage_items).setVisible(true);
                     popupMenu.getMenu().findItem(R.id.action_manage_combos).setVisible(true);
+                    popupMenu.getMenu().findItem(R.id.action_manage_parameters).setVisible(true);
+
 
                     popupMenu.getMenu().findItem(R.id.action_manage_items).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
@@ -193,6 +202,27 @@ public class MainActivity extends BaseActivity {
                             return false;
                         }
                     });
+
+                    popupMenu.getMenu().findItem(R.id.action_manage_parameters).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            List<Parameters> parametersList = firebaseDatabaseHelperParameters.get();
+                            Parameters parameters = null;
+                            if(parametersList.size()>0){
+                                parameters = parametersList.get(0);
+
+                            }
+
+                            if(parameters!=null){
+                                ActivityManager.startActivity(MainActivity.this, ManageParametersActivity.class, parameters);
+                            }
+                            else{
+                                ActivityManager.startActivity(MainActivity.this, ManageParametersActivity.class);
+                            }
+                            return false;
+                        }
+                    });
                 }
                 else{
                     popupMenu.getMenu().findItem(R.id.action_manage_items).setVisible(false);
@@ -204,6 +234,7 @@ public class MainActivity extends BaseActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         CyburgerApplication.autoLogin = false;
                         ActivityManager.startActivityKillingThis(MainActivity.this, LoginActivity.class);
+
                         return false;
                     }
                 });
