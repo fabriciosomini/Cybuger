@@ -9,8 +9,6 @@ import com.cynerds.cyburger.models.general.FirebaseRealtimeDatabaseResult;
 import com.cynerds.cyburger.models.general.BaseModel;
 import com.cynerds.cyburger.models.general.MessageType;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -253,9 +251,9 @@ public class FirebaseDatabaseHelper<T> {
         return -1;
     }
 
-    public void insert(BaseModel baseModel) {
+    public Task<Void> insert(BaseModel baseModel) {
 
-        LogHelper.log("InsertOrUpdate new object into the database of type: " + classType.getSimpleName());
+        LogHelper.log("InsertUnique new object into the database of type: " + classType.getSimpleName());
         if (baseModel != null) {
             if (baseModel.getId() != null) {
                 if (baseModel.getId().isEmpty()) {
@@ -268,22 +266,9 @@ public class FirebaseDatabaseHelper<T> {
         }
 
 
-        final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
-        OnCompleteListener<Void> insertListener = new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    firebaseRealtimeDatabaseResult.setMessage("Success");
-                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
-                } else {
-                    firebaseRealtimeDatabaseResult.setMessage("Error");
-                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
-                }
-            }
-        };
 
-        tableReference.push().setValue(baseModel).addOnCompleteListener(insertListener);
+        return tableReference.push().setValue(baseModel);
     }
 
 
@@ -303,7 +288,7 @@ public class FirebaseDatabaseHelper<T> {
     }
 
 
-    public void update(BaseModel baseModel) {
+    public Task<Void> update(BaseModel baseModel) {
 
         LogHelper.log("Update an object into the database of type: " + classType.getSimpleName());
 
@@ -322,8 +307,7 @@ public class FirebaseDatabaseHelper<T> {
                 }
             }
         };
-        tableReference.child(baseModel.getKey()).setValue(baseModel).addOnCompleteListener(pushListener);
-
+       return tableReference.child(baseModel.getKey()).setValue(baseModel);
 
     }
 

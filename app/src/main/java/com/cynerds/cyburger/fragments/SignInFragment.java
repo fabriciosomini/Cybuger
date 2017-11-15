@@ -2,13 +2,9 @@ package com.cynerds.cyburger.fragments;
 
 
 import android.content.Intent;
-import android.content.IntentSender;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
@@ -38,7 +33,6 @@ import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.OnSignInListener;
 import com.cynerds.cyburger.models.account.UserAccount;
 import com.facebook.CallbackManager;
-import com.firebase.ui.auth.User;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -54,8 +48,6 @@ import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifTextView;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -187,7 +179,12 @@ public class SignInFragment extends Fragment {
     }
 
     private void storeCredentials(String email, String password) {
-        userAccountDAO.InsertOrUpdate(email, password);
+        UserAccount userAccount = new UserAccount();
+        userAccount.setEmail(email);
+        userAccount.setPassword(password);
+        CyburgerApplication.setUserAccount(userAccount);
+
+        userAccountDAO.InsertUnique(email, password);
 
     }
 
@@ -274,6 +271,7 @@ public class SignInFragment extends Fragment {
             UserAccount userAccount = loadCredentials();
 
             if (userAccount != null) {
+                CyburgerApplication.setUserAccount(userAccount);
                 fillCredentials(userAccount);
             }
 
@@ -428,6 +426,7 @@ public class SignInFragment extends Fragment {
         }
 
         preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
+
 
         ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
         authenticationHelper.removeOnSignInListener();

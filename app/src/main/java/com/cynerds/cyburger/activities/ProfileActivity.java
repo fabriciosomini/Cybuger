@@ -1,7 +1,9 @@
 package com.cynerds.cyburger.activities;
 
 import android.net.Uri;
+
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,10 +12,17 @@ import android.widget.TextView;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.PhotoViewer;
+import com.cynerds.cyburger.dao.UserAccountDAO;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
+import com.cynerds.cyburger.models.account.UserAccount;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.profile.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -104,17 +113,44 @@ public class ProfileActivity extends BaseActivity {
                 public void onClick(View v) {
 
                     saveProfileBtn.setEnabled(false);
-                    String updatedEmail = profileEmailTxt.getText().toString().trim();
+                    final String updatedEmail = profileEmailTxt.getText().toString().trim();
 
-                    if (!updatedEmail.isEmpty() && !updatedEmail.equals(email)) {
+                    if (FieldValidationHelper.isEditTextValidated(profileEmailTxt)) {
 
-                        authenticationHelper.updateEmail(updatedEmail);
+                        authenticationHelper.updateEmail(updatedEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+
+                                    UserAccountDAO userAccountDAO = new UserAccountDAO(ProfileActivity.this);
+                                    UserAccount userAccount = CyburgerApplication.getUserAccount();
+                                    userAccount.setEmail(updatedEmail);
+
+                                    userAccountDAO.InsertUnique(userAccount.getEmail(), userAccount.getPassword());
+
+                                    MessageHelper.show(ProfileActivity.this,
+                                            MessageType.SUCCESS,
+                                            "Perfil atualizado");
+
+
+                                    finish();
+                                }
+                                else{
+                                    MessageHelper.show(ProfileActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao atualizar e-mail");
+
+                                    saveProfileBtn.setEnabled(true);
+
+                                }
+                            }
+                        });
 
 
                     }
 
-                    saveProfileBtn.setEnabled(true);
-                    finish();
+
+
 
                 }
             });

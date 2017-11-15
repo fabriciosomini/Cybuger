@@ -26,9 +26,7 @@
         android:id="@+id/profileNameTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:text="Olá, {user.name}"
@@ -40,28 +38,29 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
         android:text="Seu e-mail"
-        app:layout_constraintBottom_toTopOf="@+id/profileEmailTxt"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileNameTxt" />
 
     <EditText
         android:id="@+id/profileEmailTxt"
         style="@style/AppTheme.CyburgerEditText"
-        android:layout_width="304dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/default_height"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/profilePictureImg"
-        app:layout_constraintTop_toBottomOf="@+id/profilePictureImg" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <com.cynerds.cyburger.components.PhotoViewer
         android:id="@+id/profilePictureImg"
@@ -69,18 +68,18 @@
         android:layout_height="66dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-
+        android:visibility="gone"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/profileBonusPointsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:id="@+id/profileBonusPointsTextView"
-        app:layout_constraintTop_toBottomOf="@+id/profileEmailTxt"
         android:text="Você possui {totalBonusPoints} pontos"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTxt"
         tools:layout_editor_absoluteY="182dp" />
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,7 @@ import com.cynerds.cyburger.interfaces.CountDownTimeoutListener;
 import com.cynerds.cyburger.interfaces.OnFatalErrorListener;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnSyncResultListener;
+import com.cynerds.cyburger.models.account.UserAccount;
 import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
@@ -38,7 +39,7 @@ public class CyburgerApplication extends Application {
     public static boolean autoLogin = true;
     private static Profile profile;
 
-    private static Credential credential;
+    private static UserAccount userAccount;
     private static OnSyncResultListener onSyncResultListener;
     private static Context context;
     private static boolean syncNotified;
@@ -49,12 +50,12 @@ public class CyburgerApplication extends Application {
 
     private static Sync sync;
 
-    public static Credential getCredential() {
-        return credential;
+    public static UserAccount getUserAccount() {
+        return userAccount;
     }
 
-    public static void setCredential(Credential credential) {
-        CyburgerApplication.credential = credential;
+    public static void setUserAccount(UserAccount userAccount) {
+        CyburgerApplication.userAccount = userAccount;
     }
 
     public static Profile getProfile() {
@@ -166,10 +167,10 @@ public class CyburgerApplication extends Application {
                     if (!syncNotified) {
                         firebaseDatabaseHelper.removeListenters();
 
-                       if(CyburgerApplication.onSyncResultListener!=null){
-                           onSyncResultListener.onSyncResult(false);
-                           CyburgerApplication.onSyncResultListener = null;
-                       }
+                        if (CyburgerApplication.onSyncResultListener != null) {
+                            onSyncResultListener.onSyncResult(false);
+                            CyburgerApplication.onSyncResultListener = null;
+                        }
 
                     }
 

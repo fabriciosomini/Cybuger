@@ -52,7 +52,7 @@ public class UserAccountDAO extends AbstractDAO {
     }
 
     // Método para adicionar registro na base de dados.
-    public long InsertOrUpdate(final String email, final String password) {
+    public long InsertUnique(final String email, final String password) {
         DeleteAll();
 
         Open();
@@ -62,13 +62,15 @@ public class UserAccountDAO extends AbstractDAO {
         }
 
 
-        long retorno = -1;
-
-
-        // Adiciona os valores a serem adicionados na base.
         ContentValues values = new ContentValues();
-        values.put(UserAccount.COLUMN_EMAIL, email);
-        values.put(UserAccount.COLUMN_PASSWORD, password);
+
+        if (!email.isEmpty()) {
+            values.put(UserAccount.COLUMN_EMAIL, email);
+        }
+
+        if (!password.isEmpty()) {
+            values.put(UserAccount.COLUMN_PASSWORD, password);
+        }
 
         int id = (int) db.insert(UserAccount.TABLE_NAME,
                 null,

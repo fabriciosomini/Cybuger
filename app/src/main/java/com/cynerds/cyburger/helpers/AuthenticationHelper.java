@@ -215,7 +215,7 @@ public class AuthenticationHelper {
 
     }
 
-    public void updateEmail(@NonNull String email) {
+    public Task<Void> updateEmail(@NonNull String email) {
         if (!email.isEmpty()) {
             profileBuilder.setDisplayName(email);
         }
@@ -224,7 +224,7 @@ public class AuthenticationHelper {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        user.updateEmail(email)
+        return user.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -242,13 +242,13 @@ public class AuthenticationHelper {
                 });
     }
 
-    public void updatePassword(@NonNull String password) {
+    public Task<Void> updatePassword(@NonNull String password) {
 
         if (user == null) {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        user.updatePassword(password)
+       return user.updatePassword(password)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -261,7 +261,7 @@ public class AuthenticationHelper {
                 });
     }
 
-    public void updateDisplayName(@NonNull String displayName) {
+    public Task<Void> updateDisplayName(@NonNull String displayName) {
 
 
         if (!displayName.isEmpty()) {
@@ -274,7 +274,7 @@ public class AuthenticationHelper {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        user.updateProfile(profileUpdates)
+        return user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -288,7 +288,7 @@ public class AuthenticationHelper {
 
     }
 
-    public void updateProfilePicture(@NonNull Uri profileUri) {
+    public Task<Void> updateProfilePicture(@NonNull Uri profileUri) {
 
 
         profileBuilder.setPhotoUri(profileUri);
@@ -298,7 +298,7 @@ public class AuthenticationHelper {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        user.updateProfile(profileUpdates)
+        return user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

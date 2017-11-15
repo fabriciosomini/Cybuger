@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,12 +19,16 @@ import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnItemAddedListener;
 import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.combo.ComboDay;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.view.TagModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,18 +164,46 @@ public class ManageCombosActivity extends BaseActivity {
                     }
                     combo.setComboItems(items);
                     if (loadedCombo != null) {
-                        firebaseDatabaseHelper.update(combo);
+
+                        firebaseDatabaseHelper.update(combo).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.SUCCESS,
+                                            "Combo atualizado");
+                                    finish();
+                                } else {
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao adicionar combo");
+                                }
+                            }
+                        });
                     } else {
-                        firebaseDatabaseHelper.insert(combo);
+                        firebaseDatabaseHelper.insert(combo).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.SUCCESS,
+                                            "Combo atualizado");
+                                    finish();
+                                } else {
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao atualizar combo");
+                                }
+                            }
+                        });
                     }
-                    finish();
+
                 }
             }
         });
 
-        if(CyburgerApplication.isAdmin()) {
-            if(loadedCombo!=null)
-            {
+        if (CyburgerApplication.isAdmin()) {
+            if (loadedCombo != null) {
                 deleteComboLink.setVisibility(View.VISIBLE);
                 deleteComboLink.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -194,13 +227,13 @@ public class ManageCombosActivity extends BaseActivity {
 
                     }
                 });
-            }else{
+            } else {
                 deleteComboLink.setVisibility(View.GONE);
 
             }
 
 
-        } else{
+        } else {
             deleteComboLink.setVisibility(View.GONE);
 
         }
@@ -212,7 +245,6 @@ public class ManageCombosActivity extends BaseActivity {
 
 
                 if (firebaseDatabaseHelperItems.get().size() > 0) {
-
 
                     updateTags();
                 }
