@@ -348,7 +348,7 @@ public class SignInFragment extends Fragment {
 
                        switch (touchCount){
                            case 3:
-                               Toast.makeText(currentActivity, "Você está a 1 passo de descrobrir o segredo"
+                               Toast.makeText(currentActivity, "Você está quase descrobrindo o segredo"
                                        , Toast.LENGTH_SHORT).show();
 
                        }

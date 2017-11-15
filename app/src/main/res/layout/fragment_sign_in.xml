@@ -43,8 +43,6 @@
                 android:layout_width="300dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/login_label_email"
-                android:drawableTint="@color/verylightgrey"
-                android:drawableRight="@drawable/ic_action_close"
                 android:inputType="textEmailAddress"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
