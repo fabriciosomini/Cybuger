@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnSignInListener;
 import com.cynerds.cyburger.interfaces.OnSyncResultListener;
@@ -30,7 +29,7 @@ import java.util.List;
 public class AuthenticationHelper {
 
     private final Activity activity;
-    FirebaseDatabaseManager<Profile> firebaseDatabaseManager;
+    FirebaseDatabaseHelper<Profile> firebaseDatabaseHelper;
     private UserProfileChangeRequest profileUpdates;
     private UserProfileChangeRequest.Builder profileBuilder;
     private FirebaseAuth mAuth;
@@ -63,11 +62,11 @@ public class AuthenticationHelper {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        if (firebaseDatabaseManager == null) {
-            firebaseDatabaseManager = new FirebaseDatabaseManager(activity, Profile.class);
+        if (firebaseDatabaseHelper == null) {
+            firebaseDatabaseHelper = new FirebaseDatabaseHelper(activity, Profile.class);
         }
 
-        firebaseDatabaseManager.insert(profile);
+        firebaseDatabaseHelper.insert(profile);
 
         CyburgerApplication.setProfile(profile);
 
@@ -139,8 +138,8 @@ public class AuthenticationHelper {
             user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-        if (firebaseDatabaseManager == null) {
-            firebaseDatabaseManager = new FirebaseDatabaseManager(activity, Profile.class);
+        if (firebaseDatabaseHelper == null) {
+            firebaseDatabaseHelper = new FirebaseDatabaseHelper(activity, Profile.class);
         }
 
         if (!findUserProfileAndSetToApplication()) {
@@ -173,7 +172,7 @@ public class AuthenticationHelper {
             }
         };
 
-        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
+        firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
     }
 
     private boolean findUserProfileAndSetToApplication() {
@@ -198,9 +197,9 @@ public class AuthenticationHelper {
                         onSignInListener.onSuccess();
 
                         profile.setLastLogin(new DateHelper(activity).getCurrentDate());
-                        firebaseDatabaseManager.update(profile);
+                        firebaseDatabaseHelper.update(profile);
 
-                        firebaseDatabaseManager.removeListenters();
+                        firebaseDatabaseHelper.removeListenters();
 
                         return true;
                     }
@@ -314,7 +313,7 @@ public class AuthenticationHelper {
     }
 
     public List<Profile> getProfiles() {
-        List<Profile> profiles = firebaseDatabaseManager.get();
+        List<Profile> profiles = firebaseDatabaseHelper.get();
         LogHelper.log("Profiles loaded: " + profiles.size());
         return profiles;
     }

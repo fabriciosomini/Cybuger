@@ -18,7 +18,7 @@ import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class ItemsMenuFragment extends Fragment {
 
-    final FirebaseDatabaseManager firebaseDatabaseManager;
+    final FirebaseDatabaseHelper firebaseDatabaseHelper;
     OnDataChangeListener onDataChangeListener;
     List<CardModel> cardModels;
     CardAdapter adapter;
@@ -46,7 +46,7 @@ public class ItemsMenuFragment extends Fragment {
 
     public ItemsMenuFragment() {
 
-        firebaseDatabaseManager = new FirebaseDatabaseManager(getContext(), Item.class);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper(getContext(), Item.class);
         cardModels = new ArrayList<>();
 
     }
@@ -122,7 +122,7 @@ public class ItemsMenuFragment extends Fragment {
             }
         };
 
-        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
+        firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -159,7 +159,7 @@ public class ItemsMenuFragment extends Fragment {
 
     List<Item> getItems() {
 
-        List<Item> items = firebaseDatabaseManager.get();
+        List<Item> items = firebaseDatabaseHelper.get();
         return items;
 
     }

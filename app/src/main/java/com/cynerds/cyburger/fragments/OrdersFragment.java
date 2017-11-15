@@ -16,7 +16,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class OrdersFragment extends Fragment {
 
-    final FirebaseDatabaseManager firebaseDatabaseManager;
+    final FirebaseDatabaseHelper firebaseDatabaseHelper;
     private final Profile profile;
     OnDataChangeListener onDataChangeListener;
     List<CardModel> cardModels;
@@ -47,7 +47,7 @@ public class OrdersFragment extends Fragment {
 
     public OrdersFragment() {
 
-        firebaseDatabaseManager = new FirebaseDatabaseManager(getContext(), Order.class);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper(getContext(), Order.class);
         cardModels = new ArrayList<>();
 
         profile = CyburgerApplication.getProfile();
@@ -142,7 +142,7 @@ public class OrdersFragment extends Fragment {
             }
         };
 
-        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
+        firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -275,7 +275,7 @@ public class OrdersFragment extends Fragment {
 
     List<Order> getOrders() {
 
-        List<Order> orders = firebaseDatabaseManager.get();
+        List<Order> orders = firebaseDatabaseHelper.get();
         return orders;
 
     }

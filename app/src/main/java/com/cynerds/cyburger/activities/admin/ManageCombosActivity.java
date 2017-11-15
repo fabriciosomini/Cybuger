@@ -13,7 +13,7 @@ import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
@@ -31,12 +31,12 @@ import java.util.List;
 
 public class ManageCombosActivity extends BaseActivity {
 
-    private final FirebaseDatabaseManager firebaseDatabaseManager;
-    private final FirebaseDatabaseManager firebaseDatabaseManagerItems;
+    private final FirebaseDatabaseHelper firebaseDatabaseHelper;
+    private final FirebaseDatabaseHelper firebaseDatabaseHelperItems;
 
     public ManageCombosActivity() {
-        firebaseDatabaseManager = new FirebaseDatabaseManager(this, Combo.class);
-        firebaseDatabaseManagerItems = new FirebaseDatabaseManager(this, Item.class);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper(this, Combo.class);
+        firebaseDatabaseHelperItems = new FirebaseDatabaseHelper(this, Item.class);
 
     }
 
@@ -159,9 +159,9 @@ public class ManageCombosActivity extends BaseActivity {
                     }
                     combo.setComboItems(items);
                     if (loadedCombo != null) {
-                        firebaseDatabaseManager.update(combo);
+                        firebaseDatabaseHelper.update(combo);
                     } else {
-                        firebaseDatabaseManager.insert(combo);
+                        firebaseDatabaseHelper.insert(combo);
                     }
                     finish();
                 }
@@ -181,7 +181,7 @@ public class ManageCombosActivity extends BaseActivity {
                             public void onClick(View v) {
 
 
-                                firebaseDatabaseManager.delete(loadedCombo);
+                                firebaseDatabaseHelper.delete(loadedCombo);
                                 finish();
                                 LogHelper.log("Combo removido");
                             }
@@ -211,7 +211,7 @@ public class ManageCombosActivity extends BaseActivity {
             public void onDataChanged() {
 
 
-                if (firebaseDatabaseManagerItems.get().size() > 0) {
+                if (firebaseDatabaseHelperItems.get().size() > 0) {
 
 
                     updateTags();
@@ -225,7 +225,7 @@ public class ManageCombosActivity extends BaseActivity {
             }
         };
 
-        firebaseDatabaseManagerItems.setOnDataChangeListener(onDataChangeListener);
+        firebaseDatabaseHelperItems.setOnDataChangeListener(onDataChangeListener);
     }
 
     private String recalcuteSuggestedPrice(List<TagModel> tagModels) {
@@ -278,7 +278,7 @@ public class ManageCombosActivity extends BaseActivity {
 
     List<Item> getItems() {
 
-        List<Item> items = firebaseDatabaseManagerItems.get();
+        List<Item> items = firebaseDatabaseHelperItems.get();
         return items;
 
     }

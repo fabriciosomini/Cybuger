@@ -2,7 +2,6 @@ package com.cynerds.cyburger.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,11 +10,15 @@ import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
+import com.cynerds.cyburger.helpers.DateHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.GsonHelper;
+import com.cynerds.cyburger.models.sync.Sync;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by fabri on 08/07/2017.
@@ -44,6 +47,19 @@ public class BaseActivity extends AppCompatActivity {
 
 
 
+    public void updateLastSyncDate(Date lastDate)
+    {
+        if(CyburgerApplication.isAdmin())
+        {
+            FirebaseDatabaseHelper firebaseDatabaseHelper = new FirebaseDatabaseHelper(Sync.class);
+            Date currentDate= new DateHelper(this).getCurrentDate();
+            Sync sync = CyburgerApplication.getSync();
+            sync.setSynced(true);
+            sync.setLastSyncedDate(currentDate);
+
+            firebaseDatabaseHelper.update(sync);
+        }
+    }
 
     public View getView() {
 

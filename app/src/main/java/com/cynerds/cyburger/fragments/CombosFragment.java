@@ -18,7 +18,7 @@ import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -37,7 +37,7 @@ import java.util.List;
 public class CombosFragment extends Fragment {
 
 
-    private final FirebaseDatabaseManager firebaseDatabaseManager;
+    private final FirebaseDatabaseHelper firebaseDatabaseHelper;
     private MainActivity currentActivty;
     private List<CardModel> cardModels;
     private CardAdapter adapter;
@@ -46,7 +46,7 @@ public class CombosFragment extends Fragment {
 
     public CombosFragment() {
 
-        firebaseDatabaseManager = new FirebaseDatabaseManager(getContext(),Combo.class);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper(getContext(),Combo.class);
         cardModels = new ArrayList<>();
 
     }
@@ -74,7 +74,7 @@ public class CombosFragment extends Fragment {
     private void setUIEvents(View view) {
 
 
-        EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
+       final EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
 
 
         searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
@@ -86,6 +86,12 @@ public class CombosFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                if(s.toString().isEmpty()){
+                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                }
+                else{
+                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_closeicon,0);
+                }
                 generateDashboardCardViewItems();
                 filterList(s.toString());
 
@@ -126,7 +132,7 @@ public class CombosFragment extends Fragment {
             }
         };
 
-        firebaseDatabaseManager.setOnDataChangeListener(onDataChangeListener);
+        firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -238,7 +244,7 @@ public class CombosFragment extends Fragment {
 
     List<Combo> getCombos() {
 
-        List<Combo> combos = firebaseDatabaseManager.get();
+        List<Combo> combos = firebaseDatabaseHelper.get();
         return combos;
 
     }

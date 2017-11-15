@@ -5,7 +5,7 @@ import android.content.Context;
 
 
 import com.cynerds.cyburger.activities.BaseActivity;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
 import com.cynerds.cyburger.helpers.CountDownTimerHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
@@ -42,6 +42,12 @@ public class CyburgerApplication extends Application {
     private static OnSyncResultListener onSyncResultListener;
     private static Context context;
     private static boolean syncNotified;
+
+    public static Sync getSync() {
+        return sync;
+    }
+
+    private static Sync sync;
 
     public static Credential getCredential() {
         return credential;
@@ -115,17 +121,23 @@ public class CyburgerApplication extends Application {
     private static void getSyncResponse(final OnSyncResultListener onSyncResultListener) {
         if (onSyncResultListener != null) {
 
-            final FirebaseDatabaseManager<Sync> firebaseDatabaseManager = new FirebaseDatabaseManager(Sync.class);
+            final FirebaseDatabaseHelper<Sync> firebaseDatabaseHelper = new FirebaseDatabaseHelper(Sync.class);
 
-            firebaseDatabaseManager.setOnDataChangeListener(new OnDataChangeListener() {
+            firebaseDatabaseHelper.setOnDataChangeListener(new OnDataChangeListener() {
                 @Override
                 public void onDataChanged() {
-                    if(firebaseDatabaseManager.get().size()>0){
-                        Sync sync = firebaseDatabaseManager.get().get(0);
-                        boolean isSynced = sync.isSynced();
+                    if(firebaseDatabaseHelper.get().size()>0){
+                         sync = firebaseDatabaseHelper.get().get(0);
 
-                        onSyncResultListener.onSyncResult(isSynced);
+                        if(sync!=null){
+                            boolean isSynced = sync.isSynced();
+
+                            onSyncResultListener.onSyncResult(isSynced);
+                        }
+
                         syncNotified = true;
+
+
 
                     }
 
@@ -144,7 +156,7 @@ public class CyburgerApplication extends Application {
                 @Override
                 public void onTimeout() {
                     if(!syncNotified){
-                        firebaseDatabaseManager.removeListenters();
+                        firebaseDatabaseHelper.removeListenters();
                         onSyncResultListener.onSyncResult(false);
                     }
                     CyburgerApplication.onSyncResultListener = null;
@@ -197,8 +209,8 @@ public class CyburgerApplication extends Application {
     }
 
     private void reportError(Exception ex, String activityName) {
-        FirebaseDatabaseManager<CrashReport> crashReportFirebaseDatabaseManager
-                = new FirebaseDatabaseManager(CrashReport.class);
+        FirebaseDatabaseHelper<CrashReport> crashReportFirebaseDatabaseHelper
+                = new FirebaseDatabaseHelper(CrashReport.class);
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -221,7 +233,7 @@ public class CyburgerApplication extends Application {
         crashReport.setStackTrace(sStackTrace);
         crashReport.setDate(date);
 
-        crashReportFirebaseDatabaseManager.insert(crashReport);
+        crashReportFirebaseDatabaseHelper.insert(crashReport);
 
     }
 }

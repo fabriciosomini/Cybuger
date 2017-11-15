@@ -20,6 +20,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.application.CyburgerApplication;
+import com.cynerds.cyburger.dao.UserAccountDAO;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -28,19 +29,15 @@ import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.OnSignInListener;
+import com.cynerds.cyburger.models.account.UserAccount;
 import com.facebook.CallbackManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.credentials.Credential;
-import com.google.android.gms.auth.api.credentials.CredentialRequest;
-import com.google.android.gms.auth.api.credentials.CredentialRequestResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.firebase.ui.auth.User;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -67,7 +64,7 @@ public class SignInFragment extends Fragment {
     private Permissions permissions;
     private CallbackManager mCallbackManager;
     private AuthenticationHelper authenticationHelper;
-    private GoogleApiClient mCredentialsApiClient;
+    private UserAccountDAO userAccountDAO;
 
 
     public SignInFragment() {
@@ -84,6 +81,7 @@ public class SignInFragment extends Fragment {
         View inflatedView = inflater.inflate(R.layout.fragment_sign_in, container, false);
         currentActivity = (LoginActivity) getActivity();
         currentActivity.signInFragment = this;
+        userAccountDAO = new UserAccountDAO(currentActivity);
 
         authenticationHelper = new AuthenticationHelper(currentActivity);
         setUIEvents(inflatedView);
@@ -132,136 +130,46 @@ public class SignInFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null) {
 
-            if (requestCode == RC_SAVE) {
-                if (resultCode == RESULT_OK) {
-                    LogHelper.log("Credentials SignIn RC_SAVE");
-                    Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-                    CyburgerApplication.setCredential(credential);
-                } else {
-                    LogHelper.log("User cancelled saving credentials");
-                }
-            }
+    }
 
-            if (requestCode == RC_LOAD) {
-                if (resultCode == RESULT_OK) {
-                    LogHelper.log("Credentials RC_LOAD");
-                    Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-                    CyburgerApplication.setCredential(credential);
-                    fillCredentials(credential);
-                } else {
-                    LogHelper.log("User cancelled loading credentials");
-                }
-            }
+
+    private UserAccount loadCredentials() {
+
+        List<UserAccount> userAccountList = userAccountDAO.SelectAll();
+        UserAccount userAccount = null;
+
+        if (userAccountList.size() > 0) {
+            userAccount = userAccountList.get(0);
         }
 
+        return userAccount;
     }
 
-
-    private void loadCredentials() {
-
-        CredentialRequest mCredentialRequest = new CredentialRequest.Builder()
-                .setPasswordLoginSupported(true)
-                .build();
-
-        Auth.CredentialsApi.request(mCredentialsApiClient, mCredentialRequest).setResultCallback(
-                new ResultCallback<CredentialRequestResult>() {
-                    @Override
-                    public void onResult(CredentialRequestResult credentialRequestResult) {
-                        Status status = credentialRequestResult.getStatus();
-                        if (status.isSuccess()) {
-
-                            Credential credential = credentialRequestResult.getCredential();
-
-                            fillCredentials(credential);
-
-                        } else {
-
-                            if (status.hasResolution()) {
-                                // Try to resolve the save request. This will prompt the user if
-                                // the credential is new.
-                                try {
-
-                                    status.startResolutionForResult(currentActivity, RC_LOAD);
-
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Could not resolve the request
-                                    LogHelper.log("Failed to load credential - Could not resolve the request: ["
-                                            + status.getStatusCode() + "]"
-                                            + status.getStatusMessage());
-
-                                }
-                            } else {
-                                // Request has no resolution
-                                LogHelper.log("Failed to load credential - Request has no resolution: ["
-                                        + status.getStatusCode() + "]"
-                                        + status.getStatusMessage());
-                            }
-
-                        }
-                    }
-                });
-    }
-
-    private void fillCredentials(Credential credential) {
+    private void fillCredentials(UserAccount userAccount) {
 
 
         String currentEmail = String.valueOf(signInUserTxt.getText().toString());
         String currentPassword = String.valueOf(signInPasswordTxt.getText().toString());
-        String email = credential.getId();
+        String email = userAccount.getEmail();
+        String password = userAccount.getPassword();
+
         if (currentEmail.isEmpty() && currentPassword.isEmpty()) {
+
             signInUserTxt.setText(email);
-            signInPasswordTxt.setText(credential.getPassword());
+            signInPasswordTxt.setText(password);
 
             if (CyburgerApplication.autoLogin) {
                 performSignIn();
             }
+
         }
 
 
     }
 
     private void storeCredentials(String email, String password) {
-
-
-      /*  Credential credential = new Credential.Builder(email)
-                .setPassword(password)
-                .build();
-
-        Auth.CredentialsApi.save(mCredentialsApiClient, credential).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-
-                            LogHelper.log("Credential Saved");
-                            //hideProgress();
-                        } else {
-
-                            if (status.hasResolution()) {
-                                // Try to resolve the save request. This will prompt therr user if
-                                // the credential is new.
-                                try {
-                                    status.startResolutionForResult(currentActivity, RC_SAVE);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Could not resolve the request
-                                    LogHelper.log("Failed to save credential - Could not resolve the request: ["
-                                            + status.getStatusCode() + "]"
-                                            + status.getStatusMessage());
-
-                                }
-                            } else {
-                                // Request has no resolution
-                                LogHelper.log("Failed to save credential - Request has no resolution: ["
-                                        + status.getStatusCode() + "]"
-                                        + status.getStatusMessage());
-                            }
-
-                        }
-                    }
-                });*/
-
+        userAccountDAO.InsertOrUpdate(email, password);
 
     }
 
@@ -297,36 +205,14 @@ public class SignInFragment extends Fragment {
 
         };
 
-        mCredentialsApiClient = new GoogleApiClient.Builder(currentActivity)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
-
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                    }
-                })
-                .addApi(Auth.CREDENTIALS_API)
-                .build();
-
-        mCredentialsApiClient.connect();
 
         signInBtn.setFocusableInTouchMode(true);
 
 
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             signInUserTxt.setText("admin@cynerds.com");
             signInPasswordTxt.setText("123456");
-        }
+        }*/
 
 
         signInBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -365,13 +251,14 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        Credential credential = CyburgerApplication.getCredential();
-        if (credential != null) {
-            fillCredentials(credential);
-        } else {
-            //loadCredentials();
+        UserAccount userAccount = loadCredentials();
+
+        if (userAccount != null) {
+            fillCredentials(userAccount);
         }
 
+
+        signInRememberCbx.setChecked(isRememberMeChecked);
 
     }
 
@@ -392,11 +279,6 @@ public class SignInFragment extends Fragment {
 
                     signInSuccess(email, password);
 
-                    /*FirebaseDatabaseManager firebaseDatabaseManager = new FirebaseDatabaseManager(Sync.class);
-                    Sync sync = new Sync();
-                    sync.setSynced(true);
-                    sync.setLastSyncedDate(new DateHelper(currentActivity).getCurrentDate());
-                    firebaseDatabaseManager.insert(sync);*/
                 }
 
                 @Override
@@ -433,10 +315,20 @@ public class SignInFragment extends Fragment {
 
     private void signInSuccess(String email, String password) {
         signInPasswordTxt.setError(null);
-        storeCredentials(email, password);
+        if(isRememberMeChecked){
+            storeCredentials(email, password);
+        }else{
+            removeCredentials();
+        }
+
+        preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
 
         ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
         authenticationHelper.removeOnSignInListener();
+    }
+
+    private void removeCredentials() {
+        userAccountDAO.DeleteAll();
     }
 
 

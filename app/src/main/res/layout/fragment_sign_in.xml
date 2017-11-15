@@ -39,11 +39,12 @@
             <EditText
                 android:id="@+id/signUserInTxt"
                 style="@style/AppTheme.CyburgerEditText"
-android:layout_height="@dimen/default_height"
+                android:layout_height="@dimen/default_height"
                 android:layout_width="300dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/login_label_email"
-
+                android:drawableTint="@color/verylightgrey"
+                android:drawableRight="@drawable/ic_action_close"
                 android:inputType="textEmailAddress"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -66,12 +67,19 @@ android:layout_height="@dimen/default_height"
                 tools:layout_constraintLeft_creator="1"
                 tools:layout_constraintRight_creator="1"></EditText>
 
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:text="TEST"
+                
+                android:layout_height="wrap_content" />
             <CheckBox
                 android:id="@+id/signInRememberCbx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:buttonTint="@color/redishOrange2"
+                android:backgroundTint="@color/verylightgrey"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/verylightgrey"
                 android:text="@string/login_label_rememberMe"

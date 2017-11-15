@@ -23,7 +23,7 @@ import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.fragments.CombosFragment;
 import com.cynerds.cyburger.fragments.ItemsMenuFragment;
 import com.cynerds.cyburger.fragments.OrdersFragment;
@@ -53,8 +53,8 @@ public class MainActivity extends BaseActivity {
     CombosFragment combosFragment = new CombosFragment();
     ItemsMenuFragment itemsMenuFragment = new ItemsMenuFragment();
     OrdersFragment ordersFragment = new OrdersFragment();
-    private FirebaseDatabaseManager firebaseDatabaseManagerOrders;
-    private FirebaseDatabaseManager<Profile> firebaseDatabaseManagerProfile;
+    private FirebaseDatabaseHelper firebaseDatabaseHelperOrders;
+    private FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile;
     private Badge badge;
     private View hamburgerMenu;
     private ImageButton hamburgerMenuIcon;
@@ -98,8 +98,8 @@ public class MainActivity extends BaseActivity {
 
 
     public MainActivity() {
-        firebaseDatabaseManagerOrders = new FirebaseDatabaseManager(MainActivity.this,  Order.class);
-        firebaseDatabaseManagerProfile = new FirebaseDatabaseManager(MainActivity.this, Profile.class);
+        firebaseDatabaseHelperOrders = new FirebaseDatabaseHelper(MainActivity.this,  Order.class);
+        firebaseDatabaseHelperProfile = new FirebaseDatabaseHelper(MainActivity.this, Profile.class);
     }
 
     public Order getOrder() {
@@ -303,7 +303,7 @@ public class MainActivity extends BaseActivity {
 
 
                                     for (Profile p :
-                                            firebaseDatabaseManagerProfile.get()) {
+                                            firebaseDatabaseHelperProfile.get()) {
                                        if(order.getCustomer().getLinkedProfileId().equals(p.getUserId()))
                                        {
                                            int comboBonusPoints = 0;
@@ -325,7 +325,7 @@ public class MainActivity extends BaseActivity {
                                                    + p.getBonusPoints();
 
 
-                                           List<Order> orderList = firebaseDatabaseManagerOrders.get();
+                                           List<Order> orderList = firebaseDatabaseHelperOrders.get();
                                            if(orderList.size()>1){
                                                Order nextOrder = orderList.get(1);
                                                Customer nextCustomer = nextOrder.getCustomer();
@@ -338,8 +338,8 @@ public class MainActivity extends BaseActivity {
 
 
                                            p.setBonusPoints(totalBonusPoints);
-                                           firebaseDatabaseManagerProfile.update(p);
-                                           firebaseDatabaseManagerOrders.delete(order);
+                                           firebaseDatabaseHelperProfile.update(p);
+                                           firebaseDatabaseHelperOrders.delete(order);
 
                                            String topic = "cyburger-" + p.getUserId();
                                            String customerName = order.getCustomer().getCustomerName();
@@ -407,7 +407,7 @@ public class MainActivity extends BaseActivity {
                         customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
 
                         order.setCustomer(customer);
-                        firebaseDatabaseManagerOrders.insert(order);
+                        firebaseDatabaseHelperOrders.insert(order);
 
                         LogHelper.log("Pedido confirmado");
 
@@ -441,7 +441,7 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             if (readOnly) {
-                                firebaseDatabaseManagerOrders.delete(order);
+                                firebaseDatabaseHelperOrders.delete(order);
                                 removeNotification(ORDERS_TAB, 1);
 
                                 if(CyburgerApplication.isAdmin()){

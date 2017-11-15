@@ -2,6 +2,7 @@ package com.cynerds.cyburger.fragments;
 
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,16 +18,14 @@ import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
-import com.cynerds.cyburger.application.CyburgerApplication;
+import com.cynerds.cyburger.dao.UserAccountDAO;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.OnSignInListener;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.credentials.Credential;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,10 +34,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.Random;
-
-import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -55,8 +51,8 @@ public class SignUpFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private AuthenticationHelper authenticationHelper;
     private LoginActivity currentActivity;
-    private GoogleApiClient mCredentialsApiClient;
     final static int RC_SAVE = 100;
+    private UserAccountDAO userAccountDAO;
 
     public SignUpFragment() {
 
@@ -70,6 +66,7 @@ public class SignUpFragment extends Fragment {
 
         currentActivity = (LoginActivity) getActivity();
         currentActivity.signUpFragment = this;
+        userAccountDAO = new UserAccountDAO(currentActivity);
 
         authenticationHelper = new AuthenticationHelper(currentActivity);
 
@@ -134,28 +131,7 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        mCredentialsApiClient = new GoogleApiClient.Builder(currentActivity)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
 
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                    }
-                })
-                .addApi(Auth.CREDENTIALS_API)
-                .build();
-
-        mCredentialsApiClient.connect();
     }
 
     private void test_fill() {
@@ -189,10 +165,25 @@ public class SignUpFragment extends Fragment {
                     authenticationHelper.setOnSignInListener(new OnSignInListener() {
                         @Override
                         public void onSuccess() {
+                            DialogAction dialogAction = new DialogAction();
+                            dialogAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    storeCredentials(email, password);
+                                    signInSuccess();
+                                }
+                            });
+                            dialogAction.setNegativeAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    signInSuccess();
+                                }
+                            });
 
-                            storeCredentials(email, password);
-
-
+                            DialogManager storePasswordDialogManager =
+                                    new DialogManager(currentActivity, DialogManager.DialogType.YES_NO );
+                            storePasswordDialogManager.setAction(dialogAction);
+                            storePasswordDialogManager.showDialog(getString(R.string.login_message_remember));
                         }
 
                         @Override
@@ -258,69 +249,10 @@ public class SignUpFragment extends Fragment {
     }
 
     private void storeCredentials(String email, String password) {
-/*
-
-        Credential credential = new Credential.Builder(email)
-                .setPassword(password)
-                .build();
-
-        Auth.CredentialsApi.save(mCredentialsApiClient, credential).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-
-                            LogHelper.log("Credential Saved");
-                            signInSuccess();
-                        } else {
-
-                            if (status.hasResolution()) {
-                                // Try to resolve the save request. This will prompt the user if
-                                // the credential is new.
-                                try {
-                                    status.startResolutionForResult(currentActivity, RC_SAVE);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Could not resolve the request
-                                    LogHelper.log("Failed to save credential - Could not resolve the request: ["
-                                            + status.getStatusCode() + "]"
-                                            + status.getStatusMessage());
-
-                                }
-                            } else {
-                                // Request has no resolution
-                                LogHelper.log("Failed to save credential - Request has no resolution: ["
-                                        + status.getStatusCode() + "]"
-                                        + status.getStatusMessage());
-                            }
-
-                        }
-                    }
-                });
-
-*/
+        userAccountDAO.InsertOrUpdate(email, password);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null) {
 
-            if (requestCode == RC_SAVE) {
-                if (resultCode == RESULT_OK) {
-                    LogHelper.log("Credentials SignUp RC_SAVE");
-                    Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-                    CyburgerApplication.setCredential(credential);
-                    CyburgerApplication.setCredential(credential);
-
-                } else {
-                    LogHelper.log("User cancelled saving credentials");
-                }
-            }
-        }
-
-        signInSuccess();
-
-    }
 
 }

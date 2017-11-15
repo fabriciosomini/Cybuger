@@ -1,7 +1,7 @@
 package com.cynerds.cyburger.models.general;
 
 
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 
 /**
  * Created by fabri on 08/07/2017.
@@ -10,14 +10,14 @@ import com.cynerds.cyburger.data.FirebaseDatabaseManager;
 
 public class FirebaseRealtimeDatabaseResult {
 
-    private FirebaseDatabaseManager.DatabaseOperationResultType resultType;
+    private FirebaseDatabaseHelper.DatabaseOperationResultType resultType;
     private String message;
 
-    public FirebaseDatabaseManager.DatabaseOperationResultType getResultType() {
+    public FirebaseDatabaseHelper.DatabaseOperationResultType getResultType() {
         return resultType;
     }
 
-    public void setResultType(FirebaseDatabaseManager.DatabaseOperationResultType resultType) {
+    public void setResultType(FirebaseDatabaseHelper.DatabaseOperationResultType resultType) {
         this.resultType = resultType;
     }
 
@@ -31,6 +31,6 @@ public class FirebaseRealtimeDatabaseResult {
 
 
     public boolean sucess() {
-        return resultType == FirebaseDatabaseManager.DatabaseOperationResultType.SUCCESS;
+        return resultType == FirebaseDatabaseHelper.DatabaseOperationResultType.SUCCESS;
     }
 }

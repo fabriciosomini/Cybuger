@@ -11,7 +11,7 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.data.FirebaseDatabaseManager;
+import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
@@ -24,12 +24,12 @@ import java.util.List;
 public class ManageItemsActivity extends BaseActivity {
 
 
-    final FirebaseDatabaseManager firebaseDatabaseManager;
+    final FirebaseDatabaseHelper firebaseDatabaseHelper;
 
 
     public ManageItemsActivity() {
 
-        firebaseDatabaseManager = new FirebaseDatabaseManager(this, Item.class);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper(this, Item.class);
 
     }
 
@@ -99,10 +99,10 @@ public class ManageItemsActivity extends BaseActivity {
 
                     if (loadedItem == null) {
 
-                        firebaseDatabaseManager.insert(item);
+                        firebaseDatabaseHelper.insert(item);
                     } else {
 
-                        firebaseDatabaseManager.update(item);
+                        firebaseDatabaseHelper.update(item);
                     }
 
                     finish();
@@ -125,7 +125,7 @@ public class ManageItemsActivity extends BaseActivity {
                             public void onClick(View v) {
 
 
-                                firebaseDatabaseManager.delete(loadedItem);
+                                firebaseDatabaseHelper.delete(loadedItem);
 
                                 LogHelper.log("Item removido");
                             }

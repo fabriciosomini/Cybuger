@@ -1,12 +1,9 @@
-package com.cynerds.cyburger.data;
+package com.cynerds.cyburger.helpers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.cynerds.cyburger.application.CyburgerApplication;
-import com.cynerds.cyburger.helpers.LogHelper;
-import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.general.FirebaseRealtimeDatabaseResult;
 import com.cynerds.cyburger.models.general.BaseModel;
@@ -29,7 +26,7 @@ import java.util.UUID;
  * Created by fabri on 07/07/2017.
  */
 
-public class FirebaseDatabaseManager<T> {
+public class FirebaseDatabaseHelper<T> {
     private final Class<BaseModel> classType;
     private final DatabaseReference databaseReference;
     private final String tableName;
@@ -47,7 +44,7 @@ public class FirebaseDatabaseManager<T> {
     private long loadedItemsCount;
 
 
-    public FirebaseDatabaseManager(Class<BaseModel> classType) {
+    public FirebaseDatabaseHelper(Class<BaseModel> classType) {
 
         tableName = classType.getSimpleName();
         this.classType = classType;
@@ -61,7 +58,7 @@ public class FirebaseDatabaseManager<T> {
     }
 
 
-    public FirebaseDatabaseManager(Context context, Class<BaseModel> classType) {
+    public FirebaseDatabaseHelper(Context context, Class<BaseModel> classType) {
 
         this(classType);
         this.context = context;
@@ -258,7 +255,7 @@ public class FirebaseDatabaseManager<T> {
 
     public void insert(BaseModel baseModel) {
 
-        LogHelper.log("Insert new object into the database of type: " + classType.getSimpleName());
+        LogHelper.log("InsertOrUpdate new object into the database of type: " + classType.getSimpleName());
         if (baseModel != null) {
             if (baseModel.getId() != null) {
                 if (baseModel.getId().isEmpty()) {
