@@ -265,9 +265,6 @@ public class FirebaseDatabaseHelper<T> {
             }
         }
 
-
-
-
         return tableReference.push().setValue(baseModel);
     }
 
@@ -277,11 +274,11 @@ public class FirebaseDatabaseHelper<T> {
         return (List<T>) items;
     }
 
-    public Task<Void> delete(BaseModel object) {
+    public Task<Void> delete(BaseModel baseModel) {
 
         String key = "0";
-        if(object !=null){
-            key = object.getKey();
+        if(baseModel !=null){
+            key = baseModel.getKey();
         }
 
         return tableReference.child(key).removeValue();
@@ -295,20 +292,12 @@ public class FirebaseDatabaseHelper<T> {
 
         final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
-        OnCompleteListener<Void> pushListener = new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
 
-                if (task.isSuccessful()) {
-                    firebaseRealtimeDatabaseResult.setMessage("Success");
-                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
-                } else {
-                    firebaseRealtimeDatabaseResult.setMessage("Error");
-                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
-                }
-            }
-        };
-       return tableReference.child(baseModel.getKey()).setValue(baseModel);
+        String key = "0";
+        if(baseModel !=null){
+            key = baseModel.getKey();
+        }
+       return tableReference.child(key).setValue(baseModel);
 
     }
 

@@ -7,7 +7,6 @@
 
     <android.support.constraint.ConstraintLayout
        android:id="@+id/toastInnerContainer"
-        android:background="@color/coralred"
         android:layout_width="@dimen/default_width"
         style="@style/AppTheme.CyburgerContainer"
         android:layout_height="@dimen/default_height">

@@ -1,12 +1,15 @@
 package com.cynerds.cyburger.activities;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -34,6 +37,8 @@ public class BaseActivity extends AppCompatActivity {
     private Bundle savedInstanceState;
     private TextView actionBarTitle;
     private boolean finishApp;
+    private View progressBackground;
+
 
     public BaseActivity() {
 
@@ -64,10 +69,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    protected boolean isWorkspaceDirty() {
 
-        return dirty.size() > 0;
-    }
 
     protected void setActionBarTitle(String title) {
         actionBarTitle.setVisibility(View.VISIBLE);
@@ -82,6 +84,10 @@ public class BaseActivity extends AppCompatActivity {
 
 
         this.savedInstanceState = savedInstanceState;
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        progressBackground = inflater.inflate(R.layout.component_busyloader, null);
+
 
         setUIEvents();
 
@@ -151,6 +157,22 @@ public class BaseActivity extends AppCompatActivity {
         if (finishApp) {
             CyburgerApplication.unsubscribeToUserTopic();
             android.os.Process.killProcess(android.os.Process.myPid());
+        }
+
+    }
+
+    public void showBusyLoader(boolean show){
+
+        ViewGroup parent = findViewById(android.R.id.content);
+        parent.setFocusable(true);
+        parent.setFocusableInTouchMode(true);
+        parent.requestFocus();
+
+        if (show) {
+            parent.addView(progressBackground);
+
+        } else {
+            parent.removeView(progressBackground);
         }
 
     }

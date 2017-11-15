@@ -25,43 +25,11 @@ import java.util.List;
 
 
 public class LoginActivity extends BaseActivity {
-    public static boolean isRememberMeChecked;
-    EditText signInUserTxt;
-    EditText signInPasswordTxt;
-    Button signInBtn;
-    CheckBox signInRememberCbx;
-    private Preferences preferences;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private Permissions permissions;
+
     public static SignInFragment signInFragment;
     public static SignUpFragment signUpFragment;
 
 
-    public void displayProgressBar(boolean display) {
-        View progressBackground = findViewById(R.id.progressBackground);
-        View progressBar = findViewById(R.id.progressBar);
-
-        if (display) {
-
-            progressBackground.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-
-        } else {
-            progressBackground.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        //  mAuth.addAuthStateListener(mAuthListener);
-
-
-    }
 
 
     @Override
@@ -77,13 +45,7 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

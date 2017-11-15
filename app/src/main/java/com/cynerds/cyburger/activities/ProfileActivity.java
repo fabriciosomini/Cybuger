@@ -112,10 +112,13 @@ public class ProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    saveProfileBtn.setEnabled(false);
+
                     final String updatedEmail = profileEmailTxt.getText().toString().trim();
 
                     if (FieldValidationHelper.isEditTextValidated(profileEmailTxt)) {
+
+                        saveProfileBtn.setEnabled(false);
+                        showBusyLoader(true);
 
                         authenticationHelper.updateEmail(updatedEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -132,7 +135,6 @@ public class ProfileActivity extends BaseActivity {
                                             MessageType.SUCCESS,
                                             "Perfil atualizado");
 
-
                                     finish();
                                 }
                                 else{
@@ -140,6 +142,7 @@ public class ProfileActivity extends BaseActivity {
                                             MessageType.ERROR,
                                             "Erro ao atualizar e-mail");
 
+                                    showBusyLoader(false);
                                     saveProfileBtn.setEnabled(true);
 
                                 }

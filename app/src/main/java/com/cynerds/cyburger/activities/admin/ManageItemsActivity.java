@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,11 @@ import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.helpers.MessageHelper;
+import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.item.Item;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +88,9 @@ public class ManageItemsActivity extends BaseActivity {
                         FieldValidationHelper.isEditTextValidated(itemBonusPointTxt) &&
                         FieldValidationHelper.isEditTextValidated(itemPriceTxt)) {
 
+                    showBusyLoader(true);
+                    saveItemBtn.setEnabled(false);
+
                     String itemDescription = itemDescriptionTxt.getText().toString().trim();
                     Float itemPrice = Float.valueOf(itemPriceTxt.getText().toString().trim());
                     String itemIngredients = itemIngredientsTxt.getText().toString().trim();
@@ -99,13 +107,47 @@ public class ManageItemsActivity extends BaseActivity {
 
                     if (loadedItem == null) {
 
-                        firebaseDatabaseHelper.insert(item);
+                        firebaseDatabaseHelper.insert(item).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    MessageHelper.show(ManageItemsActivity.this,
+                                            MessageType.SUCCESS,
+                                            "Item adicionado");
+                                    saveItemBtn.setEnabled(true);
+                                    finish();
+                                } else {
+                                    MessageHelper.show(ManageItemsActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao adicionar item");
+                                    saveItemBtn.setEnabled(true);
+                                    showBusyLoader(false);
+                                }
+                            }
+                        });
                     } else {
 
-                        firebaseDatabaseHelper.update(item);
+                        firebaseDatabaseHelper.update(item).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    MessageHelper.show(ManageItemsActivity.this,
+                                            MessageType.SUCCESS,
+                                            "Item atualizado");
+                                    saveItemBtn.setEnabled(true);
+                                    finish();
+                                } else {
+                                    MessageHelper.show(ManageItemsActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao atualizar item");
+                                    saveItemBtn.setEnabled(true);
+                                    showBusyLoader(false);
+                                }
+                            }
+                        });
                     }
 
-                    finish();
+
 
                 }
 
@@ -124,8 +166,27 @@ public class ManageItemsActivity extends BaseActivity {
                             @Override
                             public void onClick(View v) {
 
+                                showBusyLoader(true);
 
-                                firebaseDatabaseHelper.delete(loadedItem);
+                                firebaseDatabaseHelper.delete(loadedItem).addOnCompleteListener(new OnCompleteListener() {
+                                    @Override
+                                    public void onComplete(@NonNull Task task) {
+                                        if(task.isSuccessful()){
+                                            MessageHelper.show(ManageItemsActivity.this,
+                                                    MessageType.SUCCESS,
+                                                    "Item removido");
+                                            saveItemBtn.setEnabled(true);
+
+                                            finish();
+                                        }else{
+
+                                            MessageHelper.show(ManageItemsActivity.this,
+                                                    MessageType.ERROR,
+                                                    "Erro ao remover item");
+                                            showBusyLoader(false);
+                                        }
+                                    }
+                                });
 
                                 LogHelper.log("Item removido");
                             }

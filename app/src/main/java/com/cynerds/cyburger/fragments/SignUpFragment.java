@@ -157,7 +157,7 @@ public class SignUpFragment extends Fragment {
 
         LogHelper.log("Trying to create a new user using email and password");
         signUpBtn.setEnabled(false);
-        currentActivity.displayProgressBar(true);
+        currentActivity.showBusyLoader(true);
 
         Task<AuthResult> createNewUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
 
@@ -200,7 +200,7 @@ public class SignUpFragment extends Fragment {
 
                         @Override
                         public void onError(Exception exception) {
-                            currentActivity.displayProgressBar(false);
+                            currentActivity.showBusyLoader(false);
                             signUpBtn.setEnabled(true);
                             LogHelper.log(exception.getMessage());
                         }
@@ -213,7 +213,7 @@ public class SignUpFragment extends Fragment {
                     LogHelper.log("Failed to create user");
 
                     signUpBtn.setEnabled(true);
-                    currentActivity.displayProgressBar(false);
+                    currentActivity.showBusyLoader(false);
 
                     if (task.getException() instanceof FirebaseAuthException) {
                         FirebaseAuthException authException = (FirebaseAuthException) task.getException();

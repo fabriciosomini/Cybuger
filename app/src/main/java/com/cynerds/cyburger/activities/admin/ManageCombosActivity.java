@@ -135,11 +135,15 @@ public class ManageCombosActivity extends BaseActivity {
                         FieldValidationHelper.isEditTextValidated(comboBonusPointsTxt) &&
                         FieldValidationHelper.isEditTextValidated(comboPriceTxt)) {
 
+
                     //Validação especial, SOMENTE para este caso
                     if (itemsTagInput.getSelectedTagModels().size() == 0) {
                         FieldValidationHelper.setFieldAsInvalid(itemsTagInput.getSearchTagItemBox(), R.string.manage_combos_required_field);
                         return;
                     }
+
+                    saveComboBtn.setEnabled(false);
+                    showBusyLoader(true);
 
                     String comboName = comboNameTxt.getText().toString().trim();
                     String comboInfo = comboInfoTxt.getText().toString().trim();
@@ -163,8 +167,28 @@ public class ManageCombosActivity extends BaseActivity {
                         }
                     }
                     combo.setComboItems(items);
-                    if (loadedCombo != null) {
 
+                    if (loadedCombo == null) {
+
+                        firebaseDatabaseHelper.insert(combo).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.SUCCESS,
+                                            "Combo adicionado");
+                                    saveComboBtn.setEnabled(true);
+                                    finish();
+                                } else {
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.ERROR,
+                                            "Erro ao adicionar combo");
+                                    saveComboBtn.setEnabled(true);
+                                    showBusyLoader(false);
+                                }
+                            }
+                        });
+                    } else {
                         firebaseDatabaseHelper.update(combo).addOnCompleteListener(new OnCompleteListener() {
                             @Override
                             public void onComplete(@NonNull Task task) {
@@ -172,27 +196,14 @@ public class ManageCombosActivity extends BaseActivity {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.SUCCESS,
                                             "Combo atualizado");
-                                    finish();
-                                } else {
-                                    MessageHelper.show(ManageCombosActivity.this,
-                                            MessageType.ERROR,
-                                            "Erro ao adicionar combo");
-                                }
-                            }
-                        });
-                    } else {
-                        firebaseDatabaseHelper.insert(combo).addOnCompleteListener(new OnCompleteListener() {
-                            @Override
-                            public void onComplete(@NonNull Task task) {
-                                if (task.isSuccessful()) {
-                                    MessageHelper.show(ManageCombosActivity.this,
-                                            MessageType.SUCCESS,
-                                            "Combo atualizado");
+                                    saveComboBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.ERROR,
                                             "Erro ao atualizar combo");
+                                    saveComboBtn.setEnabled(true);
+                                    showBusyLoader(false);
                                 }
                             }
                         });
@@ -214,8 +225,28 @@ public class ManageCombosActivity extends BaseActivity {
                             public void onClick(View v) {
 
 
-                                firebaseDatabaseHelper.delete(loadedCombo);
-                                finish();
+                                showBusyLoader(true);
+                                firebaseDatabaseHelper.delete(loadedCombo).addOnCompleteListener(new OnCompleteListener() {
+                                    @Override
+                                    public void onComplete(@NonNull Task task) {
+
+                                        if (task.isSuccessful()) {
+                                            MessageHelper.show(ManageCombosActivity.this,
+                                                    MessageType.SUCCESS,
+                                                    "Combo removido");
+                                            saveComboBtn.setEnabled(true);
+
+                                            finish();
+                                        } else {
+
+                                            MessageHelper.show(ManageCombosActivity.this,
+                                                    MessageType.ERROR,
+                                                    "Erro ao remover combo");
+                                            showBusyLoader(false);
+                                        }
+                                    }
+                                });
+
                                 LogHelper.log("Combo removido");
                             }
                         });

@@ -191,7 +191,7 @@ public class SignInFragment extends Fragment {
 
     public void setUIEvents(View inflatedView) {
 
-
+       
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(currentActivity);
         permissions = new Permissions(currentActivity);
@@ -366,7 +366,7 @@ public class SignInFragment extends Fragment {
                 FieldValidationHelper.isEditTextValidated(signInPasswordTxt)) {
 
             signInBtn.setEnabled(false);
-            currentActivity.displayProgressBar(true);
+            currentActivity.showBusyLoader(true);
             LogHelper.log("Remove busyloader");
 
             final String email = String.valueOf(signInUserTxt.getText().toString());
@@ -385,7 +385,7 @@ public class SignInFragment extends Fragment {
 
 
                     signInBtn.setEnabled(true);
-                    currentActivity.displayProgressBar(false);
+                    currentActivity.showBusyLoader(false);
 
                     if (exception != null) {
                         if (exception.getClass() == FirebaseAuthInvalidUserException.class||
