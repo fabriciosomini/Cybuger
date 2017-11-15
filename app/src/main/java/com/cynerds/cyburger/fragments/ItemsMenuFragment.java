@@ -20,6 +20,7 @@ import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
+import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
@@ -29,6 +30,7 @@ import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.view.CardModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,7 +208,16 @@ public class ItemsMenuFragment extends Fragment {
                     + "\n\nVocê ganha " + item.getBonusPoints() + " pontos");
             cardModel.setSubContent("R$" + item.getPrice());
 
+            float amount = item.getPrice();
+            if(BonusPointExchangeHelper.convertUserPointsToCash()>=amount)
+            {
+                DecimalFormat format = new DecimalFormat();
+                format.setDecimalSeparatorAlwaysShown(false);
+                String requiredPoints = "(ou "
+                        + format.format(BonusPointExchangeHelper.convertAmountToPoints(amount)) + " pontos)";
+                cardModel.setRightContent(requiredPoints);
 
+            }
             cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
