@@ -42,7 +42,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         TextView cardContent = convertView.findViewById(R.id.cardContent);
         TextView cardSubContent = convertView.findViewById(R.id.cardSubContent);
         ImageView cardManageIcon = convertView.findViewById(R.id.cardManageIcon);
-        ConstraintLayout baseComponentContainer = convertView.findViewById(R.id.dashboard_cardview);
+        ConstraintLayout cardClickArea = convertView.findViewById(R.id.cardClickArea);
         final View.OnClickListener onCardViewClickListener = cardModel.getOnCardViewClickListener();
         View.OnClickListener onManageClickListener = cardModel.getOnManageClickListener();
         View.OnClickListener onPictureViewClickListener = cardModel.getOnPictureClickListener();
@@ -68,28 +68,10 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
         if(onCardViewClickListener !=null)
         {
-            baseComponentContainer.setOnClickListener(onCardViewClickListener);
-            baseComponentContainer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
-                    {
-                        onCardViewClickListener.onClick(v);
-                    }
-                }
-            });
-
+            cardClickArea.setOnClickListener(onCardViewClickListener);
             if(onPictureViewClickListener ==null){
                 cardPicture.setOnClickListener(onCardViewClickListener);
-                cardPicture.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if(hasFocus)
-                        {
-                            onCardViewClickListener.onClick(v);
-                        }
-                    }
-                });
+
             }
 
         }
