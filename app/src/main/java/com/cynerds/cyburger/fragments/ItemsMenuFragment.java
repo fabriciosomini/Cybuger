@@ -139,7 +139,7 @@ public class ItemsMenuFragment extends Fragment {
         OnDataChangeListener onDataChangeListener
                 = new OnDataChangeListener() {
             @Override
-            public void onDataChanged() {
+            public void onDatabaseChanges() {
                 updateList(view);
             }
 
@@ -150,6 +150,7 @@ public class ItemsMenuFragment extends Fragment {
         };
 
         firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
+        CyburgerApplication.addListenerToNotifyAboutProfile(onDataChangeListener);
     }
 
     private void updateList(View view) {

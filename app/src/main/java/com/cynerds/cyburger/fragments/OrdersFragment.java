@@ -158,7 +158,7 @@ public class OrdersFragment extends Fragment {
         OnDataChangeListener onDataChangeListener
                 = new OnDataChangeListener() {
             @Override
-            public void onDataChanged() {
+            public void onDatabaseChanges() {
                 updateList(view);
             }
 

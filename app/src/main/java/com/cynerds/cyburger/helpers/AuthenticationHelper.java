@@ -40,10 +40,7 @@ public class AuthenticationHelper {
 
     public AuthenticationHelper(Activity activity) {
         this.activity = activity;
-
         preferences = new Preferences(activity);
-
-
         profileBuilder = new UserProfileChangeRequest.Builder();
         mAuth = FirebaseAuth.getInstance();
 
@@ -148,7 +145,7 @@ public class AuthenticationHelper {
             firebaseDatabaseHelper = new FirebaseDatabaseHelper(activity, Profile.class);
         }
 
-        if (!findUserProfileAndSetToApplication()) {
+        if (!findUserProfileAndSetToApplication(getProfiles())) {
             createProfilesList();
         }
     }
@@ -157,9 +154,9 @@ public class AuthenticationHelper {
         LogHelper.log("Initializing a new onDataChangeListener for Profile");
         OnDataChangeListener onDataChangeListener = new OnDataChangeListener() {
             @Override
-            public void onDataChanged() {
+            public void onDatabaseChanges() {
 
-                if (!findUserProfileAndSetToApplication()) {
+                if (!findUserProfileAndSetToApplication(getProfiles())) {
                     if (onSignInListener != null) {
 
 
@@ -181,10 +178,8 @@ public class AuthenticationHelper {
         firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
     }
 
-    private boolean findUserProfileAndSetToApplication() {
+    private boolean findUserProfileAndSetToApplication(List<Profile> profiles) {
         LogHelper.log("Trying to get profiles list");
-
-        List<Profile> profiles = getProfiles();
 
 
         for (Profile profile :

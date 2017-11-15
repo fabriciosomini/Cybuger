@@ -5,7 +5,8 @@ import android.content.Context;
 
 
 import com.cynerds.cyburger.activities.BaseActivity;
-import com.cynerds.cyburger.activities.MainActivity;
+import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.DateHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
 import com.cynerds.cyburger.helpers.CountDownTimerHelper;
@@ -22,13 +23,13 @@ import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.role.Role;
 import com.cynerds.cyburger.models.sync.Sync;
-import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +43,13 @@ public class CyburgerApplication extends Application {
     public static boolean autoLogin = true;
     private static Profile profile;
     private static boolean isSynced;
+    private static List<OnDataChangeListener> onDataChangeListeners;
+    private static Parameters parameters;
+    private static UserAccount userAccount;
+    private static OnSyncResultListener onSyncResultListener;
+    private static Context context;
+    private static boolean syncNotified;
+    private static Sync sync;
 
     public static Parameters getParameters() {
         return parameters;
@@ -51,18 +59,9 @@ public class CyburgerApplication extends Application {
         CyburgerApplication.parameters = parameters;
     }
 
-    private static Parameters parameters;
-
-    private static UserAccount userAccount;
-    private static OnSyncResultListener onSyncResultListener;
-    private static Context context;
-    private static boolean syncNotified;
-
     public static Sync getSync() {
         return sync;
     }
-
-    private static Sync sync;
 
     public static UserAccount getUserAccount() {
         return userAccount;
@@ -117,6 +116,10 @@ public class CyburgerApplication extends Application {
 
     }
 
+    public static void addListenerToNotifyAboutProfile(OnDataChangeListener onDataChangeListener) {
+        onDataChangeListeners.add(onDataChangeListener);
+    }
+
     public static void setOnSyncResultListener(OnSyncResultListener onSyncResultListener) {
         if (onSyncResultListener != null) {
             if (CyburgerApplication.onSyncResultListener == null) {
@@ -141,12 +144,12 @@ public class CyburgerApplication extends Application {
 
             firebaseDatabaseHelper.setOnDataChangeListener(new OnDataChangeListener() {
                 @Override
-                public void onDataChanged() {
+                public void onDatabaseChanges() {
                     if (firebaseDatabaseHelper.get().size() > 0) {
                         sync = firebaseDatabaseHelper.get().get(0);
 
                         if (sync != null) {
-                             isSynced = sync.isSynced();
+                            isSynced = sync.isSynced();
                             setApplicationParameters();
                         }
 
@@ -187,6 +190,79 @@ public class CyburgerApplication extends Application {
 
 
         }
+    }
+
+    private static void createProfileWatcher() {
+
+        onDataChangeListeners = new ArrayList<>();
+        final FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile = new FirebaseDatabaseHelper(Profile.class);
+        firebaseDatabaseHelperProfile.setOnDataChangeListener(new OnDataChangeListener() {
+            @Override
+            public void onDatabaseChanges() {
+
+                for (Profile profile :
+                        firebaseDatabaseHelperProfile.get()) {
+                    if (profile != null) {
+
+                        LogHelper.log("Found a matching profile in the list: " + profile.getUserId());
+                        CyburgerApplication.profile = profile;
+
+                    }
+                }
+
+                for (OnDataChangeListener onDataChangeListener :
+                        onDataChangeListeners) {
+                    if (onDataChangeListener != null) {
+                        onDataChangeListener.onDatabaseChanges();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    private static void setApplicationParameters() {
+        final FirebaseDatabaseHelper<Parameters> firebaseDatabaseHelperParameters
+                = new FirebaseDatabaseHelper(context, Parameters.class);
+
+        firebaseDatabaseHelperParameters.setOnDataChangeListener(new OnDataChangeListener() {
+            @Override
+            public void onDatabaseChanges() {
+                List<Parameters> parametersList = firebaseDatabaseHelperParameters.get();
+
+                Parameters parameters = null;
+
+                if (parametersList.size() > 0) {
+                    parameters = parametersList.get(0);
+                }
+                if (parameters != null) {
+
+                    CyburgerApplication.setParameters(parameters);
+
+                    if (!syncNotified) {
+                        if (CyburgerApplication.onSyncResultListener != null) {
+
+                            onSyncResultListener.onSyncResult(isSynced);
+                            CyburgerApplication.onSyncResultListener = null;
+                        }
+                        createProfileWatcher();
+                        syncNotified = true;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
     }
 
     @Override
@@ -254,42 +330,6 @@ public class CyburgerApplication extends Application {
         crashReport.setDate(date);
 
         crashReportFirebaseDatabaseHelper.insert(crashReport);
-
-    }
-
-    private static void setApplicationParameters() {
-         final FirebaseDatabaseHelper<Parameters> firebaseDatabaseHelperParameters
-                  = new FirebaseDatabaseHelper(context, Parameters.class);
-
-        firebaseDatabaseHelperParameters.setOnDataChangeListener(new OnDataChangeListener() {
-            @Override
-            public void onDataChanged() {
-                List<Parameters> parametersList = firebaseDatabaseHelperParameters.get();
-
-                Parameters parameters = null;
-
-                if (parametersList.size() > 0) {
-                    parameters = parametersList.get(0);
-                }
-                if (parameters != null) {
-
-                    CyburgerApplication.setParameters(parameters);
-
-                    if (CyburgerApplication.onSyncResultListener != null) {
-
-                        onSyncResultListener.onSyncResult(isSynced);
-                        CyburgerApplication.onSyncResultListener = null;
-                    }
-                    syncNotified = true;
-
-                }
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
 
     }
 }

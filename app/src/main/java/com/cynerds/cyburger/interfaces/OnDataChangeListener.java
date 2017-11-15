@@ -6,7 +6,7 @@ package com.cynerds.cyburger.interfaces;
 
 public interface OnDataChangeListener {
 
-    public void onDataChanged();
+    public void onDatabaseChanges();
 
     public void onCancel();
 }

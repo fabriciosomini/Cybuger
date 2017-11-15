@@ -1,14 +1,12 @@
 package com.cynerds.cyburger.helpers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.general.FirebaseRealtimeDatabaseResult;
 import com.cynerds.cyburger.models.general.BaseModel;
 import com.cynerds.cyburger.models.general.MessageType;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -232,7 +230,7 @@ public class FirebaseDatabaseHelper<T> {
     private void notifyIfNeeded() {
         if (onDataChangeListener != null && items.size() == loadedItemsCount) {
             notityPending = false;
-            onDataChangeListener.onDataChanged();
+            onDataChangeListener.onDatabaseChanges();
 
         } else if (items.size() != loadedItemsCount) {
             notityPending = true;
