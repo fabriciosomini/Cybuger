@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -92,10 +93,12 @@ public class ItemsMenuFragment extends Fragment {
                     searchBoxItemsTxt.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
-                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            Drawable drawable = searchBoxItemsTxt.getCompoundDrawables()[2];
+
+                            if(drawable!=null){
                                 boolean clicked = event.getRawX() >=
                                         searchBoxItemsTxt.getRight()
-                                                - searchBoxItemsTxt.getCompoundDrawables()[2].getBounds().width();
+                                                - drawable.getBounds().width();
                                 if (clicked) {
                                     searchBoxItemsTxt.setText("");
                                     searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);

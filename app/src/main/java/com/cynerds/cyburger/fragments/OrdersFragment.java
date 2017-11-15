@@ -2,6 +2,7 @@ package com.cynerds.cyburger.fragments;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -110,10 +111,12 @@ public class OrdersFragment extends Fragment {
                        searchBoxOrdersTxt.setOnTouchListener(new View.OnTouchListener() {
                            @Override
                            public boolean onTouch(View v, MotionEvent event) {
-                               if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                               Drawable drawable = searchBoxOrdersTxt.getCompoundDrawables()[2];
+
+                               if(drawable!=null){
                                    boolean clicked = event.getRawX() >=
                                            searchBoxOrdersTxt.getRight()
-                                                   - searchBoxOrdersTxt.getCompoundDrawables()[2].getBounds().width();
+                                                   - drawable.getBounds().width();
                                    if (clicked) {
                                        searchBoxOrdersTxt.setText("");
                                        searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);

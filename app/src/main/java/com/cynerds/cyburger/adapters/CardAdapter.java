@@ -41,6 +41,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         TextView cardTitle = convertView.findViewById(R.id.cardTitle);
         TextView cardContent = convertView.findViewById(R.id.cardContent);
         TextView cardSubContent = convertView.findViewById(R.id.cardSubContent);
+        TextView cardRightContent = convertView.findViewById(R.id.cardRightContent);
         ImageView cardManageIcon = convertView.findViewById(R.id.cardManageIcon);
         ConstraintLayout cardClickArea = convertView.findViewById(R.id.cardClickArea);
         final View.OnClickListener onCardViewClickListener = cardModel.getOnCardViewClickListener();
@@ -82,6 +83,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         cardTitle.setText(cardModel.getTitle());
         cardContent.setText(cardModel.getContent());
         cardSubContent.setText(cardModel.getSubContent());
+        cardRightContent.setText(cardModel.getRightContent());
 
         return convertView;
     }

@@ -1,6 +1,7 @@
 package com.cynerds.cyburger.fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -92,17 +93,23 @@ public class CombosFragment extends Fragment {
                 }
                 else{
                     searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
+                    searchBoxCombosTxt.setClickable(false);
                     searchBoxCombosTxt.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
                             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                boolean clicked = event.getRawX() >=
-                                        searchBoxCombosTxt.getRight()
-                                                - searchBoxCombosTxt.getCompoundDrawables()[2].getBounds().width();
-                                if (clicked) {
-                                    searchBoxCombosTxt.setText("");
-                                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-                                    return true;
+
+                                Drawable drawable = searchBoxCombosTxt.getCompoundDrawables()[2];
+
+                                if(drawable!=null){
+                                    boolean clicked = event.getRawX() >=
+                                            searchBoxCombosTxt.getRight()
+                                                    - drawable.getBounds().width();
+                                    if (clicked) {
+                                        searchBoxCombosTxt.setText("");
+                                        searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                                        return true;
+                                    }
                                 }
                             }
                             return false;

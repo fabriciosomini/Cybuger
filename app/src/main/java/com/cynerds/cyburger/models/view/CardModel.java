@@ -14,6 +14,7 @@ public class CardModel {
     private String title;
     private String content;
     private String subContent;
+    private String rightContent;
     private int headerIconId = R.drawable.ic_burger_default;
     private int actionIconId;
     private View.OnClickListener onPictureClickListener;
@@ -21,6 +22,14 @@ public class CardModel {
     private View.OnClickListener onCardViewClickListener;
     private Object extra;
     private int titleColor;
+
+    public String getRightContent() {
+        return rightContent;
+    }
+
+    public void setRightContent(String rightContent) {
+        this.rightContent = rightContent;
+    }
 
     public String getSubContent() {
         return subContent;
@@ -69,8 +78,6 @@ public class CardModel {
     public void setActionIconId(int actionIconId) {
         this.actionIconId = actionIconId;
     }
-
-
 
     public String getTitle() {
         return title;
