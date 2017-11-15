@@ -18,7 +18,7 @@
     <string name="login_label_password">Senha</string>
     <string name="login_label_rememberMe">Lembrar-me</string>
     <string name="login_button_singIn">Entrar</string>
-    <string name="login_label_incorrectPassword">E-mail ou senha inválido</string>
+    <string name="login_label_incorrectPassword">E-mail ou senha inválidos</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

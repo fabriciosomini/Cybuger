@@ -8,8 +8,10 @@ import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.general.FirebaseRealtimeDatabaseResult;
 import com.cynerds.cyburger.models.general.BaseModel;
 import com.cynerds.cyburger.models.general.MessageType;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,7 +44,6 @@ public class FirebaseDatabaseHelper<T> {
 
     private boolean notityPending;
     private long loadedItemsCount;
-
 
     public FirebaseDatabaseHelper(Class<BaseModel> classType) {
 
@@ -213,8 +214,6 @@ public class FirebaseDatabaseHelper<T> {
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
-
-
             }
 
             @Override
@@ -226,17 +225,18 @@ public class FirebaseDatabaseHelper<T> {
             }
         };
 
+
         tableReference.addChildEventListener(tableListener);
 
 
     }
 
     private void checkForNotification() {
-        if(onDataChangeListener!=null && items.size() == loadedItemsCount){
+        if (onDataChangeListener != null && items.size() == loadedItemsCount) {
             notityPending = false;
             onDataChangeListener.onDataChanged();
 
-        }else if(items.size() != loadedItemsCount){
+        } else if (items.size() != loadedItemsCount) {
             notityPending = true;
         }
     }
@@ -270,28 +270,25 @@ public class FirebaseDatabaseHelper<T> {
 
         final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
-
-        tableReference.push().setValue(baseModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+        OnCompleteListener<Void> insertListener = new OnCompleteListener<Void>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                firebaseRealtimeDatabaseResult.setMessage("Success");
-                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    firebaseRealtimeDatabaseResult.setMessage("Success");
+                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+                } else {
+                    firebaseRealtimeDatabaseResult.setMessage("Error");
+                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
+                }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+        };
 
-                firebaseRealtimeDatabaseResult.setMessage(e.getClass().getSimpleName() + ": " + e.getMessage());
-                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
-            }
-        });
-
-
+        tableReference.push().setValue(baseModel).addOnCompleteListener(insertListener);
     }
 
 
     public List<T> get() {
-        LogHelper.log("Get items "+ loadedItemsCount +" of type: " + classType.getSimpleName());
+        LogHelper.log("Get items " + loadedItemsCount + " of type: " + classType.getSimpleName());
         return (List<T>) items;
     }
 
@@ -301,9 +298,7 @@ public class FirebaseDatabaseHelper<T> {
             if (object.getKey() != null) {
                 tableReference.child(object.getKey()).removeValue();
             }
-
         }
-
 
     }
 
@@ -314,20 +309,21 @@ public class FirebaseDatabaseHelper<T> {
 
         final FirebaseRealtimeDatabaseResult firebaseRealtimeDatabaseResult = new FirebaseRealtimeDatabaseResult();
 
+        OnCompleteListener<Void> pushListener = new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
 
-        tableReference.child(baseModel.getKey()).setValue(baseModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                firebaseRealtimeDatabaseResult.setMessage("Success");
-                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+                if (task.isSuccessful()) {
+                    firebaseRealtimeDatabaseResult.setMessage("Success");
+                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.SUCCESS);
+                } else {
+                    firebaseRealtimeDatabaseResult.setMessage("Error");
+                    firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
+                }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                firebaseRealtimeDatabaseResult.setMessage(e.getClass().getSimpleName() + ": " + e.getMessage());
-                firebaseRealtimeDatabaseResult.setResultType(DatabaseOperationResultType.ERROR);
-            }
-        });
+        };
+        tableReference.child(baseModel.getKey()).setValue(baseModel).addOnCompleteListener(pushListener);
+
 
     }
 

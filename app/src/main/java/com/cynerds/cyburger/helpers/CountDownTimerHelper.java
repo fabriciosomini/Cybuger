@@ -10,7 +10,7 @@ import com.cynerds.cyburger.interfaces.CountDownTimeoutListener;
 
 public class CountDownTimerHelper {
 
-    public static void startCount(final CountDownTimeoutListener countDownTimeoutListener, long time, long tick){
+    public static void waitFor(final CountDownTimeoutListener countDownTimeoutListener, long time, long tick){
 
         if(countDownTimeoutListener!=null){
             new CountDownTimer(time, tick) {

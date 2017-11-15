@@ -319,6 +319,7 @@ public class AuthenticationHelper {
     }
 
     public void removeOnSignInListener() {
+
         onSignInListener = null;
     }
 

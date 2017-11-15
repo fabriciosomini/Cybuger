@@ -39,6 +39,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Random;
 
 
@@ -194,7 +195,7 @@ public class SignUpFragment extends Fragment {
                             });
 
                             DialogManager storePasswordDialogManager =
-                                    new DialogManager(currentActivity, DialogManager.DialogType.YES_NO );
+                                    new DialogManager(currentActivity, DialogManager.DialogType.YES_NO);
                             storePasswordDialogManager.setAction(dialogAction);
                             storePasswordDialogManager.showDialog(getString(R.string.login_message_remember));
                         }
@@ -259,49 +260,94 @@ public class SignUpFragment extends Fragment {
 
     private void signInSuccess() {
 
-        if(isRememberMeChecked){
+        if (isRememberMeChecked) {
             if (!permissions.isPermissionForExternalStorageGranted()) {
 
                 permissions.requestPermissionForExternalStorage();
-            }
 
-            currentActivity.setOnRequestPermissionsResultCallback(new ActivityCompat.OnRequestPermissionsResultCallback() {
-                @Override
-                public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-                    // If request is cancelled, the result arrays are empty.
-                    if (grantResults.length > 0
-                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                currentActivity.setOnRequestPermissionsResultCallback(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                    @Override
+                    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-                        preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
-                        ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-                        authenticationHelper.removeOnSignInListener();
+                        // If request is cancelled, the result arrays are empty.
+                        if (grantResults.length > 0
+                                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    } else {
+                            preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
+                            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                            authenticationHelper.removeOnSignInListener();
 
-                        DialogAction dialogAction = new DialogAction();
-                        dialogAction.setPositiveAction(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-                                authenticationHelper.removeOnSignInListener();
-                            }
-                        });
-                        DialogManager permissionDeniedDialogManager = new DialogManager(currentActivity, DialogManager.DialogType.OK);
-                        permissionDeniedDialogManager.setAction(dialogAction);
-                        permissionDeniedDialogManager.showDialog("Não será possível logar automaticamente,"
-                                +" pois a permissão ao armazenamento foi negada");
+                        } else {
+
+                            DialogAction dialogAction = new DialogAction();
+                            dialogAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                                    authenticationHelper.removeOnSignInListener();
+                                }
+                            });
+                            DialogManager permissionDeniedDialogManager = new DialogManager(currentActivity, DialogManager.DialogType.OK);
+                            permissionDeniedDialogManager.setAction(dialogAction);
+                            permissionDeniedDialogManager.showDialog("Não será possível logar automaticamente,"
+                                    + " pois a permissão ao armazenamento foi negada");
+
+                        }
+
 
                     }
+                });
+            } else {
+                preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
+                ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                authenticationHelper.removeOnSignInListener();
+            }
+        } else {
+
+            if (!permissions.isPermissionForExternalStorageGranted()) {
+
+                permissions.requestPermissionForExternalStorage();
+
+                currentActivity.setOnRequestPermissionsResultCallback(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                    @Override
+                    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+                        // If request is cancelled, the result arrays are empty.
+                        if (grantResults.length > 0
+                                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                            preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
+                            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                            authenticationHelper.removeOnSignInListener();
+
+                        } else {
+
+                            DialogAction dialogAction = new DialogAction();
+                            dialogAction.setPositiveAction(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                                    authenticationHelper.removeOnSignInListener();
+                                }
+                            });
+                            DialogManager permissionDeniedDialogManager = new DialogManager(currentActivity, DialogManager.DialogType.OK);
+                            permissionDeniedDialogManager.setAction(dialogAction);
+                            permissionDeniedDialogManager.showDialog("Não será possível remover a opção de logar automaticamente,"
+                                    + " pois a permissão ao armazenamento foi negada");
+
+                        }
 
 
+                    }
+                });
+            } else {
+                preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
+                ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                authenticationHelper.removeOnSignInListener();
+            }
 
-                }
-            });
-        }
-        else{
-            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-            authenticationHelper.removeOnSignInListener();
+
         }
 
     }
@@ -309,8 +355,6 @@ public class SignUpFragment extends Fragment {
     private void storeCredentials(String email, String password) {
         userAccountDAO.InsertOrUpdate(email, password);
     }
-
-
 
 
 }

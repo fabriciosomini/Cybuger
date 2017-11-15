@@ -126,17 +126,20 @@ public class CyburgerApplication extends Application {
             firebaseDatabaseHelper.setOnDataChangeListener(new OnDataChangeListener() {
                 @Override
                 public void onDataChanged() {
-                    if(firebaseDatabaseHelper.get().size()>0){
-                         sync = firebaseDatabaseHelper.get().get(0);
+                    if (firebaseDatabaseHelper.get().size() > 0) {
+                        sync = firebaseDatabaseHelper.get().get(0);
 
-                        if(sync!=null){
+                        if (sync != null) {
                             boolean isSynced = sync.isSynced();
 
-                            onSyncResultListener.onSyncResult(isSynced);
+                            if (CyburgerApplication.onSyncResultListener != null) {
+
+                                onSyncResultListener.onSyncResult(isSynced);
+                                CyburgerApplication.onSyncResultListener = null;
+                            }
                         }
 
                         syncNotified = true;
-
 
 
                     }
@@ -145,21 +148,30 @@ public class CyburgerApplication extends Application {
 
                 @Override
                 public void onCancel() {
-                    onSyncResultListener.onSyncResult(false);
+                    if (CyburgerApplication.onSyncResultListener != null) {
+
+                        onSyncResultListener.onSyncResult(false);
+                        CyburgerApplication.onSyncResultListener = null;
+                    }
+
                 }
 
 
             });
 
 
-            CountDownTimerHelper.startCount(new CountDownTimeoutListener() {
+            CountDownTimerHelper.waitFor(new CountDownTimeoutListener() {
                 @Override
                 public void onTimeout() {
-                    if(!syncNotified){
+                    if (!syncNotified) {
                         firebaseDatabaseHelper.removeListenters();
-                        onSyncResultListener.onSyncResult(false);
+
+                       if(CyburgerApplication.onSyncResultListener!=null){
+                           onSyncResultListener.onSyncResult(false);
+                           CyburgerApplication.onSyncResultListener = null;
+                       }
+
                     }
-                    CyburgerApplication.onSyncResultListener = null;
 
 
                 }

@@ -41,6 +41,7 @@ import com.facebook.CallbackManager;
 import com.firebase.ui.auth.User;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -368,6 +369,7 @@ public class SignInFragment extends Fragment {
 
             signInBtn.setEnabled(false);
             currentActivity.displayProgressBar(true);
+            LogHelper.log("Remove busyloader");
 
             final String email = String.valueOf(signInUserTxt.getText().toString());
             final String password = String.valueOf(signInPasswordTxt.getText().toString());
@@ -383,11 +385,14 @@ public class SignInFragment extends Fragment {
                 @Override
                 public void onError(Exception exception) {
 
+
                     signInBtn.setEnabled(true);
                     currentActivity.displayProgressBar(false);
 
                     if (exception != null) {
-                        if (exception.getClass() == FirebaseAuthInvalidUserException.class) {
+                        if (exception.getClass() == FirebaseAuthInvalidUserException.class||
+                                exception.getClass() == FirebaseAuthInvalidCredentialsException.class
+                                ) {
 
                             signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
 
@@ -397,13 +402,15 @@ public class SignInFragment extends Fragment {
                             dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_unsynced));
 
 
-                        } else {
-
-                            LogHelper.log(
-                                    exception.getClass().getSimpleName()
-                                            + ": " + exception.getMessage());
                         }
+
+                        LogHelper.log(
+                                exception.getClass().getSimpleName()
+                                        + ": " + exception.getMessage());
+
                     }
+
+                    authenticationHelper.removeOnSignInListener();
                 }
 
             });
