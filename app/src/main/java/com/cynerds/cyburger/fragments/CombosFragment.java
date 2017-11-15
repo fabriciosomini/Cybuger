@@ -20,6 +20,7 @@ import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
+import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
@@ -27,8 +28,10 @@ import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
+import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.view.CardModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,6 +195,7 @@ public class CombosFragment extends Fragment {
 
     public void generateDashboardCardViewItems() {
 
+
         cardModels.clear();
 
         List<Combo> combos = getCombos();
@@ -205,8 +209,19 @@ public class CombosFragment extends Fragment {
             cardModel.setTitle(combo.getComboName());
             cardModel.setExtra(combo);
             cardModel.setContent(combo.getComboInfo()
-                    + "\n\n+" + combo.getComboBonusPoints() + " pontos");
+                    + "\n\nVocê ganha " + combo.getComboBonusPoints() + " pontos");
             cardModel.setSubContent("R$ " + combo.getComboAmount());
+
+            float amount = combo.getComboAmount();
+            if(BonusPointExchangeHelper.convertUserPointsToCash()>=amount)
+            {
+                DecimalFormat format = new DecimalFormat();
+                format.setDecimalSeparatorAlwaysShown(false);
+                String requiredPoints = "(ou "
+                        + format.format(BonusPointExchangeHelper.convertAmountToPoints(amount)) + " pontos)";
+                cardModel.setRightContent(requiredPoints);
+
+            }
 
 
             cardModel.setOnCardViewClickListener(new View.OnClickListener() {

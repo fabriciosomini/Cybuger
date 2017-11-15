@@ -90,9 +90,15 @@ public class AuthenticationHelper {
                         if (isSuccessful) {
 
                             LogHelper.log("Sign in task result: isSuccessful");
-                            onSuccessfulSignIn();
 
-
+                            CyburgerApplication.setOnSyncResultListener(new OnSyncResultListener() {
+                                @Override
+                                public void onSyncResult(boolean isSynced) {
+                                   if(isSynced){
+                                       onSuccessfulSignIn();
+                                   }
+                                }
+                            });
 
                         } else {
 

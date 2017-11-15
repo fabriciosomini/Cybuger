@@ -5,6 +5,7 @@ import android.content.Context;
 
 
 import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
 import com.cynerds.cyburger.helpers.CountDownTimerHelper;
@@ -16,6 +17,7 @@ import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnSyncResultListener;
 import com.cynerds.cyburger.models.account.UserAccount;
 import com.cynerds.cyburger.models.general.MessageType;
+import com.cynerds.cyburger.models.parameters.Parameters;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.role.Role;
@@ -28,6 +30,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fabri on 30/09/2017.
@@ -38,6 +41,17 @@ public class CyburgerApplication extends Application {
     public static OnFatalErrorListener onFatalErrorListener;
     public static boolean autoLogin = true;
     private static Profile profile;
+    private static boolean isSynced;
+
+    public static Parameters getParameters() {
+        return parameters;
+    }
+
+    public static void setParameters(Parameters parameters) {
+        CyburgerApplication.parameters = parameters;
+    }
+
+    private static Parameters parameters;
 
     private static UserAccount userAccount;
     private static OnSyncResultListener onSyncResultListener;
@@ -110,6 +124,7 @@ public class CyburgerApplication extends Application {
 
                 if (CyburgerApplication.onSyncResultListener != null) {
                     getSyncResponse(onSyncResultListener);
+
                 }
             } else {
 
@@ -131,17 +146,9 @@ public class CyburgerApplication extends Application {
                         sync = firebaseDatabaseHelper.get().get(0);
 
                         if (sync != null) {
-                            boolean isSynced = sync.isSynced();
-
-                            if (CyburgerApplication.onSyncResultListener != null) {
-
-                                onSyncResultListener.onSyncResult(isSynced);
-                                CyburgerApplication.onSyncResultListener = null;
-                            }
+                             isSynced = sync.isSynced();
+                            setApplicationParameters();
                         }
-
-                        syncNotified = true;
-
 
                     }
 
@@ -176,7 +183,7 @@ public class CyburgerApplication extends Application {
 
 
                 }
-            }, 5000, 50);
+            }, 15000, 50);
 
 
         }
@@ -247,6 +254,42 @@ public class CyburgerApplication extends Application {
         crashReport.setDate(date);
 
         crashReportFirebaseDatabaseHelper.insert(crashReport);
+
+    }
+
+    private static void setApplicationParameters() {
+         final FirebaseDatabaseHelper<Parameters> firebaseDatabaseHelperParameters
+                  = new FirebaseDatabaseHelper(context, Parameters.class);
+
+        firebaseDatabaseHelperParameters.setOnDataChangeListener(new OnDataChangeListener() {
+            @Override
+            public void onDataChanged() {
+                List<Parameters> parametersList = firebaseDatabaseHelperParameters.get();
+
+                Parameters parameters = null;
+
+                if (parametersList.size() > 0) {
+                    parameters = parametersList.get(0);
+                }
+                if (parameters != null) {
+
+                    CyburgerApplication.setParameters(parameters);
+
+                    if (CyburgerApplication.onSyncResultListener != null) {
+
+                        onSyncResultListener.onSyncResult(isSynced);
+                        CyburgerApplication.onSyncResultListener = null;
+                    }
+                    syncNotified = true;
+
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
 
     }
 }

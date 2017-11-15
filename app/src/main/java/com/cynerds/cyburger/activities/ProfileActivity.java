@@ -14,6 +14,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.dao.UserAccountDAO;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
@@ -70,13 +71,16 @@ public class ProfileActivity extends BaseActivity {
             final TextView profileBonusPointsTextView = findViewById(R.id.profileBonusPointsTextView);
             final PhotoViewer profilePictureImg = findViewById(R.id.profilePictureImg);
 
+            Float convertedUserPointstoCash = BonusPointExchangeHelper.convertUserPointsToCash();
             String strTotalBonusPoints = String.valueOf(curentProfile.getBonusPoints());
             String profileName = profileNameTxtEditText.getText().toString();
             String profileBonusPoints = profileBonusPointsTextView.getText().toString();
             profileNameTxtEditText.setText(profileName.replace("{user.name}", name));
             profileEmailTxt.setText(email);
-            profileBonusPointsTextView.setText(profileBonusPoints.replace("{totalBonusPoints}",strTotalBonusPoints ));
             profilePictureImg.setEditable(true);
+
+            profileBonusPointsTextView.setText(profileBonusPoints.replace("{totalBonusPoints}",
+                    strTotalBonusPoints + " (R$" + convertedUserPointstoCash + ")" ));
 
             profilePictureImg.setOnClickListener(new View.OnClickListener() {
                 @Override

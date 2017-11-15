@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
+import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
@@ -40,7 +41,7 @@ public class ManageParametersActivity extends BaseActivity {
         final EditText bonusAmountExchangeBaseTxt = findViewById(R.id.bonusAmountExchangeBaseTxt);
         final EditText bonusPointsExchangeBaseTxt = findViewById(R.id.bonusPointsExchangeBaseTxt);
         final Button saveParametersBtn = findViewById(R.id.saveItemBtn);
-        final Parameters loadedParameters = (Parameters) getExtra(Parameters.class);
+        final Parameters loadedParameters = CyburgerApplication.getParameters();
 
         bonusPointsBaseTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         bonusAmountBaseTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
