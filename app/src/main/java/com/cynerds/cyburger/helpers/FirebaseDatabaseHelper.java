@@ -88,7 +88,7 @@ public class FirebaseDatabaseHelper<T> {
                 LogHelper.log("Loaded " + loadedItemsCount
                         + " items of type: " + classType.getSimpleName());
 
-                checkForNotification();
+                notifyIfNeeded();
             }
 
             @Override
@@ -125,7 +125,7 @@ public class FirebaseDatabaseHelper<T> {
 
                     }
 
-                    checkForNotification();
+                    notifyIfNeeded();
 
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
@@ -153,7 +153,7 @@ public class FirebaseDatabaseHelper<T> {
 
                     }
 
-                    checkForNotification();
+                    notifyIfNeeded();
 
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
@@ -179,7 +179,7 @@ public class FirebaseDatabaseHelper<T> {
 
                     }
 
-                    checkForNotification();
+                    notifyIfNeeded();
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
                 }
@@ -207,7 +207,7 @@ public class FirebaseDatabaseHelper<T> {
 
                     }
 
-                    checkForNotification();
+                    notifyIfNeeded();
 
                 } catch (DatabaseException exception) {
                     CyburgerApplication.onFatalErrorListener.onFatalError(context, exception);
@@ -229,7 +229,7 @@ public class FirebaseDatabaseHelper<T> {
 
     }
 
-    private void checkForNotification() {
+    private void notifyIfNeeded() {
         if (onDataChangeListener != null && items.size() == loadedItemsCount) {
             notityPending = false;
             onDataChangeListener.onDataChanged();
@@ -277,13 +277,14 @@ public class FirebaseDatabaseHelper<T> {
         return (List<T>) items;
     }
 
-    public void delete(BaseModel object) {
+    public Task<Void> delete(BaseModel object) {
 
-        if (object != null) {
-            if (object.getKey() != null) {
-                tableReference.child(object.getKey()).removeValue();
-            }
+        String key = "0";
+        if(object !=null){
+            key = object.getKey();
         }
+
+        return tableReference.child(key).removeValue();
 
     }
 
