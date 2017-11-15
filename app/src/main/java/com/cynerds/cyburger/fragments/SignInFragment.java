@@ -3,17 +3,23 @@ package com.cynerds.cyburger.fragments;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
@@ -25,6 +31,7 @@ import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.NetworkHelper;
 import com.cynerds.cyburger.helpers.Permissions;
 import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.helpers.LogHelper;
@@ -37,7 +44,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifTextView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -65,6 +80,8 @@ public class SignInFragment extends Fragment {
     private CallbackManager mCallbackManager;
     private AuthenticationHelper authenticationHelper;
     private UserAccountDAO userAccountDAO;
+    private int touchCount;
+    private URL url;
 
 
     public SignInFragment() {
@@ -187,6 +204,7 @@ public class SignInFragment extends Fragment {
         signInRememberCbx = inflatedView.findViewById(R.id.signInRememberCbx);
         rememberMePref = "rememberMe";
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
+        secretCode();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -260,6 +278,85 @@ public class SignInFragment extends Fragment {
 
         signInRememberCbx.setChecked(isRememberMeChecked);
 
+    }
+
+    private void secretCode() {
+
+        touchCount = 0;
+        ImageView appLogo = currentActivity.findViewById(R.id.appLogo);
+        final GifTextView eg = currentActivity.findViewById(R.id.eg);
+        appLogo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+               if(NetworkHelper.isNetworkAvailable(currentActivity)){
+                   if(touchCount == 6){
+                       touchCount = 0;
+                        url = null;
+                       try {
+                           url = new URL("http://i.imgur.com/la8CnEB.gif");
+                       } catch (MalformedURLException e) {
+                           e.printStackTrace();
+                       }
+
+                       AsyncTask asyncTask =  new AsyncTask<Object, Void, GifDrawable>() {
+
+
+                           @Override
+                           protected GifDrawable doInBackground(Object... objects) {
+
+                                   InputStream sourceIs = null;
+                                   try {
+                                       sourceIs = url.openConnection().getInputStream();
+                                   } catch (IOException e) {
+                                       e.printStackTrace();
+                                   }
+                                   BufferedInputStream bis = new BufferedInputStream( sourceIs, 8192 );
+
+                                   try {
+                                       return  new GifDrawable( bis );
+                                   } catch (IOException e) {
+                                       e.printStackTrace();
+                                   }
+
+                                   return null;
+
+                           }
+
+                           @Override
+                           protected void onPostExecute(GifDrawable gifFromStream) {
+                               super.onPostExecute(gifFromStream);
+
+                               eg.setBackground(gifFromStream);
+                               eg.setVisibility(View.VISIBLE);
+                               eg.setOnTouchListener(new View.OnTouchListener() {
+                                   @Override
+                                   public boolean onTouch(View v, MotionEvent event) {
+                                       eg.setVisibility(View.GONE);
+                                       return false;
+                                   }
+                               });
+                           }
+                       };
+                       asyncTask.execute();
+
+
+
+
+                   }
+                   else{
+                       touchCount++;
+
+                       switch (touchCount){
+                           case 3:
+                               Toast.makeText(currentActivity, "Você está a 1 passo de descrobrir o segredo"
+                                       , Toast.LENGTH_SHORT).show();
+
+                       }
+                   }
+               }
+                return false;
+            }
+        });
     }
 
     private void performSignIn() {

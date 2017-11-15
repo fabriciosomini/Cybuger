@@ -81,6 +81,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/pl.droidsonroids.gif/android-gif-drawable/1.2.9-SNAPSHOT/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
@@ -134,6 +135,7 @@
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-auth-api-phone-license-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="com.google.firebase:firebase-iid-license-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-auth-api-phone-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="pl.droidsonroids.gif:android-gif-drawable-1.2.9-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:palette-v7-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="android.arch.core:runtime-1.0.0-beta1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="com.android.support:multidex-instrumentation-1.0.1" level="project" />
