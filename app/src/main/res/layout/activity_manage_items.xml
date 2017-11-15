@@ -139,17 +139,18 @@
         android:id="@+id/deleteItemLink"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent" />
+
     <Button
         android:id="@+id/saveItemBtn"
         style="@style/AppTheme.CyburgerButton"
         android:layout_width="@dimen/default_width"
         android:layout_height="@dimen/default_height"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/general_button_save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deleteItemLink" />
