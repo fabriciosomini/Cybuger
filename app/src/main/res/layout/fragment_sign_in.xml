@@ -67,11 +67,6 @@
                 tools:layout_constraintLeft_creator="1"
                 tools:layout_constraintRight_creator="1"></EditText>
 
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:text="TEST"
-                
-                android:layout_height="wrap_content" />
             <CheckBox
                 android:id="@+id/signInRememberCbx"
                 android:layout_width="wrap_content"
@@ -81,6 +76,7 @@
                 android:buttonTint="@color/redishOrange2"
                 android:backgroundTint="@color/verylightgrey"
                 android:layout_marginTop="8dp"
+
                 android:textColor="@color/verylightgrey"
                 android:text="@string/login_label_rememberMe"
                 app:layout_constraintLeft_toLeftOf="@+id/signInPasswordTxt"
