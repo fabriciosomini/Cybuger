@@ -25,7 +25,11 @@ public class Preferences {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(preferenceKey, preferenceValue);
 
-            return editor.commit();
+            boolean result = editor.commit();
+
+            LogHelper.log("setPreferenceValue "+ preferenceKey+"="+preferenceValue+" commited: " + result);
+
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }

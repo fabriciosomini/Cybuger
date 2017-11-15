@@ -269,12 +269,14 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        UserAccount userAccount = loadCredentials();
+        if(isRememberMeChecked){
+            UserAccount userAccount = loadCredentials();
 
-        if (userAccount != null) {
-            fillCredentials(userAccount);
+            if (userAccount != null) {
+                fillCredentials(userAccount);
+            }
+
         }
-
 
         signInRememberCbx.setChecked(isRememberMeChecked);
 

@@ -3,9 +3,11 @@ package com.cynerds.cyburger.fragments;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 
 import com.cynerds.cyburger.BuildConfig;
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.activities.LoginActivity;
 import com.cynerds.cyburger.activities.MainActivity;
 import com.cynerds.cyburger.dao.UserAccountDAO;
@@ -25,6 +28,8 @@ import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.helpers.Permissions;
+import com.cynerds.cyburger.helpers.Preferences;
 import com.cynerds.cyburger.interfaces.OnSignInListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,6 +58,9 @@ public class SignUpFragment extends Fragment {
     private LoginActivity currentActivity;
     final static int RC_SAVE = 100;
     private UserAccountDAO userAccountDAO;
+    private static boolean isRememberMeChecked;
+    private Preferences preferences;
+    private Permissions permissions;
 
     public SignUpFragment() {
 
@@ -77,6 +85,9 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setUIEvents(View inflatedView) {
+
+        preferences = new Preferences(currentActivity);
+        permissions = new Permissions(currentActivity);
         signUpDisplayNameTxt = inflatedView.findViewById(R.id.signUpDisplayNameTxt);
         signUpUserTxt = inflatedView.findViewById(R.id.signUpUserTxt);
         signUpPasswordTxt = inflatedView.findViewById(R.id.signUpPassword);
@@ -169,6 +180,7 @@ public class SignUpFragment extends Fragment {
                             dialogAction.setPositiveAction(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    isRememberMeChecked = true;
                                     storeCredentials(email, password);
                                     signInSuccess();
                                 }
@@ -176,6 +188,7 @@ public class SignUpFragment extends Fragment {
                             dialogAction.setNegativeAction(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    isRememberMeChecked = false;
                                     signInSuccess();
                                 }
                             });
@@ -189,6 +202,7 @@ public class SignUpFragment extends Fragment {
                         @Override
                         public void onError(Exception exception) {
                             currentActivity.displayProgressBar(false);
+                            signUpBtn.setEnabled(true);
                             LogHelper.log(exception.getMessage());
                         }
                     });
@@ -244,8 +258,52 @@ public class SignUpFragment extends Fragment {
     }
 
     private void signInSuccess() {
-        ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
-        authenticationHelper.removeOnSignInListener();
+
+        if(isRememberMeChecked){
+            if (!permissions.isPermissionForExternalStorageGranted()) {
+
+                permissions.requestPermissionForExternalStorage();
+            }
+
+            currentActivity.setOnRequestPermissionsResultCallback(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                @Override
+                public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+                    // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
+                        ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                        authenticationHelper.removeOnSignInListener();
+
+                    } else {
+
+                        DialogAction dialogAction = new DialogAction();
+                        dialogAction.setPositiveAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+                                authenticationHelper.removeOnSignInListener();
+                            }
+                        });
+                        DialogManager permissionDeniedDialogManager = new DialogManager(currentActivity, DialogManager.DialogType.OK);
+                        permissionDeniedDialogManager.setAction(dialogAction);
+                        permissionDeniedDialogManager.showDialog("Não será possível logar automaticamente,"
+                                +" pois a permissão ao armazenamento foi negada");
+
+                    }
+
+
+
+                }
+            });
+        }
+        else{
+            ActivityManager.startActivityKillingThis(currentActivity, MainActivity.class);
+            authenticationHelper.removeOnSignInListener();
+        }
+
     }
 
     private void storeCredentials(String email, String password) {

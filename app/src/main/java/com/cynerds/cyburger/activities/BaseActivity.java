@@ -2,6 +2,8 @@ package com.cynerds.cyburger.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -28,31 +30,25 @@ public class BaseActivity extends AppCompatActivity {
 
 
     private ArrayList dirty = new ArrayList<>();
-    private Runnable onPermissionGrantedAction;
-    private Runnable onPermissionDeniedAction;
-    private boolean ignoreUnsavedChanges;
-    private String unsavedChangesMessage;
-
+    private ActivityCompat.OnRequestPermissionsResultCallback onRequestPermissionsResultCallback;
     private Bundle savedInstanceState;
-    private View.OnClickListener onSaveListener;
-    private View.OnClickListener onCancelListener;
     private TextView actionBarTitle;
     private boolean finishApp;
-
 
     public BaseActivity() {
 
 
     }
 
+    public void setOnRequestPermissionsResultCallback(ActivityCompat.OnRequestPermissionsResultCallback
+                                                              onRequestPermissionsResultCallback) {
+        this.onRequestPermissionsResultCallback = onRequestPermissionsResultCallback;
+    }
 
-
-    public void updateLastSyncDate(Date lastDate)
-    {
-        if(CyburgerApplication.isAdmin())
-        {
+    public void updateLastSyncDate(Date lastDate) {
+        if (CyburgerApplication.isAdmin()) {
             FirebaseDatabaseHelper firebaseDatabaseHelper = new FirebaseDatabaseHelper(Sync.class);
-            Date currentDate= new DateHelper(this).getCurrentDate();
+            Date currentDate = new DateHelper(this).getCurrentDate();
             Sync sync = CyburgerApplication.getSync();
             sync.setSynced(true);
             sync.setLastSyncedDate(currentDate);
@@ -67,52 +63,6 @@ public class BaseActivity extends AppCompatActivity {
         return findViewById(android.R.id.content);
     }
 
-    public View.OnClickListener getOnSaveListener() {
-        return onSaveListener;
-    }
-
-    public void setOnSaveListener(View.OnClickListener onSaveListener) {
-        this.onSaveListener = onSaveListener;
-    }
-
-    public View.OnClickListener getOnCancelListener() {
-        return onCancelListener;
-    }
-
-    public void setOnCancelListener(View.OnClickListener onCancelListener) {
-        this.onCancelListener = onCancelListener;
-    }
-
-    protected void setOnPermissionGrantedAction(Runnable onPermissionGrantedAction) {
-        this.onPermissionGrantedAction = onPermissionGrantedAction;
-    }
-
-    protected void setOnPermissionDeniedAction(Runnable onPermissionDeniedAction) {
-        this.onPermissionDeniedAction = onPermissionDeniedAction;
-    }
-
-    protected boolean isIgnoreUnsavedChanges() {
-        return ignoreUnsavedChanges;
-    }
-
-    protected void setIgnoreUnsavedChanges(boolean ignoreUnsavedChanges) {
-        this.ignoreUnsavedChanges = ignoreUnsavedChanges;
-    }
-
-    protected String getUnsavedChangesMessage() {
-        return unsavedChangesMessage;
-    }
-
-    protected void setUnsavedChangesMessage(String unsavedChangesMessage) {
-        this.unsavedChangesMessage = unsavedChangesMessage;
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        closeActivity();
-
-    }
 
     protected boolean isWorkspaceDirty() {
 
@@ -125,37 +75,6 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    protected void closeActivity() {
-
-        if (isWorkspaceDirty() && !ignoreUnsavedChanges) {
-
-            DialogAction dialogAction = new DialogAction();
-            final DialogManager dialogManager = new DialogManager(this,
-                    DialogManager.DialogType.YES_NO);
-            dialogManager.setAction(dialogAction);
-
-            dialogAction.setPositiveAction(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-
-            dialogAction.setNegativeAction(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogManager.closeDialog();
-                }
-            });
-
-            dialogManager.showDialog("Você possui alterações. Deseja sair?");
-
-        } else {
-            finish();
-        }
-
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +100,7 @@ public class BaseActivity extends AppCompatActivity {
         setStatusBarTranslucent(true);
 
     }
+
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
         if (makeTranslucent) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -193,29 +113,14 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
 
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (onRequestPermissionsResultCallback != null) {
 
-
-                    if (onPermissionGrantedAction != null) {
-
-                        onPermissionGrantedAction.run();
-                    }
-                } else {
-
-
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
+            onRequestPermissionsResultCallback.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
     }
+
 
     public Object getExtra(Class type) {
         Object newObject;
@@ -234,15 +139,16 @@ public class BaseActivity extends AppCompatActivity {
         return newObject;
     }
 
-    public void finishApplication(){
+    public void finishApplication() {
         this.finishApp = true;
         finish();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if(finishApp){
+        if (finishApp) {
             CyburgerApplication.unsubscribeToUserTopic();
             android.os.Process.killProcess(android.os.Process.myPid());
         }
