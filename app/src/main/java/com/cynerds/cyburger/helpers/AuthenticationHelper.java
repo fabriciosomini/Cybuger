@@ -136,7 +136,7 @@ public class AuthenticationHelper {
                 });
     }
 
-    private void onSuccessfulSignIn() {
+    private void onSuccessfulSignIn( ) {
         if (user == null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
         }
@@ -148,6 +148,8 @@ public class AuthenticationHelper {
         if (!findUserProfileAndSetToApplication(getProfiles())) {
             createProfilesList();
         }
+
+
     }
 
     private void createProfilesList() {

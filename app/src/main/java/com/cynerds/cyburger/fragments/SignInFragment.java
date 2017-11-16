@@ -203,6 +203,21 @@ public class SignInFragment extends Fragment {
         rememberMePref = "rememberMe";
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
         secretCode();
+
+        if(!NetworkHelper.isNetworkAvailable(currentActivity))
+        {
+            signInUserTxt.setKeyListener(null);
+            signInPasswordTxt.setKeyListener(null);
+
+            signInUserTxt.setError("Você está offline");
+
+        }else{
+            signInUserTxt.setError(null);
+            signInUserTxt.setFocusable(true);
+            signInPasswordTxt.setFocusable(true);
+        }
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -267,7 +282,7 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        if(isRememberMeChecked){
+        if (isRememberMeChecked) {
             UserAccount userAccount = loadCredentials();
 
             if (userAccount != null) {
@@ -279,6 +294,8 @@ public class SignInFragment extends Fragment {
 
         signInRememberCbx.setChecked(isRememberMeChecked);
 
+
+
     }
 
     private void secretCode() {
@@ -289,72 +306,69 @@ public class SignInFragment extends Fragment {
         appLogo.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-               if(NetworkHelper.isNetworkAvailable(currentActivity)){
-                   if(touchCount == 6){
-                       touchCount = 0;
+                if (NetworkHelper.isNetworkAvailable(currentActivity)) {
+                    if (touchCount == 6) {
+                        touchCount = 0;
                         url = null;
-                       try {
-                           url = new URL("http://i.imgur.com/la8CnEB.gif");
-                       } catch (MalformedURLException e) {
-                           e.printStackTrace();
-                       }
+                        try {
+                            url = new URL("http://i.imgur.com/la8CnEB.gif");
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
 
-                       AsyncTask asyncTask =  new AsyncTask<Object, Void, GifDrawable>() {
-
-
-                           @Override
-                           protected GifDrawable doInBackground(Object... objects) {
-
-                                   InputStream sourceIs = null;
-                                   try {
-                                       sourceIs = url.openConnection().getInputStream();
-                                   } catch (IOException e) {
-                                       e.printStackTrace();
-                                   }
-                                   BufferedInputStream bis = new BufferedInputStream( sourceIs, 8192 );
-
-                                   try {
-                                       return  new GifDrawable( bis );
-                                   } catch (IOException e) {
-                                       e.printStackTrace();
-                                   }
-
-                                   return null;
-
-                           }
-
-                           @Override
-                           protected void onPostExecute(GifDrawable gifFromStream) {
-                               super.onPostExecute(gifFromStream);
-
-                               eg.setBackground(gifFromStream);
-                               eg.setVisibility(View.VISIBLE);
-                               eg.setOnTouchListener(new View.OnTouchListener() {
-                                   @Override
-                                   public boolean onTouch(View v, MotionEvent event) {
-                                       eg.setVisibility(View.GONE);
-                                       return false;
-                                   }
-                               });
-                           }
-                       };
-                       asyncTask.execute();
+                        AsyncTask asyncTask = new AsyncTask<Object, Void, GifDrawable>() {
 
 
+                            @Override
+                            protected GifDrawable doInBackground(Object... objects) {
+
+                                InputStream sourceIs = null;
+                                try {
+                                    sourceIs = url.openConnection().getInputStream();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                BufferedInputStream bis = new BufferedInputStream(sourceIs, 8192);
+
+                                try {
+                                    return new GifDrawable(bis);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return null;
+
+                            }
+
+                            @Override
+                            protected void onPostExecute(GifDrawable gifFromStream) {
+                                super.onPostExecute(gifFromStream);
+
+                                eg.setBackground(gifFromStream);
+                                eg.setVisibility(View.VISIBLE);
+                                eg.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        eg.setVisibility(View.GONE);
+                                        return false;
+                                    }
+                                });
+                            }
+                        };
+                        asyncTask.execute();
 
 
-                   }
-                   else{
-                       touchCount++;
+                    } else {
+                        touchCount++;
 
-                       switch (touchCount){
-                           case 3:
-                               Toast.makeText(currentActivity, "Você está quase descrobrindo o segredo"
-                                       , Toast.LENGTH_SHORT).show();
+                        switch (touchCount) {
+                            case 3:
+                                Toast.makeText(currentActivity, "Você está quase descrobrindo o segredo"
+                                        , Toast.LENGTH_SHORT).show();
 
-                       }
-                   }
-               }
+                        }
+                    }
+                }
                 return false;
             }
         });
@@ -388,9 +402,8 @@ public class SignInFragment extends Fragment {
                     currentActivity.showBusyLoader(false);
 
                     if (exception != null) {
-                        if (exception.getClass() == FirebaseAuthInvalidUserException.class||
-                                exception.getClass() == FirebaseAuthInvalidCredentialsException.class
-                                ) {
+                        if (exception.getClass() == FirebaseAuthInvalidUserException.class ||
+                                exception.getClass() == FirebaseAuthInvalidCredentialsException.class) {
 
                             signInUserTxt.setError(getString(R.string.login_label_incorrectPassword));
 
@@ -400,7 +413,7 @@ public class SignInFragment extends Fragment {
                             dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_unsynced));
 
 
-                        }else{
+                        } else {
 
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                             dialogManager.showDialog("Erro", exception.getMessage());
@@ -425,9 +438,9 @@ public class SignInFragment extends Fragment {
 
     private void signInSuccess(String email, String password) {
         signInPasswordTxt.setError(null);
-        if(isRememberMeChecked){
+        if (isRememberMeChecked) {
             storeCredentials(email, password);
-        }else{
+        } else {
             removeCredentials();
         }
 

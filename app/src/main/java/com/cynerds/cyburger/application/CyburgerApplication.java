@@ -51,6 +51,7 @@ public class CyburgerApplication extends Application {
     private static boolean syncNotified;
     private static Sync sync;
     private static FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile;
+    private static boolean offlineMode;
 
     public static Parameters getParameters() {
         return parameters;
@@ -275,6 +276,8 @@ public class CyburgerApplication extends Application {
         });
 
     }
+
+
 
     @Override
     public void onCreate() {
