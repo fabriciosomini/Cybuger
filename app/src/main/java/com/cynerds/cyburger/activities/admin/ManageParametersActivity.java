@@ -29,6 +29,7 @@ public class ManageParametersActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_parameters);
+        setActionBarTitle(getString(R.string.menu_manage_parameters));
 
         setUIEvents();
     }

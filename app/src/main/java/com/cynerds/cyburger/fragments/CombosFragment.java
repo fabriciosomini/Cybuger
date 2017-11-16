@@ -28,7 +28,6 @@ import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
-import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.view.CardModel;
 
 import java.text.DecimalFormat;
@@ -160,7 +159,7 @@ public class CombosFragment extends Fragment {
         };
 
         firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
-        CyburgerApplication.addListenerToNotifyAboutProfile(onDataChangeListener);
+        CyburgerApplication.addListenerToNotify(onDataChangeListener);
     }
 
     private void updateList(View view) {

@@ -50,6 +50,7 @@ public class CyburgerApplication extends Application {
     private static Context context;
     private static boolean syncNotified;
     private static Sync sync;
+    private static FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile;
 
     public static Parameters getParameters() {
         return parameters;
@@ -116,7 +117,7 @@ public class CyburgerApplication extends Application {
 
     }
 
-    public static void addListenerToNotifyAboutProfile(OnDataChangeListener onDataChangeListener) {
+    public static void addListenerToNotify(OnDataChangeListener onDataChangeListener) {
         onDataChangeListeners.add(onDataChangeListener);
     }
 
@@ -194,36 +195,43 @@ public class CyburgerApplication extends Application {
 
     private static void createProfileWatcher() {
 
-        onDataChangeListeners = new ArrayList<>();
-        final FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile = new FirebaseDatabaseHelper(Profile.class);
-        firebaseDatabaseHelperProfile.setOnDataChangeListener(new OnDataChangeListener() {
-            @Override
-            public void onDatabaseChanges() {
+        if(onDataChangeListeners == null)
+        {
+            onDataChangeListeners = new ArrayList<>();
+        }
 
-                for (Profile profile :
-                        firebaseDatabaseHelperProfile.get()) {
-                    if (profile != null) {
+        if(firebaseDatabaseHelperProfile == null){
+            firebaseDatabaseHelperProfile = new FirebaseDatabaseHelper(Profile.class);
+            firebaseDatabaseHelperProfile.setOnDataChangeListener(new OnDataChangeListener() {
+                @Override
+                public void onDatabaseChanges() {
 
-                        LogHelper.log("Found a matching profile in the list: " + profile.getUserId());
-                        CyburgerApplication.profile = profile;
+                    for (Profile profile :
+                            firebaseDatabaseHelperProfile.get()) {
+                        if (profile != null) {
 
+                            LogHelper.log("Found a matching profile in the list: " + profile.getUserId());
+                            CyburgerApplication.profile = profile;
+
+                        }
                     }
+
+                    for (OnDataChangeListener onDataChangeListener :
+                            onDataChangeListeners) {
+                        if (onDataChangeListener != null) {
+                            onDataChangeListener.onDatabaseChanges();
+                        }
+                    }
+
                 }
 
-                for (OnDataChangeListener onDataChangeListener :
-                        onDataChangeListeners) {
-                    if (onDataChangeListener != null) {
-                        onDataChangeListener.onDatabaseChanges();
-                    }
+                @Override
+                public void onCancel() {
+
                 }
+            });
+        }
 
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
     }
 
     private static void setApplicationParameters() {
@@ -244,16 +252,20 @@ public class CyburgerApplication extends Application {
 
                     CyburgerApplication.setParameters(parameters);
 
-                    if (!syncNotified) {
-                        if (CyburgerApplication.onSyncResultListener != null) {
+                    if (CyburgerApplication.onSyncResultListener != null) {
 
-                            onSyncResultListener.onSyncResult(isSynced);
-                            CyburgerApplication.onSyncResultListener = null;
-                        }
-                        createProfileWatcher();
-                        syncNotified = true;
+                        onSyncResultListener.onSyncResult(isSynced);
+                        CyburgerApplication.onSyncResultListener = null;
                     }
 
+                    syncNotified = true;
+
+                    for (OnDataChangeListener onDataChangeListener :
+                            onDataChangeListeners) {
+                        if (onDataChangeListener != null) {
+                            onDataChangeListener.onDatabaseChanges();
+                        }
+                    }
                 }
             }
 
@@ -302,6 +314,8 @@ public class CyburgerApplication extends Application {
 
             }
         };
+
+        createProfileWatcher();
     }
 
     private void reportError(Exception ex, String activityName) {

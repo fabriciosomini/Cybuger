@@ -150,7 +150,7 @@ public class ItemsMenuFragment extends Fragment {
         };
 
         firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
-        CyburgerApplication.addListenerToNotifyAboutProfile(onDataChangeListener);
+        CyburgerApplication.addListenerToNotify(onDataChangeListener);
     }
 
     private void updateList(View view) {

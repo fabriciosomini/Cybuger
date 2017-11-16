@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:text="Valor da compra para os pontos*"
+        android:text="Uma compra no valor de*"
         app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:text="Pontos por compra*"
+        android:text="Vai dar estes pontos*"
         app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
         app:layout_constraintTop_toBottomOf="@+id/bonusAmountBaseTxt" />
 
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:text="Pontos na troca*"
+        android:text="Esta quantidade de pontos*"
         app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
         app:layout_constraintTop_toBottomOf="@+id/bonusPointsBaseTxt" />
 
@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:text="Valor de pontos na troca*"
+        android:text="Vale isso em dinheiro na troca*"
         app:layout_constraintLeft_toLeftOf="@+id/bonusAmountBaseTxt"
         app:layout_constraintTop_toBottomOf="@+id/bonusPointsExchangeBaseTxt" />
 

@@ -71,7 +71,7 @@ public class ProfileActivity extends BaseActivity {
             final TextView profileBonusPointsTextView = findViewById(R.id.profileBonusPointsTextView);
             final PhotoViewer profilePictureImg = findViewById(R.id.profilePictureImg);
 
-            Float convertedUserPointstoCash = BonusPointExchangeHelper.convertUserPointsToCash();
+
             String strTotalBonusPoints = String.valueOf(curentProfile.getBonusPoints());
             String profileName = profileNameTxtEditText.getText().toString();
             String profileBonusPoints = profileBonusPointsTextView.getText().toString();
@@ -80,7 +80,7 @@ public class ProfileActivity extends BaseActivity {
             profilePictureImg.setEditable(true);
 
             profileBonusPointsTextView.setText(profileBonusPoints.replace("{totalBonusPoints}",
-                    strTotalBonusPoints + " (R$" + convertedUserPointstoCash + ")" ));
+                    strTotalBonusPoints ));
 
             profilePictureImg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,7 +144,7 @@ public class ProfileActivity extends BaseActivity {
                                 else{
                                     MessageHelper.show(ProfileActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao atualizar e-mail");
+                                            "Erro ao atualizar perfil");
 
                                     showBusyLoader(false);
                                     saveProfileBtn.setEnabled(true);

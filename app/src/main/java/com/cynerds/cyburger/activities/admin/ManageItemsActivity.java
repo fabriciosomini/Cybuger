@@ -42,7 +42,7 @@ public class ManageItemsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_items);
-        setActionBarTitle(getString(R.string.menu_manage_parameters));
+        setActionBarTitle(getString(R.string.menu_manage_items));
 
 
         setUIEvents();
