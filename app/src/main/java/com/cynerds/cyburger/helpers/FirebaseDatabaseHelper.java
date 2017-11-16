@@ -299,6 +299,10 @@ public class FirebaseDatabaseHelper<T> {
 
     }
 
+    public boolean isFullLoaded() {
+        return get().size() == loadedItemsCount;
+    }
+
 
     public enum DatabaseOperationResultType {
 

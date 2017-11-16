@@ -4,6 +4,7 @@ package com.cynerds.cyburger.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -41,6 +42,8 @@ import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.order.Order;
 import com.cynerds.cyburger.models.parameters.Parameters;
 import com.cynerds.cyburger.models.profile.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -320,7 +323,7 @@ public class MainActivity extends BaseActivity {
                                 public void onClick(View v) {
 
 
-                                    for (Profile p :
+                                    for (final Profile p :
                                             firebaseDatabaseHelperProfile.get()) {
                                         if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())) {
                                             int comboBonusPoints = 0;
@@ -355,27 +358,48 @@ public class MainActivity extends BaseActivity {
 
 
                                             p.setBonusPoints(totalBonusPoints);
-                                            firebaseDatabaseHelperProfile.update(p);
-                                            firebaseDatabaseHelperOrders.delete(order);
+                                            firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        firebaseDatabaseHelperOrders.delete(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
 
-                                            String topic = "cyburger-" + p.getUserId();
-                                            String customerName = order.getCustomer().getCustomerName();
+                                                                if(task.isSuccessful()){
+                                                                    String topic = "cyburger-" + p.getUserId();
+                                                                    String customerName = order.getCustomer().getCustomerName();
 
-                                            confirmFinishOrderDialog.closeDialog();
-                                            orderDialog.closeDialog();
-                                            MessageHelper.show(MainActivity.this,
-                                                    MessageType.SUCCESS, "Pedido concluído!");
+                                                                    confirmFinishOrderDialog.closeDialog();
+                                                                    orderDialog.closeDialog();
+                                                                    MessageHelper.show(MainActivity.this,
+                                                                            MessageType.SUCCESS, "Pedido concluído!");
 
-                                            PostNotificationHelper.post(MainActivity.this,
-                                                    "", customerName
-                                                            + " seu pedido está pronto!", topic);
+                                                                    PostNotificationHelper.post(MainActivity.this,
+                                                                            "", customerName
+                                                                                    + " seu pedido está pronto!", topic);
+                                                                }else{
+                                                                    MessageHelper.show(MainActivity.this,
+                                                                            MessageType.ERROR,
+                                                                            "Erro ao concluir pedido");
+                                                                }
+                                                            }
+                                                        });
+                                                    }else{
+                                                        MessageHelper.show(MainActivity.this,
+                                                                MessageType.ERROR,
+                                                                "Erro ao vincular os pontos ao perfil");
+                                                    }
+                                                }
+                                            });
+
                                             return;
                                         }
                                     }
 
                                     MessageHelper.show(MainActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao vincular os pontos ao perfil");
+                                            "Cliente do pedido não encontrado");
                                 }
 
                             });

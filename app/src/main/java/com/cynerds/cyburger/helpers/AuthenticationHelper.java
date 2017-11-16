@@ -108,7 +108,7 @@ public class AuthenticationHelper {
                                     @Override
                                     public void onSyncResult(boolean isSynced) {
                                         if (exception.getClass().equals(FirebaseNetworkException.class)&& isSynced) {
-                                            LogHelper.log("Não tem internet, " +
+                                            LogHelper.log("Sem conexão com a internet, " +
                                                     "mas os dados já estão sincronizados, " +
                                                     "então pode entrar!");
                                             onSuccessfulSignIn();
@@ -175,7 +175,25 @@ public class AuthenticationHelper {
             }
         };
 
-        firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
+        if(!firebaseDatabaseHelper.isFullLoaded())
+        {
+            firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
+        }
+        else
+        {
+            if (!findUserProfileAndSetToApplication(getProfiles()))
+            {
+                if (onSignInListener != null) {
+
+
+                    Exception exception = new FirebaseAuthException("ERROR_CANT_LOAD_PROFILE", activity.getString(R.string.login_error_unable_load_profile));
+
+                    onSignInListener.onError(exception);
+                }
+            }
+
+        }
+
     }
 
     private boolean findUserProfileAndSetToApplication(List<Profile> profiles) {

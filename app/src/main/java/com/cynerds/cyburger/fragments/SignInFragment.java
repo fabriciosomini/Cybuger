@@ -191,7 +191,7 @@ public class SignInFragment extends Fragment {
 
     public void setUIEvents(View inflatedView) {
 
-       
+
         mAuth = FirebaseAuth.getInstance();
         preferences = new Preferences(currentActivity);
         permissions = new Permissions(currentActivity);
@@ -399,6 +399,10 @@ public class SignInFragment extends Fragment {
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                             dialogManager.showDialog("Verifique sua conexão", getString(R.string.login_error_unsynced));
 
+
+                        }else{
+                            DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
+                            dialogManager.showDialog("Erro", exception.getMessage());
 
                         }
 

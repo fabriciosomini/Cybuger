@@ -57,7 +57,7 @@
     <string name="general_button_leave">Sair</string>
     <string name="order_finishOrder">Concluir</string>
     <string name="order_cancel">Cancelar</string>
-    <string name="menu_sign_out">Sair</string>
+    <string name="menu_sign_out">Desconectar</string>
     <string name="sign_in_fragment">sign_in_fragment</string>
     <string name="sign_up_fragment">sign_up_fragment</string>
     <string name="login_error_unsynced">Suas informações estão dessincronizadas. \n\nPor favor, conecte seu telefone à internet</string>
