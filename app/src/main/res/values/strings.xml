@@ -76,4 +76,24 @@
     <string name="QST_REMOVE_ITEM">Tem certeza que deseja remover esse item?</string>
     <string name="VAR_PRICE_SUGESTION">Preço sugerido: R$ {valor}</string>
     <string name="SUG_POINTS">Pontos sugeridos</string>
+    <string name="ok_add_item">Item adicionado</string>
+    <string name="err_add_item">Erro ao adicionar item</string>
+    <string name="ok_update_item">Item atualizado</string>
+    <string name="err_update_item">Erro ao atualizar item</string>
+    <string name="ok_remove_item">Item removido</string>
+    <string name="err_remove_item">Erro ao remover item</string>
+    <string name="remove_combo">Remover combo</string>
+    <string name="qst_remove_combo">Tem certeza que deseja remover esse item?</string>
+    <string name="type_unit">Unidade</string>
+    <string name="type_fatia">Fatia</string>
+    <string name="type_big_portion">Porção grande</string>
+    <string name="type_avg_portion">Porção média</string>
+    <string name="type_little_portion">Porção pequena</string>
+    <string name="type_dose">Dose</string>
+    <string name="type_250">250ml</string>
+    <string name="type_600">600ml</string>
+    <string name="type_1l">1L</string>
+    <string name="type_2l">2L</string>
+    <string name="type_25l">2.5L</string>
+    <string name="type_3l">3L</string>
 </resources>

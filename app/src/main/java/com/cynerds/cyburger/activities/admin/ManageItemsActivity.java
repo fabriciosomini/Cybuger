@@ -113,13 +113,13 @@ public class ManageItemsActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageItemsActivity.this,
                                             MessageType.SUCCESS,
-                                            "Item adicionado");
+                                            getString(R.string.ok_add_item));
                                     saveItemBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageItemsActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao adicionar item");
+                                            getString(R.string.err_add_item));
                                     saveItemBtn.setEnabled(true);
                                     showBusyLoader(false);
                                 }
@@ -133,13 +133,13 @@ public class ManageItemsActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageItemsActivity.this,
                                             MessageType.SUCCESS,
-                                            "Item atualizado");
+                                            getString(R.string.ok_update_item));
                                     saveItemBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageItemsActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao atualizar item");
+                                            getString(R.string.err_update_item));
                                     saveItemBtn.setEnabled(true);
                                     showBusyLoader(false);
                                 }
@@ -174,7 +174,7 @@ public class ManageItemsActivity extends BaseActivity {
                                         if(task.isSuccessful()){
                                             MessageHelper.show(ManageItemsActivity.this,
                                                     MessageType.SUCCESS,
-                                                    "Item removido");
+                                                    getString(R.string.ok_remove_item));
                                             saveItemBtn.setEnabled(true);
 
                                             finish();
@@ -182,19 +182,19 @@ public class ManageItemsActivity extends BaseActivity {
 
                                             MessageHelper.show(ManageItemsActivity.this,
                                                     MessageType.ERROR,
-                                                    "Erro ao remover item");
+                                                    getString(R.string.err_remove_item));
                                             showBusyLoader(false);
                                         }
                                     }
                                 });
 
-                                LogHelper.log("Item removido");
+                                LogHelper.log(getString(R.string.ok_remove_item));
                             }
                         });
                         DialogManager confirmDeleteDialog = new DialogManager(ManageItemsActivity.this,
                                 DialogManager.DialogType.YES_NO);
                         confirmDeleteDialog.setAction(deleteComboAction);
-                        confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
+                        confirmDeleteDialog.showDialog(getString(R.string.remove_combo), getString(R.string.qst_remove_combo));
                     }
                 });
 
@@ -216,19 +216,19 @@ public class ManageItemsActivity extends BaseActivity {
 
         List<String> measureUnitItems = new ArrayList<>();
 
-        measureUnitItems.add("Unidade");
-        measureUnitItems.add("Fatia");
-        measureUnitItems.add("Porção grande");
-        measureUnitItems.add("Porção média");
-        measureUnitItems.add("Porção pequena");
+        measureUnitItems.add(getString(R.string.type_unit));
+        measureUnitItems.add(getString(R.string.type_fatia));
+        measureUnitItems.add(getString(R.string.type_big_portion));
+        measureUnitItems.add(getString(R.string.type_avg_portion));
+        measureUnitItems.add(getString(R.string.type_little_portion));
 
-        measureUnitItems.add("Dose");
-        measureUnitItems.add("250ml");
-        measureUnitItems.add("600ml");
-        measureUnitItems.add("1L");
-        measureUnitItems.add("2L");
-        measureUnitItems.add("2.5L");
-        measureUnitItems.add("3L");
+        measureUnitItems.add(getString(R.string.type_dose));
+        measureUnitItems.add(getString(R.string.type_250));
+        measureUnitItems.add(getString(R.string.type_600));
+        measureUnitItems.add(getString(R.string.type_1l));
+        measureUnitItems.add(getString(R.string.type_2l));
+        measureUnitItems.add(getString(R.string.type_25l));
+        measureUnitItems.add(getString(R.string.type_3l));
 
 
         return measureUnitItems;
