@@ -258,9 +258,9 @@ public class MainActivity extends BaseActivity {
 
         final boolean readOnly = order.getKey() != null;
 
-        String title = "Fazer pedido";
+        String title = getString(R.string.get_order);
         if (readOnly) {
-            title = "PEDIDO CONFIRMADO";
+            title = getString(R.string.confirmad_order);
         }
 
         final DialogManager orderDialog = new DialogManager(MainActivity.this);
@@ -350,10 +350,10 @@ public class MainActivity extends BaseActivity {
                                                 Order nextOrder = orderList.get(1);
                                                 Customer nextCustomer = nextOrder.getCustomer();
                                                 String nextCustomerName = nextCustomer.getCustomerName();
-                                                String topic = "cyburger-" + nextCustomer.getLinkedProfileId();
+                                                String topic = getString(R.string.prefix_cyburger) + nextCustomer.getLinkedProfileId();
                                                 PostNotificationHelper.post(MainActivity.this,
                                                         "", nextCustomerName
-                                                                + " você é o próximo!", topic);
+                                                                + getString(R.string.you_next), topic);
                                             }
 
 
@@ -367,28 +367,28 @@ public class MainActivity extends BaseActivity {
                                                             public void onComplete(@NonNull Task<Void> task) {
 
                                                                 if(task.isSuccessful()){
-                                                                    String topic = "cyburger-" + p.getUserId();
+                                                                    String topic = getString(R.string.prefix_cyburger)  + p.getUserId();
                                                                     String customerName = order.getCustomer().getCustomerName();
 
                                                                     confirmFinishOrderDialog.closeDialog();
                                                                     orderDialog.closeDialog();
                                                                     MessageHelper.show(MainActivity.this,
-                                                                            MessageType.SUCCESS, "Pedido concluído!");
+                                                                            MessageType.SUCCESS, getString(R.string.order_complete));
 
                                                                     PostNotificationHelper.post(MainActivity.this,
                                                                             "", customerName
-                                                                                    + " seu pedido está pronto!", topic);
+                                                                                    + getString(R.string.order_ok), topic);
                                                                 }else{
                                                                     MessageHelper.show(MainActivity.this,
                                                                             MessageType.ERROR,
-                                                                            "Erro ao concluir pedido");
+                                                                            getString(R.string.err_complete_order));
                                                                 }
                                                             }
                                                         });
                                                     }else{
                                                         MessageHelper.show(MainActivity.this,
                                                                 MessageType.ERROR,
-                                                                "Erro ao vincular os pontos ao perfil");
+                                                                getString(R.string.err_points_profile));
                                                     }
                                                 }
                                             });
@@ -399,14 +399,14 @@ public class MainActivity extends BaseActivity {
 
                                     MessageHelper.show(MainActivity.this,
                                             MessageType.ERROR,
-                                            "Cliente do pedido não encontrado");
+                                            getString(R.string.client_404));
                                 }
 
                             });
 
 
                             confirmFinishOrderDialog.setAction(confirmFinishOrderDialogAction);
-                            confirmFinishOrderDialog.showDialog("CONCLUIR PEDIDO");
+                            confirmFinishOrderDialog.showDialog(getString(R.string.complete_order));
                         }
                     });
 
@@ -423,10 +423,10 @@ public class MainActivity extends BaseActivity {
 
                         if (previousOrder != null) {
                             order = previousOrder;
-                            LogHelper.log("Restore previous order");
+                            LogHelper.log(getString(R.string.restore_previous_order));
                         } else {
                             order = new Order();
-                            LogHelper.log("reset order");
+                            LogHelper.log(getString(R.string.reset_order));
                         }
 
 
@@ -449,7 +449,7 @@ public class MainActivity extends BaseActivity {
                         order.setCustomer(customer);
                         firebaseDatabaseHelperOrders.insert(order);
 
-                        LogHelper.log("Pedido confirmado");
+                        LogHelper.log(getString(R.string.order_comfirmed));
 
                         //Reset - pedido confirmado
                         badge.setBadgeCount(0);
@@ -460,7 +460,7 @@ public class MainActivity extends BaseActivity {
 
                         MessageHelper.show(MainActivity.this,
                                 MessageType.SUCCESS,
-                                "Tudo certo! Seu pedido vai chegar logo");
+                                getString(R.string.wait_order));
 
 
                     }
@@ -473,7 +473,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    LogHelper.log("Pedido cancelado");
+                    LogHelper.log(getString(R.string.canceled_order));
 
                     DialogAction removeOrderDialogAction = new DialogAction();
                     removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
@@ -486,11 +486,11 @@ public class MainActivity extends BaseActivity {
                                 if (CyburgerApplication.isAdmin()) {
 
                                     Customer customer = order.getCustomer();
-                                    String topic = "cyburger-" + customer.getLinkedProfileId();
+                                    String topic = getString(R.string.prefix_cyburger)  + customer.getLinkedProfileId();
                                     String customerName = order.getCustomer().getCustomerName();
                                     PostNotificationHelper.post(MainActivity.this,
                                             "", customerName
-                                                    + " seu pedido foi cancelado!", topic);
+                                                    + getString(R.string.you_order_canceled), topic);
                                 }
 
                             } else {
@@ -500,24 +500,24 @@ public class MainActivity extends BaseActivity {
 
                             if (previousOrder != null) {
                                 order = previousOrder;
-                                LogHelper.log("Restore previous order");
+                                LogHelper.log(getString(R.string.restore_previous_order));
                             } else {
                                 order = new Order();
-                                LogHelper.log("reset order");
+                                LogHelper.log(getString(R.string.reset_order));
                             }
 
 
                             orderDialog.closeDialog();
 
                             MessageHelper.show(MainActivity.this,
-                                    MessageType.SUCCESS, "Pedido cancelado!");
+                                    MessageType.SUCCESS, getString(R.string.canceled_order));
                         }
                     });
 
                     DialogManager removeOrderDialog = new DialogManager(MainActivity.this,
                             DialogManager.DialogType.YES_NO);
                     removeOrderDialog.setAction(removeOrderDialogAction);
-                    removeOrderDialog.showDialog("Cancelar Pedido", "Deseja cancelar o pedido?");
+                    removeOrderDialog.showDialog(getString(R.string.msg_cancel_order), getString(R.string.qst_cancel_order));
 
 
                 }
@@ -548,7 +548,7 @@ public class MainActivity extends BaseActivity {
 
         final DialogManager dialogManager = new DialogManager(this);
         dialogManager.setContentView(R.layout.dialog_confirm_exit);
-        dialogManager.showDialog("Sair do aplicativo", "");
+        dialogManager.showDialog(getString(R.string.exit_app), "");
 
         dialogManager.getContentView().findViewById(R.id.confirmExitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
