@@ -401,10 +401,12 @@ public class SignInFragment extends Fragment {
 
 
                         }else{
+
                             DialogManager dialogManager = new DialogManager(getContext(), DialogManager.DialogType.OK);
                             dialogManager.showDialog("Erro", exception.getMessage());
 
                         }
+
 
                         LogHelper.log(
                                 exception.getClass().getSimpleName()

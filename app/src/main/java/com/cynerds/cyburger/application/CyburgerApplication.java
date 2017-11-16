@@ -160,11 +160,7 @@ public class CyburgerApplication extends Application {
 
                 @Override
                 public void onCancel() {
-                    if (CyburgerApplication.onSyncResultListener != null) {
 
-                        onSyncResultListener.onSyncResult(false);
-                        CyburgerApplication.onSyncResultListener = null;
-                    }
 
                 }
 
@@ -252,13 +248,14 @@ public class CyburgerApplication extends Application {
 
                     CyburgerApplication.setParameters(parameters);
 
+                    syncNotified = true;
                     if (CyburgerApplication.onSyncResultListener != null) {
 
                         onSyncResultListener.onSyncResult(isSynced);
                         CyburgerApplication.onSyncResultListener = null;
                     }
 
-                    syncNotified = true;
+
 
                     for (OnDataChangeListener onDataChangeListener :
                             onDataChangeListeners) {
@@ -266,6 +263,8 @@ public class CyburgerApplication extends Application {
                             onDataChangeListener.onDatabaseChanges();
                         }
                     }
+
+
                 }
             }
 

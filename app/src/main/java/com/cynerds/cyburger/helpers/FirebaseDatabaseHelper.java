@@ -43,6 +43,7 @@ public class FirebaseDatabaseHelper<T> {
 
     public FirebaseDatabaseHelper(Class<BaseModel> classType) {
 
+        loadedItemsCount = -1;
         tableName = classType.getSimpleName();
         this.classType = classType;
         database = FirebaseDatabase.getInstance();
@@ -59,6 +60,7 @@ public class FirebaseDatabaseHelper<T> {
 
         this(classType);
         this.context = context;
+
 
     }
 
@@ -216,7 +218,7 @@ public class FirebaseDatabaseHelper<T> {
             public void onCancelled(DatabaseError databaseError) {
                 if (onDataChangeListener != null && loadedItemsCount == items.size()) {
                     onDataChangeListener.onCancel();
-                    MessageHelper.show(context, MessageType.ERROR, databaseError.getMessage());
+                   // MessageHelper.show(context, MessageType.ERROR, databaseError.getMessage());
                 }
             }
         };
