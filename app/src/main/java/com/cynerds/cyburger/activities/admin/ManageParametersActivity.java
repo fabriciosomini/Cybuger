@@ -90,13 +90,13 @@ public class ManageParametersActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageParametersActivity.this,
                                             MessageType.SUCCESS,
-                                            "Paramêtros adicionados");
+                                            getString(R.string.par_add));
                                     saveParametersBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageParametersActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao adicionar paramêtros");
+                                            getString(R.string.err_par));
                                     saveParametersBtn.setEnabled(true);
                                     showBusyLoader(false);
                                 }
@@ -110,13 +110,13 @@ public class ManageParametersActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageParametersActivity.this,
                                             MessageType.SUCCESS,
-                                            "Paramêtros atualizados");
+                                            getString(R.string.par_update));
                                     saveParametersBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageParametersActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao atualizar paramêtros");
+                                            getString(R.string.err_update_par));
                                     saveParametersBtn.setEnabled(true);
                                     showBusyLoader(false);
                                 }
@@ -125,7 +125,6 @@ public class ManageParametersActivity extends BaseActivity {
                     }
 
                 }
-
 
             }
         });

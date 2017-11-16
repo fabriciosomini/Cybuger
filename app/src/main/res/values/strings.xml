@@ -96,4 +96,8 @@
     <string name="type_2l">2L</string>
     <string name="type_25l">2.5L</string>
     <string name="type_3l">3L</string>
+    <string name="par_add">Paramêtros adicionados</string>
+    <string name="err_par">Erro ao adicionar paramêtros</string>
+    <string name="par_update">Paramêtros atualizados</string>
+    <string name="err_update_par">Erro ao atualizar paramêtros</string>
 </resources>
