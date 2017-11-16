@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 
+import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
 import com.cynerds.cyburger.helpers.DateHelper;
@@ -94,7 +95,7 @@ public class CyburgerApplication extends Application {
         String topicName = "";
         if (profile != null) {
             String userId = profile.getUserId();
-            topicName = "cyburger-" + userId;
+            topicName = context.getString(R.string.prefix_cyburger) + userId;
         }
 
         return topicName;

@@ -119,4 +119,8 @@
     <string name="msg_cancel_order">Cancelar Pedido</string>
     <string name="qst_cancel_order">Deseja cancelar o pedido?</string>
     <string name="exit_app">Sair do aplicativo</string>
+    <string name="profile_photo">Foto do perfil</string>
+    <string name="updated_profile">Perfil atualizado</string>
+    <string name="err_update_profile">Erro ao atualizar perfil</string>
+    <string name="zxxzx">cyburger-</string>
 </resources>

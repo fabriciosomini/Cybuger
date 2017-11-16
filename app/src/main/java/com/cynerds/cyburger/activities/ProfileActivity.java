@@ -106,7 +106,7 @@ public class ProfileActivity extends BaseActivity {
 
                     dialogManager.setAction(dialogAction);
                     dialogManager.setContentView(R.layout.component_photo_viewer);
-                    dialogManager.showDialog("Foto do perfil", "");
+                    dialogManager.showDialog(getString(R.string.profile_photo), "");
 
 
                 }
@@ -137,14 +137,14 @@ public class ProfileActivity extends BaseActivity {
 
                                     MessageHelper.show(ProfileActivity.this,
                                             MessageType.SUCCESS,
-                                            "Perfil atualizado");
+                                            getString(R.string.updated_profile));
 
                                     finish();
                                 }
                                 else{
                                     MessageHelper.show(ProfileActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao atualizar perfil");
+                                            getString(R.string.err_update_profile));
 
                                     showBusyLoader(false);
                                     saveProfileBtn.setEnabled(true);
