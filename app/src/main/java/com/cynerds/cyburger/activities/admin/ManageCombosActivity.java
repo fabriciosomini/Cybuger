@@ -176,13 +176,13 @@ public class ManageCombosActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.SUCCESS,
-                                            "Combo adicionado");
+                                            getString(com.cynerds.cyburger.R.string.SUCCESS_COMBO));
                                     saveComboBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao adicionar combo");
+                                            getString(R.string.ERROR_COMBO));
                                     saveComboBtn.setEnabled(true);
                                     showBusyLoader(false);
                                 }
@@ -195,13 +195,13 @@ public class ManageCombosActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.SUCCESS,
-                                            "Combo atualizado");
+                                            getString(R.string.UPDATE_COMBO));
                                     saveComboBtn.setEnabled(true);
                                     finish();
                                 } else {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.ERROR,
-                                            "Erro ao atualizar combo");
+                                            getString(R.string.ERROR_UPDATE_COMBO));
                                     saveComboBtn.setEnabled(true);
                                     showBusyLoader(false);
                                 }
@@ -233,7 +233,7 @@ public class ManageCombosActivity extends BaseActivity {
                                         if (task.isSuccessful()) {
                                             MessageHelper.show(ManageCombosActivity.this,
                                                     MessageType.SUCCESS,
-                                                    "Combo removido");
+                                                    getString(R.string.REMOVED_COMBO));
                                             saveComboBtn.setEnabled(true);
 
                                             finish();
@@ -241,20 +241,20 @@ public class ManageCombosActivity extends BaseActivity {
 
                                             MessageHelper.show(ManageCombosActivity.this,
                                                     MessageType.ERROR,
-                                                    "Erro ao remover combo");
+                                                    getString(R.string.ERROR_REMOVE_COMBO));
                                             showBusyLoader(false);
                                         }
                                     }
                                 });
 
-                                LogHelper.log("Combo removido");
+                                LogHelper.log(getString(R.string.REMOVED_COMBO));
                             }
                         });
 
                         DialogManager confirmDeleteDialog = new DialogManager(ManageCombosActivity.this,
                                 DialogManager.DialogType.YES_NO);
                         confirmDeleteDialog.setAction(deleteComboAction);
-                        confirmDeleteDialog.showDialog("Remover combo", "Tem certeza que deseja remover esse item?");
+                        confirmDeleteDialog.showDialog(getString(R.string.REMOVE_COMBO), getString(R.string.QST_REMOVE_ITEM));
 
                     }
                 });
@@ -300,7 +300,9 @@ public class ManageCombosActivity extends BaseActivity {
 
         }
 
-        return "Preço sugerido: R$ " + String.format("%.2f", suggestedPrice);
+        String price_sugestion = getString(R.string.VAR_PRICE_SUGESTION);
+        price_sugestion = price_sugestion.replace("{valor}",String.format("%.2f", suggestedPrice));
+        return  price_sugestion;
     }
 
 
@@ -313,7 +315,7 @@ public class ManageCombosActivity extends BaseActivity {
 
         }
 
-        return "Pontos sugeridos " + String.valueOf(suggestedBonusPoints);
+        return getString(R.string.SUG_POINTS) + String.valueOf(suggestedBonusPoints);
     }
 
     private void updateTags() {

@@ -66,4 +66,14 @@
     <string name="combos_search">Procurar por combos</string>
     <string name="items_search">Procurar no cardápio</string>
     <string name="orders_search">Procurar nos pedidos</string>
+    <string name="SUCCESS_COMBO">Combo adicionado</string>
+    <string name="ERROR_COMBO">Erro ao adicionar combo</string>
+    <string name="UPDATE_COMBO">Combo atualizado</string>
+    <string name="ERROR_UPDATE_COMBO">Erro ao atualizar combo</string>
+    <string name="REMOVED_COMBO">Combo removido</string>
+    <string name="ERROR_REMOVE_COMBO">Erro ao remover combo</string>
+    <string name="REMOVE_COMBO">Remover combo</string>
+    <string name="QST_REMOVE_ITEM">Tem certeza que deseja remover esse item?</string>
+    <string name="VAR_PRICE_SUGESTION">Preço sugerido: R$ {valor}</string>
+    <string name="SUG_POINTS">Pontos sugeridos</string>
 </resources>
