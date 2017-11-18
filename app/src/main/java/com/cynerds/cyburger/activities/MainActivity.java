@@ -217,6 +217,7 @@ public class MainActivity extends BaseActivity {
                 } else {
                     popupMenu.getMenu().findItem(R.id.action_manage_items).setVisible(false);
                     popupMenu.getMenu().findItem(R.id.action_manage_combos).setVisible(false);
+                    popupMenu.getMenu().findItem(R.id.action_manage_parameters).setVisible(false);
                 }
 
                 popupMenu.getMenu().findItem(R.id.action_sign_out).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
