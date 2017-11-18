@@ -75,6 +75,7 @@ public class FirebaseDatabaseHelper<T> {
     public void removeListenters() {
         LogHelper.log("Remove the onDataChangeListener of type: " + classType.getSimpleName());
         tableReference.removeEventListener(tableListener);
+        onDataChangeListener = null;
     }
 
     private void createDataWatcher() {

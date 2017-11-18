@@ -167,6 +167,8 @@ public class AuthenticationHelper {
                         onSignInListener.onError(exception);
                     }
 
+                }else{
+                    firebaseDatabaseHelper.removeListenters();
                 }
 
             }

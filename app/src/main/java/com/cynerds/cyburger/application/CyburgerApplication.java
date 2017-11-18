@@ -24,6 +24,9 @@ import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.role.Role;
 import com.cynerds.cyburger.models.sync.Sync;
+import com.firebase.ui.auth.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -208,8 +211,15 @@ public class CyburgerApplication extends Application {
                             firebaseDatabaseHelperProfile.get()) {
                         if (profile != null) {
 
-                            LogHelper.log("Found a matching profile in the list: " + profile.getUserId());
-                            CyburgerApplication.profile = profile;
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if(user!=null){
+                                if(user.getUid().equals(profile.getUserId()))
+                                {
+                                    LogHelper.log("Profile change detected. Updating: " + profile.getUserId());
+                                    CyburgerApplication.profile = profile;
+                                }
+                            }
+
 
                         }
                     }
