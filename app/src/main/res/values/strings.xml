@@ -102,7 +102,7 @@
     <string name="err_update_par">Erro ao atualizar paramêtros</string>
     <string name="get_order">Fazer pedido</string>
     <string name="confirmad_order">PEDIDO CONFIRMADO</string>
-    <string name="you_next">você é o próximo!</string>
+    <string name="you_next"> você é o próximo!</string>
     <string name="prefix_cyburger">cyburger-</string>
     <string name="order_complete">Pedido concluído!</string>
     <string name="order_ok">seu pedido está pronto!</string>
@@ -111,11 +111,11 @@
     <string name="client_404">Cliente do pedido não encontrado</string>
     <string name="complete_order">CONCLUIR PEDIDO</string>
     <string name="restore_previous_order">Restaurar pedido anterior</string>
-    <string name="reset_order">zerar pedido</string>
+    <string name="reset_order">Zerar pedido</string>
     <string name="order_comfirmed">Pedido confirmado</string>
     <string name="wait_order">Tudo certo! Seu pedido vai chegar logo</string>
     <string name="canceled_order">Pedido cancelado</string>
-    <string name="you_order_canceled">seu pedido foi cancelado!</string>
+    <string name="you_order_canceled"> seu pedido foi cancelado!</string>
     <string name="msg_cancel_order">Cancelar Pedido</string>
     <string name="qst_cancel_order">Deseja cancelar o pedido?</string>
     <string name="exit_app">Sair do aplicativo</string>
