@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -12,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -68,6 +70,7 @@ public class MainActivity extends BaseActivity {
     private Order previousOrder;
     private AHBottomNavigation bottomNavigation;
     private int[] notifications = new int[3];
+    private boolean displayOrderDialogButtons = true;
 
 
     private AHBottomNavigation.OnTabSelectedListener mOnNavigationItemSelectedListener = new AHBottomNavigation.OnTabSelectedListener() {
@@ -254,6 +257,10 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    public void displayOrderDialog(boolean displayOrderDialogButtons){
+        this.displayOrderDialogButtons = displayOrderDialogButtons;
+        displayOrderDialog();
+    }
 
     public void displayOrderDialog() {
 
@@ -300,204 +307,128 @@ public class MainActivity extends BaseActivity {
 
         if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || readOnly) {
 
-            Button confirmOrderBtn = orderDialog.getContentView().findViewById(R.id.confirmOrderBtn);
-            Button removeOrderBtn = orderDialog.getContentView().findViewById(R.id.removeOrderBtn);
+            if(displayOrderDialogButtons){
+                Button confirmOrderBtn = orderDialog.getContentView().findViewById(R.id.confirmOrderBtn);
+                Button removeOrderBtn = orderDialog.getContentView().findViewById(R.id.removeOrderBtn);
 
 
-            if (readOnly) {
+                if (readOnly) {
 
 
-                if (CyburgerApplication.isAdmin()) {
-                    confirmOrderBtn.setText(getString(R.string.order_finishOrder));
-                    confirmOrderBtn.setVisibility(View.VISIBLE);
+                    if (CyburgerApplication.isAdmin()) {
+                        confirmOrderBtn.setText(getString(R.string.order_finishOrder));
+                        confirmOrderBtn.setVisibility(View.VISIBLE);
 
-                    confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                        confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                            final DialogManager confirmFinishOrderDialog = new DialogManager(MainActivity.this,
-                                    DialogManager.DialogType.YES_NO);
+                                final DialogManager confirmFinishOrderDialog = new DialogManager(MainActivity.this,
+                                        DialogManager.DialogType.YES_NO);
 
-                            DialogAction confirmFinishOrderDialogAction = new DialogAction();
-                            confirmFinishOrderDialogAction.setPositiveAction(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-
-                                    for (final Profile p :
-                                            firebaseDatabaseHelperProfile.get()) {
-                                        if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())) {
-                                            int comboBonusPoints = 0;
-                                            int itemsBonusPoints = 0;
+                                DialogAction confirmFinishOrderDialogAction = new DialogAction();
+                                confirmFinishOrderDialogAction.setPositiveAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
 
 
-                                            for (Combo combo :
-                                                    order.getOrderedCombos()) {
-                                                comboBonusPoints += combo.getComboBonusPoints();
-                                            }
-
-                                            for (Item item :
-                                                    order.getOrderedItems()) {
-                                                itemsBonusPoints += item.getBonusPoints();
-                                            }
-
-                                            int totalBonusPoints = comboBonusPoints
-                                                    + itemsBonusPoints
-                                                    + p.getBonusPoints();
+                                        for (final Profile p :
+                                                firebaseDatabaseHelperProfile.get()) {
+                                            if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())) {
+                                                int comboBonusPoints = 0;
+                                                int itemsBonusPoints = 0;
 
 
-                                            List<Order> orderList = firebaseDatabaseHelperOrders.get();
-                                            if (orderList.size() > 1) {
-                                                Order nextOrder = orderList.get(1);
-                                                Customer nextCustomer = nextOrder.getCustomer();
-                                                String nextCustomerName = nextCustomer.getCustomerName();
-                                                String topic = getString(R.string.prefix_cyburger) + nextCustomer.getLinkedProfileId();
-                                                PostNotificationHelper.post(MainActivity.this,
-                                                        "", nextCustomerName
-                                                                + getString(R.string.you_next), topic);
-                                            }
-
-
-                                            p.setBonusPoints(totalBonusPoints);
-                                            firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful()){
-                                                        firebaseDatabaseHelperOrders.delete(order).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-
-                                                                if(task.isSuccessful()){
-                                                                    String topic = getString(R.string.prefix_cyburger)  + p.getUserId();
-                                                                    String customerName = order.getCustomer().getCustomerName();
-
-                                                                    confirmFinishOrderDialog.closeDialog();
-                                                                    orderDialog.closeDialog();
-                                                                    MessageHelper.show(MainActivity.this,
-                                                                            MessageType.SUCCESS, getString(R.string.order_complete));
-
-                                                                    PostNotificationHelper.post(MainActivity.this,
-                                                                            "", customerName
-                                                                                    + getString(R.string.order_ok), topic);
-                                                                }else{
-                                                                    MessageHelper.show(MainActivity.this,
-                                                                            MessageType.ERROR,
-                                                                            getString(R.string.err_complete_order));
-                                                                }
-                                                            }
-                                                        });
-                                                    }else{
-                                                        MessageHelper.show(MainActivity.this,
-                                                                MessageType.ERROR,
-                                                                getString(R.string.err_points_profile));
-                                                    }
+                                                for (Combo combo :
+                                                        order.getOrderedCombos()) {
+                                                    comboBonusPoints += combo.getComboBonusPoints();
                                                 }
-                                            });
 
-                                            return;
+                                                for (Item item :
+                                                        order.getOrderedItems()) {
+                                                    itemsBonusPoints += item.getBonusPoints();
+                                                }
+
+                                                int totalBonusPoints = comboBonusPoints
+                                                        + itemsBonusPoints
+                                                        + p.getBonusPoints();
+
+
+                                                List<Order> orderList = firebaseDatabaseHelperOrders.get();
+                                                if (orderList.size() > 1) {
+                                                    Order nextOrder = orderList.get(1);
+                                                    Customer nextCustomer = nextOrder.getCustomer();
+                                                    String nextCustomerName = nextCustomer.getCustomerName();
+                                                    String topic = getString(R.string.prefix_cyburger) + nextCustomer.getLinkedProfileId();
+                                                    PostNotificationHelper.post(MainActivity.this,
+                                                            "", nextCustomerName
+                                                                    + getString(R.string.you_next), topic);
+                                                }
+
+
+                                                p.setBonusPoints(totalBonusPoints);
+                                                firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            firebaseDatabaseHelperOrders.delete(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                                    if(task.isSuccessful()){
+                                                                        String topic = getString(R.string.prefix_cyburger)  + p.getUserId();
+                                                                        String customerName = order.getCustomer().getCustomerName();
+
+                                                                        confirmFinishOrderDialog.closeDialog();
+                                                                        orderDialog.closeDialog();
+                                                                        MessageHelper.show(MainActivity.this,
+                                                                                MessageType.SUCCESS, getString(R.string.order_complete));
+
+                                                                        PostNotificationHelper.post(MainActivity.this,
+                                                                                "", customerName
+                                                                                        + getString(R.string.order_ok), topic);
+                                                                    }else{
+                                                                        MessageHelper.show(MainActivity.this,
+                                                                                MessageType.ERROR,
+                                                                                getString(R.string.err_complete_order));
+                                                                    }
+                                                                }
+                                                            });
+                                                        }else{
+                                                            MessageHelper.show(MainActivity.this,
+                                                                    MessageType.ERROR,
+                                                                    getString(R.string.err_points_profile));
+                                                        }
+                                                    }
+                                                });
+
+                                                return;
+                                            }
                                         }
+
+                                        MessageHelper.show(MainActivity.this,
+                                                MessageType.ERROR,
+                                                getString(R.string.client_404));
                                     }
 
-                                    MessageHelper.show(MainActivity.this,
-                                            MessageType.ERROR,
-                                            getString(R.string.client_404));
-                                }
-
-                            });
+                                });
 
 
-                            confirmFinishOrderDialog.setAction(confirmFinishOrderDialogAction);
-                            confirmFinishOrderDialog.showDialog(getString(R.string.complete_order));
-                        }
-                    });
-
-                } else {
-
-
-                    removeOrderBtn.getLayoutParams().width = (int) getResources().getDimension(R.dimen.default_width);
-                }
-
-
-                orderDialog.setOnCanceListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-
-                        if (previousOrder != null) {
-                            order = previousOrder;
-                            LogHelper.log(getString(R.string.restore_previous_order));
-                        } else {
-                            order = new Order();
-                            LogHelper.log(getString(R.string.reset_order));
-                        }
-
-
-                    }
-                });
-
-            } else {
-
-                previousOrder = order;
-                confirmOrderBtn.setVisibility(View.VISIBLE);
-                confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                        Customer customer = new Customer();
-                        customer.setCustomerName(customerName);
-                        customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
-
-                        order.setCustomer(customer);
-                        firebaseDatabaseHelperOrders.insert(order);
-
-                        LogHelper.log(getString(R.string.order_comfirmed));
-
-                        //Reset - pedido confirmado
-                        badge.setBadgeCount(0);
-                        order = new Order();
-                        previousOrder = new Order();
-                        orderDialog.closeDialog();
-
-
-                        MessageHelper.show(MainActivity.this,
-                                MessageType.SUCCESS,
-                                getString(R.string.wait_order));
-
-
-                    }
-                });
-            }
-
-
-            removeOrderBtn.setVisibility(View.VISIBLE);
-            removeOrderBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    LogHelper.log(getString(R.string.canceled_order));
-
-                    DialogAction removeOrderDialogAction = new DialogAction();
-                    removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (readOnly) {
-                                firebaseDatabaseHelperOrders.delete(order);
-                                removeNotification(ORDERS_TAB, 1);
-
-                                if (CyburgerApplication.isAdmin()) {
-
-                                    Customer customer = order.getCustomer();
-                                    String topic = getString(R.string.prefix_cyburger)  + customer.getLinkedProfileId();
-                                    String customerName = order.getCustomer().getCustomerName();
-                                    PostNotificationHelper.post(MainActivity.this,
-                                            "", customerName
-                                                    + getString(R.string.you_order_canceled), topic);
-                                }
-
-                            } else {
-                                previousOrder = new Order();
-                                badge.setBadgeCount(0);
+                                confirmFinishOrderDialog.setAction(confirmFinishOrderDialogAction);
+                                confirmFinishOrderDialog.showDialog(getString(R.string.complete_order));
                             }
+                        });
+
+                    } else {
+
+
+                        removeOrderBtn.getLayoutParams().width = (int) getResources().getDimension(R.dimen.default_width);
+                    }
+
+
+                    orderDialog.setOnCanceListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
 
                             if (previousOrder != null) {
                                 order = previousOrder;
@@ -508,21 +439,129 @@ public class MainActivity extends BaseActivity {
                             }
 
 
-                            orderDialog.closeDialog();
-
-                            MessageHelper.show(MainActivity.this,
-                                    MessageType.SUCCESS, getString(R.string.canceled_order));
                         }
                     });
 
-                    DialogManager removeOrderDialog = new DialogManager(MainActivity.this,
-                            DialogManager.DialogType.YES_NO);
-                    removeOrderDialog.setAction(removeOrderDialogAction);
-                    removeOrderDialog.showDialog(getString(R.string.msg_cancel_order), getString(R.string.qst_cancel_order));
+                } else {
 
+                    previousOrder = order;
+                    confirmOrderBtn.setVisibility(View.VISIBLE);
+                    confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                            Customer customer = new Customer();
+                            customer.setCustomerName(customerName);
+                            customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
+
+                            order.setCustomer(customer);
+                            firebaseDatabaseHelperOrders.insert(order);
+
+                            LogHelper.log(getString(R.string.order_comfirmed));
+
+                            //Reset - pedido confirmado
+                            badge.setBadgeCount(0);
+                            order = new Order();
+                            previousOrder = new Order();
+                            orderDialog.closeDialog();
+
+
+                            MessageHelper.show(MainActivity.this,
+                                    MessageType.SUCCESS,
+                                    getString(R.string.wait_order));
+
+
+                        }
+                    });
+                }
+
+
+                removeOrderBtn.setVisibility(View.VISIBLE);
+                removeOrderBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        LogHelper.log(getString(R.string.canceled_order));
+
+                        DialogAction removeOrderDialogAction = new DialogAction();
+                        removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (readOnly) {
+                                    firebaseDatabaseHelperOrders.delete(order);
+                                    removeNotification(ORDERS_TAB, 1);
+
+                                    if (CyburgerApplication.isAdmin()) {
+
+                                        Customer customer = order.getCustomer();
+                                        String topic = getString(R.string.prefix_cyburger)  + customer.getLinkedProfileId();
+                                        String customerName = order.getCustomer().getCustomerName();
+                                        PostNotificationHelper.post(MainActivity.this,
+                                                "", customerName
+                                                        + getString(R.string.you_order_canceled), topic);
+                                    }
+
+                                } else {
+                                    previousOrder = new Order();
+                                    badge.setBadgeCount(0);
+                                }
+
+                                if (previousOrder != null) {
+                                    order = previousOrder;
+                                    LogHelper.log(getString(R.string.restore_previous_order));
+                                } else {
+                                    order = new Order();
+                                    LogHelper.log(getString(R.string.reset_order));
+                                }
+
+
+                                orderDialog.closeDialog();
+
+                                MessageHelper.show(MainActivity.this,
+                                        MessageType.SUCCESS, getString(R.string.canceled_order));
+                            }
+                        });
+
+                        DialogManager removeOrderDialog = new DialogManager(MainActivity.this,
+                                DialogManager.DialogType.YES_NO);
+                        removeOrderDialog.setAction(removeOrderDialogAction);
+                        removeOrderDialog.showDialog(getString(R.string.msg_cancel_order), getString(R.string.qst_cancel_order));
+
+
+                    }
+                });
+            }
+            else{
+                displayOrderDialogButtons = true;
+                TextView orderedItemsTotalTxtView =  orderDialog.getContentView().findViewById(R.id.orderedItemsTotalTxtView);
+
+                if(orderedItemsTotalTxtView!=null && orderedItemsAmountTxtView!=null){
+
+                    ConstraintLayout.LayoutParams orderedItemsTotalTxtViewParams =
+                            (ConstraintLayout.LayoutParams)orderedItemsTotalTxtView.getLayoutParams();
+                    orderedItemsTotalTxtViewParams
+                            .setMargins(orderedItemsTotalTxtViewParams.leftMargin,
+                                    orderedItemsTotalTxtViewParams.topMargin,
+                                    orderedItemsTotalTxtViewParams.rightMargin,
+                                    0);
+
+                    ConstraintLayout.LayoutParams orderedItemsAmountTxtViewParams =
+                            (ConstraintLayout.LayoutParams)orderedItemsAmountTxtView.getLayoutParams();
+
+                    orderedItemsAmountTxtViewParams
+                            .setMargins(orderedItemsAmountTxtViewParams.leftMargin,
+                                    orderedItemsAmountTxtViewParams.topMargin,
+                                    orderedItemsAmountTxtViewParams.rightMargin,
+                                    0);
+
+                    orderDialog.getContentView().invalidate();
+                    orderDialog.getContentView().refreshDrawableState();
 
                 }
-            });
+
+            }
+
 
 
         }

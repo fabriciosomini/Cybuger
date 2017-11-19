@@ -259,7 +259,8 @@ public class OrdersFragment extends Fragment {
                         cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                currentActivty.setOrder(order);
+                                currentActivty.displayOrderDialog(false);
                             }
                         });
                     }
