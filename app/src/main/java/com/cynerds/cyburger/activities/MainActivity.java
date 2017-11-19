@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity {
     private Order previousOrder;
     private AHBottomNavigation bottomNavigation;
     private int[] notifications = new int[3];
-    private boolean displayOrderDialogButtons = true;
+
 
 
     private AHBottomNavigation.OnTabSelectedListener mOnNavigationItemSelectedListener = new AHBottomNavigation.OnTabSelectedListener() {
@@ -257,11 +257,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    public void displayOrderDialog(boolean displayOrderDialogButtons) {
-        this.displayOrderDialogButtons = displayOrderDialogButtons;
-        displayOrderDialog();
-    }
-
     public void displayOrderDialog() {
 
         final boolean readOnly = order.getKey() != null;
@@ -306,8 +301,7 @@ public class MainActivity extends BaseActivity {
         }
 
         if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || readOnly) {
-
-            if (displayOrderDialogButtons) {
+         {
                 Button confirmOrderBtn = orderDialog.getContentView().findViewById(R.id.confirmOrderBtn);
                 Button removeOrderBtn = orderDialog.getContentView().findViewById(R.id.removeOrderBtn);
 
@@ -541,33 +535,7 @@ public class MainActivity extends BaseActivity {
 
                     }
                 });
-            } else {
-                displayOrderDialogButtons = true;
-                TextView orderedItemsTotalTxtView = orderDialog.getContentView().findViewById(R.id.orderedItemsTotalTxtView);
 
-                if (orderedItemsTotalTxtView != null && orderedItemsAmountTxtView != null) {
-
-                    ConstraintLayout.LayoutParams orderedItemsTotalTxtViewParams =
-                            (ConstraintLayout.LayoutParams) orderedItemsTotalTxtView.getLayoutParams();
-                    orderedItemsTotalTxtViewParams
-                            .setMargins(orderedItemsTotalTxtViewParams.leftMargin,
-                                    orderedItemsTotalTxtViewParams.topMargin,
-                                    orderedItemsTotalTxtViewParams.rightMargin,
-                                    0);
-
-                    ConstraintLayout.LayoutParams orderedItemsAmountTxtViewParams =
-                            (ConstraintLayout.LayoutParams) orderedItemsAmountTxtView.getLayoutParams();
-
-                    orderedItemsAmountTxtViewParams
-                            .setMargins(orderedItemsAmountTxtViewParams.leftMargin,
-                                    orderedItemsAmountTxtViewParams.topMargin,
-                                    orderedItemsAmountTxtViewParams.rightMargin,
-                                    0);
-
-                    orderDialog.getContentView().invalidate();
-                    orderDialog.getContentView().refreshDrawableState();
-
-                }
 
             }
 
