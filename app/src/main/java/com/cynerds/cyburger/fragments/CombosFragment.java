@@ -20,6 +20,7 @@ import com.cynerds.cyburger.activities.admin.ManageCombosActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
+import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
@@ -231,13 +232,13 @@ public class CombosFragment extends Fragment {
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(combo.getComboName(), "");
 
+                    PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.photoViewer);
                     Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
 
                     if (CyburgerApplication.isAdmin()) {
 
                         editRecordBtn.setVisibility(View.VISIBLE);
-
 
                         editRecordBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -247,6 +248,8 @@ public class CombosFragment extends Fragment {
                                 previewItemDialogManager.closeDialog();
                             }
                         });
+
+                        photoViewer.setEditable(true);
                     } else {
 
                         editRecordBtn.setVisibility(View.INVISIBLE);

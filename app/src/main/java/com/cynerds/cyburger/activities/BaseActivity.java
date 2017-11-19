@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.application.CyburgerApplication;
+import com.cynerds.cyburger.helpers.FileDialogHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DateHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
@@ -22,6 +23,7 @@ import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.GsonHelper;
 import com.cynerds.cyburger.models.sync.Sync;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -176,6 +178,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
 
 }
 
