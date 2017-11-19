@@ -37,8 +37,11 @@ import java.util.List;
 public class CardAdapter extends ArrayAdapter<CardModel> {
 
 
+    private final Context context;
+
     public CardAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<CardModel> objects) {
         super(context, resource, objects);
+        this.context = context;
     }
 
 
@@ -92,9 +95,14 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
             final String pictureUri = cardModel.getPictureUri();
             if (pictureUri != null) {
-                File file = new File(pictureUri);
+                File cacheDir = context.getCacheDir();
+                File regexFileName = new File(pictureUri);
+                String fileName = regexFileName.getName();
+
+                File file = new File(cacheDir + "/"+ fileName);
+
                 if (!file.exists()) {
-                        final File localFile = File.createTempFile(pictureUri, "jpg");
+                    final File localFile = File.createTempFile(fileName, "jpg", cacheDir);
                     FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
                     firebaseStorageHelper.get(cardModel.getPictureUri(), localFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
                         @Override

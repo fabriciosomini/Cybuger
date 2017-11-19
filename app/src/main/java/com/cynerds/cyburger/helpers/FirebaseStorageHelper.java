@@ -21,17 +21,9 @@ public class FirebaseStorageHelper {
          storage = FirebaseStorage.getInstance();
          storageRef = storage.getReference();
 
-         createConstDirectories();
 
     }
 
-    private void createConstDirectories() {
-        File file = new File(Environment.getExternalStorageDirectory(), FirebaseStorageConstants.PICTURE_FOLDER);
-
-        if(!file.exists()){
-            file.mkdir();
-        }
-    }
 
     public UploadTask insert(String path, byte[] data){
 
@@ -42,6 +34,7 @@ public class FirebaseStorageHelper {
     }
 
     public FileDownloadTask get(String path, File file) {
+
 
 
         StorageReference pathRef = storageRef.child(path);
