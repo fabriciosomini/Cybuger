@@ -101,17 +101,17 @@
                     android:layout_height="@dimen/default_middle_height"
                     android:text="@string/ordering_confirm"
                     android:visibility="gone"
+                    android:layout_marginRight="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
 
                 <Button
                     android:id="@+id/removeOrderBtn"
                     style="@style/AppTheme.CyburgerSecondaryButton"
-
                     android:layout_width="130dp"
                     android:layout_height="@dimen/default_middle_height"
                     android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="4dp"
                     android:text="@string/order_cancel"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"

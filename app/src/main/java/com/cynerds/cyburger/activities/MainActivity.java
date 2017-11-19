@@ -257,7 +257,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    public void displayOrderDialog(boolean displayOrderDialogButtons){
+    public void displayOrderDialog(boolean displayOrderDialogButtons) {
         this.displayOrderDialogButtons = displayOrderDialogButtons;
         displayOrderDialog();
     }
@@ -307,7 +307,7 @@ public class MainActivity extends BaseActivity {
 
         if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || readOnly) {
 
-            if(displayOrderDialogButtons){
+            if (displayOrderDialogButtons) {
                 Button confirmOrderBtn = orderDialog.getContentView().findViewById(R.id.confirmOrderBtn);
                 Button removeOrderBtn = orderDialog.getContentView().findViewById(R.id.removeOrderBtn);
 
@@ -370,13 +370,13 @@ public class MainActivity extends BaseActivity {
                                                 firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful()){
+                                                        if (task.isSuccessful()) {
                                                             firebaseDatabaseHelperOrders.delete(order).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
 
-                                                                    if(task.isSuccessful()){
-                                                                        String topic = getString(R.string.prefix_cyburger)  + p.getUserId();
+                                                                    if (task.isSuccessful()) {
+                                                                        String topic = getString(R.string.prefix_cyburger) + p.getUserId();
                                                                         String customerName = order.getCustomer().getCustomerName();
 
                                                                         confirmFinishOrderDialog.closeDialog();
@@ -387,14 +387,14 @@ public class MainActivity extends BaseActivity {
                                                                         PostNotificationHelper.post(MainActivity.this,
                                                                                 "", customerName
                                                                                         + getString(R.string.order_ok), topic);
-                                                                    }else{
+                                                                    } else {
                                                                         MessageHelper.show(MainActivity.this,
                                                                                 MessageType.ERROR,
                                                                                 getString(R.string.err_complete_order));
                                                                     }
                                                                 }
                                                             });
-                                                        }else{
+                                                        } else {
                                                             MessageHelper.show(MainActivity.this,
                                                                     MessageType.ERROR,
                                                                     getString(R.string.err_points_profile));
@@ -421,8 +421,18 @@ public class MainActivity extends BaseActivity {
 
                     } else {
 
+                        ConstraintLayout.LayoutParams removeOrderBtnViewParams =
+                                (ConstraintLayout.LayoutParams) removeOrderBtn.getLayoutParams();
+                        removeOrderBtnViewParams
+                                .setMargins(removeOrderBtnViewParams.leftMargin,
+                                        removeOrderBtnViewParams.topMargin,
+                                        removeOrderBtnViewParams.rightMargin,
+                                        removeOrderBtnViewParams.bottomMargin);
+                        removeOrderBtnViewParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        removeOrderBtn.invalidate();
+                        removeOrderBtn.refreshDrawableState();
 
-                        removeOrderBtn.getLayoutParams().width = (int) getResources().getDimension(R.dimen.default_width);
+                        // removeOrderBtn.getLayoutParams().width = (int) getResources().getDimension(R.dimen.default_width);
                     }
 
 
@@ -495,7 +505,7 @@ public class MainActivity extends BaseActivity {
                                     if (CyburgerApplication.isAdmin()) {
 
                                         Customer customer = order.getCustomer();
-                                        String topic = getString(R.string.prefix_cyburger)  + customer.getLinkedProfileId();
+                                        String topic = getString(R.string.prefix_cyburger) + customer.getLinkedProfileId();
                                         String customerName = order.getCustomer().getCustomerName();
                                         PostNotificationHelper.post(MainActivity.this,
                                                 "", customerName
@@ -531,15 +541,14 @@ public class MainActivity extends BaseActivity {
 
                     }
                 });
-            }
-            else{
+            } else {
                 displayOrderDialogButtons = true;
-                TextView orderedItemsTotalTxtView =  orderDialog.getContentView().findViewById(R.id.orderedItemsTotalTxtView);
+                TextView orderedItemsTotalTxtView = orderDialog.getContentView().findViewById(R.id.orderedItemsTotalTxtView);
 
-                if(orderedItemsTotalTxtView!=null && orderedItemsAmountTxtView!=null){
+                if (orderedItemsTotalTxtView != null && orderedItemsAmountTxtView != null) {
 
                     ConstraintLayout.LayoutParams orderedItemsTotalTxtViewParams =
-                            (ConstraintLayout.LayoutParams)orderedItemsTotalTxtView.getLayoutParams();
+                            (ConstraintLayout.LayoutParams) orderedItemsTotalTxtView.getLayoutParams();
                     orderedItemsTotalTxtViewParams
                             .setMargins(orderedItemsTotalTxtViewParams.leftMargin,
                                     orderedItemsTotalTxtViewParams.topMargin,
@@ -547,7 +556,7 @@ public class MainActivity extends BaseActivity {
                                     0);
 
                     ConstraintLayout.LayoutParams orderedItemsAmountTxtViewParams =
-                            (ConstraintLayout.LayoutParams)orderedItemsAmountTxtView.getLayoutParams();
+                            (ConstraintLayout.LayoutParams) orderedItemsAmountTxtView.getLayoutParams();
 
                     orderedItemsAmountTxtViewParams
                             .setMargins(orderedItemsAmountTxtViewParams.leftMargin,
@@ -561,7 +570,6 @@ public class MainActivity extends BaseActivity {
                 }
 
             }
-
 
 
         }
