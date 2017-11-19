@@ -212,6 +212,7 @@ public class CombosFragment extends Fragment {
             cardModel.setContent(combo.getComboInfo()
                     + "\n\nVocê ganha " + combo.getComboBonusPoints() + " pontos");
             cardModel.setSubContent("R$ " + combo.getComboAmount());
+            cardModel.setPictureUri(combo.getPictureUri());
 
             float amount = combo.getComboAmount();
             if(BonusPointExchangeHelper.convertUserPointsToCash()>=amount)
@@ -232,7 +233,7 @@ public class CombosFragment extends Fragment {
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
                     previewItemDialogManager.showDialog(combo.getComboName(), "");
 
-                    PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.photoViewer);
+                    PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
                     Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
 

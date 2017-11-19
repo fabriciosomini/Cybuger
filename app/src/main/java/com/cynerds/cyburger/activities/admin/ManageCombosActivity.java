@@ -2,9 +2,11 @@ package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -12,16 +14,20 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
+import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
+import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnItemAddedListener;
+import com.cynerds.cyburger.interfaces.OnPictureChangedListener;
 import com.cynerds.cyburger.models.combo.Combo;
 import com.cynerds.cyburger.models.combo.ComboDay;
 import com.cynerds.cyburger.models.general.MessageType;
@@ -29,7 +35,10 @@ import com.cynerds.cyburger.models.item.Item;
 import com.cynerds.cyburger.models.view.TagModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +47,9 @@ public class ManageCombosActivity extends BaseActivity {
 
     private final FirebaseDatabaseHelper firebaseDatabaseHelper;
     private final FirebaseDatabaseHelper firebaseDatabaseHelperItems;
+    private byte[] data;
+    private String pictureUri;
+    private File file;
 
     public ManageCombosActivity() {
         firebaseDatabaseHelper = new FirebaseDatabaseHelper(this, Combo.class);
@@ -60,6 +72,8 @@ public class ManageCombosActivity extends BaseActivity {
     }
 
     private void setUIEvents() {
+
+
         SpinnerArrayAdapter arrayAdapter = new SpinnerArrayAdapter(this,
                 R.layout.component_dropdown_item,
                 getNames(ComboDay.class));
@@ -70,12 +84,93 @@ public class ManageCombosActivity extends BaseActivity {
         final EditText comboBonusPointsTxt = findViewById(R.id.comboBonusPointTxt);
         final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final Button saveComboBtn = findViewById(R.id.saveComboBtn);
+        final ImageButton addComboPictureBtn = findViewById(R.id.addComboPictureBtn);
         final TextView deleteComboLink = findViewById(R.id.deleteComboLink);
         final Combo loadedCombo = (Combo) getExtra(Combo.class);
+
 
         comboNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         comboInfoTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
         comboDayCbx.setAdapter(arrayAdapter);
+
+        final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+
+        if (loadedCombo != null) {
+            String loadedPictureUri = loadedCombo.getPictureUri();
+            if (loadedPictureUri != null) {
+                pictureUri = loadedPictureUri;
+                 file = new File(pictureUri);
+                if(!file.exists())
+                {
+                    firebaseStorageHelper.get(pictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                           if(task.isSuccessful()){
+                               LogHelper.log("Loaded picture " + pictureUri);
+                           }else
+                           {
+                               LogHelper.log("Failed to load picture " + pictureUri);
+                           }
+                        }
+                    });
+                }
+
+            }
+        }
+
+        addComboPictureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DialogManager previewItemDialogManager = new DialogManager(ManageCombosActivity.this);
+                previewItemDialogManager.setContentView(R.layout.dialog_preview_picture);
+                previewItemDialogManager.showDialog("Imagem do combo", "");
+
+                final PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewPhotoViewer);
+                photoViewer.setEditable(true);
+
+                if(pictureUri!=null){
+                    photoViewer.setPicture(file);
+                }
+
+                photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
+                    @Override
+                    public void onPictureChanged() {
+                        pictureUri = FirebaseStorageConstants.PICTURE_FOLDER + "/" + photoViewer.getFileName();
+                        data = photoViewer.getData();
+
+                        Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
+                        Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
+
+                        savePictureBtn.setVisibility(View.VISIBLE);
+                        removePictureBtn.setVisibility(View.VISIBLE);
+
+                        savePictureBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                previewItemDialogManager.closeDialog();
+                                MessageHelper.show(ManageCombosActivity.this,
+                                        MessageType.INFO,
+                                        "Não se esqueça de salvar");
+
+                            }
+                        });
+
+                        removePictureBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                data = null;
+                                pictureUri = null;
+                                previewItemDialogManager.closeDialog();
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        });
+
+
 
 
         itemsTagInput.setOnItemAddedListener(new OnItemAddedListener() {
@@ -152,12 +247,16 @@ public class ManageCombosActivity extends BaseActivity {
                     ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString().trim());
                     int comboItems = itemsTagInput.getSelectedTagModels().size();
 
+
+                    pictureUri = pictureUri == null ? "" : pictureUri;
+
                     Combo combo = loadedCombo == null ? new Combo() : loadedCombo;
                     combo.setComboName(comboName);
                     combo.setComboAmount(comboAmount);
                     combo.setComboDay(comboDay);
                     combo.setComboInfo(comboInfo);
                     combo.setComboBonusPoints(comboBonusPoints);
+                    combo.setPictureUri(pictureUri);
 
                     List<Item> items = new ArrayList<Item>();
                     for (TagModel tagModel : itemsTagInput.getSelectedTagModels()) {
@@ -208,6 +307,23 @@ public class ManageCombosActivity extends BaseActivity {
                             }
                         });
                     }
+
+                    if(pictureUri!=null && data!=null)
+                    {
+
+                        firebaseStorageHelper.insert(pictureUri, data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    LogHelper.log("Saved picture " + pictureUri);
+                                }else
+                                {
+                                    LogHelper.log("Failed to save picture " + pictureUri);
+                                }
+                            }
+                        });
+                    }
+
 
                 }
             }
@@ -301,8 +417,8 @@ public class ManageCombosActivity extends BaseActivity {
         }
 
         String price_sugestion = getString(R.string.VAR_PRICE_SUGESTION);
-        price_sugestion = price_sugestion.replace("{valor}",String.format("%.2f", suggestedPrice));
-        return  price_sugestion;
+        price_sugestion = price_sugestion.replace("{valor}", String.format("%.2f", suggestedPrice));
+        return price_sugestion;
     }
 
 

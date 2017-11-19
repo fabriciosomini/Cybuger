@@ -3,6 +3,7 @@ package com.cynerds.cyburger.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -15,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
 import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
+import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.view.CardModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -87,18 +90,22 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
         try {
 
-            String pictureUri = cardModel.getPictureUri();
+            final String pictureUri = cardModel.getPictureUri();
             if (pictureUri != null) {
                 File file = new File(pictureUri);
                 if (!file.exists()) {
-                    final File localFile = File.createTempFile(pictureUri, "jpg");
+                        final File localFile = File.createTempFile(pictureUri, "jpg");
                     FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
                     firebaseStorageHelper.get(cardModel.getPictureUri(), localFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                setImage(cardPicture, localFile);
 
+                            if(task.isSuccessful()){
+                                LogHelper.log("CardAdapter Loaded picture " + pictureUri);
+                                setImage(cardPicture, localFile);
+                            }else
+                            {
+                                LogHelper.log("CardAdapter Failed to load picture " + pictureUri);
                             }
                         }
                     });

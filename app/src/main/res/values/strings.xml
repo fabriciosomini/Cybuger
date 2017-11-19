@@ -51,7 +51,7 @@
     <string name="manage_combos_combo_day">Dia do combo*</string>
     <string name="ordering_confirm">Confirmar</string>
     <string name="general_remove">Remover</string>
-    <string name="ordering_add_to_order">Adicionar</string>
+    <string name="general_add">Adicionar</string>
     <string name="login_error_no_connection">Não foi possível conectar.</string>
     <string name="manage_combos_required_field">Escolha um ou mais itens para o combo</string>
     <string name="general_button_leave">Sair</string>
@@ -75,7 +75,7 @@
     <string name="REMOVE_COMBO">Remover combo</string>
     <string name="QST_REMOVE_ITEM">Tem certeza que deseja remover esse item?</string>
     <string name="VAR_PRICE_SUGESTION">Preço sugerido: R$ {valor}</string>
-    <string name="SUG_POINTS">Pontos sugeridos</string>
+    <string name="SUG_POINTS">Pontos sugeridos: </string>
     <string name="ok_add_item">Item adicionado</string>
     <string name="err_add_item">Erro ao adicionar item</string>
     <string name="ok_update_item">Item atualizado</string>

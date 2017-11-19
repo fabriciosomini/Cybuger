@@ -53,6 +53,10 @@ public class MessageToast extends ConstraintLayout {
             case SUCCESS:
                 innerContainer.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue));
                 break;
+
+            case INFO:
+                innerContainer.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.redishYellow));
+                break;
         }
     }
 }

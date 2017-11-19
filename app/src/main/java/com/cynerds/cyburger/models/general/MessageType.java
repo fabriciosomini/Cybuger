@@ -5,5 +5,5 @@ package com.cynerds.cyburger.models.general;
  */
 
 public enum MessageType{
-    ERROR, SUCCESS
+    ERROR, INFO, SUCCESS
 }

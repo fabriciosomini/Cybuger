@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.cynerds.cyburger.R;
@@ -35,6 +37,7 @@ public class PhotoViewer extends ConstraintLayout {
     private OnPictureChangedListener onPictureChangedListener;
     private String fileName;
     private byte[] data;
+    private String picture;
 
     public PhotoViewer(Context context) {
         super(context);
@@ -103,7 +106,7 @@ public class PhotoViewer extends ConstraintLayout {
                                                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                                                         data = baos.toByteArray();
-                                                        fileName = file.getName();
+                                                        fileName = file.getName().trim().replace(" ", "");
 
                                                         if (onPictureChangedListener != null) {
                                                             onPictureChangedListener.onPictureChanged();
@@ -121,8 +124,25 @@ public class PhotoViewer extends ConstraintLayout {
                                 }
                             });
 
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    Button negativeBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                    Button positiveBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+                    Button neutralBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
+                    if (negativeBtn != null) {
+                        negativeBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+                    }
+
+                    if (positiveBtn != null) {
+                        positiveBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+                    }
+
+                    if (neutralBtn != null) {
+
+                        neutralBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+                    }
                 }
             }
         });
@@ -138,5 +158,28 @@ public class PhotoViewer extends ConstraintLayout {
 
     public void addOnPictureChangedListener(OnPictureChangedListener onPictureChangedListener) {
         this.onPictureChangedListener = onPictureChangedListener;
+    }
+
+    public void setPicture(File file) {
+
+        if (file != null) {
+            FileInputStream streamIn = null;
+            try {
+                streamIn = new FileInputStream(file);
+                Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
+                streamIn.close();
+                selectedPhotoImgView.setImageBitmap(bitmap);
+                if (onPictureChangedListener != null) {
+                    onPictureChangedListener.onPictureChanged();
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 }
