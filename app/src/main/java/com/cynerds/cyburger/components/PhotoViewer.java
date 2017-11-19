@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -17,11 +15,7 @@ import android.widget.ImageView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.helpers.FileDialogHelper;
-import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
-import com.cynerds.cyburger.helpers.LogHelper;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.UploadTask;
+import com.cynerds.cyburger.interfaces.OnPictureChangedListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,17 +32,8 @@ public class PhotoViewer extends ConstraintLayout {
     private Context context;
     private ImageView selectedPhotoImgView;
     private boolean isEditable;
-
-    public String getFileName() {
-        return fileName;
-    }
-
+    private OnPictureChangedListener onPictureChangedListener;
     private String fileName;
-
-    public byte[] getData() {
-        return data;
-    }
-
     private byte[] data;
 
     public PhotoViewer(Context context) {
@@ -61,6 +46,14 @@ public class PhotoViewer extends ConstraintLayout {
         super(context, attrs);
         this.context = context;
         initializeViews(context);
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public byte[] getData() {
+        return data;
     }
 
     private void initializeViews(Context context) {
@@ -103,6 +96,7 @@ public class PhotoViewer extends ConstraintLayout {
                                                         Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
                                                         streamIn.close();
                                                         selectedPhotoImgView.setImageBitmap(bitmap);
+
                                                         selectedPhotoImgView.setDrawingCacheEnabled(true);
                                                         selectedPhotoImgView.buildDrawingCache();
                                                         Bitmap cachedBitmap = selectedPhotoImgView.getDrawingCache();
@@ -111,19 +105,9 @@ public class PhotoViewer extends ConstraintLayout {
                                                         data = baos.toByteArray();
                                                         fileName = file.getName();
 
-                                                        FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
-                                                        firebaseStorageHelper.insert("images/"+ fileName, data)
-                                                                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
-                                                                if(task.isSuccessful()){
-                                                                    LogHelper.log("Image: " + fileName +" uploaded");
-                                                                }else{
-                                                                    LogHelper.log("Failed to upload image: " + fileName);
-                                                                }
-                                                            }
-                                                        });
+                                                        if (onPictureChangedListener != null) {
+                                                            onPictureChangedListener.onPictureChanged();
+                                                        }
 
                                                     } catch (FileNotFoundException e) {
                                                         e.printStackTrace();
@@ -152,4 +136,7 @@ public class PhotoViewer extends ConstraintLayout {
     }
 
 
+    public void addOnPictureChangedListener(OnPictureChangedListener onPictureChangedListener) {
+        this.onPictureChangedListener = onPictureChangedListener;
+    }
 }

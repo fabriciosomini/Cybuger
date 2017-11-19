@@ -22,6 +22,11 @@ public class CardModel {
     private View.OnClickListener onCardViewClickListener;
     private Object extra;
     private int titleColor;
+    private String pictureUri;
+
+    public String getPictureUri() {
+        return pictureUri;
+    }
 
     public String getRightContent() {
         return rightContent;

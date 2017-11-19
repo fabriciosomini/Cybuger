@@ -16,6 +16,15 @@ public class Combo extends BaseModel {
     private float comboAmount;
     private ComboDay comboDay;
     private int comboBonusPoints;
+    private String pictureUri;
+
+    public String getPictureUri() {
+        return pictureUri;
+    }
+
+    public void setPictureUri(String pictureUri) {
+        this.pictureUri = pictureUri;
+    }
 
     public String getComboInfo() {
         return comboInfo;

@@ -13,6 +13,15 @@ public class Item extends BaseModel {
     private float price;
     private String size;
     private int bonusPoints;
+    private String pictureUri;
+
+    public String getPictureUri() {
+        return pictureUri;
+    }
+
+    public void setPictureUri(String pictureUri) {
+        this.pictureUri = pictureUri;
+    }
 
     public String getSize() {
         return size;

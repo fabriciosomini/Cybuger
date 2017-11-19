@@ -1,6 +1,8 @@
 package com.cynerds.cyburger.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -13,8 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
 import com.cynerds.cyburger.models.view.CardModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FileDownloadTask;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,7 +47,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.dashboard_card_view, parent, false);
         }
         // Lookup view for data population
-        ImageView cardPicture = convertView.findViewById(R.id.cardIcon);
+        final ImageView cardPicture = convertView.findViewById(R.id.cardIcon);
         TextView cardTitle = convertView.findViewById(R.id.cardTitle);
         TextView cardContent = convertView.findViewById(R.id.cardContent);
         TextView cardSubContent = convertView.findViewById(R.id.cardSubContent);
@@ -61,22 +71,46 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
         }
 
-        if(onManageClickListener !=null)
-        {
+        if (onManageClickListener != null) {
             cardManageIcon.setOnClickListener(onManageClickListener);
 
         }
 
-        if(onCardViewClickListener !=null)
-        {
+        if (onCardViewClickListener != null) {
             cardClickArea.setOnClickListener(onCardViewClickListener);
-            if(onPictureViewClickListener ==null){
+            if (onPictureViewClickListener == null) {
                 cardPicture.setOnClickListener(onCardViewClickListener);
 
             }
 
         }
 
+        try {
+
+            String pictureUri = cardModel.getPictureUri();
+            if (pictureUri != null) {
+                File file = new File(pictureUri);
+                if (!file.exists()) {
+                    final File localFile = File.createTempFile(pictureUri, "jpg");
+                    FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+                    firebaseStorageHelper.get(cardModel.getPictureUri(), localFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                setImage(cardPicture, localFile);
+
+                            }
+                        }
+                    });
+                } else {
+                    setImage(cardPicture, file);
+                }
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         cardPicture.setImageResource(cardModel.getHeaderIconId());
@@ -88,6 +122,20 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         return convertView;
     }
 
+    private void setImage(ImageView cardPicture, File localFile) {
+        FileInputStream streamIn = null;
+        try {
+            streamIn = new FileInputStream(localFile);
+            Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
+            streamIn.close();
+            cardPicture.setImageBitmap(bitmap);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
