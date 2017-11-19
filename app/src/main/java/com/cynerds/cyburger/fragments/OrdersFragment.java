@@ -169,6 +169,7 @@ public class OrdersFragment extends Fragment {
         };
 
         firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
+        CyburgerApplication.addListenerToNotify(onDataChangeListener);
     }
 
     private void updateList(View view) {
@@ -211,21 +212,27 @@ public class OrdersFragment extends Fragment {
         for (final Order order :
                 orders) {
 
-            Customer customer = order.getCustomer();
+           final Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
+
             final CardModel cardModel = new CardModel();
             cardModel.setExtra(order);
+            if (customer.getLinkedProfileId().equals(profile.getUserId())) {
+                cardModel.setTitle("Meu pedido");
+                cardModel.setTitleColor(R.color.colorAccent);
+            } else {
+                cardModel.setTitle(customerName);
+                cardModel.setTitleColor(R.color.lightGrey);
+            }
+
+
 
             if (CyburgerApplication.isAdmin()) {
                 cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Order newOrder = new Order();
-                        newOrder.setCustomer(order.getCustomer());
-                        newOrder.setOrderedCombos(order.getOrderedCombos());
-                        newOrder.setOrderedItems(order.getOrderedItems());
-                        newOrder.setKey(order.getKey());
-                        currentActivty.setOrder(newOrder);
+
+                        currentActivty.setOrder(order);
                         currentActivty.displayOrderDialog();
 
                     }
@@ -239,35 +246,27 @@ public class OrdersFragment extends Fragment {
                 if (profileId != null && profile!=null) {
                     if (profileId.equals(profile.getUserId())) {
 
-
                         cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Order newOrder = new Order();
-                                newOrder.setCustomer(order.getCustomer());
-                                newOrder.setOrderedCombos(order.getOrderedCombos());
-                                newOrder.setOrderedItems(order.getOrderedItems());
-                                newOrder.setKey(order.getKey());
-
-                                currentActivty.setOrder(newOrder);
+                                currentActivty.setOrder(order);
                                 currentActivty.displayOrderDialog();
-
                             }
                         });
 
-
                         currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                    }else{
+                        cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
                     }
                 }
             }
 
-            if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                cardModel.setTitle("Meu pedido");
-                cardModel.setTitleColor(R.color.colorAccent);
-            } else {
-                cardModel.setTitle(customerName);
-                cardModel.setTitleColor(R.color.lightGrey);
-            }
+
 
 
             //Pega Items do pedido-----------
