@@ -72,7 +72,7 @@ public class PhotoViewer extends ConstraintLayout {
             selectedPhotoImgView.setDrawingCacheEnabled(true);
             selectedPhotoImgView.buildDrawingCache();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             data = baos.toByteArray();
             baos.close();
         } catch (IOException e) {
@@ -104,51 +104,14 @@ public class PhotoViewer extends ConstraintLayout {
             public void onClick(View v) {
                 if (PhotoViewer.this.isEditable) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage("Escolher imagem")
-                            .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //camera intent
-                                           /* Intent cameraIntent = new Intent(ProfileActivity.this, CameraActivity.class);
-                                            //cameraIntent.putExtra("EXTRA_CONTACT_JID", contact.getJid());
-                                            startActivity(cameraIntent);*/
-                                }
-                            })
-                            .setNegativeButton("Galeria", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    String[] extensions = {".jpeg", ".bmp", ".jpg", ".png"};
-                                    FileDialogHelper.showFileDialog((Activity) context, Environment.DIRECTORY_DCIM, extensions)
-                                            .addFileListener(new FileDialogHelper.FileSelectedListener() {
-                                                @Override
-                                                public void fileSelected(final File file) {
-
-                                                    setPicture(file.getPath());
-
-
-                                                }
-                                            });
+                    String[] extensions = {".jpeg", ".bmp", ".jpg", ".png"};
+                    FileDialogHelper.showFileDialog((Activity) context, Environment.DIRECTORY_DCIM, extensions)
+                            .addFileListener(new FileDialogHelper.FileSelectedListener() {
+                                @Override
+                                public void fileSelected(final File file) {
+                                    setPicture(file.getPath());
                                 }
                             });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-
-                    Button negativeBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                    Button positiveBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
-                    Button neutralBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-
-                    if (negativeBtn != null) {
-                        negativeBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-                    }
-
-                    if (positiveBtn != null) {
-                        positiveBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-                    }
-
-                    if (neutralBtn != null) {
-
-                        neutralBtn.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-                    }
                 }
             }
         });

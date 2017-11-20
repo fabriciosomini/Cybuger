@@ -79,6 +79,7 @@ public class ItemsMenuFragment extends Fragment {
         if (listView == null) {
 
             listView = view.findViewById(android.R.id.list);
+            listView.setEmptyView(view.findViewById(R.id.emptyItemListTxt));
         }
 
         if (!isListCreated) {

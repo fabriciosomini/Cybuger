@@ -24,7 +24,9 @@
 
             <item android:right="5dp">
 
-                <bitmap android:gravity="center_vertical|right" android:src="@drawable/ic_expand" />
+                <bitmap android:gravity="center_vertical|right"
+                    android:tint="@color/verylightgrey"
+                    android:src="@drawable/ic_expand" />
 
 
 
