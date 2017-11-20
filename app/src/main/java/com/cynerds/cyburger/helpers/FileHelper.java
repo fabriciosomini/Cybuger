@@ -28,10 +28,10 @@ public class FileHelper {
         return file.getParent();
     }
 
-    public static String getStoragePath(String path) {
+    public static String getStoragePath(Context context, String path) {
 
 
-        return Environment.getDataDirectory() + "/" + path;
+        return getApplicationDirectory(context) + "/" + path;
     }
 
     public static String getFirebasePictureStoragePath(String fileName) {
@@ -67,11 +67,11 @@ public class FileHelper {
         try {
             p = m.getPackageInfo(s, 0);
             s = p.applicationInfo.dataDir;
-            return s;
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "";
+        return s;
 
     }
 }

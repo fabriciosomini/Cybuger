@@ -85,7 +85,7 @@ public class ManageItemsActivity extends BaseActivity {
 
         itemDescriptionTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
 
-        final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+        final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper(this);
 
         if (loadedItem != null) {
             pictureUri = loadedItem.getPictureUri();
@@ -93,7 +93,7 @@ public class ManageItemsActivity extends BaseActivity {
 
         if (pictureUri != null) {
 
-            localPictureUri = FileHelper.getStoragePath(pictureUri);
+            localPictureUri = FileHelper.getStoragePath(this, pictureUri);
             file = new File(localPictureUri);
 
             if (!file.exists()) {
@@ -125,7 +125,9 @@ public class ManageItemsActivity extends BaseActivity {
                 photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
                     @Override
                     public void onPictureChanged() {
-                        localPictureUri = FileHelper.getStoragePath(FirebaseStorageConstants.PICTURE_FOLDER
+                        localPictureUri = FileHelper.getStoragePath(
+                                ManageItemsActivity.this,
+                                FirebaseStorageConstants.PICTURE_FOLDER
                                 + "/" + photoViewer.getSelectedFileName());
                         pictureUri = FileHelper.getFirebasePictureStoragePath(photoViewer.getSelectedFileName());
                         data = photoViewer.getData();

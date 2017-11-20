@@ -1,5 +1,6 @@
 package com.cynerds.cyburger.helpers;
 
+import android.content.Context;
 import android.os.Environment;
 
 import com.google.firebase.storage.FileDownloadTask;
@@ -20,18 +21,20 @@ import java.io.IOException;
 public class FirebaseStorageHelper {
     private final FirebaseStorage storage;
     private final StorageReference storageRef;
+    private final Context context;
 
-    public FirebaseStorageHelper() {
+    public FirebaseStorageHelper(Context context) {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
+        this.context = context;
 
     }
 
 
     public UploadTask insert(String pictureUri, byte[] data) {
 
-        File file = new File(Environment.getExternalStorageDirectory() + "/" + pictureUri);
+        File file = new File(FileHelper.getApplicationDirectory(context) + "/" + pictureUri);
         if (!file.exists()) {
             BufferedOutputStream bos = null;
             try {

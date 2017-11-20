@@ -96,7 +96,7 @@ public class ManageCombosActivity extends BaseActivity {
         comboInfoTxt.setTransformationMethod(SingleLineTransformationMethod.getInstance());
         comboDayCbx.setAdapter(arrayAdapter);
 
-        final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+        final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper(this);
 
         if (loadedCombo != null) {
             pictureUri = loadedCombo.getPictureUri();
@@ -104,7 +104,7 @@ public class ManageCombosActivity extends BaseActivity {
 
         if (pictureUri != null) {
 
-            localPictureUri = FileHelper.getStoragePath(pictureUri);
+            localPictureUri = FileHelper.getStoragePath(this, pictureUri);
             file = new File(localPictureUri);
 
             if (!file.exists()) {
@@ -136,7 +136,8 @@ public class ManageCombosActivity extends BaseActivity {
                 photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
                     @Override
                     public void onPictureChanged() {
-                        localPictureUri = FileHelper.getStoragePath(FirebaseStorageConstants.PICTURE_FOLDER
+                        localPictureUri = FileHelper.getStoragePath(ManageCombosActivity.this,
+                                FirebaseStorageConstants.PICTURE_FOLDER
                                 + "/" + photoViewer.getSelectedFileName());
                         pictureUri = FileHelper.getFirebasePictureStoragePath(photoViewer.getSelectedFileName());
                         data = photoViewer.getData();

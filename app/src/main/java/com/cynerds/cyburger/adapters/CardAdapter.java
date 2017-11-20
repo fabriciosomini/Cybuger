@@ -94,7 +94,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
 
             if (pictureUri != null) {
-                final String localPictureUri = FileHelper.getStoragePath(pictureUri);
+                final String localPictureUri = FileHelper.getStoragePath(context, pictureUri);
                 final File file = new File(localPictureUri);
 
                 if (!file.exists()) {
@@ -126,7 +126,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
     }
 
     private void downloadImage(final String pictureUri, final File file, final PhotoViewer cardPicture) {
-        FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+        FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper(context);
         firebaseStorageHelper.get(pictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {

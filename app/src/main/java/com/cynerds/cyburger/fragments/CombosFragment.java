@@ -238,7 +238,7 @@ public class CombosFragment extends Fragment {
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
                     PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
                     photoViewer.setEditable(false);
-                    photoViewer.setPicture(FileHelper.getStoragePath(combo.getPictureUri()));
+                    photoViewer.setPicture(FileHelper.getStoragePath(currentActivty,combo.getPictureUri()));
 
                     if (CyburgerApplication.isAdmin()) {
 
