@@ -98,14 +98,14 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
                 final File file = new File(localPictureUri);
 
                 if (!file.exists()) {
-                    downloadImage(localPictureUri, file, cardPicture);
+                    downloadImage(pictureUri, file, cardPicture);
                 } else {
 
                     if (file.length() > 0) {
 
                         cardPicture.setPicture(localPictureUri);
                     } else {
-                        downloadImage(cardModel.getPictureUri(), file, cardPicture);
+                        downloadImage(pictureUri, file, cardPicture);
                     }
 
                 }
@@ -133,7 +133,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
                 if (task.isSuccessful()) {
                     LogHelper.log("CardAdapter Loaded picture " + pictureUri);
-                    cardPicture.setPicture(pictureUri);
+                    cardPicture.setPicture(file.getPath());
 
                 } else {
                     LogHelper.log("CardAdapter Failed to load picture " + pictureUri);
