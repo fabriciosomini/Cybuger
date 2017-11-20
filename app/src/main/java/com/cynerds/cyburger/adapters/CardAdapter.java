@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
@@ -49,7 +50,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.dashboard_card_view, parent, false);
         }
         // Lookup view for data population
-        final ImageView cardPicture = convertView.findViewById(R.id.cardIcon);
+        final PhotoViewer cardPicture = convertView.findViewById(R.id.cardIcon);
         TextView cardTitle = convertView.findViewById(R.id.cardTitle);
         TextView cardContent = convertView.findViewById(R.id.cardContent);
         TextView cardSubContent = convertView.findViewById(R.id.cardSubContent);
@@ -100,7 +101,8 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             } else {
 
                 if (file.length() > 0) {
-                    setPicture(cardPicture, localPictureUri);
+
+                    cardPicture.setPicture(localPictureUri);
                 } else {
                     downloadImage(cardModel.getPictureUri(), file, cardPicture);
                 }
@@ -108,8 +110,6 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             }
         }
 
-
-        cardPicture.setImageResource(cardModel.getHeaderIconId());
         cardTitle.setText(cardModel.getTitle());
         cardContent.setText(cardModel.getContent());
         cardSubContent.setText(cardModel.getSubContent());
@@ -118,7 +118,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         return convertView;
     }
 
-    private void downloadImage(final String pictureUri, final File file, final ImageView cardPicture) {
+    private void downloadImage(final String pictureUri, final File file, final PhotoViewer cardPicture) {
         FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
         firebaseStorageHelper.get(pictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
             @Override
@@ -126,7 +126,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
                 if (task.isSuccessful()) {
                     LogHelper.log("CardAdapter Loaded picture " + pictureUri);
-                    setPicture(cardPicture, pictureUri);
+                    cardPicture.setPicture(pictureUri);
 
                 } else {
                     LogHelper.log("CardAdapter Failed to load picture " + pictureUri);
@@ -135,36 +135,6 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         });
     }
 
-    public boolean setPicture(ImageView selectedPhotoImgView, String uri) {
-
-        if (uri != null) {
-            File file = new File(uri);
-            if (file != null) {
-                if (file.exists()) {
-
-                    ViewGroup.LayoutParams layoutParams = selectedPhotoImgView.getLayoutParams();
-                    int width = layoutParams.width;
-                    int height = layoutParams.height;
-
-                    RequestCreator requestCreator = Picasso.with(context).load(file);
-                    if (width > 0 && height > 0) {
-                        requestCreator.resize(width, height).centerCrop().into(selectedPhotoImgView);
-                    } else {
-                        requestCreator.into(selectedPhotoImgView);
-                    }
-
-
-                    return true;
-
-                }
-
-
-            }
-        }
-
-
-        return false;
-    }
 
 
 }

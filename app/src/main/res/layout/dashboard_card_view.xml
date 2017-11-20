@@ -124,7 +124,7 @@
             app:srcCompat="@drawable/ic_home_black_24dp"
             tools:layout_constraintBottom_creator="1" />
 
-        <ImageView
+        <com.cynerds.cyburger.components.PhotoViewer
             android:id="@+id/cardIcon"
             android:layout_width="120dp"
             android:layout_height="120dp"
