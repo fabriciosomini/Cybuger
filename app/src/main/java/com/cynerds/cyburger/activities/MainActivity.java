@@ -28,6 +28,7 @@ import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.activities.admin.ManageParametersActivity;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
+import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
 import com.cynerds.cyburger.helpers.FileDialogHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.fragments.CombosFragment;
@@ -481,20 +482,58 @@ public class MainActivity extends BaseActivity {
                             customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
 
                             order.setCustomer(customer);
-                            firebaseDatabaseHelperOrders.insert(order);
+                            firebaseDatabaseHelperOrders.insert(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Profile profile = CyburgerApplication.getProfile();
+                                        if (profile != null) {
 
-                            LogHelper.log(getString(R.string.order_comfirmed));
+                                            int bonusPoint = profile.getBonusPoints();
 
-                            //Reset - pedido confirmado
-                            badge.setBadgeCount(0);
-                            order = new Order();
-                            previousOrder = new Order();
-                            orderDialog.closeDialog();
+                                            int pointsToRemove = 0;
+
+                                            for (Combo combo : order.getOrderedCombos()) {
+                                                pointsToRemove += combo.getComboSpentPoints();
+                                            }
+                                            for (Item item : order.getOrderedItems()) {
+                                                pointsToRemove += item.getItemSpentPoints();
+                                            }
+
+                                            int totalBonusBalance = bonusPoint - pointsToRemove;
+
+                                            profile.setBonusPoints(totalBonusBalance);
+                                            FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
+                                                    = new FirebaseDatabaseHelper(Profile.class);
+
+                                            profileFirebaseDatabaseHelper.update(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                    if (task.isSuccessful()) {
+                                                        LogHelper.log(getString(R.string.order_comfirmed));
+
+                                                        //Reset - pedido confirmado
+                                                        badge.setBadgeCount(0);
+                                                        order = new Order();
+                                                        previousOrder = new Order();
+                                                        orderDialog.closeDialog();
 
 
-                            MessageHelper.show(MainActivity.this,
-                                    MessageType.SUCCESS,
-                                    getString(R.string.wait_order));
+                                                        MessageHelper.show(MainActivity.this,
+                                                                MessageType.SUCCESS,
+                                                                getString(R.string.wait_order));
+                                                    }
+                                                }
+                                            });
+
+
+                                        }
+
+
+                                    }
+                                }
+                            });
 
 
                         }
@@ -527,6 +566,31 @@ public class MainActivity extends BaseActivity {
                                                         + getString(R.string.you_order_canceled), topic);
                                     }
 
+                                    //Restaurar os pontos gastos
+                                    int pointsToRestore = 0;
+
+                                    for (Combo combo : order.getOrderedCombos()) {
+                                        pointsToRestore += combo.getComboSpentPoints();
+                                    }
+                                    for (Item item : order.getOrderedItems()) {
+                                        pointsToRestore += item.getItemSpentPoints();
+                                    }
+
+
+                                    if (pointsToRestore > 0) {
+                                        Profile profile = CyburgerApplication.getProfile();
+                                        int bonusPoint = profile.getBonusPoints() + pointsToRestore;
+
+                                        if (profile != null) {
+                                            profile.setBonusPoints(bonusPoint);
+                                            FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
+                                                    = new FirebaseDatabaseHelper(Profile.class);
+
+                                            profileFirebaseDatabaseHelper.update(profile);
+                                        }
+                                    }
+                                    //----------------------------
+
                                 } else {
                                     previousOrder = new Order();
                                     badge.setBadgeCount(0);
@@ -542,6 +606,7 @@ public class MainActivity extends BaseActivity {
 
 
                                 orderDialog.closeDialog();
+
 
                                 MessageHelper.show(MainActivity.this,
                                         MessageType.SUCCESS, getString(R.string.canceled_order));

@@ -325,27 +325,11 @@ public class CombosFragment extends Fragment {
                                             int bonusPoint = profile.getBonusPoints();
                                             final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(combo.getComboAmount());
                                             int totalBonusBalance = bonusPoint - pointsToRemove;
-
-                                            profile.setBonusPoints(totalBonusBalance);
-                                            FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
-                                                    = new FirebaseDatabaseHelper(Profile.class);
-
-                                            profileFirebaseDatabaseHelper.update(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-
-                                                    if (task.isSuccessful()) {
-
-                                                        Combo paidCombo = (Combo) combo.copyValues(Combo.class);
-                                                        paidCombo.setComboAmount(0);
-                                                        paidCombo.setComboBonusPoints(0);
-                                                        paidCombo.setComboSpentPoints(pointsToRemove);
-                                                        addToOrder.onExecute(paidCombo);
-                                                    }
-                                                }
-                                            });
-
-
+                                            Combo paidCombo = (Combo) combo.copyValues(Combo.class);
+                                            paidCombo.setComboAmount(0);
+                                            paidCombo.setComboBonusPoints(0);
+                                            paidCombo.setComboSpentPoints(pointsToRemove);
+                                            addToOrder.onExecute(paidCombo);
                                         }
 
 

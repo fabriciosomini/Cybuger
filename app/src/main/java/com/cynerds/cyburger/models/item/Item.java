@@ -14,6 +14,7 @@ public class Item extends BaseModel {
     private String size;
     private int bonusPoints;
     private String pictureUri;
+    private int itemSpentPoints;
 
     public String getPictureUri() {
         return pictureUri;
@@ -63,4 +64,11 @@ public class Item extends BaseModel {
         this.bonusPoints = bonusPoints;
     }
 
+    public void setItemSpentPoints(int itemSpentPoints) {
+        this.itemSpentPoints = itemSpentPoints;
+    }
+
+    public int getItemSpentPoints() {
+        return itemSpentPoints;
+    }
 }
