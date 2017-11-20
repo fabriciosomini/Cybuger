@@ -44,6 +44,7 @@ public class PhotoViewer extends ConstraintLayout {
     private byte[] data;
     private String picture;
     private String selectedFilePath;
+    private File currentFile;
 
     public PhotoViewer(Context context) {
         super(context);
@@ -62,13 +63,31 @@ public class PhotoViewer extends ConstraintLayout {
     }
 
     public byte[] getData() {
+
+
+        try {
+            FileInputStream streamIn = new FileInputStream(currentFile);
+            Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
+            streamIn.close();
+            selectedPhotoImgView.setDrawingCacheEnabled(true);
+            selectedPhotoImgView.buildDrawingCache();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            data = baos.toByteArray();
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
         return data;
     }
 
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-          inflater.inflate(R.layout.component_photo_viewer, this);
+        inflater.inflate(R.layout.component_photo_viewer, this);
     }
 
     @Override
@@ -78,6 +97,7 @@ public class PhotoViewer extends ConstraintLayout {
 
         selectedPhotoImgView = findViewById(R.id.selectedPhotoImgView);
         selectedPhotoImgViewTxt = findViewById(R.id.selectedPhotoImgViewTxt);
+        setEditable(isEditable);
 
         selectedPhotoImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,10 +159,9 @@ public class PhotoViewer extends ConstraintLayout {
 
         this.isEditable = isEditable;
 
-        if(!isEditable){
+        if (!isEditable) {
             selectedPhotoImgViewTxt.setVisibility(GONE);
-        }
-        else{
+        } else {
             selectedPhotoImgViewTxt.setVisibility(VISIBLE);
         }
 
@@ -160,56 +179,40 @@ public class PhotoViewer extends ConstraintLayout {
             if (file != null) {
                 if (file.exists()) {
 
-                   if(file.length()>0){
-                       try {
+                    if (file.length() > 0) {
+                        this.currentFile = file;
+                        selectedFileName = file.getName();
+                        selectedFilePath = file.getPath();
+
+                        ViewGroup.LayoutParams layoutParams = selectedPhotoImgView.getLayoutParams();
+                        int width = layoutParams.width;
+                        int height = layoutParams.height;
+
+                        RequestCreator requestCreator = Picasso.with(context).load(file);
+                        if (width > 0 && height > 0) {
+                            requestCreator.resize(width, height).centerCrop().into(selectedPhotoImgView);
+                        } else {
+                            requestCreator.into(selectedPhotoImgView);
+                        }
 
 
-                           ViewGroup.LayoutParams layoutParams = selectedPhotoImgView.getLayoutParams();
-                           int width = layoutParams.width;
-                           int height = layoutParams.height;
+                        selectedPhotoImgViewTxt.setVisibility(GONE);
 
-                           RequestCreator requestCreator = Picasso.with(context).load(file);
-                           if (width > 0 && height > 0) {
-                               requestCreator.resize(width, height).centerCrop().into(selectedPhotoImgView);
-                           } else {
-                               requestCreator.into(selectedPhotoImgView);
-                           }
+                        if (onPictureChangedListener != null) {
+                            onPictureChangedListener.onPictureChanged();
+                        }
+                        return true;
 
-
-                           selectedPhotoImgViewTxt.setVisibility(GONE);
-
-
-                           FileInputStream streamIn = new FileInputStream(file);
-                           Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
-                           streamIn.close();
-                           selectedPhotoImgView.setDrawingCacheEnabled(true);
-                           selectedPhotoImgView.buildDrawingCache();
-                           ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                           bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                           data = baos.toByteArray();
-                           baos.close();
-                           selectedFileName = file.getName();
-                           selectedFilePath = file.getPath();
-
-                           if (onPictureChangedListener != null) {
-                               onPictureChangedListener.onPictureChanged();
-                           }
-                           return true;
-                       } catch (FileNotFoundException e) {
-                           e.printStackTrace();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       }
-                   }
+                    }
                 }
 
 
             }
         }
 
-       if(isEditable){
-           selectedPhotoImgViewTxt.setVisibility(VISIBLE);
-       }
+        if (isEditable) {
+            selectedPhotoImgViewTxt.setVisibility(VISIBLE);
+        }
 
         return false;
     }
