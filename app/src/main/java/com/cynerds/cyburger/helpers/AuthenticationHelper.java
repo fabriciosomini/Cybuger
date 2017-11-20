@@ -9,6 +9,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnSignInListener;
 import com.cynerds.cyburger.interfaces.OnSyncResultListener;
+import com.cynerds.cyburger.models.account.UserAccount;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.role.Role;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +18,7 @@ import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
@@ -77,66 +79,86 @@ public class AuthenticationHelper {
 
         LogHelper.log("Tentando fazer signIn...");
 
-        mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+        OnCompleteListener<AuthResult> onSignInCompleteListener = new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
 
 
-                        boolean isSuccessful = task.isSuccessful();
-                        if (isSuccessful) {
+                boolean isSuccessful = task.isSuccessful();
+                if (isSuccessful) {
 
-                            LogHelper.log("Sign in task result: isSuccessful");
+                    LogHelper.log("Sign in task result: isSuccessful");
 
-                            CyburgerApplication.setOnSyncResultListener(new OnSyncResultListener() {
-                                @Override
-                                public void onSyncResult(boolean isSynced) {
-                                   if(isSynced){
-                                       onSuccessfulSignIn();
-                                   }
-                                }
-                            });
-
-                        } else {
-
-
-                            final Exception exception = task.getException();
-
-                            if (exception != null) {
-
-                                CyburgerApplication.setOnSyncResultListener(new OnSyncResultListener() {
-                                    @Override
-                                    public void onSyncResult(boolean isSynced) {
-                                        if (exception.getClass().equals(FirebaseNetworkException.class)&& isSynced) {
-                                            LogHelper.log("Sem conexão com a internet, " +
-                                                    "mas os dados já estão sincronizados, " +
-                                                    "então pode entrar!");
-                                            onSuccessfulSignIn();
-                                            return;
-                                        }
-
-                                        LogHelper.log("Sign in task result: log - " + exception.getMessage());
-
-                                        if (onSignInListener != null) {
-
-                                            LogHelper.log("Callback Sign-in onError");
-                                            onSignInListener.onError(exception);
-                                        }
-                                    }
-                                });
-
-
-
+                    CyburgerApplication.setOnSyncResultListener(new OnSyncResultListener() {
+                        @Override
+                        public void onSyncResult(boolean isSynced) {
+                            if (isSynced) {
+                                onSuccessfulSignIn();
                             }
-
-
                         }
+                    });
+
+                } else {
+
+
+                    final Exception exception = task.getException();
+
+                    if (exception != null) {
+
+                        CyburgerApplication.setOnSyncResultListener(new OnSyncResultListener() {
+                            @Override
+                            public void onSyncResult(boolean isSynced) {
+                                if (exception.getClass().equals(FirebaseNetworkException.class) && isSynced) {
+                                    LogHelper.log("Sem conexão com a internet, " +
+                                            "mas os dados já estão sincronizados, " +
+                                            "então pode entrar!");
+                                    onSuccessfulSignIn();
+                                    return;
+                                }
+
+                                LogHelper.log("Sign in task result: log - " + exception.getMessage());
+
+                                if (onSignInListener != null) {
+
+                                    LogHelper.log("Callback Sign-in onError");
+                                    onSignInListener.onError(exception);
+                                }
+                            }
+                        });
+
 
                     }
-                });
+
+
+                }
+
+            }
+        };
+        if (NetworkHelper.isNetworkAvailable(activity)) {
+            mAuth.signInWithEmailAndPassword(email.trim(), password.trim())
+                    .addOnCompleteListener(activity, onSignInCompleteListener);
+        } else {
+            UserAccount userAccount = CyburgerApplication.getUserAccount();
+            if (userAccount.getEmail().equals(email.trim())
+                    && userAccount.getPassword().equals(password.trim())) {
+
+                onSuccessfulSignIn();
+            }
+            else
+            {
+                if(onSignInListener!=null)
+                {
+                    FirebaseAuthInvalidCredentialsException firebaseAuthInvalidCredentialsException =
+                            new FirebaseAuthInvalidCredentialsException("Offline mode", "INVALID_CREDENTIALS");
+                    onSignInListener.onError(firebaseAuthInvalidCredentialsException);
+                }
+
+            }
+        }
+
     }
 
-    private void onSuccessfulSignIn( ) {
+    private void onSuccessfulSignIn() {
         if (user == null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
         }
@@ -167,7 +189,7 @@ public class AuthenticationHelper {
                         onSignInListener.onError(exception);
                     }
 
-                }else{
+                } else {
                     firebaseDatabaseHelper.removeListenters();
                 }
 
@@ -179,14 +201,10 @@ public class AuthenticationHelper {
             }
         };
 
-        if(!firebaseDatabaseHelper.isFullLoaded())
-        {
+        if (!firebaseDatabaseHelper.isFullLoaded()) {
             firebaseDatabaseHelper.setOnDataChangeListener(onDataChangeListener);
-        }
-        else
-        {
-            if (!findUserProfileAndSetToApplication(getProfiles()))
-            {
+        } else {
+            if (!findUserProfileAndSetToApplication(getProfiles())) {
                 if (onSignInListener != null) {
 
 
@@ -214,7 +232,7 @@ public class AuthenticationHelper {
 
                     CyburgerApplication.setProfile(profile);
 
-                    if (onSignInListener != null && profile!=null) {
+                    if (onSignInListener != null && profile != null) {
 
                         LogHelper.log("Callback Sign-in onSuccess");
                         onSignInListener.onSuccess();
@@ -271,7 +289,7 @@ public class AuthenticationHelper {
             this.user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
-       return user.updatePassword(password)
+        return user.updatePassword(password)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

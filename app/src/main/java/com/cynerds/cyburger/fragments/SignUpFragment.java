@@ -175,12 +175,15 @@ public class SignUpFragment extends Fragment {
                     authenticationHelper.setOnSignInListener(new OnSignInListener() {
                         @Override
                         public void onSuccess() {
+
+                            storeCredentials(email, password);
+
                             DialogAction dialogAction = new DialogAction();
                             dialogAction.setPositiveAction(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     isRememberMeChecked = true;
-                                    storeCredentials(email, password);
+
                                     signInSuccess();
                                 }
                             });

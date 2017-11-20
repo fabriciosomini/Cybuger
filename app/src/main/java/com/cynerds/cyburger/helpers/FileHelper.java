@@ -1,5 +1,8 @@
 package com.cynerds.cyburger.helpers;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import java.io.File;
@@ -28,7 +31,7 @@ public class FileHelper {
     public static String getStoragePath(String path) {
 
 
-        return Environment.getExternalStorageDirectory() + "/" + path;
+        return Environment.getDataDirectory() + "/" + path;
     }
 
     public static String getFirebasePictureStoragePath(String fileName) {
@@ -55,6 +58,21 @@ public class FileHelper {
         } finally {
             in.close();
         }
+    }
+
+    public static String getApplicationDirectory(Context context){
+        PackageManager m = context.getPackageManager();
+        String s = context.getPackageName();
+        PackageInfo p = null;
+        try {
+            p = m.getPackageInfo(s, 0);
+            s = p.applicationInfo.dataDir;
+            return s;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+
     }
 }
 

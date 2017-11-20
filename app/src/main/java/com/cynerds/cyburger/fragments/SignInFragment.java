@@ -100,40 +100,6 @@ public class SignInFragment extends Fragment {
         return inflatedView;
     }
 
-    private void doLoginFacebook() {
-        // Initialize Facebook Login button
-       /* mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) getActivity().findViewById(R.id.signInFacebookBtn);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                LogHelper.log(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                LogHelper.log(TAG, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException log) {
-                LogHelper.log(TAG, "facebook:onError", log);
-                // ...
-            }
-        });*/
-    }
-
-
-    // @Override
-   /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Pass the activity result back to the Facebook SDK
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }*/
 
 
     @Override
@@ -204,7 +170,7 @@ public class SignInFragment extends Fragment {
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
         secretCode();
 
-        if(!NetworkHelper.isNetworkAvailable(currentActivity))
+        /*if(!NetworkHelper.isNetworkAvailable(currentActivity))
         {
             signInUserTxt.setKeyListener(null);
             signInPasswordTxt.setKeyListener(null);
@@ -215,7 +181,7 @@ public class SignInFragment extends Fragment {
             signInUserTxt.setError(null);
             signInUserTxt.setFocusable(true);
             signInPasswordTxt.setFocusable(true);
-        }
+        }*/
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -240,12 +206,6 @@ public class SignInFragment extends Fragment {
         signInBtn.setFocusableInTouchMode(true);
 
 
-        /*if (BuildConfig.DEBUG) {
-            signInUserTxt.setText("admin@cynerds.com");
-            signInPasswordTxt.setText("123456");
-        }*/
-
-
         signInBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -261,7 +221,7 @@ public class SignInFragment extends Fragment {
         signInFacebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doLoginFacebook();
+
             }
         });
 
@@ -293,7 +253,6 @@ public class SignInFragment extends Fragment {
         }
 
         signInRememberCbx.setChecked(isRememberMeChecked);
-
 
 
     }
@@ -386,6 +345,7 @@ public class SignInFragment extends Fragment {
             final String email = String.valueOf(signInUserTxt.getText().toString());
             final String password = String.valueOf(signInPasswordTxt.getText().toString());
 
+
             authenticationHelper.setOnSignInListener(new OnSignInListener() {
                 @Override
                 public void onSuccess() {
@@ -431,18 +391,16 @@ public class SignInFragment extends Fragment {
                 }
 
             });
+
             authenticationHelper.signIn(email, password);
+
 
         }
     }
 
     private void signInSuccess(String email, String password) {
         signInPasswordTxt.setError(null);
-        if (isRememberMeChecked) {
-            storeCredentials(email, password);
-        } else {
-            removeCredentials();
-        }
+        storeCredentials(email, password);
 
         preferences.setPreferenceValue("rememberMe", String.valueOf(isRememberMeChecked));
 
