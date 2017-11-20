@@ -128,7 +128,7 @@ public class ManageItemsActivity extends BaseActivity {
                         localPictureUri = FileHelper.getStoragePath(
                                 ManageItemsActivity.this,
                                 FirebaseStorageConstants.PICTURE_FOLDER
-                                + "/" + photoViewer.getSelectedFileName());
+                                        + "/" + photoViewer.getSelectedFileName());
                         pictureUri = FileHelper.getFirebasePictureStoragePath(photoViewer.getSelectedFileName());
                         data = photoViewer.getData();
 
@@ -145,33 +145,31 @@ public class ManageItemsActivity extends BaseActivity {
 
                         }
 
-                        if (checkSelectedFile.exists()) {
-                            Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
-                            Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
+                        Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
+                        Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
 
-                            savePictureBtn.setVisibility(View.VISIBLE);
-                            removePictureBtn.setVisibility(View.VISIBLE);
+                        savePictureBtn.setVisibility(View.VISIBLE);
+                        removePictureBtn.setVisibility(View.VISIBLE);
 
-                            savePictureBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    previewItemDialogManager.closeDialog();
-                                    MessageHelper.show(ManageItemsActivity.this,
-                                            MessageType.INFO,
-                                            "Não se esqueça de salvar");
+                        savePictureBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                previewItemDialogManager.closeDialog();
+                                MessageHelper.show(ManageItemsActivity.this,
+                                        MessageType.INFO,
+                                        "Não se esqueça de salvar");
 
-                                }
-                            });
+                            }
+                        });
 
-                            removePictureBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    data = null;
-                                    pictureUri = null;
-                                    previewItemDialogManager.closeDialog();
-                                }
-                            });
-                        }
+                        removePictureBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                data = null;
+                                pictureUri = null;
+                                previewItemDialogManager.closeDialog();
+                            }
+                        });
 
 
                     }
@@ -201,6 +199,16 @@ public class ManageItemsActivity extends BaseActivity {
                         FieldValidationHelper.isEditTextValidated(itemBonusPointTxt) &&
                         FieldValidationHelper.isEditTextValidated(itemPriceTxt)) {
 
+
+                    pictureUri = pictureUri == null ? "" : pictureUri;
+
+                    if(pictureUri.isEmpty()){
+                        MessageHelper.show(ManageItemsActivity.this, MessageType.ERROR,
+                                "Selecione uma imagem para o item");
+                        return;
+                    }
+
+
                     showBusyLoader(true);
                     saveItemBtn.setEnabled(false);
 
@@ -210,7 +218,6 @@ public class ManageItemsActivity extends BaseActivity {
                     String size = spinner.getSelectedItem().toString();
                     int bonusPoint = Integer.valueOf(itemBonusPointTxt.getText().toString().trim());
 
-                    pictureUri = pictureUri == null ? "" : pictureUri;
 
                     Item item = loadedItem == null ? new Item() : loadedItem;
                     item.setDescription(itemDescription);

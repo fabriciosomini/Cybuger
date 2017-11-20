@@ -138,7 +138,7 @@ public class ManageCombosActivity extends BaseActivity {
                     public void onPictureChanged() {
                         localPictureUri = FileHelper.getStoragePath(ManageCombosActivity.this,
                                 FirebaseStorageConstants.PICTURE_FOLDER
-                                + "/" + photoViewer.getSelectedFileName());
+                                        + "/" + photoViewer.getSelectedFileName());
                         pictureUri = FileHelper.getFirebasePictureStoragePath(photoViewer.getSelectedFileName());
                         data = photoViewer.getData();
 
@@ -155,33 +155,32 @@ public class ManageCombosActivity extends BaseActivity {
 
                         }
 
-                        if (checkSelectedFile.exists()) {
-                            Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
-                            Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
 
-                            savePictureBtn.setVisibility(View.VISIBLE);
-                            removePictureBtn.setVisibility(View.VISIBLE);
+                        Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
+                        Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
 
-                            savePictureBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    previewItemDialogManager.closeDialog();
-                                    MessageHelper.show(ManageCombosActivity.this,
-                                            MessageType.INFO,
-                                            "Não se esqueça de salvar");
+                        savePictureBtn.setVisibility(View.VISIBLE);
+                        removePictureBtn.setVisibility(View.VISIBLE);
 
-                                }
-                            });
+                        savePictureBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                previewItemDialogManager.closeDialog();
+                                MessageHelper.show(ManageCombosActivity.this,
+                                        MessageType.INFO,
+                                        "Não se esqueça de salvar");
 
-                            removePictureBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    data = null;
-                                    pictureUri = null;
-                                    previewItemDialogManager.closeDialog();
-                                }
-                            });
-                        }
+                            }
+                        });
+
+                        removePictureBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                data = null;
+                                pictureUri = null;
+                                previewItemDialogManager.closeDialog();
+                            }
+                        });
 
 
                     }
@@ -259,6 +258,15 @@ public class ManageCombosActivity extends BaseActivity {
                         return;
                     }
 
+                    if(pictureUri.isEmpty()){
+
+                       MessageHelper.show(ManageCombosActivity.this, MessageType.ERROR,
+                               "Selecione uma imagem para o combo");
+                        return;
+                    }
+
+
+
                     saveComboBtn.setEnabled(false);
                     showBusyLoader(true);
 
@@ -269,8 +277,6 @@ public class ManageCombosActivity extends BaseActivity {
                     ComboDay comboDay = ComboDay.valueOf(comboDayCbx.getSelectedItem().toString().trim());
                     int comboItems = itemsTagInput.getSelectedTagModels().size();
 
-
-                    pictureUri = pictureUri == null ? "" : pictureUri;
 
                     Combo combo = loadedCombo == null ? new Combo() : loadedCombo;
                     combo.setComboName(comboName);
