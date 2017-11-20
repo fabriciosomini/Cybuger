@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -103,14 +104,6 @@ public class SignInFragment extends Fragment {
 
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-    }
-
-
     private UserAccount loadCredentials() {
 
         List<UserAccount> userAccountList = userAccountDAO.SelectAll();
@@ -199,7 +192,40 @@ public class SignInFragment extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
 
-                    performSignIn();
+                    if (!permissions.isPermissionForExternalStorageGranted()) {
+
+                        final DialogManager askPermissionDialog = new DialogManager(currentActivity, DialogManager.DialogType.YES_NO);
+                        DialogAction dialogAction = new DialogAction();
+                        dialogAction.setPositiveAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                permissions.requestPermissionForExternalStorage();
+
+                                currentActivity.setOnRequestPermissionsResultCallback(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                                    @Override
+                                    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+                                        performSignIn();
+                                    }
+                                });
+                            }
+                        });
+                        dialogAction.setNegativeAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                askPermissionDialog.closeDialog();
+                                performSignIn();
+                            }
+                        });
+
+                        askPermissionDialog.setAction(dialogAction);
+                        askPermissionDialog.showDialog("Permissão requerida", "Olá, para o " +
+                                "funcionamento do aplicativo precisamos de sua permissão para gravar algumas informações. " +
+                                "\n\nVocê gostaria de fornecer esta permissão?");
+                    }
+                    else{
+                        performSignIn();
+                    }
+
                     signInBtn.clearFocus();
 
                 }
@@ -220,37 +246,10 @@ public class SignInFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SignInFragment.isRememberMeChecked = isChecked;
-                if (isChecked) {
-                    if (!permissions.isPermissionForExternalStorageGranted()) {
-
-                        permissions.requestPermissionForExternalStorage();
-                    }
-
-                }
             }
         });
 
-        if (!permissions.isPermissionForExternalStorageGranted()) {
 
-            final DialogManager askPermission = new DialogManager(currentActivity, DialogManager.DialogType.YES_NO);
-            DialogAction dialogAction = new DialogAction();
-            dialogAction.setPositiveAction(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    permissions.requestPermissionForExternalStorage();
-                }
-            });
-            dialogAction.setNegativeAction(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    askPermission.closeDialog();
-                }
-            });
-
-            askPermission.setAction(dialogAction);
-            askPermission.showDialog("Permissão requerida", "Olá, você poderia " +
-                    "nos dar permissão de gravar informações do aplicativo?");
-        }
 
         if (isRememberMeChecked) {
             UserAccount userAccount = loadCredentials();
