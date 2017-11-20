@@ -323,7 +323,7 @@ public class CombosFragment extends Fragment {
                                         if (profile != null) {
 
                                             int bonusPoint = profile.getBonusPoints();
-                                            int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(combo.getComboAmount());
+                                            final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(combo.getComboAmount());
                                             int totalBonusBalance = bonusPoint - pointsToRemove;
 
                                             profile.setBonusPoints(totalBonusBalance);
@@ -338,6 +338,8 @@ public class CombosFragment extends Fragment {
 
                                                         Combo paidCombo = (Combo) combo.copyValues(Combo.class);
                                                         paidCombo.setComboAmount(0);
+                                                        paidCombo.setComboBonusPoints(0);
+                                                        paidCombo.setComboSpentPoints(pointsToRemove);
                                                         addToOrder.onExecute(paidCombo);
                                                     }
                                                 }

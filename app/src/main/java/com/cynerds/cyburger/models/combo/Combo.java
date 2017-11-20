@@ -17,6 +17,7 @@ public class Combo extends BaseModel {
     private ComboDay comboDay;
     private int comboBonusPoints;
     private String pictureUri;
+    private int comboSpentPoints;
 
     public String getPictureUri() {
         return pictureUri;
@@ -74,4 +75,11 @@ public class Combo extends BaseModel {
         this.comboBonusPoints = comboBonusPoints;
     }
 
+    public int getComboSpentPoints() {
+        return comboSpentPoints;
+    }
+
+    public void setComboSpentPoints(int comboSpentPoints) {
+        this.comboSpentPoints = comboSpentPoints;
+    }
 }
