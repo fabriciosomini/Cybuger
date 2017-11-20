@@ -22,6 +22,7 @@ public class CardModel {
     private View.OnClickListener onCardViewClickListener;
     private Object extra;
     private int titleColor;
+    private boolean noPicture;
 
     public void setPictureUri(String pictureUri) {
         this.pictureUri = pictureUri;
@@ -119,5 +120,13 @@ public class CardModel {
 
     public void setTitleColor(int titleColor) {
         this.titleColor = titleColor;
+    }
+
+    public void setNoPicture(boolean noPicture) {
+        this.noPicture = noPicture;
+    }
+
+    public boolean getNoPicture() {
+        return noPicture;
     }
 }

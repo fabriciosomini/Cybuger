@@ -20,7 +20,9 @@ import com.cynerds.cyburger.activities.admin.ManageItemsActivity;
 import com.cynerds.cyburger.adapters.CardAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
+import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
+import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
@@ -208,6 +210,7 @@ public class ItemsMenuFragment extends Fragment {
                     + item.getSize()
                     + "\n\nVocê ganha " + item.getBonusPoints() + " pontos");
             cardModel.setSubContent("R$" + item.getPrice());
+            cardModel.setPictureUri(item.getPictureUri());
 
             float amount = item.getPrice();
             if(BonusPointExchangeHelper.convertUserPointsToCash()>=amount)
@@ -229,6 +232,9 @@ public class ItemsMenuFragment extends Fragment {
 
                     Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+                    PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
+                    photoViewer.setEditable(false);
+                    photoViewer.setPicture(FileHelper.getStoragePath(item.getPictureUri()));
 
                     if (CyburgerApplication.isAdmin()) {
 

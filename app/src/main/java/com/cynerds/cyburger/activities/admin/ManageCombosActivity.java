@@ -87,7 +87,7 @@ public class ManageCombosActivity extends BaseActivity {
         final EditText comboBonusPointsTxt = findViewById(R.id.comboBonusPointTxt);
         final EditText comboPriceTxt = findViewById(R.id.comboPriceTxt);
         final Button saveComboBtn = findViewById(R.id.saveComboBtn);
-        final ImageButton addComboPictureBtn = findViewById(R.id.addComboPictureBtn);
+        final Button addComboPictureBtn = findViewById(R.id.addComboPictureBtn);
         final TextView deleteComboLink = findViewById(R.id.deleteComboLink);
         final Combo loadedCombo = (Combo) getExtra(Combo.class);
 

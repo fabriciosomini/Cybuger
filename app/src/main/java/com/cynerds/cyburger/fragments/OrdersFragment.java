@@ -218,6 +218,8 @@ public class OrdersFragment extends Fragment {
            if(profile!=null){
                final CardModel cardModel = new CardModel();
                cardModel.setExtra(order);
+               cardModel.setNoPicture(true);
+
                if (customer.getLinkedProfileId().equals(profile.getUserId())) {
                    cardModel.setTitle("Meu pedido");
                    cardModel.setTitleColor(R.color.colorAccent);

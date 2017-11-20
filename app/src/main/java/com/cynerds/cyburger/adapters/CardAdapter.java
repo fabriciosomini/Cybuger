@@ -89,25 +89,32 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         }
 
 
-        final String pictureUri = cardModel.getPictureUri();
+        if (!cardModel.getNoPicture()) {
+            final String pictureUri = cardModel.getPictureUri();
 
 
-        if (pictureUri != null) {
-            final String localPictureUri = FileHelper.getStoragePath(pictureUri);
-            final File file = new File(localPictureUri);
+            if (pictureUri != null) {
+                final String localPictureUri = FileHelper.getStoragePath(pictureUri);
+                final File file = new File(localPictureUri);
 
-            if (!file.exists()) {
-                downloadImage(localPictureUri, file, cardPicture);
-            } else {
-
-                if (file.length() > 0) {
-
-                    cardPicture.setPicture(localPictureUri);
+                if (!file.exists()) {
+                    downloadImage(localPictureUri, file, cardPicture);
                 } else {
-                    downloadImage(cardModel.getPictureUri(), file, cardPicture);
-                }
 
+                    if (file.length() > 0) {
+
+                        cardPicture.setPicture(localPictureUri);
+                    } else {
+                        downloadImage(cardModel.getPictureUri(), file, cardPicture);
+                    }
+
+                }
+            } else {
+                cardPicture.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_action_close));
             }
+            
+        } else {
+            cardPicture.setVisibility(View.GONE);
         }
 
         cardTitle.setText(cardModel.getTitle());
@@ -134,7 +141,6 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             }
         });
     }
-
 
 
 }

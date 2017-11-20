@@ -12,17 +12,26 @@ import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
+import com.cynerds.cyburger.components.PhotoViewer;
+import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
+import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
+import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
+import com.cynerds.cyburger.interfaces.OnPictureChangedListener;
 import com.cynerds.cyburger.models.general.MessageType;
 import com.cynerds.cyburger.models.item.Item;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +40,10 @@ public class ManageItemsActivity extends BaseActivity {
 
     final FirebaseDatabaseHelper firebaseDatabaseHelper;
 
+    private byte[] data;
+    private String pictureUri;
+    private File file;
+    private String localPictureUri;
 
     public ManageItemsActivity() {
 
@@ -66,10 +79,108 @@ public class ManageItemsActivity extends BaseActivity {
         final EditText itemIngredientsTxt = findViewById(R.id.itemIngredientsTxt);
         final EditText itemBonusPointTxt = findViewById(R.id.itemBonusPointTxt);
         final Button saveItemBtn = findViewById(R.id.saveItemBtn);
+        final Button addItemPictureBtn = findViewById(R.id.addItemPictureBtn);
         final TextView deleteItemLink = findViewById(R.id.deleteItemLink);
         final Item loadedItem = (Item) getExtra(Item.class);
 
         itemDescriptionTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
+
+        final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+
+        if (loadedItem != null) {
+            pictureUri = loadedItem.getPictureUri();
+        }
+
+        if (pictureUri != null) {
+
+            localPictureUri = FileHelper.getStoragePath(pictureUri);
+            file = new File(localPictureUri);
+
+            if (!file.exists()) {
+                firebaseStorageHelper.get(localPictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            LogHelper.log("Loaded picture " + pictureUri);
+                        } else {
+                            LogHelper.log("Failed to load picture " + pictureUri);
+                        }
+                    }
+                });
+            }
+
+        }
+
+
+        addItemPictureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DialogManager previewItemDialogManager = new DialogManager(ManageItemsActivity.this);
+                previewItemDialogManager.setContentView(R.layout.dialog_preview_picture);
+                previewItemDialogManager.showDialog("Imagem do item", "");
+
+                final PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewPhotoViewer);
+                photoViewer.setEditable(true);
+
+                photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
+                    @Override
+                    public void onPictureChanged() {
+                        localPictureUri = FileHelper.getStoragePath(FirebaseStorageConstants.PICTURE_FOLDER
+                                + "/" + photoViewer.getSelectedFileName());
+                        pictureUri = FileHelper.getFirebasePictureStoragePath(photoViewer.getSelectedFileName());
+                        data = photoViewer.getData();
+
+                        File checkSelectedFile = new File(localPictureUri);
+                        if (!checkSelectedFile.exists()) {
+
+                            File sourceFile = new File(photoViewer.getSelectedFilePath());
+                            try {
+                                FileHelper.copy(sourceFile, checkSelectedFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+
+                            }
+
+                        }
+
+                        if (checkSelectedFile.exists()) {
+                            Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
+                            Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
+
+                            savePictureBtn.setVisibility(View.VISIBLE);
+                            removePictureBtn.setVisibility(View.VISIBLE);
+
+                            savePictureBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    previewItemDialogManager.closeDialog();
+                                    MessageHelper.show(ManageItemsActivity.this,
+                                            MessageType.INFO,
+                                            "Não se esqueça de salvar");
+
+                                }
+                            });
+
+                            removePictureBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    data = null;
+                                    pictureUri = null;
+                                    previewItemDialogManager.closeDialog();
+                                }
+                            });
+                        }
+
+
+                    }
+                });
+
+                if (pictureUri != null) {
+                    boolean pictureChanged = photoViewer.setPicture(localPictureUri);
+                }
+
+            }
+        });
 
         if (loadedItem != null) {
 
@@ -97,13 +208,15 @@ public class ManageItemsActivity extends BaseActivity {
                     String size = spinner.getSelectedItem().toString();
                     int bonusPoint = Integer.valueOf(itemBonusPointTxt.getText().toString().trim());
 
+                    pictureUri = pictureUri == null ? "" : pictureUri;
+
                     Item item = loadedItem == null ? new Item() : loadedItem;
                     item.setDescription(itemDescription);
                     item.setPrice(itemPrice);
                     item.setIngredients(itemIngredients);
                     item.setSize(size);
                     item.setBonusPoints(bonusPoint);
-
+                    item.setPictureUri(pictureUri);
 
                     if (loadedItem == null) {
 
@@ -147,6 +260,19 @@ public class ManageItemsActivity extends BaseActivity {
                         });
                     }
 
+                    if (pictureUri != null && data != null) {
+
+                        firebaseStorageHelper.insert(pictureUri, data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    LogHelper.log("Saved picture " + pictureUri);
+                                } else {
+                                    LogHelper.log("Failed to save picture " + pictureUri);
+                                }
+                            }
+                        });
+                    }
 
 
                 }
@@ -155,7 +281,7 @@ public class ManageItemsActivity extends BaseActivity {
             }
         });
 
-        if(CyburgerApplication.isAdmin()) {
+        if (CyburgerApplication.isAdmin()) {
             if (loadedItem != null) {
                 deleteItemLink.setVisibility(View.VISIBLE);
                 deleteItemLink.setOnClickListener(new View.OnClickListener() {
@@ -171,14 +297,14 @@ public class ManageItemsActivity extends BaseActivity {
                                 firebaseDatabaseHelper.delete(loadedItem).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
-                                        if(task.isSuccessful()){
+                                        if (task.isSuccessful()) {
                                             MessageHelper.show(ManageItemsActivity.this,
                                                     MessageType.SUCCESS,
                                                     getString(R.string.ok_remove_item));
                                             saveItemBtn.setEnabled(true);
 
                                             finish();
-                                        }else{
+                                        } else {
 
                                             MessageHelper.show(ManageItemsActivity.this,
                                                     MessageType.ERROR,
@@ -199,11 +325,11 @@ public class ManageItemsActivity extends BaseActivity {
                 });
 
 
-            }else{
+            } else {
 
                 deleteItemLink.setVisibility(View.GONE);
             }
-        }else{
+        } else {
 
             deleteItemLink.setVisibility(View.GONE);
         }
