@@ -344,7 +344,7 @@ public class CombosFragment extends Fragment {
                                 });
                                 askForPaymentMethodDialog.setAction(dialogAction);
                                 askForPaymentMethodDialog.showDialog("Você gostaria de usar " +
-                                        "seus pontos para comprar este pedido?");
+                                        "seus pontos para comprar este combo?");
 
 
                             } else {

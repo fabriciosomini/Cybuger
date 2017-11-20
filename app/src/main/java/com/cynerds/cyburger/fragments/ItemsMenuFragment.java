@@ -22,14 +22,18 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.InnerMethod;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.item.Item;
+
+import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.view.CardModel;
 
 import java.text.DecimalFormat;
@@ -269,14 +273,73 @@ public class ItemsMenuFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            LogHelper.log("Item adicionado ao pedido");
+                            final InnerMethod addToOrder = new InnerMethod() {
+                                @Override
+                                public void onExecute(Object... params) {
 
-                            Badge badge = currentActivty.getBadge();
+                                    Item paidItem = null;
+                                    if (params.length > 0) {
+                                        paidItem = (Item) params[0];
+                                    }
+                                    LogHelper.log("Item adicionado ao pedido");
 
-                            currentActivty.getOrder().getOrderedItems().add(item);
-                            badge.setBadgeCount(badge.getBadgeCount() + 1);
 
-                            previewItemDialogManager.closeDialog();
+                                    Badge badge = currentActivty.getBadge();
+
+                                    if (paidItem != null) {
+
+                                        currentActivty.getOrder().getOrderedItems().add(paidItem);
+                                    } else {
+                                        currentActivty.getOrder().getOrderedItems().add(item);
+                                    }
+                                    badge.setBadgeCount(badge.getBadgeCount() + 1);
+
+                                    previewItemDialogManager.closeDialog();
+                                }
+                            };
+
+                            float amount = item.getPrice();
+                            if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
+
+                                DialogManager askForPaymentMethodDialog =
+                                        new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
+
+                                DialogAction dialogAction = new DialogAction();
+                                dialogAction.setPositiveAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Profile profile = CyburgerApplication.getProfile();
+                                        if (profile != null) {
+
+                                            int bonusPoint = profile.getBonusPoints();
+                                            final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(item.getPrice());
+                                            int totalBonusBalance = bonusPoint - pointsToRemove;
+                                            Item paidItem = (Item) item.copyValues(Item.class);
+                                            paidItem.setPrice(0);
+                                            paidItem.setBonusPoints(0);
+                                            paidItem.setItemSpentPoints(pointsToRemove);
+                                            addToOrder.onExecute(paidItem);
+                                        }
+
+
+                                    }
+                                });
+
+                                dialogAction.setNegativeAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        addToOrder.onExecute();
+                                    }
+                                });
+                                askForPaymentMethodDialog.setAction(dialogAction);
+                                askForPaymentMethodDialog.showDialog("Você gostaria de usar " +
+                                        "seus pontos para comprar este item?");
+
+
+                            } else {
+                                addToOrder.onExecute();
+                            }
 
 
                         }
