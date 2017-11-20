@@ -49,6 +49,9 @@ public class ItemsMenuFragment extends Fragment {
     private boolean isListCreated;
     private MainActivity currentActivty;
     private String filter = "";
+    private ListView listView;
+    private View view;
+    private boolean eventSet;
 
     public ItemsMenuFragment() {
 
@@ -64,20 +67,32 @@ public class ItemsMenuFragment extends Fragment {
 
         currentActivty = (MainActivity) getActivity();
 
-        View view = inflater.inflate(R.layout.fragment_items_menu, container, false);
+        if (view == null) {
+
+            view = inflater.inflate(R.layout.fragment_items_menu, container, false);
+        }
+
+        if (listView == null) {
+
+            listView = view.findViewById(android.R.id.list);
+        }
 
         if (!isListCreated) {
             isListCreated = true;
             setListDataListener(view);
         }
 
-        updateList(view);
-        setUIEvents(view);
+        if (!eventSet) {
+            eventSet = true;
+            updateList();
+            setUIEvents(view);
+        }
 
         return view;
     }
 
     private void setUIEvents(View view) {
+
 
         final EditText searchBoxItemsTxt = view.findViewById(R.id.searchBoxItemsTxt);
 
@@ -89,23 +104,22 @@ public class ItemsMenuFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().isEmpty()){
-                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-                }
-                else{
-                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
+                if (s.toString().isEmpty()) {
+                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                } else {
+                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_close, 0);
                     searchBoxItemsTxt.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
                             Drawable drawable = searchBoxItemsTxt.getCompoundDrawables()[2];
 
-                            if(drawable!=null){
+                            if (drawable != null) {
                                 boolean clicked = event.getRawX() >=
                                         searchBoxItemsTxt.getRight()
                                                 - drawable.getBounds().width();
                                 if (clicked) {
                                     searchBoxItemsTxt.setText("");
-                                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                                    searchBoxItemsTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                                     return true;
                                 }
                             }
@@ -142,7 +156,7 @@ public class ItemsMenuFragment extends Fragment {
                 = new OnDataChangeListener() {
             @Override
             public void onDatabaseChanges() {
-                updateList(view);
+                updateList();
             }
 
             @Override
@@ -155,12 +169,11 @@ public class ItemsMenuFragment extends Fragment {
         CyburgerApplication.addListenerToNotify(onDataChangeListener);
     }
 
-    private void updateList(View view) {
+    private void updateList() {
 
-        final ListView listview = view.findViewById(android.R.id.list);
         generateDashboardCardViewItems();
 
-        if(!filter.isEmpty()){
+        if (!filter.isEmpty()) {
             filterList(filter);
         }
 
@@ -170,12 +183,12 @@ public class ItemsMenuFragment extends Fragment {
                             R.layout.dashboard_card_view, cardModels);
 
 
-            listview.setAdapter(adapter);
+            listView.setAdapter(adapter);
         } else {
 
-            if (listview.getAdapter() == null) {
+            if (listView.getAdapter() == null) {
 
-                listview.setAdapter(adapter);
+                listView.setAdapter(adapter);
             }
 
             currentActivty.runOnUiThread(new Runnable() {
@@ -213,8 +226,7 @@ public class ItemsMenuFragment extends Fragment {
             cardModel.setPictureUri(item.getPictureUri());
 
             float amount = item.getPrice();
-            if(BonusPointExchangeHelper.convertUserPointsToCash()>=amount)
-            {
+            if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
                 DecimalFormat format = new DecimalFormat();
                 format.setDecimalSeparatorAlwaysShown(false);
                 String requiredPoints = "(ou "
@@ -239,7 +251,6 @@ public class ItemsMenuFragment extends Fragment {
                     if (CyburgerApplication.isAdmin()) {
 
                         editRecordBtn.setVisibility(View.VISIBLE);
-
 
 
                         editRecordBtn.setOnClickListener(new View.OnClickListener() {

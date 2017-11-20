@@ -85,7 +85,9 @@ public class MainActivity extends BaseActivity {
 
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
                             combosFragment,
-                            combosFragment.getTag()).commit();
+                            combosFragment.getTag())
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                            .commit();
                     setActionBarTitle(getString(R.string.title_combos));
 
                     return true;
@@ -93,7 +95,9 @@ public class MainActivity extends BaseActivity {
                 case ITEMS_TAB:
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
                             itemsMenuFragment,
-                            itemsMenuFragment.getTag()).commit();
+                            itemsMenuFragment.getTag())
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                            .commit();
                     setActionBarTitle(getString(R.string.title_dashboard));
 
                     return true;
@@ -101,7 +105,9 @@ public class MainActivity extends BaseActivity {
                 case ORDERS_TAB:
                     fragmentManager.beginTransaction().replace(R.id.contentLayout,
                             ordersFragment,
-                            ordersFragment.getTag()).commit();
+                            ordersFragment.getTag())
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                            .commit();
                     setActionBarTitle(getString(R.string.title_notifications));
 
 

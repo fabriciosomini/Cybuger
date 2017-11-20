@@ -46,6 +46,8 @@ public class OrdersFragment extends Fragment {
     private MainActivity currentActivty;
     private View view;
     private String filter = "";
+    private ListView listView;
+    private boolean eventSet;
 
     public OrdersFragment() {
 
@@ -63,15 +65,23 @@ public class OrdersFragment extends Fragment {
         currentActivty = (MainActivity) context;
         LayoutInflater inflater = (LayoutInflater) currentActivty
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.fragment_orders, null);
+
+        if (view == null) {
+
+            view = inflater.inflate(R.layout.fragment_orders, null);
+        }
+
+        if (listView == null) {
+
+            listView = view.findViewById(android.R.id.list);
+            listView.setEmptyView(view.findViewById(R.id.emptyOrdersListTxt));
+        }
 
 
         if (!isListCreated) {
             isListCreated = true;
             setListDataListener(view);
         }
-
-        updateList(view);
 
     }
 
@@ -79,65 +89,61 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-        if (!isListCreated) {
-            isListCreated = true;
-            setListDataListener(view);
+        if (!eventSet) {
+            eventSet = true;
+            setUIEvents(view);
         }
-
-        updateList(view);
-        setUIEvents(view);
 
         return view;
     }
 
     private void setUIEvents(View view) {
 
+
         final EditText searchBoxOrdersTxt = view.findViewById(R.id.searchBoxOrdersTxt);
 
-           searchBoxOrdersTxt.addTextChangedListener(new TextWatcher() {
-               @Override
-               public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        searchBoxOrdersTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-               }
+            }
 
-               @Override
-               public void onTextChanged(CharSequence s, int start, int before, int count) {
-                   if(s.toString().isEmpty()){
-                       searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-                   }
-                   else{
-                       searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
-                       searchBoxOrdersTxt.setOnTouchListener(new View.OnTouchListener() {
-                           @Override
-                           public boolean onTouch(View v, MotionEvent event) {
-                               Drawable drawable = searchBoxOrdersTxt.getCompoundDrawables()[2];
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().isEmpty()) {
+                    searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                } else {
+                    searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_close, 0);
+                    searchBoxOrdersTxt.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            Drawable drawable = searchBoxOrdersTxt.getCompoundDrawables()[2];
 
-                               if(drawable!=null){
-                                   boolean clicked = event.getRawX() >=
-                                           searchBoxOrdersTxt.getRight()
-                                                   - drawable.getBounds().width();
-                                   if (clicked) {
-                                       searchBoxOrdersTxt.setText("");
-                                       searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-                                       return true;
-                                   }
-                               }
-                               return false;
-                           }
-                       });
-                   }
+                            if (drawable != null) {
+                                boolean clicked = event.getRawX() >=
+                                        searchBoxOrdersTxt.getRight()
+                                                - drawable.getBounds().width();
+                                if (clicked) {
+                                    searchBoxOrdersTxt.setText("");
+                                    searchBoxOrdersTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                }
 
-                   generateDashboardCardViewItems();
-                   filterList(s.toString());
+                generateDashboardCardViewItems();
+                filterList(s.toString());
 
-               }
+            }
 
-               @Override
-               public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
-               }
-           });
+            }
+        });
 
     }
 
@@ -159,7 +165,7 @@ public class OrdersFragment extends Fragment {
                 = new OnDataChangeListener() {
             @Override
             public void onDatabaseChanges() {
-                updateList(view);
+                updateList();
             }
 
             @Override
@@ -172,9 +178,9 @@ public class OrdersFragment extends Fragment {
         CyburgerApplication.addListenerToNotify(onDataChangeListener);
     }
 
-    private void updateList(View view) {
+    private void updateList() {
 
-        final ListView listview = view.findViewById(android.R.id.list);
+
         generateDashboardCardViewItems();
 
         if (!filter.isEmpty()) {
@@ -187,12 +193,13 @@ public class OrdersFragment extends Fragment {
                             R.layout.dashboard_card_view, cardModels);
 
 
-            listview.setAdapter(adapter);
+            listView.setAdapter(adapter);
+
         } else {
 
-            if (listview.getAdapter() == null) {
+            if (listView.getAdapter() == null) {
 
-                listview.setAdapter(adapter);
+                listView.setAdapter(adapter);
             }
 
             currentActivty.runOnUiThread(new Runnable() {
@@ -212,91 +219,88 @@ public class OrdersFragment extends Fragment {
         for (final Order order :
                 orders) {
 
-           final Customer customer = order.getCustomer();
+            final Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
 
-           if(profile!=null){
-               final CardModel cardModel = new CardModel();
-               cardModel.setExtra(order);
-               cardModel.setNoPicture(true);
+            if (profile != null) {
+                final CardModel cardModel = new CardModel();
+                cardModel.setExtra(order);
+                cardModel.setNoPicture(true);
 
-               if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                   cardModel.setTitle("Meu pedido");
-                   cardModel.setTitleColor(R.color.colorAccent);
-               } else {
-                   cardModel.setTitle(customerName);
-                   cardModel.setTitleColor(R.color.lightGrey);
-               }
-
-
-
-               if (CyburgerApplication.isAdmin()) {
-                   cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-
-                           currentActivty.setOrder(order);
-                           currentActivty.displayOrderDialog();
-
-                       }
-                   });
+                if (customer.getLinkedProfileId().equals(profile.getUserId())) {
+                    cardModel.setTitle("Meu pedido");
+                    cardModel.setTitleColor(R.color.colorAccent);
+                } else {
+                    cardModel.setTitle(customerName);
+                    cardModel.setTitleColor(R.color.lightGrey);
+                }
 
 
-                   currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
-               } else {
+                if (CyburgerApplication.isAdmin()) {
+                    cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                   String profileId = customer.getLinkedProfileId();
-                   if (profileId != null && profile!=null) {
-                       if (profileId.equals(profile.getUserId())) {
+                            currentActivty.setOrder(order);
+                            currentActivty.displayOrderDialog();
 
-                           cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View v) {
-                                   currentActivty.setOrder(order);
-                                   currentActivty.displayOrderDialog();
-                               }
-                           });
-
-                           currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
-                       }else{
-                           cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View v) {
-                               }
-                           });
-                       }
-                   }
-               }
+                        }
+                    });
 
 
+                    currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                } else {
+
+                    String profileId = customer.getLinkedProfileId();
+                    if (profileId != null && profile != null) {
+                        if (profileId.equals(profile.getUserId())) {
+
+                            cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    currentActivty.setOrder(order);
+                                    currentActivty.displayOrderDialog();
+                                }
+                            });
+
+                            currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                        } else {
+                            cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                }
+                            });
+                        }
+                    }
+                }
 
 
-               //Pega Items do pedido-----------
-               String orderedItemsString = "";
+                //Pega Items do pedido-----------
+                String orderedItemsString = "";
 
 
-               for (Combo combo :
-                       order.getOrderedCombos()) {
+                for (Combo combo :
+                        order.getOrderedCombos()) {
 
 
-                   orderedItemsString += combo.getComboName() + "\n";
-               }
+                    orderedItemsString += combo.getComboName() + "\n";
+                }
 
-               for (Item item :
-                       order.getOrderedItems()) {
-
-
-                   orderedItemsString += item.getDescription() + "\n";
-               }
+                for (Item item :
+                        order.getOrderedItems()) {
 
 
-               //------------------------------
-               cardModel.setContent(orderedItemsString);
-
-               cardModels.add(cardModel);
+                    orderedItemsString += item.getDescription() + "\n";
+                }
 
 
-           }
+                //------------------------------
+                cardModel.setContent(orderedItemsString);
+
+                cardModels.add(cardModel);
+
+
+            }
         }
 
     }

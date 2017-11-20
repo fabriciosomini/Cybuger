@@ -49,10 +49,13 @@ public class CombosFragment extends Fragment {
     private CardAdapter adapter;
     private boolean isListCreated;
     private String filter = "";
+    private ListView listView;
+    private View view;
+    private boolean eventSet;
 
     public CombosFragment() {
 
-        firebaseDatabaseHelper = new FirebaseDatabaseHelper(getContext(),Combo.class);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper(getContext(), Combo.class);
         cardModels = new ArrayList<>();
 
     }
@@ -64,23 +67,35 @@ public class CombosFragment extends Fragment {
 
         currentActivty = (MainActivity) getActivity();
 
-        View view = inflater.inflate(R.layout.fragment_combos, container, false);
+        if (view == null) {
+
+            view = inflater.inflate(R.layout.fragment_combos, container, false);
+        }
+
+        if (listView == null) {
+
+            listView = view.findViewById(android.R.id.list);
+        }
 
         if (!isListCreated) {
             isListCreated = true;
             setListDataListener(view);
         }
 
-        updateList(view);
-        setUIEvents(view);
+        if(!eventSet){
+            eventSet= true;
+            updateList();
+            setUIEvents(view);
+        }
 
         return view;
     }
 
+
     private void setUIEvents(View view) {
 
 
-       final EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
+        final EditText searchBoxCombosTxt = view.findViewById(R.id.searchBoxCombosTxt);
 
 
         searchBoxCombosTxt.addTextChangedListener(new TextWatcher() {
@@ -92,11 +107,10 @@ public class CombosFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.toString().isEmpty()){
-                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-                }
-                else{
-                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_close,0);
+                if (s.toString().isEmpty()) {
+                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                } else {
+                    searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_close, 0);
                     searchBoxCombosTxt.setClickable(false);
                     searchBoxCombosTxt.setOnTouchListener(new View.OnTouchListener() {
                         @Override
@@ -105,13 +119,13 @@ public class CombosFragment extends Fragment {
 
                                 Drawable drawable = searchBoxCombosTxt.getCompoundDrawables()[2];
 
-                                if(drawable!=null){
+                                if (drawable != null) {
                                     boolean clicked = event.getRawX() >=
                                             searchBoxCombosTxt.getRight()
                                                     - drawable.getBounds().width();
                                     if (clicked) {
                                         searchBoxCombosTxt.setText("");
-                                        searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                                        searchBoxCombosTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                                         return true;
                                     }
                                 }
@@ -151,7 +165,7 @@ public class CombosFragment extends Fragment {
                 = new OnDataChangeListener() {
             @Override
             public void onDatabaseChanges() {
-                updateList(view);
+                updateList();
             }
 
             @Override
@@ -164,12 +178,12 @@ public class CombosFragment extends Fragment {
         CyburgerApplication.addListenerToNotify(onDataChangeListener);
     }
 
-    private void updateList(View view) {
+    private void updateList() {
 
-        final ListView listview = view.findViewById(android.R.id.list);
+
         generateDashboardCardViewItems();
 
-        if(!filter.isEmpty()){
+        if (!filter.isEmpty()) {
             filterList(filter);
         }
 
@@ -179,12 +193,12 @@ public class CombosFragment extends Fragment {
                             R.layout.dashboard_card_view, cardModels);
 
 
-            listview.setAdapter(adapter);
+            listView.setAdapter(adapter);
         } else {
 
-            if (listview.getAdapter() == null) {
+            if (listView.getAdapter() == null) {
 
-                listview.setAdapter(adapter);
+                listView.setAdapter(adapter);
             }
 
             currentActivty.runOnUiThread(new Runnable() {
@@ -216,8 +230,7 @@ public class CombosFragment extends Fragment {
             cardModel.setPictureUri(combo.getPictureUri());
 
             float amount = combo.getComboAmount();
-            if(BonusPointExchangeHelper.convertUserPointsToCash()>=amount)
-            {
+            if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
                 DecimalFormat format = new DecimalFormat();
                 format.setDecimalSeparatorAlwaysShown(false);
                 String requiredPoints = "(ou "
@@ -238,7 +251,7 @@ public class CombosFragment extends Fragment {
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
                     PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
                     photoViewer.setEditable(false);
-                    photoViewer.setPicture(FileHelper.getStoragePath(currentActivty,combo.getPictureUri()));
+                    photoViewer.setPicture(FileHelper.getStoragePath(currentActivty, combo.getPictureUri()));
 
                     if (CyburgerApplication.isAdmin()) {
 
@@ -258,7 +271,6 @@ public class CombosFragment extends Fragment {
 
                         editRecordBtn.setVisibility(View.INVISIBLE);
                     }
-
 
 
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
