@@ -24,6 +24,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.dao.UserAccountDAO;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.AuthenticationHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.FieldValidationHelper;
 import com.cynerds.cyburger.helpers.NetworkHelper;
@@ -170,19 +171,6 @@ public class SignInFragment extends Fragment {
         isRememberMeChecked = Boolean.parseBoolean(preferences.getPreferenceValue(rememberMePref));
         secretCode();
 
-        /*if(!NetworkHelper.isNetworkAvailable(currentActivity))
-        {
-            signInUserTxt.setKeyListener(null);
-            signInPasswordTxt.setKeyListener(null);
-
-            signInUserTxt.setError("Você está offline");
-
-        }else{
-            signInUserTxt.setError(null);
-            signInUserTxt.setFocusable(true);
-            signInPasswordTxt.setFocusable(true);
-        }*/
-
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -241,6 +229,28 @@ public class SignInFragment extends Fragment {
                 }
             }
         });
+
+        if (!permissions.isPermissionForExternalStorageGranted()) {
+
+            final DialogManager askPermission = new DialogManager(currentActivity, DialogManager.DialogType.YES_NO);
+            DialogAction dialogAction = new DialogAction();
+            dialogAction.setPositiveAction(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    permissions.requestPermissionForExternalStorage();
+                }
+            });
+            dialogAction.setNegativeAction(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    askPermission.closeDialog();
+                }
+            });
+
+            askPermission.setAction(dialogAction);
+            askPermission.showDialog("Permissão requerida", "Olá, você poderia " +
+                    "nos dar permissão de gravar informações do aplicativo?");
+        }
 
         if (isRememberMeChecked) {
             UserAccount userAccount = loadCredentials();
