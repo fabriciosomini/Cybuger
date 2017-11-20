@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity {
     private int[] notifications = new int[3];
 
 
-
     private AHBottomNavigation.OnTabSelectedListener mOnNavigationItemSelectedListener = new AHBottomNavigation.OnTabSelectedListener() {
         @Override
         public boolean onTabSelected(int position, boolean wasSelected) {
@@ -266,7 +265,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
     public void displayOrderDialog() {
 
         final boolean readOnly = order.getKey() != null;
@@ -292,14 +290,27 @@ public class MainActivity extends BaseActivity {
                 order.getOrderedCombos()) {
 
             orderedItemsAmount += combo.getComboAmount();
-            orderedItemsString += combo.getComboName() + ": R$ " + combo.getComboAmount() + " (" + combo.getComboBonusPoints() + " pontos)" + "\n";
+            orderedItemsString += combo.getComboName() + ": R$ " + combo.getComboAmount();
+
+            if (combo.getComboAmount() > 0) {
+                orderedItemsString += " (" + combo.getComboBonusPoints() + " pontos)";
+            }
+
+            orderedItemsString += "\n";
         }
 
         for (Item item :
                 order.getOrderedItems()) {
 
             orderedItemsAmount += item.getPrice();
-            orderedItemsString += item.getDescription() + ": R$ " + item.getPrice() + " (" + item.getBonusPoints() + " pontos)" + "\n";
+            orderedItemsString += item.getDescription() + ": R$ " + item.getPrice();
+
+            if (item.getPrice() > 0) {
+                orderedItemsString += " (" + item.getBonusPoints() + " pontos)";
+            }
+
+            orderedItemsString += "\n";
+
         }
 
 
@@ -311,7 +322,7 @@ public class MainActivity extends BaseActivity {
         }
 
         if (order.getOrderedItems().size() > 0 || order.getOrderedCombos().size() > 0 || readOnly) {
-         {
+            {
                 Button confirmOrderBtn = orderDialog.getContentView().findViewById(R.id.confirmOrderBtn);
                 Button removeOrderBtn = orderDialog.getContentView().findViewById(R.id.removeOrderBtn);
 

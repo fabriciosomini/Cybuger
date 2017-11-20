@@ -229,8 +229,7 @@ public class ItemsMenuFragment extends Fragment {
             if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
                 DecimalFormat format = new DecimalFormat();
                 format.setDecimalSeparatorAlwaysShown(false);
-                String requiredPoints = "(ou "
-                        + format.format(BonusPointExchangeHelper.convertAmountToPoints(amount)) + " pontos)";
+                String requiredPoints = "(ou " + BonusPointExchangeHelper.convertAmountToPoints(amount) + " pontos)";
                 cardModel.setRightContent(requiredPoints);
 
             }

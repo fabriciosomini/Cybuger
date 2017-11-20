@@ -2,7 +2,7 @@ package com.cynerds.cyburger.helpers;
 
 import android.os.CountDownTimer;
 
-import com.cynerds.cyburger.interfaces.CountDownTimeoutListener;
+import com.cynerds.cyburger.interfaces.OnTimeoutListener;
 
 /**
  * Created by fabri on 13/11/2017.
@@ -10,9 +10,9 @@ import com.cynerds.cyburger.interfaces.CountDownTimeoutListener;
 
 public class CountDownTimerHelper {
 
-    public static void waitFor(final CountDownTimeoutListener countDownTimeoutListener, long time, long tick){
+    public static void waitFor(final OnTimeoutListener onTimeoutListener, long time, long tick){
 
-        if(countDownTimeoutListener!=null){
+        if(onTimeoutListener !=null){
             new CountDownTimer(time, tick) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -21,7 +21,7 @@ public class CountDownTimerHelper {
 
                 @Override
                 public void onFinish() {
-                    countDownTimeoutListener.onTimeout();
+                    onTimeoutListener.onTimeout();
                 }
             }.start();
         }

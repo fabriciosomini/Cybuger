@@ -1,5 +1,8 @@
 package com.cynerds.cyburger.models.general;
 
+import com.cynerds.cyburger.helpers.GsonHelper;
+import com.cynerds.cyburger.models.combo.Combo;
+
 /**
  * Created by fabri on 06/10/2017.
  */
@@ -25,5 +28,9 @@ public class BaseModel {
     }
 
 
+    public Object copyValues(Class type) {
 
+        String json = GsonHelper.ToGson(this);
+        return GsonHelper.ToObject(type, json);
+    }
 }

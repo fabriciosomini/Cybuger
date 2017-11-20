@@ -3,6 +3,7 @@ package com.cynerds.cyburger.fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,15 +23,21 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
+import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
+import com.cynerds.cyburger.helpers.GsonHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
+import com.cynerds.cyburger.interfaces.InnerMethod;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
+import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.view.CardModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -82,8 +89,8 @@ public class CombosFragment extends Fragment {
             setListDataListener(view);
         }
 
-        if(!eventSet){
-            eventSet= true;
+        if (!eventSet) {
+            eventSet = true;
             updateList();
             setUIEvents(view);
         }
@@ -233,8 +240,7 @@ public class CombosFragment extends Fragment {
             if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
                 DecimalFormat format = new DecimalFormat();
                 format.setDecimalSeparatorAlwaysShown(false);
-                String requiredPoints = "(ou "
-                        + format.format(BonusPointExchangeHelper.convertAmountToPoints(amount)) + " pontos)";
+                String requiredPoints = "(ou " + BonusPointExchangeHelper.convertAmountToPoints(amount) + " pontos)";
                 cardModel.setRightContent(requiredPoints);
 
             }
@@ -276,15 +282,88 @@ public class CombosFragment extends Fragment {
                     addToOrderBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            LogHelper.log("Item adicionado ao pedido");
+
+                            final InnerMethod addToOrder = new InnerMethod() {
+                                @Override
+                                public void onExecute(Object... params) {
+
+                                    Combo paidCombo = null;
+                                    if (params.length > 0) {
+                                        paidCombo = (Combo) params[0];
+                                    }
+                                    LogHelper.log("Item adicionado ao pedido");
 
 
-                            Badge badge = currentActivty.getBadge();
+                                    Badge badge = currentActivty.getBadge();
 
-                            currentActivty.getOrder().getOrderedCombos().add(combo);
-                            badge.setBadgeCount(badge.getBadgeCount() + 1);
+                                    if (paidCombo != null) {
 
-                            previewItemDialogManager.closeDialog();
+                                        currentActivty.getOrder().getOrderedCombos().add(paidCombo);
+                                    } else {
+                                        currentActivty.getOrder().getOrderedCombos().add(combo);
+                                    }
+                                    badge.setBadgeCount(badge.getBadgeCount() + 1);
+
+                                    previewItemDialogManager.closeDialog();
+                                }
+                            };
+
+                            float amount = combo.getComboAmount();
+                            if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
+
+                                DialogManager askForPaymentMethodDialog =
+                                        new DialogManager(currentActivty, DialogManager.DialogType.YES_NO);
+
+                                DialogAction dialogAction = new DialogAction();
+                                dialogAction.setPositiveAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Profile profile = CyburgerApplication.getProfile();
+                                        if (profile != null) {
+
+                                            int bonusPoint = profile.getBonusPoints();
+                                            int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(combo.getComboAmount());
+                                            int totalBonusBalance = bonusPoint - pointsToRemove;
+
+                                            profile.setBonusPoints(totalBonusBalance);
+                                            FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
+                                                    = new FirebaseDatabaseHelper(Profile.class);
+
+                                            profileFirebaseDatabaseHelper.update(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                    if (task.isSuccessful()) {
+
+                                                        Combo paidCombo = (Combo) combo.copyValues(Combo.class);
+                                                        paidCombo.setComboAmount(0);
+                                                        addToOrder.onExecute(paidCombo);
+                                                    }
+                                                }
+                                            });
+
+
+                                        }
+
+
+                                    }
+                                });
+
+                                dialogAction.setNegativeAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        addToOrder.onExecute();
+                                    }
+                                });
+                                askForPaymentMethodDialog.setAction(dialogAction);
+                                askForPaymentMethodDialog.showDialog("Você gostaria de usar " +
+                                        "seus pontos para comprar este pedido?");
+
+
+                            } else {
+                                addToOrder.onExecute();
+                            }
 
 
                         }

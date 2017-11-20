@@ -6,14 +6,12 @@ import android.content.Context;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.activities.BaseActivity;
-import com.cynerds.cyburger.helpers.AuthenticationHelper;
-import com.cynerds.cyburger.helpers.DateHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.handlers.ApplicationLifecycleHandler;
 import com.cynerds.cyburger.helpers.CountDownTimerHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.helpers.MessageHelper;
-import com.cynerds.cyburger.interfaces.CountDownTimeoutListener;
+import com.cynerds.cyburger.interfaces.OnTimeoutListener;
 import com.cynerds.cyburger.interfaces.OnFatalErrorListener;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.interfaces.OnSyncResultListener;
@@ -24,7 +22,6 @@ import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.report.CrashReport;
 import com.cynerds.cyburger.models.role.Role;
 import com.cynerds.cyburger.models.sync.Sync;
-import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -173,7 +170,7 @@ public class CyburgerApplication extends Application {
             });
 
 
-            CountDownTimerHelper.waitFor(new CountDownTimeoutListener() {
+            CountDownTimerHelper.waitFor(new OnTimeoutListener() {
                 @Override
                 public void onTimeout() {
                     if (!syncNotified) {
