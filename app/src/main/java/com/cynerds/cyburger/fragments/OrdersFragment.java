@@ -215,84 +215,86 @@ public class OrdersFragment extends Fragment {
            final Customer customer = order.getCustomer();
             String customerName = order.getCustomer().getCustomerName();
 
-            final CardModel cardModel = new CardModel();
-            cardModel.setExtra(order);
-            if (customer.getLinkedProfileId().equals(profile.getUserId())) {
-                cardModel.setTitle("Meu pedido");
-                cardModel.setTitleColor(R.color.colorAccent);
-            } else {
-                cardModel.setTitle(customerName);
-                cardModel.setTitleColor(R.color.lightGrey);
-            }
+           if(profile!=null){
+               final CardModel cardModel = new CardModel();
+               cardModel.setExtra(order);
+               if (customer.getLinkedProfileId().equals(profile.getUserId())) {
+                   cardModel.setTitle("Meu pedido");
+                   cardModel.setTitleColor(R.color.colorAccent);
+               } else {
+                   cardModel.setTitle(customerName);
+                   cardModel.setTitleColor(R.color.lightGrey);
+               }
 
 
 
-            if (CyburgerApplication.isAdmin()) {
-                cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+               if (CyburgerApplication.isAdmin()) {
+                   cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
 
-                        currentActivty.setOrder(order);
-                        currentActivty.displayOrderDialog();
+                           currentActivty.setOrder(order);
+                           currentActivty.displayOrderDialog();
 
-                    }
-                });
-
-
-                currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
-            } else {
-
-                String profileId = customer.getLinkedProfileId();
-                if (profileId != null && profile!=null) {
-                    if (profileId.equals(profile.getUserId())) {
-
-                        cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                currentActivty.setOrder(order);
-                                currentActivty.displayOrderDialog();
-                            }
-                        });
-
-                        currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
-                    }else{
-                        cardModel.setOnCardViewClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                }
-                        });
-                    }
-                }
-            }
+                       }
+                   });
 
 
+                   currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+               } else {
+
+                   String profileId = customer.getLinkedProfileId();
+                   if (profileId != null && profile!=null) {
+                       if (profileId.equals(profile.getUserId())) {
+
+                           cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                                   currentActivty.setOrder(order);
+                                   currentActivty.displayOrderDialog();
+                               }
+                           });
+
+                           currentActivty.addNotification(MainActivity.ORDERS_TAB, 1);
+                       }else{
+                           cardModel.setOnCardViewClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                               }
+                           });
+                       }
+                   }
+               }
 
 
-            //Pega Items do pedido-----------
-            String orderedItemsString = "";
 
 
-            for (Combo combo :
-                    order.getOrderedCombos()) {
+               //Pega Items do pedido-----------
+               String orderedItemsString = "";
 
 
-                orderedItemsString += combo.getComboName() + "\n";
-            }
-
-            for (Item item :
-                    order.getOrderedItems()) {
+               for (Combo combo :
+                       order.getOrderedCombos()) {
 
 
-                orderedItemsString += item.getDescription() + "\n";
-            }
+                   orderedItemsString += combo.getComboName() + "\n";
+               }
+
+               for (Item item :
+                       order.getOrderedItems()) {
 
 
-            //------------------------------
-            cardModel.setContent(orderedItemsString);
-
-            cardModels.add(cardModel);
+                   orderedItemsString += item.getDescription() + "\n";
+               }
 
 
+               //------------------------------
+               cardModel.setContent(orderedItemsString);
+
+               cardModels.add(cardModel);
+
+
+           }
         }
 
     }

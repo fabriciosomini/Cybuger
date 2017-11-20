@@ -12,12 +12,17 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.helpers.FileDialogHelper;
+import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
 import com.cynerds.cyburger.interfaces.OnPictureChangedListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,6 +38,7 @@ public class PhotoViewer extends ConstraintLayout {
 
     private Context context;
     private ImageView selectedPhotoImgView;
+    private TextView selectedPhotoImgViewTxt;
     private boolean isEditable;
     private OnPictureChangedListener onPictureChangedListener;
     private String fileName;
@@ -62,14 +68,16 @@ public class PhotoViewer extends ConstraintLayout {
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.component_photo_viewer, this);
+          inflater.inflate(R.layout.component_photo_viewer, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+
         selectedPhotoImgView = findViewById(R.id.selectedPhotoImgView);
+        selectedPhotoImgViewTxt = findViewById(R.id.selectedPhotoImgViewTxt);
 
         selectedPhotoImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,30 +101,8 @@ public class PhotoViewer extends ConstraintLayout {
                                             .addFileListener(new FileDialogHelper.FileSelectedListener() {
                                                 @Override
                                                 public void fileSelected(final File file) {
-                                                    FileInputStream streamIn = null;
-                                                    try {
-                                                        streamIn = new FileInputStream(file);
-                                                        Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
-                                                        streamIn.close();
-                                                        selectedPhotoImgView.setImageBitmap(bitmap);
 
-                                                        selectedPhotoImgView.setDrawingCacheEnabled(true);
-                                                        selectedPhotoImgView.buildDrawingCache();
-                                                        Bitmap cachedBitmap = selectedPhotoImgView.getDrawingCache();
-                                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                                        data = baos.toByteArray();
-                                                        fileName = file.getName().trim().replace(" ", "");
-
-                                                        if (onPictureChangedListener != null) {
-                                                            onPictureChangedListener.onPictureChanged();
-                                                        }
-
-                                                    } catch (FileNotFoundException e) {
-                                                        e.printStackTrace();
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    }
+                                                    setPicture(file.getPath());
 
 
                                                 }
@@ -153,6 +139,13 @@ public class PhotoViewer extends ConstraintLayout {
 
         this.isEditable = isEditable;
 
+        if(!isEditable){
+            selectedPhotoImgViewTxt.setVisibility(GONE);
+        }
+        else{
+            selectedPhotoImgViewTxt.setVisibility(VISIBLE);
+        }
+
     }
 
 
@@ -160,26 +153,63 @@ public class PhotoViewer extends ConstraintLayout {
         this.onPictureChangedListener = onPictureChangedListener;
     }
 
-    public void setPicture(File file) {
+    public boolean setPicture(String uri) {
 
-        if (file != null) {
-            FileInputStream streamIn = null;
-            try {
-                streamIn = new FileInputStream(file);
-                Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
-                streamIn.close();
-                selectedPhotoImgView.setImageBitmap(bitmap);
-                if (onPictureChangedListener != null) {
-                    onPictureChangedListener.onPictureChanged();
+        if (uri != null) {
+            File file = new File(uri);
+            if (file != null) {
+                if (file.exists()) {
+
+                   if(file.length()>0){
+                       try {
+
+
+                           ViewGroup.LayoutParams layoutParams = selectedPhotoImgView.getLayoutParams();
+                           int width = layoutParams.width;
+                           int height = layoutParams.height;
+
+                           RequestCreator requestCreator = Picasso.with(context).load(file);
+                           if (width > 0 && height > 0) {
+                               requestCreator.resize(width, height).centerCrop().into(selectedPhotoImgView);
+                           } else {
+                               requestCreator.into(selectedPhotoImgView);
+                           }
+
+
+                           selectedPhotoImgViewTxt.setVisibility(GONE);
+
+
+                           FileInputStream streamIn = new FileInputStream(file);
+                           Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
+                           streamIn.close();
+                           selectedPhotoImgView.setDrawingCacheEnabled(true);
+                           selectedPhotoImgView.buildDrawingCache();
+                           ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                           bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                           data = baos.toByteArray();
+                           baos.close();
+                           fileName = file.getName();
+
+                           if (onPictureChangedListener != null) {
+                               onPictureChangedListener.onPictureChanged();
+                           }
+                           return true;
+                       } catch (FileNotFoundException e) {
+                           e.printStackTrace();
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
+                   }
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
+
+            }
         }
 
+       if(isEditable){
+           selectedPhotoImgViewTxt.setVisibility(VISIBLE);
+       }
 
+        return false;
     }
 }

@@ -2,7 +2,7 @@ package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.text.method.SingleLineTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +17,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
+import com.cynerds.cyburger.helpers.FileNamingHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -50,6 +51,7 @@ public class ManageCombosActivity extends BaseActivity {
     private byte[] data;
     private String pictureUri;
     private File file;
+    private String localPictureUri;
 
     public ManageCombosActivity() {
         firebaseDatabaseHelper = new FirebaseDatabaseHelper(this, Combo.class);
@@ -89,34 +91,40 @@ public class ManageCombosActivity extends BaseActivity {
         final Combo loadedCombo = (Combo) getExtra(Combo.class);
 
 
-        comboNameTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
-        comboInfoTxt.setTransformationMethod(android.text.method.SingleLineTransformationMethod.getInstance());
+        comboNameTxt.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+        comboInfoTxt.setTransformationMethod(SingleLineTransformationMethod.getInstance());
         comboDayCbx.setAdapter(arrayAdapter);
 
         final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
 
-        if (loadedCombo != null) {
-            String loadedPictureUri = loadedCombo.getPictureUri();
-            if (loadedPictureUri != null) {
-                pictureUri = loadedPictureUri;
-                 file = new File(pictureUri);
-                if(!file.exists())
-                {
-                    firebaseStorageHelper.get(pictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-                           if(task.isSuccessful()){
-                               LogHelper.log("Loaded picture " + pictureUri);
-                           }else
-                           {
-                               LogHelper.log("Failed to load picture " + pictureUri);
-                           }
-                        }
-                    });
-                }
 
-            }
+
+        if (loadedCombo != null) {
+            pictureUri = loadedCombo.getPictureUri();
         }
+
+        //   pictureUri = pictureUri == null ? loadedComboPictureUri : pictureUri;
+
+        if (pictureUri != null) {
+
+            localPictureUri = FileNamingHelper.getStoragePath(pictureUri);
+            file = new File(localPictureUri);
+
+            if (!file.exists()) {
+                firebaseStorageHelper.get(localPictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            LogHelper.log("Loaded picture " + pictureUri);
+                        } else {
+                            LogHelper.log("Failed to load picture " + pictureUri);
+                        }
+                    }
+                });
+            }
+
+        }
+
 
         addComboPictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,14 +136,12 @@ public class ManageCombosActivity extends BaseActivity {
                 final PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewPhotoViewer);
                 photoViewer.setEditable(true);
 
-                if(pictureUri!=null){
-                    photoViewer.setPicture(file);
-                }
-
                 photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
                     @Override
                     public void onPictureChanged() {
-                        pictureUri = FirebaseStorageConstants.PICTURE_FOLDER + "/" + photoViewer.getFileName();
+                        localPictureUri = FileNamingHelper.getStoragePath(FirebaseStorageConstants.PICTURE_FOLDER
+                                +"/"+photoViewer.getFileName());
+                        pictureUri = FileNamingHelper.getFirebasePictureStoragePath(photoViewer.getFileName());
                         data = photoViewer.getData();
 
                         Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
@@ -167,10 +173,12 @@ public class ManageCombosActivity extends BaseActivity {
                     }
                 });
 
+                if (pictureUri != null) {
+                   boolean pictureChanged =  photoViewer.setPicture(localPictureUri);
+                }
+
             }
         });
-
-
 
 
         itemsTagInput.setOnItemAddedListener(new OnItemAddedListener() {
@@ -275,7 +283,7 @@ public class ManageCombosActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     MessageHelper.show(ManageCombosActivity.this,
                                             MessageType.SUCCESS,
-                                            getString(com.cynerds.cyburger.R.string.SUCCESS_COMBO));
+                                            getString(R.string.SUCCESS_COMBO));
                                     saveComboBtn.setEnabled(true);
                                     finish();
                                 } else {
@@ -308,16 +316,14 @@ public class ManageCombosActivity extends BaseActivity {
                         });
                     }
 
-                    if(pictureUri!=null && data!=null)
-                    {
+                    if (pictureUri != null && data != null) {
 
                         firebaseStorageHelper.insert(pictureUri, data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     LogHelper.log("Saved picture " + pictureUri);
-                                }else
-                                {
+                                } else {
                                     LogHelper.log("Failed to save picture " + pictureUri);
                                 }
                             }

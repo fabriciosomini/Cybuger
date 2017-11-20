@@ -1,8 +1,11 @@
 package com.cynerds.cyburger.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -16,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
+import com.cynerds.cyburger.helpers.FileNamingHelper;
 import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
 import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
@@ -23,7 +27,10 @@ import com.cynerds.cyburger.models.view.CardModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -91,40 +98,25 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
         }
 
-        try {
 
-            final String pictureUri = cardModel.getPictureUri();
-            if (pictureUri != null) {
-                File cacheDir = context.getCacheDir();
-                File regexFileName = new File(pictureUri);
-                String fileName = regexFileName.getName();
+        final String pictureUri = cardModel.getPictureUri();
 
-                File file = new File(cacheDir + "/"+ fileName);
 
-                if (!file.exists()) {
-                    final File localFile = File.createTempFile(fileName, "jpg", cacheDir);
-                    FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
-                    firebaseStorageHelper.get(cardModel.getPictureUri(), localFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+        if (pictureUri != null) {
+            final String localPictureUri = FileNamingHelper.getStoragePath(pictureUri);
+            final File file = new File(localPictureUri);
 
-                            if(task.isSuccessful()){
-                                LogHelper.log("CardAdapter Loaded picture " + pictureUri);
-                                setImage(cardPicture, localFile);
-                            }else
-                            {
-                                LogHelper.log("CardAdapter Failed to load picture " + pictureUri);
-                            }
-                        }
-                    });
+            if (!file.exists()) {
+                downloadImage(localPictureUri, file, cardPicture);
+            } else {
+
+                if (file.length() > 0) {
+                    setPicture(cardPicture, localPictureUri);
                 } else {
-                    setImage(cardPicture, file);
+                    downloadImage(cardModel.getPictureUri(), file, cardPicture);
                 }
+
             }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
 
@@ -137,19 +129,52 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
         return convertView;
     }
 
-    private void setImage(ImageView cardPicture, File localFile) {
-        FileInputStream streamIn = null;
-        try {
-            streamIn = new FileInputStream(localFile);
-            Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
-            streamIn.close();
-            cardPicture.setImageBitmap(bitmap);
+    private void downloadImage(final String pictureUri, final File file, final ImageView cardPicture) {
+        FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
+        firebaseStorageHelper.get(pictureUri, file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+                if (task.isSuccessful()) {
+                    LogHelper.log("CardAdapter Loaded picture " + pictureUri);
+                    setPicture(cardPicture, pictureUri);
+
+                } else {
+                    LogHelper.log("CardAdapter Failed to load picture " + pictureUri);
+                }
+            }
+        });
+    }
+
+    public boolean setPicture(ImageView selectedPhotoImgView, String uri) {
+
+        if (uri != null) {
+            File file = new File(uri);
+            if (file != null) {
+                if (file.exists()) {
+
+                    ViewGroup.LayoutParams layoutParams = selectedPhotoImgView.getLayoutParams();
+                    int width = layoutParams.width;
+                    int height = layoutParams.height;
+
+                    RequestCreator requestCreator = Picasso.with(context).load(file);
+                    if (width > 0 && height > 0) {
+                        requestCreator.resize(width, height).centerCrop().into(selectedPhotoImgView);
+                    } else {
+                        requestCreator.into(selectedPhotoImgView);
+                    }
+
+
+                    return true;
+
+                }
+
+
+            }
         }
+
+
+        return false;
     }
 
 
