@@ -105,7 +105,7 @@
     <string name="you_next"> você é o próximo!</string>
     <string name="prefix_cyburger">cyburger-</string>
     <string name="order_complete">Pedido concluído!</string>
-    <string name="order_ok">seu pedido está pronto!</string>
+    <string name="order_ok"> seu pedido está pronto!</string>
     <string name="err_complete_order">Erro ao concluir pedido</string>
     <string name="err_points_profile">Erro ao vincular os pontos ao perfil</string>
     <string name="client_404">Cliente do pedido não encontrado</string>

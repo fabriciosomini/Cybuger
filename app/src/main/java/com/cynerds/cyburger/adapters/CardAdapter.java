@@ -112,7 +112,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
             } else {
                 cardPicture.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_action_close));
             }
-            
+
         } else {
             cardPicture.setVisibility(View.GONE);
         }
