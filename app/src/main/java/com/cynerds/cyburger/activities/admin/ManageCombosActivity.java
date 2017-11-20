@@ -17,7 +17,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.components.TagInput;
 import com.cynerds.cyburger.components.TagItem;
-import com.cynerds.cyburger.helpers.FileNamingHelper;
+import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
 import com.cynerds.cyburger.helpers.DialogManager;
@@ -40,6 +40,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,17 +98,13 @@ public class ManageCombosActivity extends BaseActivity {
 
         final FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
 
-
-
         if (loadedCombo != null) {
             pictureUri = loadedCombo.getPictureUri();
         }
 
-        //   pictureUri = pictureUri == null ? loadedComboPictureUri : pictureUri;
-
         if (pictureUri != null) {
 
-            localPictureUri = FileNamingHelper.getStoragePath(pictureUri);
+            localPictureUri = FileHelper.getStoragePath(pictureUri);
             file = new File(localPictureUri);
 
             if (!file.exists()) {
@@ -139,42 +136,58 @@ public class ManageCombosActivity extends BaseActivity {
                 photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
                     @Override
                     public void onPictureChanged() {
-                        localPictureUri = FileNamingHelper.getStoragePath(FirebaseStorageConstants.PICTURE_FOLDER
-                                +"/"+photoViewer.getFileName());
-                        pictureUri = FileNamingHelper.getFirebasePictureStoragePath(photoViewer.getFileName());
+                        localPictureUri = FileHelper.getStoragePath(FirebaseStorageConstants.PICTURE_FOLDER
+                                + "/" + photoViewer.getSelectedFileName());
+                        pictureUri = FileHelper.getFirebasePictureStoragePath(photoViewer.getSelectedFileName());
                         data = photoViewer.getData();
 
-                        Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
-                        Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
+                        File checkSelectedFile = new File(localPictureUri);
+                        if (!checkSelectedFile.exists()) {
 
-                        savePictureBtn.setVisibility(View.VISIBLE);
-                        removePictureBtn.setVisibility(View.VISIBLE);
-
-                        savePictureBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                previewItemDialogManager.closeDialog();
-                                MessageHelper.show(ManageCombosActivity.this,
-                                        MessageType.INFO,
-                                        "Não se esqueça de salvar");
+                            File sourceFile = new File(photoViewer.getSelectedFilePath());
+                            try {
+                                FileHelper.copy(sourceFile, checkSelectedFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
 
                             }
-                        });
 
-                        removePictureBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                data = null;
-                                pictureUri = null;
-                                previewItemDialogManager.closeDialog();
-                            }
-                        });
+                        }
+
+                        if (checkSelectedFile.exists()) {
+                            Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
+                            Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
+
+                            savePictureBtn.setVisibility(View.VISIBLE);
+                            removePictureBtn.setVisibility(View.VISIBLE);
+
+                            savePictureBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    previewItemDialogManager.closeDialog();
+                                    MessageHelper.show(ManageCombosActivity.this,
+                                            MessageType.INFO,
+                                            "Não se esqueça de salvar");
+
+                                }
+                            });
+
+                            removePictureBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    data = null;
+                                    pictureUri = null;
+                                    previewItemDialogManager.closeDialog();
+                                }
+                            });
+                        }
+
 
                     }
                 });
 
                 if (pictureUri != null) {
-                   boolean pictureChanged =  photoViewer.setPicture(localPictureUri);
+                    boolean pictureChanged = photoViewer.setPicture(localPictureUri);
                 }
 
             }

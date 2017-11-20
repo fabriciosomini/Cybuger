@@ -22,7 +22,7 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.Badge;
 import com.cynerds.cyburger.components.PhotoViewer;
 import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
-import com.cynerds.cyburger.helpers.FileNamingHelper;
+import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
@@ -237,7 +237,8 @@ public class CombosFragment extends Fragment {
                     PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
                     Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
                     Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
-                    photoViewer.setPicture(FileNamingHelper.getStoragePath(combo.getPictureUri()));
+                    photoViewer.setEditable(false);
+                    photoViewer.setPicture(FileHelper.getStoragePath(combo.getPictureUri()));
 
                     if (CyburgerApplication.isAdmin()) {
 

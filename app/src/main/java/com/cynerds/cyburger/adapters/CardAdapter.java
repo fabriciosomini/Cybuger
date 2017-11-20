@@ -1,12 +1,6 @@
 package com.cynerds.cyburger.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -19,8 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
-import com.cynerds.cyburger.helpers.FileNamingHelper;
-import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
+import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseStorageHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.models.view.CardModel;
@@ -30,11 +23,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -103,7 +92,7 @@ public class CardAdapter extends ArrayAdapter<CardModel> {
 
 
         if (pictureUri != null) {
-            final String localPictureUri = FileNamingHelper.getStoragePath(pictureUri);
+            final String localPictureUri = FileHelper.getStoragePath(pictureUri);
             final File file = new File(localPictureUri);
 
             if (!file.exists()) {

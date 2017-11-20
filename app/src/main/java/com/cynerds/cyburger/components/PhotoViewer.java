@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.cynerds.cyburger.R;
 import com.cynerds.cyburger.helpers.FileDialogHelper;
-import com.cynerds.cyburger.helpers.FirebaseStorageConstants;
 import com.cynerds.cyburger.interfaces.OnPictureChangedListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -41,9 +40,10 @@ public class PhotoViewer extends ConstraintLayout {
     private TextView selectedPhotoImgViewTxt;
     private boolean isEditable;
     private OnPictureChangedListener onPictureChangedListener;
-    private String fileName;
+    private String selectedFileName;
     private byte[] data;
     private String picture;
+    private String selectedFilePath;
 
     public PhotoViewer(Context context) {
         super(context);
@@ -57,8 +57,8 @@ public class PhotoViewer extends ConstraintLayout {
         initializeViews(context);
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getSelectedFileName() {
+        return selectedFileName;
     }
 
     public byte[] getData() {
@@ -188,7 +188,8 @@ public class PhotoViewer extends ConstraintLayout {
                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                            data = baos.toByteArray();
                            baos.close();
-                           fileName = file.getName();
+                           selectedFileName = file.getName();
+                           selectedFilePath = file.getPath();
 
                            if (onPictureChangedListener != null) {
                                onPictureChangedListener.onPictureChanged();
@@ -211,5 +212,9 @@ public class PhotoViewer extends ConstraintLayout {
        }
 
         return false;
+    }
+
+    public String getSelectedFilePath() {
+        return selectedFilePath;
     }
 }
