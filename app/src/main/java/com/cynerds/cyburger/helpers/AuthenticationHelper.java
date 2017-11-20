@@ -139,20 +139,31 @@ public class AuthenticationHelper {
                     .addOnCompleteListener(activity, onSignInCompleteListener);
         } else {
             UserAccount userAccount = CyburgerApplication.getUserAccount();
-            if (userAccount.getEmail().equals(email.trim())
-                    && userAccount.getPassword().equals(password.trim())) {
 
-                onSuccessfulSignIn();
-            }
-            else
-            {
-                if(onSignInListener!=null)
-                {
-                    FirebaseAuthInvalidCredentialsException firebaseAuthInvalidCredentialsException =
-                            new FirebaseAuthInvalidCredentialsException("Offline mode", "INVALID_CREDENTIALS");
-                    onSignInListener.onError(firebaseAuthInvalidCredentialsException);
+            if (userAccount != null) {
+                if (userAccount.getEmail().equals(email.trim())
+                        && userAccount.getPassword().equals(password.trim())) {
+
+                    onSuccessfulSignIn();
+                } else {
+                    if (onSignInListener != null) {
+                        FirebaseAuthInvalidCredentialsException firebaseAuthInvalidCredentialsException =
+                                new FirebaseAuthInvalidCredentialsException("Offline mode", "INVALID_CREDENTIALS");
+                        onSignInListener.onError(firebaseAuthInvalidCredentialsException);
+                    }
+
                 }
-
+            } else {
+                if (onSignInListener != null) {
+                    Exception neverLoggedInSync =
+                            new Exception("Não foi possível validar as suas credenciais. " +
+                                    "\nAs possíveis soluções são:"
+                                    +"\n\n* Você precisa fazer login na aplicação " +
+                                    "conectado à internet ao menos uma vez"
+                                    +"\n\n* A aplicação precisa da sua permissão" +
+                                    " para gravar informações");
+                    onSignInListener.onError(neverLoggedInSync);
+                }
             }
         }
 
