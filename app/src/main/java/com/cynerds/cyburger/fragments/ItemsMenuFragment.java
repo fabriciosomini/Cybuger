@@ -245,6 +245,7 @@ public class ItemsMenuFragment extends Fragment {
                 public void onClick(View v) {
                     final DialogManager previewItemDialogManager = new DialogManager(currentActivty);
                     previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
+                    previewItemDialogManager.setCentered(true);
                     previewItemDialogManager.showDialog(item.getDescription(), "");
 
 
@@ -347,7 +348,7 @@ public class ItemsMenuFragment extends Fragment {
                                     }
                                 });
                                 askForPaymentMethodDialog.setAction(dialogAction);
-                                askForPaymentMethodDialog.showDialog("Você gostaria de usar " +
+                                askForPaymentMethodDialog.showDialog("Usar pontos na compra", "Você gostaria de usar " +
                                         "seus pontos para comprar este item?");
 
 

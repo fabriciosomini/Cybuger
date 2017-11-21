@@ -277,6 +277,7 @@ public class MainActivity extends BaseActivity {
 
         final DialogManager orderDialog = new DialogManager(MainActivity.this);
         orderDialog.setContentView(R.layout.dialog_ordering_items);
+        orderDialog.setCentered(true);
         orderDialog.showDialog(title, "");
 
 

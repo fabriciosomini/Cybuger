@@ -248,13 +248,14 @@ public class CombosFragment extends Fragment {
             cardModel.setOnCardViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final DialogManager previewItemDialogManager = new DialogManager(currentActivty);
-                    previewItemDialogManager.setContentView(R.layout.dialog_preview_item);
-                    previewItemDialogManager.showDialog(combo.getComboName(), "");
+                    final DialogManager previewComboDialogManager = new DialogManager(currentActivty);
+                    previewComboDialogManager.setContentView(R.layout.dialog_preview_item);
+                    previewComboDialogManager.setCentered(true);
+                    previewComboDialogManager.showDialog(combo.getComboName(), "");
 
-                    Button editRecordBtn = previewItemDialogManager.getContentView().findViewById(R.id.editRecordBtn);
-                    Button addToOrderBtn = previewItemDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
-                    PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
+                    Button editRecordBtn = previewComboDialogManager.getContentView().findViewById(R.id.editRecordBtn);
+                    Button addToOrderBtn = previewComboDialogManager.getContentView().findViewById(R.id.addToOrderBtn);
+                    PhotoViewer photoViewer = previewComboDialogManager.getContentView().findViewById(R.id.previewItemComboPhotoViewer);
                     photoViewer.setEditable(false);
                     photoViewer.setPicture(FileHelper.getStoragePath(currentActivty, combo.getPictureUri()));
 
@@ -267,7 +268,7 @@ public class CombosFragment extends Fragment {
                             public void onClick(View v) {
 
                                 ActivityManager.startActivity(currentActivty, ManageCombosActivity.class, cardModel.getExtra());
-                                previewItemDialogManager.closeDialog();
+                                previewComboDialogManager.closeDialog();
                             }
                         });
 
@@ -313,7 +314,7 @@ public class CombosFragment extends Fragment {
                                     }
                                     badge.setBadgeCount(badge.getBadgeCount() + 1);
 
-                                    previewItemDialogManager.closeDialog();
+                                    previewComboDialogManager.closeDialog();
 
                                     firebaseDatabaseHelper.notifyChanges();
                                 }
@@ -356,7 +357,7 @@ public class CombosFragment extends Fragment {
                                     }
                                 });
                                 askForPaymentMethodDialog.setAction(dialogAction);
-                                askForPaymentMethodDialog.showDialog("Você gostaria de usar " +
+                                askForPaymentMethodDialog.showDialog("Usar pontos na compra", "Você gostaria de usar " +
                                         "seus pontos para comprar este combo?");
 
 

@@ -27,7 +27,13 @@ public class DialogManager {
     private int layoutResId = -1;
     private View contentView;
     private AlertDialog.Builder builder;
-    
+
+    public void setCentered(boolean centered) {
+        this.centered = centered;
+    }
+
+    private boolean centered;
+
     public DialogManager(Context context, DialogType dialogType) {
 
         this.context = context;
@@ -118,7 +124,6 @@ public class DialogManager {
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View titleView = inflater.inflate(R.layout.alert_dialog_title, null);
 
         alertDialog.setCancelable(true);
         alertDialog.setCanceledOnTouchOutside(true);
@@ -126,7 +131,19 @@ public class DialogManager {
         title = title == null ? "" : title;
         message = message == null ? "" : message;
 
-        TextView titleText = titleView.findViewById(R.id.alertTitleText);
+        View titleView = null;
+        TextView titleText = null;
+        if(centered)
+        {
+            titleView = inflater.inflate(R.layout.alert_dialog_title_centered, null);
+            titleText = titleView.findViewById(R.id.alertTitleTextCentered);
+        }else
+        {
+            titleView = inflater.inflate(R.layout.alert_dialog_title, null);
+            titleText = titleView.findViewById(R.id.alertTitleText);
+        }
+
+
         titleText.setText(title);
         alertDialog.setCustomTitle(titleView);
 
