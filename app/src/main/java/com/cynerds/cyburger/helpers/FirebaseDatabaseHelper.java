@@ -269,10 +269,27 @@ public class FirebaseDatabaseHelper<T> {
         return tableReference.push().setValue(baseModel);
     }
 
-
     public List<T> get() {
         LogHelper.log("Get items " + loadedItemsCount + " of type: " + classType.getSimpleName());
+
+
         return (List<T>) items;
+    }
+
+    public List<T> get(String key) {
+        LogHelper.log("Get items " + loadedItemsCount + " of type: " + classType.getSimpleName());
+
+        List<T> filtered = new ArrayList<>();
+
+        for (BaseModel t :
+                items) {
+            if(t.getKey().equals(key))
+            {
+                filtered.add((T)t);
+            }
+        }
+
+        return (List<T>) filtered;
     }
 
     public Task<Void> delete(BaseModel baseModel) {
@@ -304,6 +321,13 @@ public class FirebaseDatabaseHelper<T> {
 
     public boolean isFullLoaded() {
         return get().size() == loadedItemsCount;
+    }
+
+    public void notifyChanges() {
+        if(onDataChangeListener!=null)
+        {
+            onDataChangeListener.onDatabaseChanges();
+        }
     }
 
 

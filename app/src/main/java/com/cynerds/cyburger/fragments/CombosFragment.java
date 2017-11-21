@@ -3,7 +3,6 @@ package com.cynerds.cyburger.fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,15 +28,14 @@ import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.ActivityManager;
 import com.cynerds.cyburger.helpers.CardModelFilterHelper;
 import com.cynerds.cyburger.helpers.DialogManager;
-import com.cynerds.cyburger.helpers.GsonHelper;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.InnerMethod;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
 import com.cynerds.cyburger.models.combo.Combo;
+import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.view.CardModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -297,6 +295,16 @@ public class CombosFragment extends Fragment {
 
                                     Badge badge = currentActivty.getBadge();
 
+
+                                    if(currentActivty.getOrder().getCustomer() == null)
+                                    {
+                                        String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                        Customer customer = new Customer();
+                                        customer.setCustomerName(customerName);
+                                        customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
+
+                                        currentActivty.getOrder().setCustomer(customer);
+                                    }
                                     if (paidCombo != null) {
 
                                         currentActivty.getOrder().getOrderedCombos().add(paidCombo);
@@ -306,6 +314,8 @@ public class CombosFragment extends Fragment {
                                     badge.setBadgeCount(badge.getBadgeCount() + 1);
 
                                     previewItemDialogManager.closeDialog();
+
+                                    firebaseDatabaseHelper.notifyChanges();
                                 }
                             };
 
@@ -323,14 +333,16 @@ public class CombosFragment extends Fragment {
                                         Profile profile = CyburgerApplication.getProfile();
                                         if (profile != null) {
 
-                                            int bonusPoint = profile.getBonusPoints();
+
                                             final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(combo.getComboAmount());
-                                            int totalBonusBalance = bonusPoint - pointsToRemove;
+                                            profile.setBonusPoints(profile.getBonusPoints() - pointsToRemove);
                                             Combo paidCombo = (Combo) combo.copyValues(Combo.class);
                                             paidCombo.setComboAmount(0);
                                             paidCombo.setComboBonusPoints(0);
                                             paidCombo.setComboSpentPoints(pointsToRemove);
                                             addToOrder.onExecute(paidCombo);
+
+
                                         }
 
 

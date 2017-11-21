@@ -31,10 +31,12 @@ import com.cynerds.cyburger.helpers.DialogManager;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.cynerds.cyburger.interfaces.InnerMethod;
 import com.cynerds.cyburger.interfaces.OnDataChangeListener;
+import com.cynerds.cyburger.models.customer.Customer;
 import com.cynerds.cyburger.models.item.Item;
 
 import com.cynerds.cyburger.models.profile.Profile;
 import com.cynerds.cyburger.models.view.CardModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -287,6 +289,16 @@ public class ItemsMenuFragment extends Fragment {
 
                                     Badge badge = currentActivty.getBadge();
 
+                                    if(currentActivty.getOrder().getCustomer() == null)
+                                    {
+                                        String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                        Customer customer = new Customer();
+                                        customer.setCustomerName(customerName);
+                                        customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
+
+                                        currentActivty.getOrder().setCustomer(customer);
+                                    }
+
                                     if (paidItem != null) {
 
                                         currentActivty.getOrder().getOrderedItems().add(paidItem);
@@ -296,6 +308,8 @@ public class ItemsMenuFragment extends Fragment {
                                     badge.setBadgeCount(badge.getBadgeCount() + 1);
 
                                     previewItemDialogManager.closeDialog();
+
+                                    firebaseDatabaseHelper.notifyChanges();
                                 }
                             };
 
@@ -313,9 +327,8 @@ public class ItemsMenuFragment extends Fragment {
                                         Profile profile = CyburgerApplication.getProfile();
                                         if (profile != null) {
 
-                                            int bonusPoint = profile.getBonusPoints();
                                             final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(item.getPrice());
-                                            int totalBonusBalance = bonusPoint - pointsToRemove;
+                                            profile.setBonusPoints(profile.getBonusPoints() - pointsToRemove);
                                             Item paidItem = (Item) item.copyValues(Item.class);
                                             paidItem.setPrice(0);
                                             paidItem.setBonusPoints(0);

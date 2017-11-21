@@ -476,12 +476,7 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
 
-                            String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                            Customer customer = new Customer();
-                            customer.setCustomerName(customerName);
-                            customer.setLinkedProfileId(CyburgerApplication.getProfile().getUserId());
 
-                            order.setCustomer(customer);
                             firebaseDatabaseHelperOrders.insert(order).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -490,19 +485,8 @@ public class MainActivity extends BaseActivity {
                                         if (profile != null) {
 
                                             int bonusPoint = profile.getBonusPoints();
+                                            profile.setBonusPoints(bonusPoint);
 
-                                            int pointsToRemove = 0;
-
-                                            for (Combo combo : order.getOrderedCombos()) {
-                                                pointsToRemove += combo.getComboSpentPoints();
-                                            }
-                                            for (Item item : order.getOrderedItems()) {
-                                                pointsToRemove += item.getItemSpentPoints();
-                                            }
-
-                                            int totalBonusBalance = bonusPoint - pointsToRemove;
-
-                                            profile.setBonusPoints(totalBonusBalance);
                                             FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
                                                     = new FirebaseDatabaseHelper(Profile.class);
 
@@ -552,64 +536,90 @@ public class MainActivity extends BaseActivity {
                         removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (readOnly) {
-                                    firebaseDatabaseHelperOrders.delete(order);
-                                    removeNotification(ORDERS_TAB, 1);
+                                Profile profile = CyburgerApplication.getProfile();
 
-                                    if (CyburgerApplication.isAdmin()) {
+                                if (profile != null) {
+                                    FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
+                                            = new FirebaseDatabaseHelper(Profile.class);
 
-                                        Customer customer = order.getCustomer();
-                                        String topic = getString(R.string.prefix_cyburger) + customer.getLinkedProfileId();
-                                        String customerName = order.getCustomer().getCustomerName();
-                                        PostNotificationHelper.post(MainActivity.this,
-                                                "", customerName
-                                                        + getString(R.string.you_order_canceled), topic);
-                                    }
+                                    Profile customerProfile = null;
 
-                                    //Restaurar os pontos gastos
-                                    int pointsToRestore = 0;
-
-                                    for (Combo combo : order.getOrderedCombos()) {
-                                        pointsToRestore += combo.getComboSpentPoints();
-                                    }
-                                    for (Item item : order.getOrderedItems()) {
-                                        pointsToRestore += item.getItemSpentPoints();
+                                    List<Profile> filteredProfiles = profileFirebaseDatabaseHelper.get(order.getCustomer().getLinkedProfileId());
+                                    if (filteredProfiles.size() > 0) {
+                                        customerProfile = filteredProfiles.get(0);
                                     }
 
 
-                                    if (pointsToRestore > 0) {
-                                        Profile profile = CyburgerApplication.getProfile();
-                                        int bonusPoint = profile.getBonusPoints() + pointsToRestore;
+                                    //A compra cancelada é minha, é só devolver os pontos pro meu perfil
+                                    if (order.getCustomer().getLinkedProfileId().equals(profile.getUserId())) {
+                                        //Restaurar os pontos gastos
+                                        int pointsToRestore = 0;
 
-                                        if (profile != null) {
-                                            profile.setBonusPoints(bonusPoint);
-                                            FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
-                                                    = new FirebaseDatabaseHelper(Profile.class);
-
-                                            profileFirebaseDatabaseHelper.update(profile);
+                                        for (Combo combo : order.getOrderedCombos()) {
+                                            pointsToRestore += combo.getComboSpentPoints();
                                         }
+                                        for (Item item : order.getOrderedItems()) {
+                                            pointsToRestore += item.getItemSpentPoints();
+                                        }
+
+
+                                        if (pointsToRestore > 0) {
+
+                                            if (profile != null) {
+                                                int bonusPoint = profile.getBonusPoints() + pointsToRestore;
+                                                profile.setBonusPoints(bonusPoint);
+
+
+                                            }
+                                        }
+
+                                        //----------------------------
                                     }
-                                    //----------------------------
 
-                                } else {
-                                    previousOrder = new Order();
-                                    badge.setBadgeCount(0);
+
+                                    //Se a compra já foi CONFIRMADA
+                                    if (readOnly) {
+                                        firebaseDatabaseHelperOrders.delete(order);
+                                        removeNotification(ORDERS_TAB, 1);
+
+                                        if (CyburgerApplication.isAdmin()) {
+
+                                            Customer customer = order.getCustomer();
+                                            String topic = getString(R.string.prefix_cyburger) + customer.getLinkedProfileId();
+                                            String customerName = order.getCustomer().getCustomerName();
+                                            PostNotificationHelper.post(MainActivity.this,
+                                                    "", customerName
+                                                            + getString(R.string.you_order_canceled), topic);
+                                        }
+
+                                        //Se a compra já havia sido confirmada os pontos foram descontados
+                                        //então temos que atualizar o perfil com
+                                        if(customerProfile!=null)
+                                        {
+                                            profileFirebaseDatabaseHelper.update(customerProfile);
+                                        }
+
+                                    } else {
+                                        previousOrder = new Order();
+                                        badge.setBadgeCount(0);
+                                    }
+
+                                    if (previousOrder != null) {
+                                        order = previousOrder;
+                                        LogHelper.log(getString(R.string.restore_previous_order));
+                                    } else {
+                                        order = new Order();
+                                        LogHelper.log(getString(R.string.reset_order));
+                                    }
+                                    
+                                    orderDialog.closeDialog();
+                                    MessageHelper.show(MainActivity.this,
+                                            MessageType.SUCCESS, getString(R.string.canceled_order));
+
+
+
+                                    CyburgerApplication.notifyChanges();
                                 }
-
-                                if (previousOrder != null) {
-                                    order = previousOrder;
-                                    LogHelper.log(getString(R.string.restore_previous_order));
-                                } else {
-                                    order = new Order();
-                                    LogHelper.log(getString(R.string.reset_order));
-                                }
-
-
-                                orderDialog.closeDialog();
-
-
-                                MessageHelper.show(MainActivity.this,
-                                        MessageType.SUCCESS, getString(R.string.canceled_order));
                             }
                         });
 

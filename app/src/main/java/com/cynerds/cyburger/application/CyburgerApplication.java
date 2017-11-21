@@ -266,12 +266,7 @@ public class CyburgerApplication extends Application {
 
 
 
-                    for (OnDataChangeListener onDataChangeListener :
-                            onDataChangeListeners) {
-                        if (onDataChangeListener != null) {
-                            onDataChangeListener.onDatabaseChanges();
-                        }
-                    }
+                   notifyChanges();
 
 
                 }
@@ -355,5 +350,14 @@ public class CyburgerApplication extends Application {
 
         crashReportFirebaseDatabaseHelper.insert(crashReport);
 
+    }
+
+    public static void notifyChanges() {
+        for (OnDataChangeListener onDataChangeListener :
+                onDataChangeListeners) {
+            if (onDataChangeListener != null) {
+                onDataChangeListener.onDatabaseChanges();
+            }
+        }
     }
 }
