@@ -18,7 +18,7 @@ public class BonusPointExchangeHelper {
 
             if(parameters!=null){
 
-                userCacheFromPoints = userPoints * parameters.getBaseExchangeAmount() / parameters.getBaseExchangePoints();
+                userCacheFromPoints = userPoints * (parameters.getBaseExchangeAmount() / parameters.getBaseExchangePoints());
 
             }
         }
@@ -34,7 +34,7 @@ public class BonusPointExchangeHelper {
 
             if(parameters!=null){
 
-                float pointsFromCacheF = amount * parameters.getBaseExchangePoints() / parameters.getBaseExchangeAmount();
+                float pointsFromCacheF = amount * (parameters.getBasePoints() / parameters.getBaseAmount());
                 pointsFromCache = (int)Math.round(pointsFromCacheF);
 
             }

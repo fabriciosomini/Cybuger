@@ -2,6 +2,8 @@ package com.cynerds.cyburger.activities.admin;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import com.cynerds.cyburger.activities.BaseActivity;
 import com.cynerds.cyburger.adapters.SpinnerArrayAdapter;
 import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.components.PhotoViewer;
+import com.cynerds.cyburger.helpers.BonusPointExchangeHelper;
 import com.cynerds.cyburger.helpers.FileHelper;
 import com.cynerds.cyburger.helpers.FirebaseDatabaseHelper;
 import com.cynerds.cyburger.helpers.DialogAction;
@@ -178,6 +181,35 @@ public class ManageItemsActivity extends BaseActivity {
                 if (pictureUri != null) {
                     boolean pictureChanged = photoViewer.setPicture(localPictureUri);
                 }
+
+            }
+        });
+
+        itemPriceTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length()>0)
+                {
+                    String itemPrice = s.toString();
+                    Float itemPriceFloat = Float.valueOf(itemPrice);
+                    int suggestedPoints = BonusPointExchangeHelper.convertAmountToPoints(itemPriceFloat);
+                    itemBonusPointTxt.setHint("Pontos sugeridos: " + suggestedPoints);
+                    BonusPointExchangeHelper.convertUserPointsToCash();
+                }
+                else{
+                    itemBonusPointTxt.setHint(null);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
