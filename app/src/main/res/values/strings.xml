@@ -74,8 +74,8 @@
     <string name="ERROR_REMOVE_COMBO">Erro ao remover combo</string>
     <string name="REMOVE_COMBO">Remover combo</string>
     <string name="QST_REMOVE_ITEM">Tem certeza que deseja remover esse item?</string>
-    <string name="VAR_PRICE_SUGESTION">Preço sugerido: R$ {valor}</string>
-    <string name="SUG_POINTS">Pontos sugeridos: </string>
+    <string name="VAR_PRICE_SUGESTION">Preço mínimo sugerido: R$ {valor}</string>
+    <string name="SUG_POINTS">Pontos sugeridos:&#160;</string>
     <string name="ok_add_item">Item adicionado</string>
     <string name="err_add_item">Erro ao adicionar item</string>
     <string name="ok_update_item">Item atualizado</string>
