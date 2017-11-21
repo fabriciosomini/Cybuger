@@ -27,7 +27,7 @@
         android:layout_marginTop="8dp"
         android:id="@+id/selectedPhotoImgViewTxt"
         android:text="+ Toque para adicionar"
-        android:textColor="@color/verylightgrey"
+        android:textColor="@color/darkgrey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
