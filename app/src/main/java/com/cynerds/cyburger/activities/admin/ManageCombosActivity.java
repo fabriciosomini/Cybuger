@@ -258,6 +258,8 @@ public class ManageCombosActivity extends BaseActivity {
                         return;
                     }
 
+                    pictureUri = pictureUri == null ? "" : pictureUri;
+                    
                     if(pictureUri.isEmpty()){
 
                        MessageHelper.show(ManageCombosActivity.this, MessageType.ERROR,
