@@ -198,7 +198,7 @@ public class SignUpFragment extends Fragment {
                             DialogManager storePasswordDialogManager =
                                     new DialogManager(currentActivity, DialogManager.DialogType.YES_NO);
                             storePasswordDialogManager.setAction(dialogAction);
-                            storePasswordDialogManager.showDialog(getString(R.string.login_message_remember));
+                            storePasswordDialogManager.showDialog("ENTRAR AUTOMATICAMENTE", getString(R.string.login_message_remember));
                         }
 
                         @Override
@@ -291,7 +291,7 @@ public class SignUpFragment extends Fragment {
                             });
                             DialogManager permissionDeniedDialogManager = new DialogManager(currentActivity, DialogManager.DialogType.OK);
                             permissionDeniedDialogManager.setAction(dialogAction);
-                            permissionDeniedDialogManager.showDialog("Não será possível logar automaticamente,"
+                            permissionDeniedDialogManager.showDialog("Permissão negada", "Não será possível entrar automaticamente,"
                                     + " pois a permissão ao armazenamento foi negada");
 
                         }
@@ -334,7 +334,7 @@ public class SignUpFragment extends Fragment {
                             });
                             DialogManager permissionDeniedDialogManager = new DialogManager(currentActivity, DialogManager.DialogType.OK);
                             permissionDeniedDialogManager.setAction(dialogAction);
-                            permissionDeniedDialogManager.showDialog("Não será possível remover a opção de logar automaticamente,"
+                            permissionDeniedDialogManager.showDialog("Permissão negada", "Não será possível manter a opção de entrar automaticamente,"
                                     + " pois a permissão ao armazenamento foi negada");
 
                         }

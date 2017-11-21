@@ -154,7 +154,10 @@ public class OrdersFragment extends Fragment {
         cardModels.addAll(filteredCardModels);
         currentActivty.runOnUiThread(new Runnable() {
             public void run() {
-                adapter.notifyDataSetChanged();
+                if(adapter!=null)
+                {
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }

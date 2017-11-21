@@ -152,7 +152,9 @@ public class ItemsMenuFragment extends Fragment {
         cardModels.addAll(filteredCardModels);
         currentActivty.runOnUiThread(new Runnable() {
             public void run() {
-                adapter.notifyDataSetChanged();
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -290,8 +292,7 @@ public class ItemsMenuFragment extends Fragment {
 
                                     Badge badge = currentActivty.getBadge();
 
-                                    if(currentActivty.getOrder().getCustomer() == null)
-                                    {
+                                    if (currentActivty.getOrder().getCustomer() == null) {
                                         String customerName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                                         Customer customer = new Customer();
                                         customer.setCustomerName(customerName);

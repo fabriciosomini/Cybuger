@@ -61,7 +61,7 @@
     <string name="sign_in_fragment">sign_in_fragment</string>
     <string name="sign_up_fragment">sign_up_fragment</string>
     <string name="login_error_unsynced">Suas informações estão dessincronizadas. \n\nPor favor, conecte seu telefone à internet</string>
-    <string name="login_message_remember">Deseja fazer login automaticamente neste dispositivo?</string>
+    <string name="login_message_remember">Deseja entrar automaticamente em sua conta?</string>
     <string name="menu_manage_parameters">Gerenciar paramêtros</string>
     <string name="combos_search">Procurar por combos</string>
     <string name="items_search">Procurar no cardápio</string>

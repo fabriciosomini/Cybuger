@@ -396,8 +396,7 @@ public class MainActivity extends BaseActivity {
                                                                         String topic = getString(R.string.prefix_cyburger) + p.getUserId();
                                                                         String customerName = order.getCustomer().getCustomerName();
 
-                                                                        confirmFinishOrderDialog.closeDialog();
-                                                                        orderDialog.closeDialog();
+
                                                                         MessageHelper.show(MainActivity.this,
                                                                                 MessageType.SUCCESS, getString(R.string.order_complete));
 
@@ -419,6 +418,9 @@ public class MainActivity extends BaseActivity {
                                                     }
                                                 });
 
+                                                confirmFinishOrderDialog.closeDialog();
+                                                orderDialog.closeDialog();
+
                                                 return;
                                             }
                                         }
@@ -432,7 +434,8 @@ public class MainActivity extends BaseActivity {
 
 
                                 confirmFinishOrderDialog.setAction(confirmFinishOrderDialogAction);
-                                confirmFinishOrderDialog.showDialog(getString(R.string.complete_order));
+                                confirmFinishOrderDialog.showDialog(getString(R.string.complete_order),
+                                        "Deseja concluir o pedido deste cliente?");
                             }
                         });
 
@@ -502,7 +505,7 @@ public class MainActivity extends BaseActivity {
                                                         badge.setBadgeCount(0);
                                                         order = new Order();
                                                         previousOrder = new Order();
-                                                        orderDialog.closeDialog();
+
 
 
                                                         MessageHelper.show(MainActivity.this,
@@ -511,6 +514,8 @@ public class MainActivity extends BaseActivity {
                                                     }
                                                 }
                                             });
+
+                                            orderDialog.closeDialog();
 
 
                                         }
