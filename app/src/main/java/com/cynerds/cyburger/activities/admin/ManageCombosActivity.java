@@ -126,11 +126,12 @@ public class ManageCombosActivity extends BaseActivity {
         addComboPictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DialogManager previewItemDialogManager = new DialogManager(ManageCombosActivity.this);
-                previewItemDialogManager.setContentView(R.layout.dialog_preview_picture);
-                previewItemDialogManager.showDialog("Imagem do combo", "");
+                final DialogManager previewComboDialogManager = new DialogManager(ManageCombosActivity.this);
+                previewComboDialogManager.setContentView(R.layout.dialog_preview_picture);
+                previewComboDialogManager.setCentered(true);
+                previewComboDialogManager.showDialog("Imagem do combo", "");
 
-                final PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewPhotoViewer);
+                final PhotoViewer photoViewer = previewComboDialogManager.getContentView().findViewById(R.id.previewPhotoViewer);
                 photoViewer.setEditable(true);
 
                 photoViewer.addOnPictureChangedListener(new OnPictureChangedListener() {
@@ -156,8 +157,8 @@ public class ManageCombosActivity extends BaseActivity {
                         }
 
 
-                        Button savePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.savePictureBtn);
-                        Button removePictureBtn = previewItemDialogManager.getContentView().findViewById(R.id.removePictureBtn);
+                        Button savePictureBtn = previewComboDialogManager.getContentView().findViewById(R.id.savePictureBtn);
+                        Button removePictureBtn = previewComboDialogManager.getContentView().findViewById(R.id.removePictureBtn);
 
                         savePictureBtn.setVisibility(View.VISIBLE);
                         removePictureBtn.setVisibility(View.VISIBLE);
@@ -165,7 +166,7 @@ public class ManageCombosActivity extends BaseActivity {
                         savePictureBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                previewItemDialogManager.closeDialog();
+                                previewComboDialogManager.closeDialog();
                                 MessageHelper.show(ManageCombosActivity.this,
                                         MessageType.INFO,
                                         "Não se esqueça de salvar");
@@ -178,7 +179,7 @@ public class ManageCombosActivity extends BaseActivity {
                             public void onClick(View v) {
                                 data = null;
                                 pictureUri = null;
-                                previewItemDialogManager.closeDialog();
+                                previewComboDialogManager.closeDialog();
                             }
                         });
 

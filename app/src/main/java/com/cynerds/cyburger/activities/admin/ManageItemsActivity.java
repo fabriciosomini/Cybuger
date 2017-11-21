@@ -120,6 +120,7 @@ public class ManageItemsActivity extends BaseActivity {
             public void onClick(View v) {
                 final DialogManager previewItemDialogManager = new DialogManager(ManageItemsActivity.this);
                 previewItemDialogManager.setContentView(R.layout.dialog_preview_picture);
+                previewItemDialogManager.setCentered(true);
                 previewItemDialogManager.showDialog("Imagem do item", "");
 
                 final PhotoViewer photoViewer = previewItemDialogManager.getContentView().findViewById(R.id.previewPhotoViewer);
