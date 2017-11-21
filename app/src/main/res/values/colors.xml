@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+
     <color name="colorAccent">#EF7E47</color>
     <color name="colorEditText">#11fdfbfb</color>
     <color name="colorPrimary">#00000000</color>
