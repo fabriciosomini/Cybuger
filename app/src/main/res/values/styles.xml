@@ -54,6 +54,11 @@
 
     </style>
 
+    <style name="AppTheme.CyburgerCircle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/circle_shape</item>
+
+    </style>
+
     <style name="AppTheme.CyburgerSpinner" parent="Widget.AppCompat.Spinner">
 
         <item name="android:background">@drawable/spinner_shape</item>

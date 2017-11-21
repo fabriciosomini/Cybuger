@@ -128,7 +128,7 @@
             android:id="@+id/cardIcon"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:background="@android:color/transparent"
+            style="@style/AppTheme.CyburgerCircle"
             android:scaleType="fitCenter"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
