@@ -7,6 +7,6 @@
         android:centerColor="@color/redishBlack"
 
 
-        android:startColor="@color/redishBlack" />
+        android:startColor="@color/redishBrown" />
 
 </shape>
