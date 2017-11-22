@@ -383,18 +383,21 @@ public class MainActivity extends BaseActivity {
                                                 }
 
 
+                                                //Vamos criar uma copia do objeto,
+                                                // pois quando o dialog fechar ele vai destruir o objeto
+                                                final Order orderClone = (Order)order.copyValues(Order.class);
                                                 p.setBonusPoints(totalBonusPoints);
                                                 firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            firebaseDatabaseHelperOrders.delete(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            firebaseDatabaseHelperOrders.delete(orderClone).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
 
                                                                     if (task.isSuccessful()) {
                                                                         String topic = getString(R.string.prefix_cyburger) + p.getUserId();
-                                                                        String customerName = order.getCustomer().getCustomerName();
+                                                                        String customerName = orderClone.getCustomer().getCustomerName();
 
 
                                                                         MessageHelper.show(MainActivity.this,
@@ -408,6 +411,7 @@ public class MainActivity extends BaseActivity {
                                                                                 MessageType.ERROR,
                                                                                 getString(R.string.err_complete_order));
                                                                     }
+
                                                                 }
                                                             });
                                                         } else {
@@ -481,7 +485,8 @@ public class MainActivity extends BaseActivity {
                         public void onClick(View v) {
 
 
-                            firebaseDatabaseHelperOrders.insert(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            Order orderClone = (Order) order.copyValues(Order.class);
+                            firebaseDatabaseHelperOrders.insert(orderClone).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
@@ -515,7 +520,7 @@ public class MainActivity extends BaseActivity {
                                                 }
                                             });
 
-                                            orderDialog.closeDialog();
+
 
 
                                         }
@@ -524,6 +529,8 @@ public class MainActivity extends BaseActivity {
                                     }
                                 }
                             });
+
+                            orderDialog.closeDialog();
 
 
                         }
@@ -545,12 +552,13 @@ public class MainActivity extends BaseActivity {
                                 Profile profile = CyburgerApplication.getProfile();
 
                                 if (profile != null) {
-                                    FirebaseDatabaseHelper<Profile> profileFirebaseDatabaseHelper
+                                    FirebaseDatabaseHelper<Profile> firebaseDatabaseHelperProfile
                                             = new FirebaseDatabaseHelper(Profile.class);
 
                                     Profile customerProfile = null;
 
-                                    List<Profile> filteredProfiles = profileFirebaseDatabaseHelper.get(order.getCustomer().getLinkedProfileId());
+                                    List<Profile> filteredProfiles = firebaseDatabaseHelperProfile
+                                            .get(order.getCustomer().getLinkedProfileId());
                                     if (filteredProfiles.size() > 0) {
                                         customerProfile = filteredProfiles.get(0);
                                     }
@@ -602,7 +610,7 @@ public class MainActivity extends BaseActivity {
                                         //então temos que atualizar o perfil com
                                         if(customerProfile!=null)
                                         {
-                                            profileFirebaseDatabaseHelper.update(customerProfile);
+                                            firebaseDatabaseHelperProfile.update(customerProfile);
                                         }
 
                                     } else {
