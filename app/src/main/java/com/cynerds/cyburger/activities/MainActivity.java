@@ -343,7 +343,8 @@ public class MainActivity extends BaseActivity {
                                 final DialogManager confirmFinishOrderDialog = new DialogManager(MainActivity.this,
                                         DialogManager.DialogType.YES_NO);
 
-                                DialogAction confirmFinishOrderDialogAction = new DialogAction();
+                                final DialogAction confirmFinishOrderDialogAction = new DialogAction();
+
                                 confirmFinishOrderDialogAction.setPositiveAction(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -351,7 +352,9 @@ public class MainActivity extends BaseActivity {
 
                                         for (final Profile p :
                                                 firebaseDatabaseHelperProfile.get()) {
-                                            if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())) {
+                                            if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())
+                                                    && !confirmFinishOrderDialogAction.isPositiveActionExecuted()) {
+
                                                 int comboBonusPoints = 0;
                                                 int itemsBonusPoints = 0;
 
@@ -385,57 +388,68 @@ public class MainActivity extends BaseActivity {
 
                                                 //Vamos criar uma copia do objeto,
                                                 // pois quando o dialog fechar ele vai destruir o objeto
-                                                final Order orderClone = (Order)order.copyValues(Order.class);
+                                                final Order orderClone = (Order) order.copyValues(Order.class);
                                                 p.setBonusPoints(totalBonusPoints);
-                                                firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            firebaseDatabaseHelperOrders.delete(orderClone).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
 
-                                                                    if (task.isSuccessful()) {
-                                                                        String topic = getString(R.string.prefix_cyburger) + p.getUserId();
-                                                                        String customerName = orderClone.getCustomer().getCustomerName();
+                                               if(!confirmFinishOrderDialogAction.isPositiveActionExecuted())
+                                               {
+                                                   confirmFinishOrderDialogAction.setPositiveActionExecuted(true);
+                                                   firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                       @Override
+                                                       public void onComplete(@NonNull Task<Void> updateTask) {
+                                                           if (updateTask.isSuccessful()) {
+                                                               firebaseDatabaseHelperOrders.delete(orderClone).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                   @Override
+                                                                   public void onComplete(@NonNull Task<Void> deleteTask) {
+
+                                                                       if (deleteTask.isSuccessful()) {
+                                                                           String topic = getString(R.string.prefix_cyburger) + p.getUserId();
+                                                                           String customerName = orderClone.getCustomer().getCustomerName();
 
 
-                                                                        MessageHelper.show(MainActivity.this,
-                                                                                MessageType.SUCCESS, getString(R.string.order_complete));
+                                                                           MessageHelper.show(MainActivity.this,
+                                                                                   MessageType.SUCCESS, getString(R.string.order_complete));
 
-                                                                        PostNotificationHelper.post(MainActivity.this,
-                                                                                "", customerName
-                                                                                        + getString(R.string.order_ok), topic);
-                                                                    } else {
-                                                                        MessageHelper.show(MainActivity.this,
-                                                                                MessageType.ERROR,
-                                                                                getString(R.string.err_complete_order));
-                                                                    }
+                                                                           PostNotificationHelper.post(MainActivity.this,
+                                                                                   "", customerName
+                                                                                           + getString(R.string.order_ok), topic);
 
-                                                                }
-                                                            });
-                                                        } else {
-                                                            MessageHelper.show(MainActivity.this,
-                                                                    MessageType.ERROR,
-                                                                    getString(R.string.err_points_profile));
-                                                        }
-                                                    }
-                                                });
+                                                                           CyburgerApplication.notifyChanges();
+                                                                       } else {
+                                                                           MessageHelper.show(MainActivity.this,
+                                                                                   MessageType.ERROR,
+                                                                                   getString(R.string.err_complete_order));
+                                                                       }
+
+                                                                   }
+                                                               });
+                                                           } else {
+                                                               MessageHelper.show(MainActivity.this,
+                                                                       MessageType.ERROR,
+                                                                       getString(R.string.err_points_profile));
+                                                           }
+                                                       }
+                                                   });
+                                               }
 
                                                 confirmFinishOrderDialog.closeDialog();
                                                 orderDialog.closeDialog();
+                                                break;
 
-                                                return;
                                             }
                                         }
 
-                                        MessageHelper.show(MainActivity.this,
-                                                MessageType.ERROR,
-                                                getString(R.string.client_404));
+
                                     }
 
                                 });
 
+                                confirmFinishOrderDialogAction.setNegativeAction(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        confirmFinishOrderDialog.closeDialog();
+                                    }
+                                });
 
                                 confirmFinishOrderDialog.setAction(confirmFinishOrderDialogAction);
                                 confirmFinishOrderDialog.showDialog(getString(R.string.complete_order),
@@ -512,15 +526,12 @@ public class MainActivity extends BaseActivity {
                                                         previousOrder = new Order();
 
 
-
                                                         MessageHelper.show(MainActivity.this,
                                                                 MessageType.SUCCESS,
                                                                 getString(R.string.wait_order));
                                                     }
                                                 }
                                             });
-
-
 
 
                                         }
@@ -544,6 +555,8 @@ public class MainActivity extends BaseActivity {
                     public void onClick(View v) {
 
                         LogHelper.log(getString(R.string.canceled_order));
+                        final DialogManager removeOrderDialog = new DialogManager(MainActivity.this,
+                                DialogManager.DialogType.YES_NO);
 
                         DialogAction removeOrderDialogAction = new DialogAction();
                         removeOrderDialogAction.setPositiveAction(new View.OnClickListener() {
@@ -608,8 +621,7 @@ public class MainActivity extends BaseActivity {
 
                                         //Se a compra já havia sido confirmada os pontos foram descontados
                                         //então temos que atualizar o perfil com
-                                        if(customerProfile!=null)
-                                        {
+                                        if (customerProfile != null) {
                                             firebaseDatabaseHelperProfile.update(customerProfile);
                                         }
 
@@ -625,11 +637,10 @@ public class MainActivity extends BaseActivity {
                                         order = new Order();
                                         LogHelper.log(getString(R.string.reset_order));
                                     }
-                                    
+
                                     orderDialog.closeDialog();
                                     MessageHelper.show(MainActivity.this,
                                             MessageType.SUCCESS, getString(R.string.canceled_order));
-
 
 
                                     CyburgerApplication.notifyChanges();
@@ -637,8 +648,13 @@ public class MainActivity extends BaseActivity {
                             }
                         });
 
-                        DialogManager removeOrderDialog = new DialogManager(MainActivity.this,
-                                DialogManager.DialogType.YES_NO);
+                        removeOrderDialogAction.setNegativeAction(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                removeOrderDialog.closeDialog();
+                            }
+                        });
+
                         removeOrderDialog.setAction(removeOrderDialogAction);
                         removeOrderDialog.showDialog(getString(R.string.msg_cancel_order), getString(R.string.qst_cancel_order));
 

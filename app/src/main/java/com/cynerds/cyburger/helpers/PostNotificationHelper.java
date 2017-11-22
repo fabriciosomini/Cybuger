@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.facebook.FacebookSdk.getCacheDir;
 
@@ -65,18 +66,21 @@ public class PostNotificationHelper {
     }
 
 
-    public static JsonObjectRequest buildRequest(String text, String title,  String clickAction, String topic) {
+    public static JsonObjectRequest buildRequest(String notificationId, String text, String title,  String clickAction, String topic) {
 
         JSONObject notification = new JSONObject();
+        JSONObject data = new JSONObject();
         JSONObject jsonBody = new JSONObject();
 
 
         try {
+            data.put("notificationId", notificationId);
             notification.put("title", title);
             notification.put("text", text);
             notification.put("click_action", clickAction);
             jsonBody.put("to", "/topics/" + topic);
             jsonBody.put("notification", notification);
+            jsonBody.put("data", data);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -135,7 +139,8 @@ public class PostNotificationHelper {
     public static void post(Context context, String title, String text, String clickAction, String topic) {
 
 
-        JsonObjectRequest jsonObjectRequest = buildRequest(title, text, clickAction, topic);
+        String id = UUID.randomUUID().toString();
+        JsonObjectRequest jsonObjectRequest = buildRequest(id, title, text, clickAction, topic);
         getInstance(context).addToRequestQueue(jsonObjectRequest);
 
 

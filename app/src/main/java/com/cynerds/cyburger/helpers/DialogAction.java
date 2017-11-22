@@ -10,6 +10,33 @@ public class DialogAction {
     private View.OnClickListener positiveAction;
     private View.OnClickListener negativeAction;
     private View.OnClickListener neutralAction;
+    private boolean positiveActionExecuted;
+    private boolean negativeActionExecuted;
+    private boolean neutralActionExecuted;
+
+    public boolean isPositiveActionExecuted() {
+        return positiveActionExecuted;
+    }
+
+    public void setPositiveActionExecuted(boolean positiveActionExecuted) {
+        this.positiveActionExecuted = positiveActionExecuted;
+    }
+
+    public boolean isNegativeActionExecuted() {
+        return negativeActionExecuted;
+    }
+
+    public void setNegativeActionExecuted(boolean negativeActionExecuted) {
+        this.negativeActionExecuted = negativeActionExecuted;
+    }
+
+    public boolean isNeutralActionExecuted() {
+        return neutralActionExecuted;
+    }
+
+    public void setNeutralActionExecuted(boolean neutralActionExecuted) {
+        this.neutralActionExecuted = neutralActionExecuted;
+    }
 
     public View.OnClickListener getPositiveAction() {
         return positiveAction;

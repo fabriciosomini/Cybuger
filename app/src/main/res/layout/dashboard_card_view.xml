@@ -20,11 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="1dp">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:id="@+id/cardClickArea"
-            android:clickable="true"
-            android:layout_height="match_parent"></android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/cardTitle"
@@ -144,6 +139,12 @@
             app:layout_constraintTop_toTopOf="parent"
 
             tools:layout_constraintTop_creator="1" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:id="@+id/cardClickArea"
+            android:clickable="true"
+            android:layout_height="match_parent"></android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

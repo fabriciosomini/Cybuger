@@ -14,13 +14,19 @@ import com.cynerds.cyburger.application.CyburgerApplication;
 import com.cynerds.cyburger.helpers.LogHelper;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by fabri on 04/11/2017.
  */
 public class FirebaseNotificationService extends com.google.firebase.messaging.FirebaseMessagingService {
 
+    private static List<String> receivedNotifications = new ArrayList<>();
 
     public FirebaseNotificationService() {
+
 
     }
 
@@ -30,16 +36,34 @@ public class FirebaseNotificationService extends com.google.firebase.messaging.F
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
 
+        Map<String, String> data = remoteMessage.getData();
+        if (data != null) {
+            String notificationId = data.get("notificationId");
+            if (notificationId != null) {
+                if (!notificationId.isEmpty()) {
+                    if (receivedNotifications.contains(notificationId)) {
+                        return;
+
+                    } else {
+                        receivedNotifications.add(notificationId);
+                    }
+                }
+            }
+        }
+
         if (remoteMessage.getFrom().equals("/topics/" + CyburgerApplication.getUserTopicName())) {
             if (remoteMessage.getNotification() != null) {
 
                 String title = remoteMessage.getNotification().getTitle(); //get title
                 String message = remoteMessage.getNotification().getBody(); //get message
 
+
                 LogHelper.log("Message Notification Title: " + title);
                 LogHelper.log("Message Notification Body: " + message);
 
                 sendNotification(title, message);
+
+
             }
 
 
