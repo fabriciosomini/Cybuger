@@ -16,7 +16,7 @@
         android:textColor="@color/verylightgrey"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        android:text="Não há combos nesta lista"
+        android:text="@string/n_o_h_combos_nesta_lista"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

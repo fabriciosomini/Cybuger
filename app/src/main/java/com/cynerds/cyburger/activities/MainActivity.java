@@ -352,8 +352,7 @@ public class MainActivity extends BaseActivity {
 
                                         for (final Profile p :
                                                 firebaseDatabaseHelperProfile.get()) {
-                                            if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())
-                                                    && !confirmFinishOrderDialogAction.isPositiveActionExecuted()) {
+                                            if (order.getCustomer().getLinkedProfileId().equals(p.getUserId())) {
 
                                                 int comboBonusPoints = 0;
                                                 int itemsBonusPoints = 0;
@@ -391,46 +390,44 @@ public class MainActivity extends BaseActivity {
                                                 final Order orderClone = (Order) order.copyValues(Order.class);
                                                 p.setBonusPoints(totalBonusPoints);
 
-                                               if(!confirmFinishOrderDialogAction.isPositiveActionExecuted())
-                                               {
-                                                   confirmFinishOrderDialogAction.setPositiveActionExecuted(true);
-                                                   firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                       @Override
-                                                       public void onComplete(@NonNull Task<Void> updateTask) {
-                                                           if (updateTask.isSuccessful()) {
-                                                               firebaseDatabaseHelperOrders.delete(orderClone).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                   @Override
-                                                                   public void onComplete(@NonNull Task<Void> deleteTask) {
 
-                                                                       if (deleteTask.isSuccessful()) {
-                                                                           String topic = getString(R.string.prefix_cyburger) + p.getUserId();
-                                                                           String customerName = orderClone.getCustomer().getCustomerName();
+                                                firebaseDatabaseHelperProfile.update(p).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> updateTask) {
+                                                        if (updateTask.isSuccessful()) {
+                                                            firebaseDatabaseHelperOrders.delete(orderClone).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> deleteTask) {
+
+                                                                    if (deleteTask.isSuccessful()) {
+                                                                        String topic = getString(R.string.prefix_cyburger) + p.getUserId();
+                                                                        String customerName = orderClone.getCustomer().getCustomerName();
 
 
-                                                                           MessageHelper.show(MainActivity.this,
-                                                                                   MessageType.SUCCESS, getString(R.string.order_complete));
+                                                                        MessageHelper.show(MainActivity.this,
+                                                                                MessageType.SUCCESS, getString(R.string.order_complete));
 
-                                                                           PostNotificationHelper.post(MainActivity.this,
-                                                                                   "", customerName
-                                                                                           + getString(R.string.order_ok), topic);
+                                                                        PostNotificationHelper.post(MainActivity.this,
+                                                                                "", customerName
+                                                                                        + getString(R.string.order_ok), topic);
 
-                                                                           CyburgerApplication.notifyChanges();
-                                                                       } else {
-                                                                           MessageHelper.show(MainActivity.this,
-                                                                                   MessageType.ERROR,
-                                                                                   getString(R.string.err_complete_order));
-                                                                       }
+                                                                        CyburgerApplication.notifyChanges();
+                                                                    } else {
+                                                                        MessageHelper.show(MainActivity.this,
+                                                                                MessageType.ERROR,
+                                                                                getString(R.string.err_complete_order));
+                                                                    }
 
-                                                                   }
-                                                               });
-                                                           } else {
-                                                               MessageHelper.show(MainActivity.this,
-                                                                       MessageType.ERROR,
-                                                                       getString(R.string.err_points_profile));
-                                                           }
-                                                       }
-                                                   });
-                                               }
+                                                                }
+                                                            });
+                                                        } else {
+                                                            MessageHelper.show(MainActivity.this,
+                                                                    MessageType.ERROR,
+                                                                    getString(R.string.err_points_profile));
+                                                        }
+                                                    }
+                                                });
+
 
                                                 confirmFinishOrderDialog.closeDialog();
                                                 orderDialog.closeDialog();

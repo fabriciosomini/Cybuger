@@ -123,4 +123,6 @@
     <string name="you_next">&#160;você é o próximo!</string>
     <string name="order_ok">&#160;seu pedido está pronto!</string>
     <string name="you_order_canceled">&#160;seu pedido foi cancelado!</string>
+    <string name="sem_pedidos_lista">Não há pedidos nesta lista</string>
+    <string name="n_o_h_combos_nesta_lista">Não há combos nesta lista</string>
 </resources>
