@@ -11,9 +11,7 @@
         android:clickable="true"
         android:layout_height="180dp"
         style="@style/AppTheme.CyburgerContainer"
-        android:layout_marginRight="0dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="1dp"
@@ -88,8 +86,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Right_Content"
             android:textColor="@color/verylightgrey"
@@ -97,16 +93,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardSubContent"
-            app:layout_constraintTop_toBottomOf="@+id/cardContent" />
+            app:layout_constraintTop_toBottomOf="@+id/cardContent"
+            tools:layout_editor_absoluteX="248dp" />
 
         <ImageView
             android:id="@+id/cardManageIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
             android:paddingBottom="0dp"
@@ -140,10 +133,12 @@
 
             tools:layout_constraintTop_creator="1" />
         <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:id="@+id/cardClickArea"
             android:clickable="true"
-            android:layout_height="match_parent"></android.support.constraint.ConstraintLayout>
+            android:layout_height="95dp"
+            tools:layout_editor_absoluteY="8dp"
+            tools:layout_editor_absoluteX="8dp"></android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
 
