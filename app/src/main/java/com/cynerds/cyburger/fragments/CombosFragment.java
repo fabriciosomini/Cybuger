@@ -241,7 +241,7 @@ public class CombosFragment extends Fragment {
             if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
                 DecimalFormat format = new DecimalFormat();
                 format.setDecimalSeparatorAlwaysShown(false);
-                String requiredPoints = "(ou " + BonusPointExchangeHelper.convertAmountToPoints(amount) + " pontos)";
+                String requiredPoints = "(ou " + BonusPointExchangeHelper.convertAmountToPointsExchange(amount) + " pontos)";
                 cardModel.setRightContent(requiredPoints);
 
             }
@@ -336,7 +336,7 @@ public class CombosFragment extends Fragment {
                                         if (profile != null) {
 
 
-                                            final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(combo.getComboAmount());
+                                            final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPointsExchange(combo.getComboAmount());
                                             profile.setBonusPoints(profile.getBonusPoints() - pointsToRemove);
                                             Combo paidCombo = (Combo) combo.copyValues(Combo.class);
                                             paidCombo.setComboAmount(0);

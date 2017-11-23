@@ -238,7 +238,7 @@ public class ItemsMenuFragment extends Fragment {
             if (BonusPointExchangeHelper.convertUserPointsToCash() >= amount) {
                 DecimalFormat format = new DecimalFormat();
                 format.setDecimalSeparatorAlwaysShown(false);
-                String requiredPoints = "(ou " + BonusPointExchangeHelper.convertAmountToPoints(amount) + " pontos)";
+                String requiredPoints = "(ou " + BonusPointExchangeHelper.convertAmountToPointsExchange(amount) + " pontos)";
                 cardModel.setRightContent(requiredPoints);
 
             }
@@ -329,7 +329,7 @@ public class ItemsMenuFragment extends Fragment {
                                         Profile profile = CyburgerApplication.getProfile();
                                         if (profile != null) {
 
-                                            final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPoints(item.getPrice());
+                                            final int pointsToRemove = BonusPointExchangeHelper.convertAmountToPointsExchange(item.getPrice());
                                             profile.setBonusPoints(profile.getBonusPoints() - pointsToRemove);
                                             Item paidItem = (Item) item.copyValues(Item.class);
                                             paidItem.setPrice(0);

@@ -27,17 +27,35 @@ public class BonusPointExchangeHelper {
 
     }
 
-    public static int convertAmountToPoints(float amount){
+    public static int convertAmountToPointsExchange(float amount){
         int pointsFromCache = 0;
 
             Parameters parameters = CyburgerApplication.getParameters();
 
             if(parameters!=null){
 
-                float pointsFromCacheF = amount * (parameters.getBasePoints() / parameters.getBaseAmount());
+                float pointsFromCacheF = (amount * parameters.getBaseExchangePoints()) / parameters.getBaseExchangeAmount();
                 pointsFromCache = (int)Math.round(pointsFromCacheF);
 
             }
+
+
+        return pointsFromCache;
+
+    }
+
+
+    public static int convertAmountToPoints(float amount){
+        int pointsFromCache = 0;
+
+        Parameters parameters = CyburgerApplication.getParameters();
+
+        if(parameters!=null){
+
+            float pointsFromCacheF = amount * (parameters.getBasePoints() / parameters.getBaseAmount());
+            pointsFromCache = (int)Math.round(pointsFromCacheF);
+
+        }
 
 
         return pointsFromCache;
